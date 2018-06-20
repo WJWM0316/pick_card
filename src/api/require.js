@@ -1,4 +1,3 @@
-import wepy from 'wepy'
 import config from '../config.js'
 /* eslint-disable no-undef */
 const util = {
@@ -18,6 +17,135 @@ const util = {
 }
 
 export const request = ({ method = 'post', url, data = {}, needKey = true, isLoading = true, needUserInfo = true } = {}) => {
+  isLoading = data.isLoading || isLoading
+  if (data.isLoading !== undefined) {
+    delete data.isLoading
+  }
+
+  console.log(config.baseHost+url)
+  const promise = new Promise((resolve, reject) => {
+    const error = {
+      code: 500,
+      message: '网络不可用，请检查网络设置。'
+    }
+    util.loading(isLoading)
+    wx.request({
+      url: config.baseHost+url,
+      /*data: {
+        user_id: wx.getStorageSync('user_id'),
+        sign: that.utilMd5.hexMD5(
+          `${url}?token=${wx.getStorageSync('token')}`
+        ),
+        ...data,
+      },*/
+      data: data,
+      method: method,
+      success(res) {
+        util.unloading(isLoading)
+        console.log('请求成功后 response', res.data)
+        /*if (typeof data === 'string') { // 转换返回json
+          data = JSON.parse(data)
+        }*/
+        if (res) {
+        let msg = res.data
+          console.log('res.code', msg.code)
+          //有字符串的情况下 转数字
+          if(msg.code === true){msg.code = 0}
+          msg.code = parseInt(msg.code)
+          switch (msg.code) {
+            case 0:
+              console.log('asdasdsd')
+              // 接口请求成功
+              util.unloading(isLoading)
+              resolve(msg.data === undefined ? {} : msg.data)
+              break
+            case 200:
+              // 接口请求成功
+              util.unloading(isLoading)
+              resolve(msg.data === undefined ? {} : msg.data)
+              break
+            case 264:
+              // 内容已被删除，跳转删除页面
+              wx.redirectTo({
+                url: '/pages/emptyPage/index'
+              })
+              break
+            case 425:
+              // 当没有授权用户信息 跳转到登录页
+              getSessionKey().then(res => {
+                // 获取session_key成功，判断是否需要授权
+                getUserInfo({ key: res.key }).then(() => {
+                  wx.navigateTo({
+                    url: '/pages/login/index'
+                  })
+                }).catch(() => {
+                  wx.navigateTo({
+                    url: '/pages/login/index'
+                  })
+                })
+              })
+              break
+            case 426:
+              // 当没有授权用户手机 直接跳转手机号登录
+              wx.navigateTo({
+                url: '/pages/login/index'
+              })
+              break
+            case 429:
+              // 找不到集call人
+              wx.switchTab({
+                url: '/pages/home/index'
+              })
+              break
+            case 430:
+              // 检测是否已完善信息，跳转去完善信息后再返回来源页
+              wx.redirectTo({
+                url: '/pages/center/editinfo'
+              })
+              break
+            case 400:
+              // 用户没有绑定手机号
+              util.unloading(isLoading)
+              reject(res)
+              break
+            case 427:
+              // 当session_key失效 code无效 重新获取code，拿code换session_key
+              // console.log('require: 当后端取不到code或者code失效')
+              // console.log('427 data', data, data)
+              getSessionKey().then(res => {
+                // 获取session_key成功，判断是否需要授权
+                if (needUserInfo) {
+                  return getUserInfo({ key: res.key })
+                }
+              }).then(res => {
+                // 获取session_key成功，重新发起原请求
+                return request({ method, url, res, needKey, isLoading: false }).then(res => {
+                  util.unloading(isLoading)
+                  resolve(res)
+                })
+              }).catch(e => {
+                util.unloading(isLoading)
+                reject(e)
+              })
+              break
+            default:
+              util.unloading(isLoading)
+              console.log(msg)
+              reject(res)
+          }
+        }
+      },
+      fail(res) {
+        console.error(url, res);
+        util.unloading(isLoading)
+        reject(res);
+      },
+    });
+  })
+  return promise
+}
+
+export const request2 = ({ method = 'post', url, data = {}, needKey = true, isLoading = true, needUserInfo = true } = {}) => {
   isLoading = data.isLoading || isLoading
   if (data.isLoading !== undefined) {
     delete data.isLoading
@@ -58,7 +186,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       }
     }
     if (continueRequest) {
-      wepy.request({ url, method, data }).catch(response => {
+      wx.request({ url, method, data }).catch(response => {
         const error = {
           code: 500,
           message: '网络不可用，请检查网络设置。'
@@ -297,3 +425,4 @@ export function getUserInfo ({ key, isLoading = false } = {}) {
     })
   })
 }
+
