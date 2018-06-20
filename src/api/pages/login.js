@@ -1,17 +1,19 @@
 import {request} from '../require.js'
 
-// 注册
-export const testApi = (data) => {
-  return request({
-    url: '/test',
-    data
-  })
-}
+
 
 // 登录
 export const loginApi = (data) => {
   return request({
-    url: '/wx/login',
+    url: '/login',
+    data
+  })
+}
+
+// 注册
+export const testApi = (data) => {
+  return request({
+    url: '/test',
     data
   })
 }
