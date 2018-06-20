@@ -42,23 +42,16 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       method: method,
       success(res) {
         util.unloading(isLoading)
-        console.log('请求成功后 response', res.data)
-        /*if (typeof data === 'string') { // 转换返回json
-          data = JSON.parse(data)
-        }*/
+        console.log('请求成功后 response', res)
+        if (typeof res.data === 'string') { // 转换返回json
+          res.data = JSON.parse(res.data)
+        }
         if (res) {
-        let msg = res.data
-          console.log('res.code', msg.code)
+          let msg = res.data
+          console.log('res.code', msg.http_status)
           //有字符串的情况下 转数字
-          if(msg.code === true){msg.code = 0}
-          msg.code = parseInt(msg.code)
-          switch (msg.code) {
-            case 0:
-              console.log('asdasdsd')
-              // 接口请求成功
-              util.unloading(isLoading)
-              resolve(msg.data === undefined ? {} : msg.data)
-              break
+          msg.http_status = parseInt(msg.http_status)
+          switch (msg.http_status) {
             case 200:
               // 接口请求成功
               util.unloading(isLoading)
@@ -74,7 +67,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
               // 当没有授权用户信息 跳转到登录页
               getSessionKey().then(res => {
                 // 获取session_key成功，判断是否需要授权
-                getUserInfo({ key: res.key }).then(() => {
+                getUserInfo({ key: msg.key }).then(() => {
                   wx.navigateTo({
                     url: '/pages/login/index'
                   })
@@ -130,7 +123,6 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
               break
             default:
               util.unloading(isLoading)
-              console.log(msg)
               reject(res)
           }
         }

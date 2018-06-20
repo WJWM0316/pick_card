@@ -203,6 +203,9 @@ export default {
       position: relative;
     }
     .peop_blo {
+      width:640rpx;
+      height:930rpx;
+      margin: 0 auto;
       border-radius: 18rpx;
       overflow: hidden;
       position: relative;
