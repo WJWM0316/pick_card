@@ -1,0 +1,257 @@
+// ==== mixins ====
+.setSingleLine (@width: 100%) {
+  max-width: @width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.setTag () {
+  display: inline-block;
+  box-sizing: border-box;
+  background: #f12c20;
+  min-width: 36rpx;
+  height: 36rpx;
+  line-height: 36rpx;
+  padding: 0 5rpx;
+  border-radius: 18rpx;
+  font-size: 26rpx;
+  text-align: center;
+  color: #fff;
+}
+
+// tabs通用
+.setTabs () {
+  font-size: 0;
+
+  .item {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 0 30rpx;
+    padding: 36rpx 22rpx 28rpx;
+    font-size: 28rpx;
+    color: #929292;
+
+    &::after {
+      display: block;
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      bottom: 6rpx;
+      background: #ffe266;
+      width: 100%;
+      height: 6rpx;
+      border-radius: 3rpx;
+    }
+
+    &.z-active {
+      font-weight: 600;
+      color: #354048;
+
+      &::after {
+        content: " ";
+      }
+    }
+
+    .text {
+      position: relative;
+
+      .addon {
+        .setTag();
+        position: absolute;
+        left: ~"calc(100% + 2px)";
+        top: -20rpx;
+      }
+    }
+  }
+}
+// ======== mixins ========
+
+// 背景初始化
+.initBg (@color: transparent, @image: none, @pos: center, @repeat: no-repeat, @size: contain) {
+  background-color: @color;
+  background-image: @image;
+  background-position: @pos;
+  background-repeat: @repeat;
+  background-size: @size;
+}
+
+// icon初始化
+.setIcon () {
+  .initBg();
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  vertical-align: middle;
+
+  &.no-offset {
+    position: static;
+    top: auto;
+  }
+}
+
+// button初始化
+.setBtn () {
+  .initBg();
+  display: inline-block;
+  border: none;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-appearance: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// 清除浮动
+.setClearfix () {
+  &::before,
+  &::after {
+    content: " ";
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
+}
+
+// 设置宽高
+.setSize (@width: auto, @height: auto) {
+  width: @width;
+  height: @height;
+}
+
+
+// 小箭头（vux）
+._setArrow (@arrowsize, @borderColor, @borderWidth) {
+  display: inline-block;
+  height: @arrowsize;
+  width: @arrowsize;
+  border-width: @borderWidth @borderWidth 0 0;
+  border-color: @borderColor;
+  border-style: solid;
+}
+
+.setArrow (@direction, @arrowsize, @borderColor, @borderWidth) when (@direction = top) {
+  ._setArrow(@arrowsize, @borderColor, @borderWidth);
+  transform: matrix(0.71,-0.71,0.71,0.71,0,0); // rotate(-45deg)
+}
+
+.setArrow (@direction, @arrowsize, @borderColor,@borderWidth) when (@direction = right) {
+  ._setArrow(@arrowsize, @borderColor, @borderWidth);
+  transform: matrix(0.71,0.71,-0.71,0.71,0,0); // rotate(45deg);
+
+  position: relative;
+  top: -2px;
+}
+
+.setArrow (@direction, @arrowsize, @borderColor,@borderWidth) when (@direction = down) {
+  ._setArrow(@arrowsize, @borderColor, @borderWidth);
+  transform: matrix(-0.71,0.71,-0.71,-0.71,0,0); // rotate(135deg);
+
+  position: relative;
+  top: -3px;
+}
+
+.setArrow (@direction, @arrowsize, @borderColor,@borderWidth) when (@direction = left) {
+  ._setArrow(@arrowsize, @borderColor, @borderWidth);
+  transform: matrix(-0.71,-0.71,0.71,-0.71,0,0); // rotate(-135deg);
+
+  position: relative;
+  top: -2px;
+}
+
+// 单行超出省略
+.setEllipsis (@width: 100%) {
+  width: @width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+// 多行超出省略
+.setEllipsisLn (@line: 2) {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @line;
+  overflow: hidden;
+}
+
+// 文本容器
+.setTextWrap () {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+// 富文本容器
+.setRichTextWrap () {
+  .setTextWrap();
+  text-align: justify;
+
+  img,
+  table,
+  video,
+  audio {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+// 英文连字号断行
+.setHyphens () {
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+// 设置flex
+.setFlex (@direction: row, @wrap: nowrap) {
+  display: flex;
+  flex-flow: @direction @wrap;
+}
+
+// 单选、复选框初始化
+.setCheck (@type: radio) {
+  position: relative;
+  display: inline-block;
+
+  & > input[type="@{type}"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+
+  & > label {
+    display: inline-block;
+  }
+}
+
+// modal
+.setModal () {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, .5);
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+
+  .wrapper {
+    .setFlex();
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+}

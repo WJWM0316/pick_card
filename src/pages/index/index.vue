@@ -252,7 +252,7 @@
     <view class="content">
       <view class="peopList">
         <view class="peop_blo">
-          <view class="top">
+          <view class="top" @tap.stop="jump()">
             <image class="bage" src=""></image>
             <view class="location">
               <image class="adr" src=""></image>
@@ -325,6 +325,11 @@ export default {
         url: `/pages/createCard/main`
       })
     },
+    jump () {
+      wx.navigateTo({
+        url: `/pages/test/main`
+      })
+    }
 
   },
 
