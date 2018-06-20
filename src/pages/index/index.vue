@@ -406,4 +406,98 @@ export default {
     }
   }
 </style>
+<template>
+  <div class="container" >
+    <view class="op_top">
+      <view class="left">筛选</view>
+      <view class="right">交换申请<view class="new">NEW</view></view>
+    </view>
+    <view class="content">
+      <view class="peopList">
+        <view class="peop_blo">
+          <view class="top" @tap.stop="jump()">
+            <image class="bage" src=""></image>
+            <view class="location">
+              <image class="adr" src=""></image>
+              广州市
+            </view>
+            <view class="text">
+              <view class="name">邓陶陶</view>
+              <view class="title">职场学习社区小灯塔</view>
+              <image class="detail" src=""></image>
+            </view>
+          </view>
+          <view class="bottom">
+            <view class="signature">这个人很懒，不想写个性签名~</view>
+            <view class="labelList">
+              <view class="label_blo">
+                移动互联网
+              </view>
+              <view class="label_blo">
+                移动互联网
+              </view>
+              <view class="label_blo">
+                移动互联网
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="btns">
+          <button class="btn delate">
+            <image src=""></image>
+          </button>
+          <button class="btn like">
+            <image src=""></image>
+          </button>
+        </view>
+        
+      </view>
+    </view>
+    <view class="footer">
+      <view class="left">
+        <view class="name cur" @tap="toCreate">Pick</view>
+        <view class="name">名片夹</view>
+        <view class="name">我的名片</view>
+      </view>
+      <view class="right">
+        <view class="r_blo">
+          <image class="detail" src=""></image>
+        </view>
+        <view class="r_blo">
+          <image class="detail" src=""></image>
+        </view>
+      </view>
+    </view>
+       <mptoast />
+  </div>
+</template>
+<script>
+  import mptoast from 'mptoast'
+export default {
+  components: {
+    mptoast
+  },
+  data () {
+    return { }
+  },
+  methods: {
+    toCreate () {
+      this.$mptoast('创建')
+
+      wx.navigateTo({
+        url: `/pages/createCard/main`
+      })
+    },
+    jump () {
+      wx.navigateTo({
+        url: `/pages/test/main`
+      })
+    }
+
+  },
+
+  created () {}
+}
+</script>
+
 

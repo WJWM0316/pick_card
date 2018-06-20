@@ -1,5 +1,14 @@
 <script>
 export default {
+  // 只有 app 才会有 onLaunch 的生命周期
+  onLaunch () {
+    // ...
+  },
+
+   // 捕获 app error
+  onError (err) {
+    console.log(err)
+  },
   methods:{
   },
   created () {
@@ -31,6 +40,11 @@ export default {
 </script>
 
 <style>
+page {
+  font-size: 28rpx;
+  color: #353943;
+  height: 100%;
+}
 button {
   content: "";  
   border:0; padding: 0; margin: 0;
@@ -53,4 +67,5 @@ button:after {
   -webkit-transition: width 2s;
   -o-transition: width 2s;
 }
+
 </style>
