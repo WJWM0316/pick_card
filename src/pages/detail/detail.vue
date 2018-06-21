@@ -103,7 +103,7 @@
 				</view>
 				<view class="article">我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我</view>
 				<view class="imgBox">
-					<image  v-for="i in 9" class="img" src="/static/images/img.jpg"></image>
+					<image  v-for="(i, index) in 9" :key="index" class="img" src="/static/images/img.jpg"></image>
 				</view>
 			</view>
 		</view>
@@ -117,7 +117,6 @@
 	</view>
 </template>
 <script>
-	
 </script>
 <style lang="less" type="text/less">
 	.detail {
