@@ -1,8 +1,7 @@
 
 <template>
-  <div class="container" >
+  <view class="container" >
     <view class="hint">会根据你选择的条件，来发现你的职场新朋友</view>
-
     <view class="op_two ">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
@@ -61,7 +60,7 @@
       <!-- <button class="next" wx:else>完成创建</button> -->
     </view>
     <mptoast />
-  </div>
+  </view>
 </template>
 
 <script>
