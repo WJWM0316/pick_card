@@ -1,6 +1,6 @@
 
 <template>
-  <div class="container" >
+  <view class="container" >
     <view class="op_top">
       <view class="left">筛选</view>
       <view class="right">交换申请<view class="new">NEW</view></view>
@@ -94,16 +94,21 @@
         </view>
       </view>
     </view>
-       <mptoast />
-  </div>
+    <authorize-pop :isIndex='true'></authorize-pop>
+    <mptoast />
+    
+  </view>
 </template>
 <script>
   import mptoast from 'mptoast'
   import {loginApi} from '@/api/pages/login'
+  import authorizePop from '@/components/authorize'
+  import {request} from '@/api/require'
   import { getUserInfoApi, getIndexUsers } from '@/api/pages/user'
 export default {
   components: {
-    mptoast
+    mptoast,
+    authorizePop
   },
   data () {
     return { 
@@ -118,7 +123,7 @@ export default {
         url: `/pages/createCard/main`
       })
     },
-
+    
   },
 
   created () {

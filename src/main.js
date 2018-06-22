@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-/*import store from '@/stores/index'*/
+import store from '@/store/index'
 import requestMethod from './utils/requestMethod'
 import mptoastRegistry from 'mptoast/registry'
 mptoastRegistry(Vue)
@@ -9,9 +9,9 @@ mptoastRegistry(Vue)
 
 Vue.config.productionTip = false
 App.mpType = 'app'
-
-/*// 挂载全局的store
-Vue.prototype.store = store
+// 挂载全局的store
+Vue.prototype.$store = store
+/*
 // 挂载一个全局的图片路径,方便后期修改图片地址的时候,做统一修改
 Vue.prototype.$imagePath = '../../static/'
 // 配置 后端统一的请求路径

@@ -2,7 +2,7 @@
 	<view class="detail">
 		<!-- 主要展示 -->
 		<view class="main card">
-			<image class="headImg" src="/static/images/img.jpg"></image>
+			<image class="headImg" :src="userInfo.headimgurl"></image>
 			<view class="content">
 				<view class="mycard" v-if="false">
 					<image class="icon" src="/static/images/float_icon_add@3x.png"></image>
@@ -10,33 +10,33 @@
 				</view>
 				<view class="nameBox">
 					<view>
-						<text class="name">大眼睛</text>
+						<text class="name">{{userInfo.nickname}}</text>
 						<image class="sex" src="/static/images/details_icon_female@3x.png"></image>
 					</view>
 					<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
-				<view class="job">絕地雞霸</view>
-				<view class="company">職場學習小社區</view>
-				<view class="signature">这个人很懒，并不想写个性签名~</view>
+				<view class="job">{{userInfo.company}}</view>
+				<view class="company">{{userInfo.company}}</view>
+				<view class="signature">{{userInfo.sign}}</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_location@3x.png"></image>
-					<text class="msg">廣州市</text>
+					<text class="msg">{{userInfo.user_location}}</text>
 				</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_territory@3x.png"></image>
-					<text class="msg">廣州市</text>
+					<text class="msg">{{userInfo.company_location}}</text>
 				</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_phone@3x.png"></image>
-					<text class="msg isShow">廣州市</text>
+					<text class="msg isShow">{{userInfo.mobile}}</text>
 				</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_email@3x.png"></image>
-					<text class="msg isShow">廣州市</text>
+					<text class="msg isShow">{{userInfo.email}}</text>
 				</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_wechat@3x.png"></image>
-					<text class="msg isShow">廣州市</text>
+					<text class="msg isShow">{{userInfo.wechat}}</text>
 				</view>
 			</view>
 		</view>
@@ -58,39 +58,34 @@
 			</view>
 		</view>
 		<!-- 工作經歷 -->
-		<view class="other card">
+		<view class="other card" v-if="workInfo.length === 0">
 			<view class="content">
 				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
 					<text class="msg">工作经历</text>
 				</view>
-				<view class="litm">
-					<view class="date">2018年3月 - 2030年8月</view>
-					<view class="job">產品經歷</view>
-					<view class="company">職場學習小社區</view>
+				<view class="litm" v-for="(item, index) in workInfo" v-if="index < 2">
+					<view class="date">{{workInfo.start_time_desc}} - {{workInfo.end_time_desc}}</view>
+					<view class="job">{{workInfo.position}}</view>
+					<view class="company">{{workInfo.name}}</view>
 				</view>
-				<view class="litm">
-					<view class="date">2018年3月 - 2030年8月</view>
-					<view class="job">產品經歷</view>
-					<view class="company">職場學習小社區</view>
-				</view>
-				<button class="open">展开查看更多</button>
+				<button class="open" v-show="workInfo.length > 2">展开查看更多</button>
 			</view>
 		</view>	
 		<!-- 教育經歷 -->
-		<view class="other card">
+		<view class="other card" v-if="educationsInfo.length === 0">
 			<view class="content">
 				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
 					<text class="msg">教育经历</text>
 				</view>
-				<view class="litm">
-					<view class="date">2018年3月 - 2030年8月</view>
-					<view class="school">產品經歷</view>
+				<view class="litm" v-for="(item, index) in educationsInfo" v-if="index < 2">
+					<view class="date">{{item.start_time_desc}} - {{item.end_time_desc}}</view>
+					<view class="school">{{item.name}}</view>
 				</view>
-				<button class="open">展开查看更多</button>
+				<button class="open" v-show="educationsInfo.length > 2">展开查看更多</button>
 			</view>
 		</view>	
 		<!-- 更多介紹 -->
@@ -102,12 +97,12 @@
 					<text class="msg">更多介紹</text>
 				</view>
 				<view class="article">我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我</view>
+
 				<view class="imgBox">
 					<image  v-for="(i, index) in 9" :key="index" class="img" src="/static/images/img.jpg"></image>
 				</view>
 			</view>
 		</view>
-		<view style="height: 140rpx"></view>
 		<view class="btnControl">
 			<button class="btn apply" v-if="false">申请和TA交换名片</button>
 			<button class="btn applying"  v-if="false">已申请和TA交换名片</button>
@@ -117,11 +112,55 @@
 	</view>
 </template>
 <script>
+	import MpRadio from 'mp-weui/packages/radio'
+	import {getUserInfo2Api, getUserInfoApi, getEducationsInfoApi, getWorkInfoApi} from '@/api/pages/user'
+	export default {
+		components: {
+	   	'mp-radio': MpRadio
+	  },
+		data () {
+			return {
+				isSelf: false,
+				userInfo: {},
+				educationsInfo: {},
+				workInfo: {}
+			}
+		},
+		onLoad (option) {
+			console.log(MpRadio)
+			option.user === 'self' ? this.isSelf = true : this.isSelf = false
+		},
+		onReady () {
+			const vkey = 'lerktonr6t'
+			if (this.isSelf) {
+				getUserInfoApi().then(res => {
+					this.userInfo = res.data
+					console.log('用户数据', this.userInfo)
+				})
+
+				getEducationsInfoApi().then(res => {
+					this.educationsInfo = res.data
+					console.log('教育数据', this.educationsInfo)
+				})
+
+				getWorkInfoApi().then(res => {
+					this.workInfo = res.data
+					console.log('教育数据', this.workInfo)
+				})
+			} else {
+				getUserInfo2Api(vkey).then(res => {
+					this.userInfo = res.data
+					console.log('用户数据', this.userInfo)
+				})
+			}
+			
+		}
+	}
 </script>
 <style lang="less" type="text/less">
 	.detail {
 		background: #FAFBFC;
-		padding: 30rpx 40rpx;
+		padding: 30rpx 40rpx 170rpx;
 		.card {
 			width: 100%;
 			background: #fff;

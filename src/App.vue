@@ -1,9 +1,11 @@
 <script>
-import {request} from './api/require.js'
+import {getSessionKeyApi, saveBaseUserInfo} from '@/api/pages/login'
 export default {
-  globalData = {
-    userInfo: null
-  }
+  data () {
+    return {
+    }
+  },
+  
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch () {
     this.checkLogin()
@@ -20,28 +22,31 @@ export default {
     checkLogin () {
       return new Promise((resolve, reject) => {
         // 调用微信登录获取本地session_key
+        const _this = this
         wx.login({
           success: function (res) {
-            // console.log('rquire login')
+            // console.log('rquire login', res)
             // 请求接口获取服务器session_key
             const getSessionKeyParams = {
-              url: '/auth/getSessionKey',
-              data: {
-                code: res.code
-              },
-              needKey: false
+              code: res.code          
             }
-            request(getSessionKeyParams).then(res => {
-              // console.log('require:获取sessionkey成功并存入本地缓存', res.key)
-              wx.setStorageSync('session_key', res.key)
-              console.log(1111)
+            getSessionKeyApi(getSessionKeyParams).then(res => {
+              console.log('require:获取sessionkey成功', res)
+              if (res.data.token) {
+                wx.setStorageSync('token', res.data.token)
+              }
+              // 为了获取用户信息
+              if (res.data.key) {
+                wx.setStorageSync('key', res.data.key)
+              } 
+              if (res.code === 0) {
+                console.log('用户在其他平台已完成授权，不需要再次授权')
+              }
+              if (res.code === 201) {
+                _this.$store.dispatch('needAuthorize', true) // 需要授权框
+              }
               resolve(res)
             }).catch(e => {
-              console.log(e)
-              if (e.data.code == 202) {
-                console.log(e.data.msg)
-              }
-              // console.log('rquire: 严重错误：code换session失败，错误码400', e.message)
               reject(e)
             })
           }
@@ -51,28 +56,6 @@ export default {
   },
   created () {
     let that = this
-    // wx.getStorage({
-    //   key: 'wxInfo',
-    //   success (res) {
-    //     console.log('您已授权过了')
-    //   },
-    //   fail(err) {
-    //     //获取微信code,然后用code获取后端openid,session_key等信息
-    //     wx.login({
-    //       success: async (res) => {
-    //         // 这个url就是我们后端的接口地址,省略了前面的服务器名称,服务器名称配置看 /src/main.js里面的配置
-    //         let url = 'mobileWechatApplets/jscode2session'
-    //         let body={jsCode:res.code}
-    //         let loginRes = await that.$post(url,body)
-    //         if(loginRes.code == 1) {
-    //           wx.setStorage({key:"wxInfo", data:loginRes.data})
-    //           console.log('登录成功!:', loginRes)
-    //         }
-    //         // console.log('code!:', res)
-    //       }
-    //     })
-    //   }
-    // })
   }
 }
 </script>
