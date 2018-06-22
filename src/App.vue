@@ -1,9 +1,9 @@
 <script>
 import {request} from './api/require.js'
 export default {
-  globalData = {
+  globalData : {
     userInfo: null
-  }
+  },
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch () {
     this.checkLogin()

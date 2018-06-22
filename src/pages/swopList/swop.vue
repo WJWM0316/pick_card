@@ -1,40 +1,6 @@
 
 <template>
   <div class="container" >
-    <view class="hint">会根据你选择的条件，来发现你的职场新朋友</view>
-
-    <view class="op_two ">
-      <view class="table_blo row_style_one">
-        <view class="tit">最近任职公司</view>
-        <input class="one_ipt" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
-      </view>
-
-      <view class="table_blo row_style_two">
-        <view class="tit">职位</view>
-        <view class="list_selct">
-          <view class="blo">不限</view>
-          <view class="blo">运营</view>
-          <view class="blo">设计</view>
-          <view class="blo">市场</view>
-          <view class="blo">技术</view>
-          <view class="blo">职能</view>
-          <view class="blo">金融</view>
-          <view class="blo">运营</view>
-        </view>
-      </view>
-
-      <view class="table_blo row_style_two">
-        <view class="tit">领域</view>
-        <view class="list_selct">
-          <view class="blo cur">不限</view>
-          <view class="blo">企业服务</view>
-          <view class="blo">金融</view>
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
-        </view>
-      </view>
-    </view>
-
     <view class="swopList">
       <view class="swop_blo">
         <view class="blo_top">
