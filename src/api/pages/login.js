@@ -11,9 +11,9 @@ export const loginApi = (data) => {
 }
 
 // 注册
-export const testApi = (data) => {
+export const firstSignApi = (data) => {
   return request({
-    url: '/test',
+    url: '/users/first',
     data
   })
 }
