@@ -3,7 +3,7 @@
   <view class="container" >
     <view class="op_top">
       <view class="left" @click="toFiltrate">筛选</view>
-      <view class="right">交换申请<view class="new">NEW</view></view>
+      <view class="right" @click="toSwop">交换申请<view class="new">NEW</view></view>
     </view>
     <view class="content">
       <view class="peopList" >
@@ -51,7 +51,7 @@
     <view class="footer">
       <view class="left">
         <view class="name cur" @tap="toCreate">Pick</view>
-        <view class="name">名片夹</view>
+        <view class="name" @tap="toCardHolder">名片夹</view>
         <view class="name">我的名片</view>
       </view>
       <view class="right">
@@ -91,11 +91,25 @@ export default {
   },
 
   methods: {
+    toCardHolder () {
+      this.$mptoast('名片夹')
+
+      wx.navigateTo({
+        url: `/pages/cardHolder/main`
+      })
+    },
     toFiltrate () {
       this.$mptoast('筛选')
 
       wx.navigateTo({
         url: `/pages/filtrate/main`
+      })
+    },
+    toSwop () {
+      this.$mptoast('选择')
+
+      wx.navigateTo({
+        url: `/pages/swopList/main`
       })
     },
     toCreate () {

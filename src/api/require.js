@@ -64,7 +64,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
             case 200:
               // 接口请求成功
               util.unloading(isLoading)
-              resolve(res.data)
+              resolve(msg.data)
               break
             default:
               util.unloading(isLoading)
