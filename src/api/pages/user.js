@@ -3,7 +3,7 @@ import {request} from '../require.js'
 // 更新或获取当前用户信息
 export const getUserInfoApi = (method,data) => {
   return request({
-    method,
+    method: 'get',
     url: '/cur/user_info',
     data
   })
@@ -17,11 +17,31 @@ export const getMoreUserInfoApi = (method,data) => {
   })
 }
 
-// 获取用户信息
+
+// 获取当前用户教育经历
+export const getEducationsInfoApi = (method,data) => {
+  return request({
+    method: 'get',
+    url: '/cur/educations',
+    data
+  })
+}
+
+// 获取当前工作经历
+export const getWorkInfoApi = (method,data) => {
+  return request({
+    method: 'get',
+    url: '/cur/careers',
+    data
+  })
+}
+
+// 获取其他人用户信息
 export const getUserInfo2Api = (data) => {
   return request({
     method: 'get',
     url: `/users/${data}`,
+    data
   })
 }
 
@@ -32,6 +52,8 @@ export const getIndexUsers = () => {
     url: `/users`,
   })
 }
+
+
 
 // 用户第一步注册
 export const saveSignFirst = (data) => {

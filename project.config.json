@@ -35,13 +35,7 @@
 					"id": 0,
 					"name": "1",
 					"pathName": "pages/detail/main",
-					"query": ""
-				},
-				{
-					"id": -1,
-					"name": "创建卡片",
-					"pathName": "pages/createCard/main",
-					"query": ""
+					"query": "user=self"
 				}
 			]
 		}

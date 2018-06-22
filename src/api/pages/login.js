@@ -21,7 +21,16 @@ export const firstSignApi = (data) => {
 export const grantInformationApi = (data) => {
   console.log(data)
   return request({
-    url: '/wx/my/grantInformation',
+    url: '/auth/grantInformation',
+    data,
+    isLoading: false
+  })
+}
+// 不需要用户允许授权后需返回数据给该接口
+export const saveBaseUserInfo = (data) => {
+  console.log(data)
+  return request({
+    url: '/auth/saveBaseUserInfo',
     data,
     isLoading: false
   })
@@ -29,11 +38,12 @@ export const grantInformationApi = (data) => {
 // code 给后端去换session_key
 export const getSessionKeyApi = (data) => {
   return request({
-    url: '/wx/my/getSessionKey',
+    url: '/auth/getSessionKey',
     data,
     isLoading: false
   })
 }
+
 // 是否绑定手机
 export const isBindPhoneApi = (data) => {
   return request({
