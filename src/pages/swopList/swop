@@ -1,83 +1,63 @@
 
 <template>
   <div class="container" >
-    <view class="hintJoined hidden">
-      <image class="hint_img" src=""></image>
-      <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有</view>
-    </view>
-    <view class="op_one " :class="{'hidden': nowNum!=1}">
-      <view class="one_txt">
-        <view class="tit1">创建名片，开启有趣的职场社交</view>
-        <view class="tit2">真实可靠的职场形象总能碰到机遇</view>
-      </view>
+    <view class="hint">会根据你选择的条件，来发现你的职场新朋友</view>
 
-      <view class="one_pic">
-        <view class="img_wrap">
-          <view class="up_wrap">
-            <image class="up_img" src=""></image>
-          </view>
-          <image class="pic" src=""></image>
-        </view>
-      </view>
-      <!-- //focus="{{focus}}" -->
-      <input class="one_name" @blur="inputText" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangHK-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名"  />
-
-      <view class="one_gender">
-        <view class="gender boy" @click.stop="gender(1)">
-          <image class="" src="/static/images/new_btn_man_sel@3x.png" v-if="firstData.gender == 1"></image>
-          <image class="" src="/static/images/new_btn_man_nor@3x.png" v-else></image>
-        </view>
-        <view class="gender girl" @click.stop="gender(2)">
-          <image class="" src="/static/images/new_btn_female_sel@3x.png" v-if="firstData.gender == 2"></image>
-          <image class="" src="/static/images/new_btn_female_nor@3x.png" v-else></image>
-        </view>
-      </view>
-    </view>
-
-
-    <view class="op_two " :class="{'hidden': nowNum==1}">
+    <view class="op_two ">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
         <input class="one_ipt" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
       </view>
-      <view class="table_blo row_style_one">
-        <view class="tit">职位</view>
-        <input class="one_ipt" v-model="firstData.realname" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  />
-      </view>
 
       <view class="table_blo row_style_two">
-        <view class="tit">职业方向 <text>请选1个职业方向</text></view>
+        <view class="tit">职位</view>
         <view class="list_selct">
+          <view class="blo">不限</view>
           <view class="blo">运营</view>
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
+          <view class="blo">设计</view>
+          <view class="blo">市场</view>
+          <view class="blo">技术</view>
+          <view class="blo">职能</view>
+          <view class="blo">金融</view>
           <view class="blo">运营</view>
         </view>
       </view>
 
       <view class="table_blo row_style_two">
-        <view class="tit">擅长领域 <text>请选择1~3个领域</text></view>
+        <view class="tit">领域</view>
         <view class="list_selct">
-          <view class="blo cur">O2O</view>
+          <view class="blo cur">不限</view>
           <view class="blo">企业服务</view>
           <view class="blo">金融</view>
           <view class="blo">运营</view>
           <view class="blo">运营</view>
         </view>
       </view>
+    </view>
 
-      <view class="table_blo row_style_three">
-        <view class="tit">个人签名</view>
-        <textarea class="area" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" />
-        <text class="astrict">1/1</text>
+    <view class="swopList">
+      <view class="swop_blo">
+        <view class="blo_top">
+          <view class="top_msg">
+            <image class="avatar" src=""></image>
+            <view class="msg_detail">
+              <view class="msg_name">asdasdasdasdasd</view>
+              <view class="msg_form">asdasdasdasdasd</view>
+            </view>
+            
+          </view>
+          <view class="top_btn">同意</view>
+        </view>
+
+        <view class="blo_bot">
+          <image class="txt_img" src=""></image>
+          <view class="txt">asdasdasdasdasd</view>
+        </view>
       </view>
-
     </view>
 
     <view class="footer">
-      <button class="next toNext" @click="toNext(1)"  v-if="nowNum == 1 && firstData.gender !== 0 && firstData.realname.length>0">下一步</button>
-      <button class="next" v-else>下一步</button>
+      <button class="next toNext" @click="toNext(1)">提交</button>
       <!-- <button class="next" wx:else>完成创建</button> -->
     </view>
     <mptoast />
@@ -130,8 +110,6 @@
         })
       }
     },
-
-    created () {}
   }
 </script>
 

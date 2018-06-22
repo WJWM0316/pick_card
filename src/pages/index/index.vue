@@ -2,82 +2,51 @@
 <template>
   <view class="container" >
     <view class="op_top">
-      <view class="left">筛选</view>
+      <view class="left" @click="toFiltrate">筛选</view>
       <view class="right">交换申请<view class="new">NEW</view></view>
     </view>
     <view class="content">
-      <swiper class="peopList" 
-        duration="300">
-        <block  v-for="(item, index) in usersInfo" :key="key">
-          <swiper-item class="peop_blo" @tap.stop="jump()">
-              <view class="top">
-                <image class="bage" src=""></image>
-                <view class="location">
-                  <image class="adr" src=""></image>
-                  广州市
+      <view class="peopList" >
+        <block v-for="(item, index) in usersInfo" :key="key">
+          <view :index="index" class="peop_blo "
+          :class="{'fadeInRight animated test': nowIndex==index, 'fadeOutLeft animated test': nowIndex-1==index}" @touchstart.stop="tStart" @touchend.stop="tEnd" @touchmove.stop="tMove" >
+            <view class="top">
+              <image class="bage" src="/static/images/img.jpg"></image>
+              <view class="location">
+                <image class="adr" src="/static/images/home_icon_location_nor@3x.png"></image>
+                广州市
+              </view>
+              <view class="text">
+                <view class="name">{{item.realname}}</view>
+                <view class="title">{{index}}职场学习社区小灯塔</view>
+                <image class="detail" src="/static/images/hone_btn_more_nor@3x.png"></image>
+              </view>
+            </view>
+            <view class="bottom">
+              <view class="signature">这个人很懒，不想写个性签名~</view>
+              <view class="labelList">
+                <view class="label_blo">
+                  移动互联网
                 </view>
-                <view class="text">
-                  <view class="name">{{item.realname}}</view>
-                  <view class="title">{{index}}职场学习社区小灯塔</view>
-                  <image class="detail" src=""></image>
+                <view class="label_blo">
+                  移动互联网
+                </view>
+                <view class="label_blo">
+                  移动互联网
                 </view>
               </view>
-              <view class="bottom">
-                <view class="signature">这个人很懒，不想写个性签名~</view>
-                <view class="labelList" >
-                  <view class="label_blo">
-                    移动互联网
-                  </view>
-                  <view class="label_blo">
-                    移动互联网
-                  </view>
-                  <view class="label_blo">
-                    移动互联网
-                  </view>
-                </view>
-              </view>
-          </swiper-item>
+            </view>
+          </view>
         </block>
-        
-      </swiper>
-      <view class="btns">
-        <button class="btn delate">
-          <image src=""></image>
-        </button>
-        <button class="btn like">
-          <image src=""></image>
-        </button>
+        <view class="btns">
+          <button class="btn delate">
+            <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
+          </button>
+          <button class="btn like">
+            <image src="/static/images/home_btn_like_nor@3x.png"></image>
+          </button>
+        </view>
       </view>
-      <!-- <view class="peop_blo">
-        <view class="top">
-          <image class="bage" src=""></image>
-          <view class="location">
-            <image class="adr" src=""></image>
-            广州市
-          </view>
-          <view class="text">
-            <view class="name">邓陶陶</view>
-            <view class="title">职场学习社区小灯塔</view>
-            <image class="detail" src=""></image>
-          </view>
-        </view>
-        <view class="bottom">
-          <view class="signature">这个人很懒，不想写个性签名~</view>
-          <view class="labelList">
-            <view class="label_blo">
-              移动互联网
-            </view>
-            <view class="label_blo">
-              移动互联网
-            </view>
-            <view class="label_blo">
-              移动互联网
-            </view>
-          </view>
-        </view>
-      </view> -->
-
-      
     </view>
     <view class="footer">
       <view class="left">
@@ -87,10 +56,10 @@
       </view>
       <view class="right">
         <view class="r_blo">
-          <image class="detail" src=""></image>
+          <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
         <view class="r_blo">
-          <image class="detail" src=""></image>
+          <image class="detail" src="/static/images/home_tab_btn_share_nor@3x.png"></image>
         </view>
       </view>
     </view>
@@ -106,16 +75,29 @@
   import {request} from '@/api/require'
   import { getUserInfoApi, getIndexUsers } from '@/api/pages/user'
 export default {
+  interval: '',
   components: {
     mptoast,
     authorizePop
   },
   data () {
     return { 
-      usersInfo: []
+      usersInfo: [],
+      touchDot: 0,
+      time: 0,
+      nowIndex: 0,
+      isMove: false,
     }
   },
+
   methods: {
+    toFiltrate () {
+      this.$mptoast('筛选')
+
+      wx.navigateTo({
+        url: `/pages/filtrate/main`
+      })
+    },
     toCreate () {
       this.$mptoast('创建')
 
@@ -123,7 +105,46 @@ export default {
         url: `/pages/createCard/main`
       })
     },
-    
+    tStart (e) {
+      let that = this
+      that.touchDot = e.touches[0].pageX
+      that.interval =  setInterval(function () {  
+         that.time++;  
+      }, 100);  
+
+      that.isMove = true;
+    },
+    tMove (e) {
+      let touchMove = e.touches[0].pageX
+      let touchDot = this.touchDot
+      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));  */
+      // 向左滑动    
+      if (touchMove - touchDot <= -40 && this.time < 10) {  
+
+        console.log('左滑页面')
+        if(this.isMove){
+          this.nowIndex ++
+          this.isMove = false
+        }
+
+      }  
+      // 向右滑动  
+      else if (touchMove - touchDot >= 40 && this.time < 10) {  
+        console.log('向右滑动');  
+        if(this.isMove){
+          this.nowIndex ++
+          this.isMove = false
+        }
+      }  
+      else {
+          //this.isMove = falses
+      }
+    },
+    tEnd (e) {
+      clearInterval(this.interval); // 清除setInterval  
+      this.time = 0;  
+      //this.isMove = false
+    },
   },
 
   created () {
@@ -159,6 +180,7 @@ export default {
 }
 </script>
 <style lang="less" type="text/less" scoped>
+@import url("~@/styles/animate.less");
   .op_top {
     height: 94rpx;
     padding: 0 40rpx;
@@ -213,9 +235,14 @@ export default {
       margin: 0 auto;
       border-radius: 18rpx;
       overflow: hidden;
-      position: relative;
+      position: absolute;
       border: 1rpx solid red;
       box-sizing: border-box;
+      background: #ffffff;
+      display: none;
+      &.test {
+        display: block;
+      }
       .top {
         width:640rpx;
         height:590rpx;
@@ -249,6 +276,7 @@ export default {
           .adr {
             width:20rpx;
             height:24rpx;
+            margin-right: 8rpx;
           }
         }
         .text {
@@ -404,10 +432,13 @@ export default {
         width: 48rpx;
         height: 48rpx;
         border-radius: 50%;
-        background:rgba(220,227,238,1);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        image { 
+          width: 48rpx;
+          height: 48rpx;
+        }
       }
     }
   }
