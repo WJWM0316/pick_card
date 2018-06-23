@@ -85,7 +85,7 @@
           <input placeholder="请输入姓名" type="" name="" />
         </view>
         <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
-        <button class="ip_btn" v-else>完成绑定</button>
+        <button class="ip_btn">完成绑定</button>
         <view class="hint_1">点击快速绑定手机号码 > ></view>
       </view>
     </view>
@@ -117,7 +117,7 @@
           realname: '',
           avatar_id: '111',
         },
-        nowNum : 1,
+        nowNum : 0,
       }
     },
     methods: {

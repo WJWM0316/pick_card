@@ -169,39 +169,39 @@
       <view class="right">
         <image class="r_icon" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         <image class="r_icon" src="/static/images/home_tab_btn_share_nor@3x.png"></image>
-    </view>
-    <view class="content">
-      <view class="personageList">
-        <view class="card_block">
-          <view class="blo_msg">
-            <image class="blo_img" src="/static/images/img.jpg"></image>
+      </view>
+      <view class="content">
+        <view class="personageList">
+          <view class="card_block">
+            <view class="blo_msg">
+              <image class="blo_img" src="/static/images/img.jpg"></image>
 
-            <view class="msg_name">吕美美</view>
-            <view class="msg_tit">产品经理</view>
-            <view class="msg_company">广州老虎信息科技有限公司</view>
+              <view class="msg_name">吕美美</view>
+              <view class="msg_tit">产品经理</view>
+              <view class="msg_company">广州老虎信息科技有限公司</view>
+            </view>
+          </view>
+        </view>
+        <view class="flockList"></view>
+      </view>
+      <view class="footer">
+        <view class="left">
+          <view class="name cur" @tap="toCreate">Pick</view>
+          <view class="name">名片夹</view>
+          <view class="name">我的名片</view>
+        </view>
+        <view class="right">
+          <view class="r_blo">
+            <image class="detail" src="/static/images/float_btn_returnhome@3x.png"></image>
+          </view>
+          <view class="r_blo">
+            <image class="detail" src="/static/images/float_btn_share@3x.png"></image>
           </view>
         </view>
       </view>
-      <view class="flockList"></view>
+      <authorize-pop></authorize-pop>
+      <mptoast />
     </view>
-    <view class="footer">
-      <view class="left">
-        <view class="name cur" @tap="toCreate">Pick</view>
-        <view class="name">名片夹</view>
-        <view class="name">我的名片</view>
-      </view>
-      <view class="right">
-        <view class="r_blo">
-          <image class="detail" src="/static/images/float_btn_returnhome@3x.png"></image>
-        </view>
-        <view class="r_blo">
-          <image class="detail" src="/static/images/float_btn_share@3x.png"></image>
-        </view>
-      </view>
-    </view>
-    <authorize-pop :isIndex='true'></authorize-pop>
-    <mptoast />
-    
   </view>
 </template>
 <script>

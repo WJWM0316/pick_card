@@ -59,7 +59,7 @@
 			</view>
 		</view>
 		<!-- 工作經歷 -->
-		<view class="other card">
+		<view class="other card" v-if="workInfo.length === 0">
 			<view class="content">
 				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
@@ -75,7 +75,7 @@
 			</view>
 		</view>	
 		<!-- 教育經歷 -->
-		<view class="other card">
+		<view class="other card" v-if="educationsInfo.length === 0">
 			<view class="content">
 				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
@@ -104,7 +104,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="btnControl">
+		<view class="btnControl" v-if="!isSelf">
 			<button class="btn apply" v-if="false">申请和TA交换名片</button>
 			<button class="btn applying"  v-if="false">已申请和TA交换名片</button>
 			<button class="btn applyed" >同意和TA交换名片</button>
@@ -131,46 +131,43 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
-		},
-		onReady () {
 			const vkey = this.vkey
-			if (vkey === wx.getStorageInfoSync('vkey')) {
+			if (vkey === wx.getStorageSync('vkey')) {
 				this.isSelf = true
 			}
+		},
+		onReady () {
 			if (this.isSelf) {
-				getUserInfoApi().then(res => {
-					this.userInfo = res.data
-					console.log('用户数据', this.userInfo)
-				})
-
-				getEducationsInfoApi().then(res => {
-					this.educationsInfo = res.data
-					console.log('教育数据', this.educationsInfo)
-				})
-
-				getWorkInfoApi().then(res => {
-					this.workInfo = res.data
-					console.log('工作数据', this.workInfo)
-				})
-
-				
+				console.log('是本人')
+				return Promise.all([this.getMyUserInfo(), this.getEducationsInfo(), this.getWorkInfo()])
 			} else {
-				getUserInfo2Api(vkey).then(res => {
-					this.userInfo = res.data
-					console.log('用户数据', this.userInfo)
-				})
+				console.log('非本人')
+				return Promise.all([this.getOtherUserInfo()])
 			}
 		},
 		methods: {
-			apply () {
-				// const applyData = {
-				// 	to_uid: 
-				// }
-				// applyApi().then(res => {
-
-				// })
+			getMyUserInfo () {
+				return getUserInfoApi().then(res => {
+					this.userInfo = res.data
+				})
 			},
-			
+			getEducationsInfo () {
+				return getEducationsInfoApi().then(res => {
+					this.educationsInfo = res.data
+				})
+			},
+			getWorkInfo () {
+				return getWorkInfoApi().then(res => {
+					this.workInfo = res.data
+				})
+			},
+			getOtherUserInfo () {
+				return getUserInfo2Api(this.vkey).then(res => {
+					this.userInfo = res.data
+				})
+			},
+			apply () {
+			},
 			previewImg (curImg) {
 				wx.previewImage({
 				  current: curImg, // 当前显示图片的http链接

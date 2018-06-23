@@ -198,7 +198,6 @@ export default {
 }
 </script>
 <style lang="less" type="text/less" scoped>
-@import url("~@/styles/animate.less");
   .op_top {
     height: 94rpx;
     padding: 0 40rpx;

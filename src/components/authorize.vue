@@ -1,5 +1,5 @@
 <template>
-	<view class="authorize" v-if="needAuthorize">
+	<view class="authorize" v-if="needAuthorize" @touchmove.stop="preventEvevt">
 		<view class="pop">
 			<image class="close" v-if="!isIndex" @tap="close" src="/static/images/popup_btn_close_nor@3x.png"></image>
 			<image class="head" src="/static/images/img.jpg"></image>
@@ -61,7 +61,11 @@ open-type="getUserInfo" type="primary">授权</button>
 	    },
 	    close () {
 	    	this.$store.dispatch('needAuthorize', false)
-	    }
+	    },
+	    preventEvevt (e) {
+				e.preventDefault()
+				e.stopPropagation()
+			}
     }
 	}
 
