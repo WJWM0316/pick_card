@@ -34,7 +34,7 @@
 				{
 					"id": 0,
 					"name": "1",
-					"pathName": "pages/detail/main",
+					"pathName": "pages/swopList/main",
 					"query": "user=self"
 				}
 			]

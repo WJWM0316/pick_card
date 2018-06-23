@@ -64,11 +64,11 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
             case 200:
               // 接口请求成功
               util.unloading(isLoading)
-              resolve(msg.data)
+              resolve(msg)
               break
             default:
               util.unloading(isLoading)
-              reject(res)
+              reject(msg)
           }
         }
       },

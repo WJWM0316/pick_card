@@ -170,6 +170,7 @@
         <image class="r_icon" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         <image class="r_icon" src="/static/images/home_tab_btn_share_nor@3x.png"></image>
     </view>
+    </view>
     <view class="content">
       <view class="personageList">
         <view class="card_block">

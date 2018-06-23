@@ -9,7 +9,11 @@
       <view class="peopList" >
         <block v-for="(item, index) in usersInfo" :key="key">
           <view :index="index" class="peop_blo "
-          :class="{'fadeInRight animated test': nowIndex==index, 'fadeOutLeft animated test': nowIndex-1==index}" @touchstart.stop="tStart" @touchend.stop="tEnd" @touchmove.stop="tMove" >
+          :class="{
+            'fadeIn animated test': nowIndex==index, 
+            'fadeOutLeft animated test': nowIndex-1==index&&moveData.style=='left',  'fadeOutRight animated test': 
+            nowIndex-1==index&&moveData.style=='right'
+          }" @touchstart.stop="tStart" @touchend.stop="tEnd" @touchmove.stop="tMove" >
             <view class="top">
               <image class="bage" src="/static/images/img.jpg"></image>
               <view class="location">
@@ -38,11 +42,11 @@
             </view>
           </view>
         </block>
-        <view class="btns">
-          <button class="btn delate">
+        <view class="btns" >
+          <button class="btn delate" @click="unLike">
             <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
           </button>
-          <button class="btn like">
+          <button class="btn like" @tap="like">
             <image src="/static/images/home_btn_like_nor@3x.png"></image>
           </button>
         </view>
@@ -72,8 +76,7 @@
   import mptoast from 'mptoast'
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
-  import {request} from '@/api/require'
-  import { getUserInfoApi, getIndexUsers } from '@/api/pages/user'
+  import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
 export default {
   interval: '',
   components: {
@@ -86,7 +89,10 @@ export default {
       touchDot: 0,
       time: 0,
       nowIndex: 0,
-      isMove: false,
+      moveData: {
+        isMove: false,
+        style: '',  //left or right
+      }
     }
   },
 
@@ -126,7 +132,10 @@ export default {
          that.time++;  
       }, 100);  
 
-      that.isMove = true;
+      that.moveData={
+        isMove: true,
+        style: '', 
+      }
     },
     tMove (e) {
       let touchMove = e.touches[0].pageX
@@ -136,28 +145,67 @@ export default {
       if (touchMove - touchDot <= -40 && this.time < 10) {  
 
         console.log('左滑页面')
-        if(this.isMove){
-          this.nowIndex ++
-          this.isMove = false
+        if(this.moveData.isMove){
+          
+          this.unLike()
         }
 
       }  
       // 向右滑动  
       else if (touchMove - touchDot >= 40 && this.time < 10) {  
         console.log('向右滑动');  
-        if(this.isMove){
-          this.nowIndex ++
-          this.isMove = false
+        if(this.moveData.isMove){
+          
+          this.like()
         }
       }  
-      else {
-          //this.isMove = falses
-      }
     },
     tEnd (e) {
       clearInterval(this.interval); // 清除setInterval  
       this.time = 0;  
-      //this.isMove = false
+    },
+    like () {
+      console.log('like')
+
+      let data = this.usersInfo[this.nowIndex]
+      let msg = {
+        to_uid: '123123',//data.unionid
+        remarks: 'biangbiangbiangqiang'
+      }
+      indexLike(msg).then((res)=>{
+        console.log(res)
+        this.nowIndex ++
+        this.moveData={
+          isMove: false,
+          style: 'right', 
+        }
+      },(res)=>{
+        console.log(res)
+        this.$mptoast(res.msg)
+      })
+    },
+
+    unLike () {
+      console.log('unlike')
+
+      let data = this.usersInfo[this.nowIndex]
+      let msg = {
+        to_uid: '123123',//data.unionid
+        remarks: 'biangbiangbiangqiang'
+      }
+      this.moveData={
+        isMove: false,
+        style: 'left', 
+      }
+      this.nowIndex ++
+
+      /*indexUnlike(msg).then((res)=>{
+        console.log(res)
+        this.nowIndex ++
+      },(res)=>{
+        console.log(res)
+        this.$mptoast(res.msg)
+      })*/
     },
   },
 
@@ -166,7 +214,6 @@ export default {
       title: '提示',
       content: 'login',
       success: function(res) {
-
         if (res.confirm) {
           let data = {
             email: 18802090814,
@@ -182,12 +229,15 @@ export default {
         }
       }
     })*/
+    getUserInfoApi().then((res)=>{
+      console.log(res.data)
+    })
   },
 
   onLoad() {
     let that = this
     getIndexUsers().then((res)=>{
-      that.usersInfo = res
+      that.usersInfo = res.data
       console.log(res)
     })
   }
