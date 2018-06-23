@@ -1,6 +1,6 @@
 
 <template>
-  <div class="container" >
+  <view class="container" >
     <view class="hint">记录只保留14天，抓紧时间处理哦~</view>
     <view class="swopList">
       <view class="swop_blo" v-for="(item, index) in listData" :key="key">
