@@ -64,5 +64,14 @@ export const saveSignFirst = (data) => {
   })
 }
 
+// 当前用户申请添加
+export const applyApi = (data) => {
+  return request({
+    method,
+    url: `/cur/applys`,
+    data
+  })
+}
+
 
 

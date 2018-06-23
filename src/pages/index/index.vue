@@ -7,9 +7,9 @@
     </view>
     <view class="content">
       <view class="peopList" >
-        <block v-for="(item, index) in usersInfo" :key="key">
+        <block v-for="(item, index) in usersInfo" :key="key" >
           <view :index="index" class="peop_blo "
-          :class="{'fadeInRight animated test': nowIndex==index, 'fadeOutLeft animated test': nowIndex-1==index}" @touchstart.stop="tStart" @touchend.stop="tEnd" @touchmove.stop="tMove" >
+          :class="{'fadeInRight animated test': nowIndex==index, 'fadeOutLeft animated test': nowIndex-1==index}" @tap="toDeatil(item)" @touchstart="tStart" @touchend.stop="tEnd" @touchmove.stop="tMove">
             <view class="top">
               <image class="bage" src="/static/images/img.jpg"></image>
               <view class="location">
@@ -91,6 +91,12 @@ export default {
   },
 
   methods: {
+    toDeatil (item) {
+      console.log(111111111)
+      wx.navigateTo({
+        url: `/pages/detail/main?vkey=${item.vkey}`
+      })
+    },
     toFiltrate () {
       this.$mptoast('筛选')
 
@@ -173,8 +179,8 @@ export default {
   onLoad() {
     let that = this
     getIndexUsers().then((res)=>{
-      that.usersInfo = res
-      console.log(res)
+      that.usersInfo = res.data
+      console.log(res.data)
     })
   }
 }

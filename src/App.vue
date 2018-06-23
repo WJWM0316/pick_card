@@ -1,11 +1,13 @@
 <script>
 import {getSessionKeyApi, saveBaseUserInfo} from '@/api/pages/login'
 export default {
+  globalData : {
+    userInfo: null
+  },
   data () {
     return {
     }
   },
-  
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch () {
     this.checkLogin()
