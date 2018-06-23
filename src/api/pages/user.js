@@ -74,4 +74,48 @@ export const applyApi = (data) => {
 }
 
 
+//首页卡片喜欢
+export const indexLike = (data) => {
+  return request({
+    method: 'post',
+    url: `/cur/applys`,
+    data
+  })
+}
 
+//处理卡片喜欢 0 等待处理 1 已同意 2 已拒绝 3 忽略
+export const putLike = (data) => {
+  return request({
+    method: 'put',
+    url: `/cur/applys/${data.id}`,
+    data
+  })
+}
+
+//删除申请
+export const delLike = (data) => {
+  return request({
+    method: 'delete',
+    url: `/cur/applys/${data.id}`,
+    data
+  })
+}
+
+//首页卡片不喜欢
+export const indexUnlike = (data) => {
+  return request({
+    method: 'post',
+    url: `/cur/applys`,
+    data
+  })
+}
+
+
+//获取申请记录列表
+export const getLikeList = (data) => {
+  return request({
+    method: 'get',
+    url: `/cur/applys`,
+    data
+  })
+}

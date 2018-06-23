@@ -72,7 +72,22 @@
         <textarea class="area" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" />
         <text class="astrict">1/1</text>
       </view>
+    </view>
 
+    <view class="sign_iphone">
+      <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" ></image></view>
+      <view class="ip_cont">
+        <view class="ipt_blo">
+          <input placeholder="请输入姓名" type="" name="" />
+          <text class="getcode">获取验证码</text>
+        </view>
+        <view class="ipt_blo">
+          <input placeholder="请输入姓名" type="" name="" />
+        </view>
+        <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
+        <button class="ip_btn" v-else>完成绑定</button>
+        <view class="hint_1">点击快速绑定手机号码 > ></view>
+      </view>
     </view>
 
     <view class="footer">
