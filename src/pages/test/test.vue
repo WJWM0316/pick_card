@@ -9,6 +9,7 @@
    </view>
 </template>
 <script>
+  import { request } from '@/api/require'
   export default {
   config: {
       navigationBarTitleText: 'TodoList',
@@ -29,7 +30,8 @@
         new_scale: 1,//新的放大倍数  
         is_move: false,//是否移动  
         bg_url: '',
-        isTouch: false
+        isTouch: false,
+        testImg: null
       }
     },
     created () {
@@ -50,9 +52,10 @@
                 sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
                 sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
                 success: function (res0) {  
-                  
                   that.tempFilePath = res0.tempFilePaths[0]
-                  console.log(that.tempFilePath, res0.tempFilePaths[0]) 
+                  console.log(that.tempFilePath, res0.tempFilePaths[0])
+                  that.testImg = res0.tempFiles
+                  console.log(res0, 22222)
                   wx.getImageInfo({  
                     src: that.tempFilePath,  
                     success: function (res) {  
@@ -142,9 +145,9 @@
         success: function (res) {    
           //res.tempFilePath即为生成的图片路径
           that.bg_url = res.tempFilePath
+          console.log(res, 33333333)
           that.save_img()
-          console.log(res.tempFilePath)  
-            
+          console.log(res.tempFilePath)   
         }  
       })  
     },  

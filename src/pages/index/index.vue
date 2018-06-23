@@ -7,13 +7,17 @@
     </view>
     <view class="content">
       <view class="peopList" >
-        <block v-for="(item, index) in usersInfo" :key="key">
+        <block v-for="(item, index) in usersInfo" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
             'fadeIn animated test': nowIndex==index, 
             'fadeOutLeft animated test': nowIndex-1==index&&moveData.style=='left',  'fadeOutRight animated test': 
             nowIndex-1==index&&moveData.style=='right'
-          }" @touchstart.stop="tStart" @touchend.stop="tEnd" @touchmove.stop="tMove" >
+          }" 
+          @tap="toDeatil(item)" 
+          @touchstart="tStart" 
+          @touchend="tEnd" 
+          @touchmove="tMove" >
             <view class="top">
               <image class="bage" src="/static/images/img.jpg"></image>
               <view class="location">
@@ -97,9 +101,13 @@ export default {
   },
 
   methods: {
+    toDeatil (item) {
+      wx.navigateTo({
+        url: `/pages/detail/main?vkey=${item.vkey}`
+      })
+    },
     toCardHolder () {
       this.$mptoast('名片夹')
-
       wx.navigateTo({
         url: `/pages/cardHolder/main`
       })
@@ -238,7 +246,6 @@ export default {
     let that = this
     getIndexUsers().then((res)=>{
       that.usersInfo = res.data
-      console.log(res)
     })
   }
 }

@@ -3,7 +3,6 @@
   <div class="container" >
     <view class="hint">记录只保留14天，抓紧时间处理哦~</view>
     <view class="swopList">
-
       <view class="swop_blo" v-for="(item, index) in listData" :key="key">
 
         <view class="blo_top">
@@ -24,7 +23,7 @@
     </view>
 
     <mptoast />
-  </div>
+  </view>
 </template>
 <style lang="less" type="text/less" scoped>
   .hint {

@@ -11,7 +11,8 @@
 				<view class="nameBox">
 					<view>
 						<text class="name">{{userInfo.nickname}}</text>
-						<image class="sex" src="/static/images/details_icon_female@3x.png"></image>
+						<image class="sex" src="/static/images/details_icon_female@3x.png" v-if="userInfo.gender === 2"></image>
+						<image class="sex" src="/static/images/details_icon_man@3x.png"></image>
 					</view>
 					<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
@@ -58,7 +59,7 @@
 			</view>
 		</view>
 		<!-- 工作經歷 -->
-		<view class="other card" v-if="workInfo.length === 0">
+		<view class="other card">
 			<view class="content">
 				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
@@ -74,7 +75,7 @@
 			</view>
 		</view>	
 		<!-- 教育經歷 -->
-		<view class="other card" v-if="educationsInfo.length === 0">
+		<view class="other card">
 			<view class="content">
 				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
@@ -99,7 +100,7 @@
 				<view class="article">我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我</view>
 
 				<view class="imgBox">
-					<image  v-for="(i, index) in 9" :key="index" class="img" src="/static/images/img.jpg"></image>
+					<image  v-for="(i, index) in 9" :key="index" class="img" src="/static/images/img.jpg" @tap.stop="previewImg('/static/images/img.jpg')"></image>
 				</view>
 			</view>
 		</view>
@@ -113,7 +114,7 @@
 </template>
 <script>
 	import MpRadio from 'mp-weui/packages/radio'
-	import {getUserInfo2Api, getUserInfoApi, getEducationsInfoApi, getWorkInfoApi} from '@/api/pages/user'
+	import {getUserInfo2Api, getUserInfoApi, getEducationsInfoApi, getWorkInfoApi, applyApi} from '@/api/pages/user'
 	export default {
 		components: {
 	   	'mp-radio': MpRadio
@@ -121,17 +122,21 @@
 		data () {
 			return {
 				isSelf: false,
+				vkey: '',
+				imgList: ['/static/images/img.jpg'],
 				userInfo: {},
 				educationsInfo: {},
 				workInfo: {}
 			}
 		},
 		onLoad (option) {
-			console.log(MpRadio)
-			option.user === 'self' ? this.isSelf = true : this.isSelf = false
+			this.vkey = option.vkey
 		},
 		onReady () {
-			const vkey = 'lerktonr6t'
+			const vkey = this.vkey
+			if (vkey === wx.getStorageInfoSync('vkey')) {
+				this.isSelf = true
+			}
 			if (this.isSelf) {
 				getUserInfoApi().then(res => {
 					this.userInfo = res.data
@@ -145,15 +150,33 @@
 
 				getWorkInfoApi().then(res => {
 					this.workInfo = res.data
-					console.log('教育数据', this.workInfo)
+					console.log('工作数据', this.workInfo)
 				})
+
+				
 			} else {
 				getUserInfo2Api(vkey).then(res => {
 					this.userInfo = res.data
 					console.log('用户数据', this.userInfo)
 				})
 			}
+		},
+		methods: {
+			apply () {
+				// const applyData = {
+				// 	to_uid: 
+				// }
+				// applyApi().then(res => {
+
+				// })
+			},
 			
+			previewImg (curImg) {
+				wx.previewImage({
+				  current: curImg, // 当前显示图片的http链接
+				  urls: this.imgList // 需要预览的图片http链接列表
+				})
+			}
 		}
 	}
 </script>
