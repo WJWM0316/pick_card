@@ -5,7 +5,7 @@
 			<view class="con">
 				<checkbox-group class="labelBox" @change="checkboxChange">
 					<label  v-for="(item, index) in labelList" :key="index">
-						<checkbox class="checkbox" :value="index"></checkbox>
+						<checkbox class="checkbox" :value="index + ' ' +item"></checkbox>
 						<text class="label">{{item}}</text>
 					</label>
 				</checkbox-group>
@@ -44,21 +44,33 @@
 					'萨达奥术大师',
 					'萨达大师',
 					'奥术大师',
-				]
+				],
+				checkedList: []
 			}
 		},
 		watch: {
 			isShow () {}
 		},
 		methods: {
+			getLabel (index) {
+				return index
+			},
 			close () {
-				this.isShow = false
+				this.$emit('close')
 			},
 			save () {
-				this.isShow = false
-				this.$emit('getLabel', )
+				let labelIndex = []
+				let labelText = []
+				this.checkedList.filter(item => {
+					let a = item.split(' ')
+					labelIndex.push(a[0])
+					labelText.push(a[1])
+				})
+				let showList = []
+				this.$emit('getLabel', labelIndex, labelText)
 			},
 			checkboxChange (e) {
+				this.checkedList = e.mp.detail.value
 				console.log(e.mp.detail.value)
 			},
 			preventEvevt (e) {

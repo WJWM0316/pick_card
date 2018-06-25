@@ -69,6 +69,12 @@ page {
   color: #353943;
   height: 100%;
 }
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 button {
   content: "";  
   border:0; padding: 0; margin: 0;

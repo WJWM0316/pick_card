@@ -73,27 +73,31 @@
         <text class="astrict">1/1</text>
       </view>
     </view>
-
-    <view class="sign_iphone">
-      <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" ></image></view>
-      <view class="ip_cont">
-        <view class="ipt_blo">
-          <input placeholder="请输入姓名" type="" name="" />
-          <text class="getcode">获取验证码</text>
-        </view>
-        <view class="ipt_blo">
-          <input placeholder="请输入姓名" type="" name="" />
+    <view class="pop_warp hidden">
+      <view class="sign_iphone" >
+        <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" ></image></view>
+        <view class="ip_cont">
+          <view class="ipt_blo">
+            <text class="getcode">获取验证码</text>
+            <input placeholder="请输入手机号" type="" name="" />
+          </view>
+          <view class="ipt_blo">
+            <input placeholder="请输入验证码" type="" name="" />
+          </view>
+          <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
+          <button class="ip_btn" >完成绑定</button>
+          <view class="hint_2">点击快速绑定手机号码 > ></view>
         </view>
         <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
         <button class="ip_btn">完成绑定</button>
         <view class="hint_1">点击快速绑定手机号码 > ></view>
+
       </view>
     </view>
-
     <view class="footer">
       <button class="next toNext" @click="toNext(1)"  v-if="nowNum == 1 && firstData.gender !== 0 && firstData.realname.length>0">下一步</button>
       <button class="next" v-else>下一步</button>
-      <!-- <button class="next" wx:else>完成创建</button> -->
+      <!-- <button class="next" v-else>完成创建</button> -->
     </view>
     <mptoast />
   </div>
@@ -154,6 +158,108 @@
   .container {
     padding-bottom: 160rpx;
   }
+  .pop_warp {
+    position: fixed;
+    left: 0;
+    background:rgba(0,0,0,0.7);
+    right:0;
+    top:0;
+    bottom:0;
+    z-index:2222;
+  }
+
+  .sign_iphone {
+    width:670rpx;
+    height:670rpx;
+    background:rgba(255,255,255,1);
+    border-radius:18rpx;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    .ip_top {
+      width:670rpx;
+      height:92rpx;
+      box-shadow:0rpx 1rpx 0rpx 0rpx rgba(53,57,67,0.1);
+      border-radius:18rpx 18rpx 0rpx 0rpx;
+      line-height:92rpx;
+      font-size:32rpx;
+      font-family:PingFangHK-Medium;
+      color:rgba(53,57,67,1);
+      border-bottom: 1rpx solid #ededed;
+      text-align: center;
+      position: relative;
+      image {
+        width:28rpx;
+        height:28rpx;
+        background:rgba(195,201,212,1);
+        position: absolute;
+        right: 33rpx;
+        top: 33rpx;
+      }
+    }
+    .ip_cont {
+        padding: 80rpx 60rpx 60rpx;
+
+      .hint_1 {
+        height:24rpx;
+        font-size:24rpx;
+        font-family:PingFangSC-Light;
+        color:rgba(255,102,102,1);
+        line-height:24rpx;
+        text-align: center;
+        margin-bottom: 28rpx;
+      }
+      .hint_2 {
+        height:28rpx;
+        font-size:28rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(0,208,147,1);
+        line-height:28rpx;
+        text-align: center;
+      }
+      .ip_btn {
+        width:570rpx;
+        height:98rpx;
+        background:rgba(0,208,147,1);
+        border-radius:49rpx;
+        font-size:32rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(255,255,255,1);
+        line-height:98rpx;
+        margin-bottom: 37rpx;
+      }
+      .ipt_blo {
+        width:550rpx;
+        height:90rpx;
+        position: relative;
+        margin-bottom: 20rpx;
+        input {
+          width:550rpx;
+          height:90rpx;
+          background:rgba(250,251,252,1);
+          border-radius:44rpx;
+          font-size:32rpx;
+          font-family:SFUIDisplay-Regular;
+          color:rgba(53,57,67,1);
+          line-height:90rpx;
+          box-sizing: border-box;
+          padding-left: 40rpx;
+        }
+        .getcode {
+          height: 28rpx;
+          font-size:28rpx;
+          font-family:PingFangSC-Regular;
+          color:rgba(0,208,147,1);
+          line-height:28rpx;
+          position: absolute;
+          top: 30rpx;
+          right: 40rpx;
+          z-index: 10;
+        }
+      }
+    }
+  }
   .footer {
     position: fixed;
     bottom: 0;
@@ -161,6 +267,7 @@
     height: 130rpx;
     background: #ffffff;
     width: 100%;
+    z-index: 1;
     .next {
       margin: 0 auto;
       width: 670rpx;

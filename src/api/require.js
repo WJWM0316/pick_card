@@ -68,7 +68,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
               break
             default:
               util.unloading(isLoading)
-              reject(res)
+              reject(msg)
           }
         }
       },

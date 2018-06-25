@@ -66,9 +66,13 @@
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">擅长领域</view>
-					<view class="right" @tap.stop="showLablePopFun">
-						<view class="fieldBox">
-							<text class="field">知识付费 | 知识付费</text>
+					<view class="right" @tap.stop="showPop">
+						<text class="placeholder" v-if="checkedTextList.length === 0">请选择擅长领域</text>
+						<view class="fieldBox" v-else>
+							<block  v-for="(item, index) in checkedTextList">
+								<text class="field">{{item}}</text>
+								<text v-if="index !== checkedTextList.length - 1"> | </text>
+							</block>
 						</view>
 					</view>
 				</view>
@@ -137,7 +141,11 @@
 		<section class="btn">
 			<button>保存资料</button>
 		</section>
-		<label-pop :isShow="showLablePop"></label-pop>
+		<label-pop 
+			:isShow="showLablePop"
+			@close="close"
+			@getLabel="getLabel"
+		></label-pop>
 	</view>
 </template>
 <script>
@@ -148,8 +156,7 @@
 	  },
 		data () {
 			return {
-				isSelf:
-				 false,
+				isSelf: false,
 				vkey: '',
 				imgList: ['/static/images/img.jpg'],
 				userInfo: {},
@@ -164,7 +171,9 @@
 					'吃屎吧',
 				],
 				showLablePop: false, // 擅长领域
-				career: null
+				career: null,
+				checkedIndexList: [],
+				checkedTextList: []
 			}
 		},
 		onLoad (option) {
@@ -174,7 +183,15 @@
 
 		},
 		methods: {
-			showLablePopFun () {
+			closePop () {
+				this.showLablePop = false
+			},
+			getLabel (a, b) {
+				this.checkedIndexList = a
+				this.checkedTextList = b
+				this.showLablePop = false
+			},
+			showPop () {
 				this.showLablePop = true
 			},
 			careerChange (e) {
@@ -246,6 +263,9 @@
 			  	.right {
 						text-align: right;
 						overflow: hidden;
+						.placeholder {
+							color: #B2B6C2;
+						}
 						.radio {
 							font-size: 0;
 							margin-left: 50rpx;
@@ -281,6 +301,7 @@
 							}
 						}
 						.fieldBox {
+							white-space: nowrap;
 						}
 			  	}
 				}
