@@ -28,7 +28,6 @@
         hide_canvas: true,
         ctx: '',
         start_position: {},//移动图片时手指起始坐标  
-        tempFilePath: '',//图片路径  
         tempWidth: 0,//图片初始宽度  
         tempHeight: 0,//图片初始高度  
         old_x: 0,//图片初始x坐标  
@@ -42,23 +41,26 @@
         openSet: false
       }
     },
-    onReady () {
+    mounted () {
       this.ctx = wx.createCanvasContext('cover-preview')
-      this.change_cover()
+      // if (this.bg_url) {
+      //   wx.getSetting({
+      //     success(res) {
+      //       console.log(res, res.authSetting['scope.writePhotosAlbum'])
+      //       if (!res.authSetting['scope.writePhotosAlbum']) {
+      //         that.openSet = true
+      //       } else {
+      //         that.openSet = false
+      //       }
+      //     }
+      //   })
+      // }
     },
-    onShow () {
-      const that = this
-      if (this.bg_url) {
-        wx.getSetting({
-          success(res) {
-            console.log(res, res.authSetting['scope.writePhotosAlbum'])
-            if (!res.authSetting['scope.writePhotosAlbum']) {
-              that.openSet = true
-            } else {
-              that.openSet = false
-            }
-          }
-        })
+    watch: {
+      isShow (val) {
+        if (val) {
+          this.change_cover()
+        }
       }
     },
     methods: {
@@ -68,11 +70,10 @@
       wx.getImageInfo({  
         src: that.filePath,  
         success: function (res) {  
-          // console.log(res.width)  
-          // console.log(res.height)  
+          console.log(res, 1111111111) 
           that.tempWidth = res.width;  
           that.tempHeight = res.height;
-          that.ctx.drawImage(that.tempFilePath,0, 0, 375,res.height/res.width*375);  
+          that.ctx.drawImage(that.filePath,0, 0, 375,res.height/res.width*375);  
           that.ctx.draw();  
         }  
       }) 
@@ -101,7 +102,7 @@
         let x = this.old_x + e.touches[0].pageX - this.start_position.x
         let y = this.old_y + e.touches[0].pageY - this.start_position.y
         console.log(x, y)
-        this.ctx.drawImage(this.tempFilePath, x, y, 375 * this.new_scale, this.tempHeight / this.tempWidth * 375 * this.new_scale);  
+        this.ctx.drawImage(this.filePath, x, y, 375 * this.new_scale, this.tempHeight / this.tempWidth * 375 * this.new_scale);  
         this.ctx.draw();  
         this.is_move = true;  
       } else if (this._touches == 2 && e.timeStamp - this.start_position.timeStamp > 150) {
@@ -113,7 +114,7 @@
         }else{  
           this.old_scale = Math.abs(e.touches[0].pageY - e.touches[1].pageY) / Math.abs(this.start_position.y - this.start_position.y1);  
         }  
-        this.ctx.drawImage(this.tempFilePath, this.old_x, this.old_y, 375 * this.old_scale * this.new_scale, this.tempHeight / this.tempWidth * 375 * this.old_scale * this.new_scale);  
+        this.ctx.drawImage(this.filePath, this.old_x, this.old_y, 375 * this.old_scale * this.new_scale, this.tempHeight / this.tempWidth * 375 * this.old_scale * this.new_scale);  
         this.ctx.draw();  
         this.is_move = true;  
       }else{  
@@ -143,7 +144,7 @@
         height: screenWidth / 750 * 661,  
         destWidth: 1000,  
         destHeight: 1000,  
-        quality:1,  
+        quality: 1,  
         canvasId: 'cover-preview',  
         success: function (res) {    
           //res.tempFilePath即为生成的图片路径
@@ -161,15 +162,31 @@
             }
           }).then(res => {
             console.log(res, 1)
+            that.ctx.clearActions()
+            that.$emit('isHide', false)
+            that.$emit('getImgcut', res.file.fileId, that.bg_url)
+            // wx.showModal({
+            //   title: '上传成功',
+            //   content: '是否需要保存至相册',
+            //   success: function (res) {
+            //     if (res.confirm) {
+            //       that.save_img()
+            //     } else {
+            //       that.isShow = false
+            //     }
+                
+            //   }
+            // })
           }).catch((e, index) => {
             console.log(e, 2)
           })
-          // that.save_img()          
+                 
         }  
       })  
     },  
     //取消图片预览编辑  
-    cancel_croper:function(){  
+    cancel_croper:function(){
+      this.$emit('isHide', false)
       this.ctx.clearActions() 
     },
     save_img () {
@@ -186,9 +203,11 @@
                   filePath: that.bg_url,
                   success: function (e) {
                     console.log('保存成功', e)
-                    wx.navigateBack({
-                      delta: 1
+                    wx.showToast({
+                      title: '保存成功',
+                      icon: 'success'
                     })
+                    that.isShow = false
                   },
                   fail: function (e) {
                     console.log('保存失败', e)
@@ -250,6 +269,8 @@
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 222;
+    background: #fff;
   }
   .master {
     width: 100%;  

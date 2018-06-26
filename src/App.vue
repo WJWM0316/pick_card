@@ -76,6 +76,7 @@ export default {
 </script>
 
 <style>
+@import url("~@/styles/app.less");
 page {
   font-size: 28rpx;
   color: #353943;

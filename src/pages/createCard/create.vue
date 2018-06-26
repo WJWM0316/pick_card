@@ -5,18 +5,18 @@
       <image class="hint_img" src=""></image>
       <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有</view>
     </view>
-    <view class="op_one " :class="{'hidden': nowNum!=1}">
+    <view class="op_one " v-if="nowNum === 0">
       <view class="one_txt">
         <view class="tit1">创建名片，开启有趣的职场社交</view>
         <view class="tit2">真实可靠的职场形象总能碰到机遇</view>
       </view>
 
       <view class="one_pic">
-        <view class="img_wrap">
+        <view class="img_wrap" @tap="chooseImg">
           <view class="up_wrap">
-            <image class="up_img" src=""></image>
+            <image class="up_img" src="/static/images/as.png"></image>
           </view>
-          <image class="pic" src=""></image>
+          <image class="pic" :src="filePath"></image>
         </view>
       </view>
       <!-- //focus="{{focus}}" -->
@@ -35,14 +35,14 @@
     </view>
 
 
-    <view class="op_two " :class="{'hidden': nowNum==1}">
+    <view class="op_two " v-if="nowNum === 1">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
         <input class="one_ipt" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt" v-model="firstData.realname" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  />
+        <input class="one_ipt" v-model="firstData.realname"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  />
       </view>
 
       <view class="table_blo row_style_two">
@@ -73,7 +73,8 @@
         <text class="astrict">1/1</text>
       </view>
     </view>
-    <view class="pop_warp hidden" v-if="isIp">
+
+    <view class="pop_warp" v-if="nowNum === 2">
       <view class="sign_iphone" >
         <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" ></image></view>
         <view class="ip_cont">
@@ -88,43 +89,84 @@
           <button class="ip_btn" @click="toCode">完成绑定</button>
           <view class="hint_2">点击快速绑定手机号码 > ></view>
         </view>
+        <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
+        <button class="ip_btn">完成绑定</button>
+        <view class="hint_1">点击快速绑定手机号码 > ></view>
+
       </view>
     </view>
     <view class="footer">
-      <button class="next toNext" @click="toNext(1)"  v-if="nowNum == 1 && firstData.gender !== 0 && firstData.realname.length>0">下一步</button>
-      <button class="next" v-else>下一步</button>
-      <!-- <button class="next" v-else>完成创建</button> -->
+      <button class="next" :class="{'toNext' : step}" @click="toNext(nowNum)">下一步</button>
     </view>
     <mptoast />
+    <cut-img :isShow="isShow"
+             :filePath="filePath"
+             @getImgcut="getImgcut"
+             @isHide="isHide"
+    ></cut-img>
   </div>
 </template>
 
 <script>
   import mptoast from 'mptoast'
   import { firstSignApi, smsApi } from '@/api/pages/login'
-
+  import cutImg from '@/components/cutImg'
   export default {
-    
     components: {
-      mptoast
+      mptoast,
+      cutImg
     },
     data () {
       return {
         focus: false,
         firstData: {
-          gender: 0, //性别 1女 2男
+          gender: 0, //性别 1女 2男 0没有选择
           realname: '',
-          avatar_id: '111',
+          avatar_id: '',
         },
         bindPhone: {
           number: '',
           code: ''
         },
         nowNum : 1,
-        isIp: false
+        isIp: false,
+        isShow: false,
+        filePath: '/static/images/new_pic_defaulhead.jpg',
+        isShow: false,
+        nowNum : 0,
       }
     },
+    computed: {
+      step () {
+        // switch (this.nowNum) {
+        //   case 0:
+        //     
+        //     break
+        // }
+      },
+    },
     methods: {
+      chooseImg () {
+        const that = this
+        wx.chooseImage({  
+          count: 1, // 默认9  
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
+          success: function (res0) {  
+            that.filePath = res0.tempFilePaths[0]
+            console.log(that.filePath)
+            that.isShow = true
+          }  
+        })  
+      },
+      getImgcut (fileId, filePath) {
+        this.filePath = filePath
+        this.firstData.avatar_id = fileId
+        console.log(fileId, filePath, 11111111111111111111111111)
+      },
+      isHide () {
+        this.isShow = false
+      },
       gender (res) {
         console.log(res)
         let that = this;
@@ -134,7 +176,6 @@
       },
       inputText (e) {
         console.log(e)
-
         let val = e.target.value
         if(val.length>0){
           this.firstData.realname = val
@@ -181,10 +222,24 @@
         smsApi(data).then((res)=>{
           console.log(res)
         })
+        let that = this
+        switch (num) {
+          case 0: 
+            if (this.firstData.gender === 0 || this.firstData.realname === '' || this.firstData.avatar_id === '') {
+              wx.showToast({
+                title: '信息未完善',
+                icon: 'none'
+              })
+              return false
+            }
+            firstSignApi(this.firstData).then((res)=>{
+              console.log(res)
+              that.nowNum = 1
+            })
+            break
+        }
       }
-    },
-
-    created () {}
+    }
   }
 </script>
 
@@ -357,16 +412,13 @@
           top: 22rpx;
           width:60rpx;
           height:60rpx;
-          background:rgba(0,208,147,1);
-          border-radius: 50%;
           display: flex;
           flex-direction: row;
           justify-content: center;
           align-items: center;
           .up_img {
-            width:34rpx;
-            height:28rpx;
-            background:rgba(255,255,255,1);
+            width:100%;
+            height:100%;
           }
         }
       }

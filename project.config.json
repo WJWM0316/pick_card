@@ -34,8 +34,8 @@
 				{
 					"id": 0,
 					"name": "1",
-					"pathName": "pages/swopList/main",
-					"query": "user=self"
+					"pathName": "pages/edit/main",
+					"query": "vkey=6ohknx4gir"
 				}
 			]
 		}

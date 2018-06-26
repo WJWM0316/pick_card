@@ -156,6 +156,7 @@ export default {
       this.isShare = false
     },
     toDeatil (item) {
+      console.log(item, 22222222222)
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
       })
@@ -291,12 +292,6 @@ export default {
     }
   },
 
-  created () {
-    /*getUserInfoApi().then((res)=>{
-      console.log(res.data)
-    })*/
-  },
-
   onLoad(res) {
 
     let that = this
@@ -311,6 +306,7 @@ export default {
     getIndexUsers(data).then((res)=>{
       console.log(res)
       that.usersInfo = res.data
+      console.log(res.data, 22222)
     })
   },
   onShow (res) {
