@@ -14,7 +14,7 @@
 						<image class="sex" src="/static/images/details_icon_female@3x.png" v-if="userInfo.gender === 2"></image>
 						<image class="sex" src="/static/images/details_icon_man@3x.png"></image>
 					</view>
-					<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
+					<image class="share" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit(1)"></image>
 				</view>
 				<view class="job">{{userInfo.company}}</view>
 				<view class="company">{{userInfo.company}}</view>
@@ -59,7 +59,7 @@
 			</view>
 		</view>
 		<!-- 工作經歷 -->
-		<view class="other card" v-if="workInfo.length === 0">
+		<view class="other card" v-if="workInfo.length > 0">
 			<view class="content">
 				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
@@ -75,7 +75,7 @@
 			</view>
 		</view>	
 		<!-- 教育經歷 -->
-		<view class="other card" v-if="educationsInfo.length === 0">
+		<view class="other card" v-if="educationsInfo.length > 0">
 			<view class="content">
 				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
@@ -105,16 +105,16 @@
 			</view>
 		</view>
 		<view class="btnControl" v-if="!isSelf">
-			<button class="btn apply" v-if="false">申请和TA交换名片</button>
-			<button class="btn applying"  v-if="false">已申请和TA交换名片</button>
-			<button class="btn applyed" >同意和TA交换名片</button>
-			<button class="btn remove" v-if="false">移除名片</button>
+			<button class="btn apply" @tap="applyFun" v-if="userInfo.handle_status === 1">申请和TA交换名片</button>
+			<button class="btn applying" v-if="userInfo.handle_status === 2">已申请和TA交换名片</button>
+			<button class="btn applyed"  v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
+			<button class="btn remove" v-if="userInfo .handle_status === 4 && false">移除名片</button>
 		</view>
 	</view>
 </template>
 <script>
 	import MpRadio from 'mp-weui/packages/radio'
-	import {getUserInfo2Api, getUserInfoApi, getEducationsInfoApi, getWorkInfoApi, applyApi} from '@/api/pages/user'
+	import {getUserInfo2Api, getUserInfoApi, getEducationsInfoApi, getWorkInfoApi, indexLike} from '@/api/pages/user'
 	export default {
 		components: {
 	   	'mp-radio': MpRadio
@@ -125,8 +125,9 @@
 				vkey: '',
 				imgList: ['/static/images/img.jpg'],
 				userInfo: {},
-				educationsInfo: {},
-				workInfo: {}
+				educationsInfo: [],
+				workInfo: [],
+				labelInfo: []
 			}
 		},
 		onLoad (option) {
@@ -146,6 +147,14 @@
 			}
 		},
 		methods: {
+			applyFun () {
+				console.log(11111111111)
+				const data = {
+					to_uid: this.vkey
+				}
+				indexLike(data).then(res => {
+				})
+			},
 			getMyUserInfo () {
 				return getUserInfoApi().then(res => {
 					this.userInfo = res.data
@@ -164,9 +173,16 @@
 			getOtherUserInfo () {
 				return getUserInfo2Api(this.vkey).then(res => {
 					this.userInfo = res.data
+					this.educationsInfo = res.data.other_info.education_info,
+					this.workInfo = res.data.other_info.career_info
+					this.labelInfo = res.data.other_info.label_info
+					console.log(this.userInfo, this.educationsInfo)
 				})
 			},
-			apply () {
+			toEdit (e) {
+				wx.navigateTo({
+	        url: `/pages/edit/main?vkey=${this.vkey}`
+	      })
 			},
 			previewImg (curImg) {
 				wx.previewImage({

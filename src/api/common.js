@@ -24,7 +24,7 @@ export const getGeneralListApi = data => request({
  * @param {*} data { file_type } file_type：image:图片,audio:音频,video:视频,file:文件
  */
 export const getUploadFileConfig = data => request({
-  url: '/wx/currency/getUploadFileConfig',
+  url: '/files/getUploadFileConfig',
   isLoading: false,
   data
 })

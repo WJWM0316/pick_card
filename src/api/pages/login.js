@@ -13,7 +13,8 @@ export const loginApi = (data) => {
 // 注册
 export const firstSignApi = (data) => {
   return request({
-    url: '/users/first',
+    method: 'put',
+    url: '/cur/first',
     data
   })
 }

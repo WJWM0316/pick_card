@@ -238,9 +238,9 @@ export default {
         }
       }
     })*/
-    getUserInfoApi().then((res)=>{
-      console.log(res.data)
-    })
+    // getUserInfoApi().then((res)=>{
+    //   console.log(res.data)
+    // })
   },
 
   onLoad() {

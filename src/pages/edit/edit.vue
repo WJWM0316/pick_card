@@ -5,13 +5,13 @@
 			<view class="head item">
 				<view class="itemCon">
 					<view class="left requst">头像</view>
-					<view class="right"><image class="headImg" src="/static/images/img.jpg"></image></view>
+					<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath"></image></view>
 				</view>
 			</view>
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">姓名</view>
-					<view class="right"><input type="text" placeholder="请输入姓名" placeholder-style="color:#B2B6C2"></view>
+					<view class="right"><input type="text" placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model="userInfo.realname"></view>
 				</view>
 			</view>
 			<view class="item">
@@ -20,10 +20,10 @@
 					<view class="right">
 						<radio-group class="radio-group" @change="radioChange">
 						  <label class="radio">
-						    <radio value="1" color="#00D093"/><text>男</text>
+						    <radio value="1" color="#00D093" :checked="userInfo.gender === 1"/><text>男</text>
 						  </label>
 						  <label class="radio">
-						    <radio value="2" color="#00D093"/><text>女</text>
+						    <radio value="2" color="#00D093" :checked="userInfo.gender === 2"/><text>女</text>
 						  </label>
 						</radio-group>
 					</view>
@@ -35,7 +35,7 @@
 					<view class="right">
 						<picker mode='region' @change="regionChange" :value="region">
 							<view class="picker">
-					      <text class="placeholder" v-show='region.length === 0'>请选择所在地</text>{{region[0]}} {{region[1]}} {{region[2]}}
+					      <text class="placeholder" v-show='region.length === 0'>请选择所在地</text>{{region[0]}}{{region[1]}}
 					    </view>
 						</picker>
 					</view>
@@ -69,7 +69,7 @@
 					<view class="right" @tap.stop="showPop">
 						<text class="placeholder" v-if="checkedTextList.length === 0">请选择擅长领域</text>
 						<view class="fieldBox" v-else>
-							<block  v-for="(item, index) in checkedTextList">
+							<block  v-for="(item, index) in checkedTextList" :key="index">
 								<text class="field">{{item}}</text>
 								<text v-if="index !== checkedTextList.length - 1"> | </text>
 							</block>
@@ -81,7 +81,7 @@
 				<view class="itemCon">
 					<view class="left requst">职业</view>
 					<view class="right">
-						<input type="text" placeholder="请输入职业" placeholder-style="color:#B2B6C2">
+						<input type="text" placeholder="请输入职业" placeholder-style="color:#B2B6C2" v-model="userInfo.occupation">
 					</view>
 				</view>
 			</view>
@@ -89,7 +89,7 @@
 				<view class="itemCon">
 					<view class="left requst">最近入职公司</view>
 					<view class="right">
-						<input type="text" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2">
+						<input type="text" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2"  v-model="userInfo.company">
 					</view>
 				</view>
 			</view>
@@ -97,7 +97,7 @@
 				<view class="itemCon">
 					<view class="left">公司地址</view>
 					<view class="right">
-						<input type="text" placeholder="请输入公司地址" placeholder-style="color:#B2B6C2">
+						<input type="text" placeholder="请输入公司地址" placeholder-style="color:#B2B6C2" v-model="userInfo.company_location">
 					</view>
 				</view>
 			</view>
@@ -108,7 +108,7 @@
 				<view class="itemCon">
 					<view class="left requst">手机号码</view>
 					<view class="right">
-						<input type="number" placeholder="请输入手机号码" placeholder-style="color:#B2B6C2">
+						<input type="number" placeholder="请输入手机号码" placeholder-style="color:#B2B6C2"  v-model="userInfo.mobile">
 					</view>
 				</view>
 			</view>
@@ -116,7 +116,7 @@
 				<view class="itemCon">
 					<view class="left">微信号</view>
 					<view class="right">
-						<input type="text" placeholder="请输入微信号" placeholder-style="color:#B2B6C2">
+						<input type="text" placeholder="请输入微信号" placeholder-style="color:#B2B6C2"  v-model="userInfo.wechat">
 					</view>
 				</view>
 			</view>
@@ -124,7 +124,7 @@
 				<view class="itemCon">
 					<view class="left">邮箱地址</view>
 					<view class="right">
-						<input type="text" placeholder="请输入邮箱地址" placeholder-style="color:#B2B6C2">
+						<input type="text" placeholder="请输入邮箱地址" placeholder-style="color:#B2B6C2"  v-model="userInfo.email">
 					</view>
 				</view>
 			</view>
@@ -133,26 +133,34 @@
 			<view class="title">个人签名</view>
 			<view class="item sign">
 				<view class="itemCon">
-					<textarea name="" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#B2B6C2"></textarea>
-					<text class="number">1/25</text>
+					<textarea name="" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#B2B6C2" v-model="userInfo.sign"></textarea>
+					<text class="number">{{userInfo.sign ? userInfo.sign.length : 0}}/25</text>
 				</view>
 			</view>
 		</section>
 		<section class="btn">
-			<button>保存资料</button>
+			<button @tap.stop="saveUserInfo">保存资料</button>
 		</section>
 		<label-pop 
 			:isShow="showLablePop"
 			@close="close"
 			@getLabel="getLabel"
 		></label-pop>
+		<cut-img :isShow="isShow"
+						 :filePath="filePath"
+						 @getImgcut="getImgcut"
+						 @isHide="isHide"
+		></cut-img>
 	</view>
 </template>
 <script>
+	import cutImg from '@/components/cutImg'
 	import labelPop from '@/components/labelPop'
+	import {getUserInfoApi, upDataUserInfoApi} from '@/api/pages/user'
 	export default {
 		components: {
-			labelPop
+			labelPop,
+			cutImg
 	  },
 		data () {
 			return {
@@ -173,16 +181,47 @@
 				showLablePop: false, // 擅长领域
 				career: null,
 				checkedIndexList: [],
-				checkedTextList: []
+				checkedTextList: [],
+				filePath: 'https://cdnstatic-test.card.ziwork.com/dev/avatar/2018-06-26/9a6ba4d71906efbb8fa35ab7adb87887.png?x-oss-process=image/resize,p_20',
+				fileId: null,
+				isShow: false
 			}
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
 		},
 		onReady () {
-
+			this.getMyUserInfo()
 		},
 		methods: {
+			isHide (e) {
+				this.isShow = false
+			},
+			getImgcut (fileId, url) {
+				this.fileId = fileId
+				this.filePath = url
+			},
+			getMyUserInfo () {
+				return getUserInfoApi().then(res => {
+					this.userInfo = res.data
+				})
+			},
+			saveUserInfo () {
+				const data = {
+					avatar_id: this.fileId,
+					realname: this.userInfo.realname,
+					gender: this.userInfo.gender,
+					user_location: this.region[0] + this.region[1],
+					occupation: this.userInfo.occupation,
+					company: this.userInfo.company,
+					company_location: this.userInfo.company_location,
+					mobile: this.userInfo.mobile,
+					wechat: this.userInfo.wechat,
+					email: this.userInfo.email,
+					sign: this.userInfo.sign
+				}
+				return upDataUserInfoApi(data).then(res => {})
+			},
 			closePop () {
 				this.showLablePop = false
 			},
@@ -191,8 +230,14 @@
 				this.checkedTextList = b
 				this.showLablePop = false
 			},
+			close () {
+				this.showLablePop = false
+			},
 			showPop () {
 				this.showLablePop = true
+			},
+			sexChange(e) {
+				this.userInfo.gender = e.mp.detail.value
 			},
 			careerChange (e) {
 				console.log('picker发送选择改变，携带值为', e.mp.detail.value)
@@ -201,6 +246,19 @@
 			regionChange (e) {
 				console.log('picker发送选择改变，携带值为', e.mp.detail.value)
 				this.region = e.mp.detail.value
+			},
+			chooseImg () {
+				const that = this
+				wx.chooseImage({  
+          count: 1, // 默认9  
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
+          success: function (res0) {  
+            that.filePath = res0.tempFilePaths[0]
+            console.log(that.filePath)
+            that.isShow = true
+          }  
+        })  
 			}
 		}
 			

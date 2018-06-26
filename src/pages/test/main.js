@@ -5,4 +5,9 @@ const app = new Vue(App);
 app.$mount();
 
 
-export default {}
+export default {
+	config: {
+	    navigationBarTitleText: '头像编辑',
+	    enablePullDownRefresh: false,
+	  },
+}
