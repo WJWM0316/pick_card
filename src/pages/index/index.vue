@@ -47,10 +47,10 @@
           </view>
         </block>
         <view class="btns" >
-          <button class="btn delate" @click="unLike">
+          <button class="btn delate" @click="likeOp('left')">
             <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
           </button>
-          <button class="btn like" @tap="like">
+          <button class="btn like" @tap="likeOp('right')">
             <image src="/static/images/home_btn_like_nor@3x.png"></image>
           </button>
         </view>
@@ -74,6 +74,51 @@
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
     
+    <!-- 分享弹窗 -->
+    <!-- <view class="pop_warp" v-if="isShare">
+      <view class="share_pop">
+        <image @click="cloSahre" class="share_clo" src="/static/images/popup_btn_close_nor@3x.png"></image>
+        <image class="share_cont" src="/static/images/popup_pic_share@3x.png"></image>
+        <view class="tit" @tap="toCardHolder">分享你的趣名片</view>
+        <view class="txt">召唤你的朋友们一起来玩吧！</view>
+
+        <view class="btns">
+          <button class="btn friend" @click="likeOp('left')">
+            <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            <view class="bt_txt">分享到微信</view>
+          </button>
+          <button class="btn friends" @tap="likeOp('right')">
+            <image src="/static/images/home_btn_like_nor@3x.png"></image>
+            <view class="bt_txt">分享朋友圈</view>
+          </button>
+        </view>
+      </view>
+    </view> -->
+
+    <!-- 分享弹窗 -->
+    <view class="pop_warp" v-if="isShare">
+      <view class="guidance_pop" v-if="gdData.isGd" @click="gdOp">
+        <image class="gd_cont" v-if="gdData.step == 1" src="/static/images/dafult_pic01@3x.png"></image>
+        <image class="gd_cont" v-else src="/static/images/dafult_pic02@3x.png"></image>
+        <view class="txt" @tap="toCardHolder">不感兴趣，没关系，看看下一个人吧 </view>
+        <view class="txt">把卡片往左滑，或者点这个按钮也可以哦～</view>
+        <view class="gd_bot">
+          <view class="bot_blo " v-if="gdData.step==1">
+            <image class="bot_btn gd_left_icon1" src="/static/images/dafult_icom_unlike@3x.png"></image>
+            <image class="blo_line gd_left_icon2" src="/static/images/dafult_line_left@3x.png"></image>
+          </view>
+
+          <view class="bot_blo " v-else>
+            <image class="blo_line gd_right_icon2" src="/static/images/dafult_line_right@3x.png">
+            
+            </image>
+            <image class="bot_btn gd_right_icon1" src="/static/images/dafult_icom_like@3x.png"></image>
+          </view>
+        </view>
+        
+      </view>
+    </view>
+    
   </view>
 </template>
 <script>
@@ -96,11 +141,20 @@ export default {
       moveData: {
         isMove: false,
         style: '',  //left or right
+      },
+      nextId: '', // 
+      isShare: false,
+      gdData : {
+        isGd: true,
+        step: 1
       }
     }
   },
 
   methods: {
+    cloSahre(){
+      this.isShare = false
+    },
     toDeatil (item) {
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
@@ -148,110 +202,256 @@ export default {
     tMove (e) {
       let touchMove = e.touches[0].pageX
       let touchDot = this.touchDot
+      let status = false
       /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));  */
       // 向左滑动    
+
       if (touchMove - touchDot <= -40 && this.time < 10) {  
-
         console.log('左滑页面')
-        if(this.moveData.isMove){
-          
-          this.unLike()
-        }
-
+        status = 'left'
       }  
       // 向右滑动  
       else if (touchMove - touchDot >= 40 && this.time < 10) {  
-        console.log('向右滑动');  
-        if(this.moveData.isMove){
-          
-          this.like()
-        }
+        status = 'right'
       }  
+
+      if(this.moveData.isMove && status){
+        this.likeOp(status)
+      }
     },
     tEnd (e) {
       clearInterval(this.interval); // 清除setInterval  
       this.time = 0;  
     },
-    like () {
-      console.log('like')
-
+    likeOp (status){
+      console.log(status)
       let data = this.usersInfo[this.nowIndex]
       let msg = {
         to_uid: '123123',//data.unionid
         remarks: 'biangbiangbiangqiang'
       }
-      indexLike(msg).then((res)=>{
-        console.log(res)
-        this.nowIndex ++
+
+      if(status && status == 'right') {
+        indexLike(msg).then((res)=>{
+          console.log(res)
+          this.nextId = this.usersInfo[this.nowIndex+1].id
+          this.nowIndex ++
+          this.moveData={
+            isMove: false,
+            style: 'right', 
+          }
+        },(res)=>{
+          console.log(res)
+          this.$mptoast(res.msg)
+        })
+      }else if(status && status == 'left'){
         this.moveData={
           isMove: false,
-          style: 'right', 
+          style: 'left', 
         }
-      },(res)=>{
-        console.log(res)
-        this.$mptoast(res.msg)
-      })
-    },
-
-    unLike () {
-      console.log('unlike')
-
-      let data = this.usersInfo[this.nowIndex]
-      let msg = {
-        to_uid: '123123',//data.unionid
-        remarks: 'biangbiangbiangqiang'
-      }
-      this.moveData={
-        isMove: false,
-        style: 'left', 
-      }
-      this.nowIndex ++
-
-      /*indexUnlike(msg).then((res)=>{
-        console.log(res)
         this.nowIndex ++
-      },(res)=>{
-        console.log(res)
-        this.$mptoast(res.msg)
-      })*/
-    },
+      } 
+
+
+      console.log(this.nowIndex)
+
+      if(this.usersInfo.length-this.nowIndex == 12){
+        console.log('next============todo=====')
+        let data2 = {
+          id: this.nextId,
+          count: 10,
+          orderBy: 'asc'
+        }
+        getIndexUsers(data2).then((res)=>{
+          console.log(res)
+          this.usersInfo = [...this.usersInfo,...res.data]
+          console.log(this.usersInfo)
+
+        })
+      }
+
+      if(this.usersInfo.length==this.nowIndex){
+        this.$mptoast('没有更多名片')
+      }
+    }
+  },
+
+  onShareAppMessage: function (res) {
+    console.log(res)
+    wx.showShareMenu({
+      withShareTicket: true
+    })
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '自定义转发标题',
+      path: '/pages/index/main?type=share'
+    }
   },
 
   created () {
-    /*wx.showModal({
-      title: '提示',
-      content: 'login',
-      success: function(res) {
-        if (res.confirm) {
-          let data = {
-            email: 18802090814,
-            password: 123456
-          }
-          loginApi(data).then((res) => {
-            console.log(res)
-          },(res)=>{
-            console.log('====',res)
-          })
-        } else if (res.cancel) {
-          console.log('用户点击取消')
-        }
-      }
-    })*/
-    getUserInfoApi().then((res)=>{
+    /*getUserInfoApi().then((res)=>{
       console.log(res.data)
-    })
+    })*/
   },
 
-  onLoad() {
+  onLoad(res) {
+
     let that = this
-    getIndexUsers().then((res)=>{
+    let data = {
+      id: '',
+      count: 10,
+      orderBy: 'asc'
+    }
+    if(!this.nextId){
+      data = {}
+    }
+    getIndexUsers(data).then((res)=>{
+      console.log(res)
       that.usersInfo = res.data
     })
+  },
+  onShow (res) {
+    console.log('onshaow',res)
+    if(res&&res.shareTickets){
+      wx.getShareInfo({
+        shareTicket: res.shareTickets[0],
+        success: (res) => {
+          console.log('已成功获取到加密信息',res)
+        }
+      })
+    }
+    
   }
 }
 </script>
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
+  .pop_warp {
+    background:rgba(0,0,0,0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+    .guidance_pop {
+      .gd_cont {
+        width: 479rpx;
+        height: 498rpx;
+        margin:  138rpx auto 100rpx auto;
+        display: block;
+      }
+      .txt {
+        height:30rpx;
+        font-size:30rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(255,255,255,1);
+        line-height:30rpx;
+        text-align: center;
+        margin-bottom: 14rpx;
+      }
+      .gd_bot {
+        .blo_line {
+          width:227rpx;
+          height:273rpx;
+        }
+        .bot_btn {
+          width:132rpx;
+          height:132rpx;
+          border-radius: 50%;
+          position: relative;
+
+        }
+        .bot_blo {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: flex-end;
+        } 
+      }
+      .gd_left_icon1 {
+        margin-right: 20rpx;
+      }
+      .gd_right_icon1 {
+        margin-left: 15rpx;
+      }
+    }
+    .share_pop {
+      width:670rpx;
+      height:800rpx;
+      background:rgba(255,255,255,1);
+      border-radius:18rpx;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+      box-sizing: border-box;
+      padding-top: 54rpx;
+      .share_clo {
+        width:28rpx;
+        height:28rpx;
+        position: absolute;
+        right: 40rpx;
+        top: 40rpx;
+      }
+      .share_cont {
+        width:375rpx;
+        height:349rpx;
+        margin: 0 auto;
+      }
+      .tit {
+        height:32rpx;
+        font-size:34rpx;
+        font-family:PingFangSC-Semibold;
+        color:rgba(53,57,67,1);
+        line-height:32rpx;
+        margin-top: 22rpx;
+
+      }
+      .txt {
+        height:28rpx;
+        font-size:28rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(154,161,171,1);
+        line-height:28rpx;
+        margin-top: 17rpx;
+        margin-bottom: 82rpx;
+      }
+      .btns {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        .btn {
+          width:140rpx;
+          height:104rpx;
+          background:rgba(0,208,147,1);
+          &.friend {
+            margin-right: 100rpx;
+          }
+          .friends {
+
+          }
+          .bt_txt {
+            font-size:28rpx;
+            font-family:PingFangHK-Regular;
+            color:rgba(178,182,194,1);
+            line-height:26rpx;
+          }
+          image {
+            width:104rpx;
+            height:104rpx;
+            border-radius: 50%;
+            margin-bottom: 15rpx;
+          }
+        }
+      }
+    }
+  }
   .op_top {
     height: 94rpx;
     padding: 0 40rpx;

@@ -17,6 +17,8 @@ export const firstSignApi = (data) => {
     data
   })
 }
+
+
 // 用户允许授权后需返回数据给该接口
 export const grantInformationApi = (data) => {
   console.log(data)
@@ -51,10 +53,11 @@ export const isBindPhoneApi = (data) => {
     data
   })
 }
+
 // 获取短信验
 export const smsApi = (data) => {
   return request({
-    url: '/wx/sms',
+    url: '/auto/getSmsCode',
     data
   })
 }

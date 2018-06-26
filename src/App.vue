@@ -9,8 +9,21 @@ export default {
     }
   },
   // 只有 app 才会有 onLaunch 的生命周期
-  onLaunch () {
+  onLaunch (res) {
+
     this.checkLogin()
+    
+    console.log('================== >>>>',res)
+    if(!res.shareTicket){return}
+      console.log('-asdasdasdhjgasgdkhasdhjkga')
+     wx.getShareInfo({
+      shareTicket: res.shareTicket,
+      success: (res) => {
+        console.log('已成功获取到加密信息',res)
+      },fail: (res)=> {
+        console.log('shibai',res)
+      }
+    })
   },
 
    // 捕获 app error
