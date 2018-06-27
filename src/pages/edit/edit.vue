@@ -108,7 +108,7 @@
 				<view class="itemCon">
 					<view class="left requst">手机号码</view>
 					<view class="right">
-						<input type="number" placeholder="请输入手机号码" placeholder-style="color:#B2B6C2"  v-model="userInfo.mobile">
+						<input type="number" disabled placeholder="请输入手机号码" placeholder-style="color:#B2B6C2"  v-model="userInfo.mobile">
 					</view>
 				</view>
 			</view>
@@ -139,7 +139,7 @@
 			</view>
 		</section>
 		<section class="btn">
-			<button @tap.stop="saveUserInfo">保存资料</button>
+			<button @tap.stop="saveUserInfo" class="light">保存资料</button>
 		</section>
 		<label-pop 
 			:isShow="showLablePop"
@@ -156,14 +156,24 @@
 <script>
 	import cutImg from '@/components/cutImg'
 	import labelPop from '@/components/labelPop'
-	import {getUserInfoApi, upDataUserInfoApi} from '@/api/pages/user'
+	import {upDataUserInfoApi} from '@/api/pages/user'
 	export default {
 		components: {
 			labelPop,
 			cutImg
 	  },
+	  watch: {
+	  	userInfo (val) {
+	  		if (this.userInfo.avatar_id !== '' && this.userInfo.realname !== '' && this.userInfo.gender !== ''  && this.userInfo.occupation !== '' && this.userInfo.mobile !== '') {
+	  			this.isLight = true
+	  		}
+	  		console.log(val)
+	  	},
+	  },
 		data () {
 			return {
+				realname: '',
+				isLight: false,
 				isSelf: false,
 				vkey: '',
 				imgList: ['/static/images/img.jpg'],
@@ -183,44 +193,48 @@
 				checkedIndexList: [],
 				checkedTextList: [],
 				filePath: 'https://cdnstatic-test.card.ziwork.com/dev/avatar/2018-06-26/9a6ba4d71906efbb8fa35ab7adb87887.png?x-oss-process=image/resize,p_20',
-				fileId: null,
 				isShow: false
 			}
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
+			this.userInfo = this.$store.getters('userInfo')
+			this.region = [this.userInfo.user_location]
 		},
 		onReady () {
-			this.getMyUserInfo()
 		},
 		methods: {
 			isHide (e) {
 				this.isShow = false
 			},
 			getImgcut (fileId, url) {
-				this.fileId = fileId
+				this.userInfo.avatar_id = fileId
 				this.filePath = url
 			},
-			getMyUserInfo () {
-				return getUserInfoApi().then(res => {
-					this.userInfo = res.data
-				})
-			},
 			saveUserInfo () {
-				const data = {
-					avatar_id: this.fileId,
+				if (this.region[1]) {
+					let user_location = this.region[0] + this.region[1]
+				} else {
+					let user_location = this.region[0]
+				}
+				let data = {
+					avatar_id: this.userInfo.avatar_id,
 					realname: this.userInfo.realname,
 					gender: this.userInfo.gender,
-					user_location: this.region[0] + this.region[1],
-					occupation: this.userInfo.occupation,
+					user_location: user_location,
+					// occupation: this.userInfo.occupation,
 					company: this.userInfo.company,
 					company_location: this.userInfo.company_location,
-					mobile: this.userInfo.mobile,
+					// mobile: this.userInfo.mobile,
 					wechat: this.userInfo.wechat,
 					email: this.userInfo.email,
-					sign: this.userInfo.sign
+					sign: this.userInfo.sign,
+					// occupation_label_id: 11,
+					// realm_label_id: 22,
+					// build_label_id: 33
 				}
-				return upDataUserInfoApi(data).then(res => {})
+				console.log(data)
+				upDataUserInfoApi(data).then(res => {})
 			},
 			closePop () {
 				this.showLablePop = false
@@ -321,6 +335,11 @@
 			  	.right {
 						text-align: right;
 						overflow: hidden;
+						input {
+							width: 450rpx;
+							height: 120rpx;
+							line-height: 120rpx;
+						}
 						.placeholder {
 							color: #B2B6C2;
 						}
@@ -338,6 +357,8 @@
 						.picker {
 							font-size: 28rpx;
 							color: #353943;
+							height: 120rpx;
+							line-height: 120rpx;
 							.placeholder {
 								color: #C3C9D4;
 							}
@@ -416,8 +437,11 @@
 				line-height: 98rpx;
 				color: #fff;
 				font-size: 32rpx;
-				background: rgba(0,208,147,1);
+				background: rgba(179, 240, 222, 1);
 				border-radius: 49rpx;
+				&.light {
+					background: rgba(0,208,147,1);
+				}
 			}
 		}
 	}

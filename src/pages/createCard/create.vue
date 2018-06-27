@@ -127,18 +127,10 @@
         },
         isShow: false,
         filePath: '/static/images/new_pic_defaulhead.jpg',
-        isShow: false,
         nowNum : 0,
       }
     },
     computed: {
-      step () {
-        // switch (this.nowNum) {
-        //   case 0:
-        //     
-        //     break
-        // }
-      },
     },
     methods: {
       chooseImg () {

@@ -1,5 +1,6 @@
 <script>
 import {getSessionKeyApi, saveBaseUserInfo} from '@/api/pages/login'
+import {getUserInfoApi} from '@/api/pages/user'
 export default {
   globalData : {
     userInfo: null
@@ -43,6 +44,10 @@ export default {
               } 
               if (res.code === 0) {
                 console.log('用户在其他平台已完成授权，不需要再次授权')
+                // 获取用户信息存于store
+                getUserInfoApi().then(res => {
+                  _this.$store.dispatch('userInfo', res.data)
+                })
               }
               if (res.code === 201) {
                 _this.$store.dispatch('needAuthorize', true) // 需要授权框

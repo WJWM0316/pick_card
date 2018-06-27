@@ -152,19 +152,15 @@ export default {
       /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));  */
       // 向左滑动    
       if (touchMove - touchDot <= -40 && this.time < 10) {  
-
         console.log('左滑页面')
         if(this.moveData.isMove){
-          
           this.unLike()
         }
-
       }  
       // 向右滑动  
       else if (touchMove - touchDot >= 40 && this.time < 10) {  
         console.log('向右滑动');  
         if(this.moveData.isMove){
-          
           this.like()
         }
       }  
@@ -207,40 +203,7 @@ export default {
         style: 'left', 
       }
       this.nowIndex ++
-
-      /*indexUnlike(msg).then((res)=>{
-        console.log(res)
-        this.nowIndex ++
-      },(res)=>{
-        console.log(res)
-        this.$mptoast(res.msg)
-      })*/
     },
-  },
-
-  created () {
-    /*wx.showModal({
-      title: '提示',
-      content: 'login',
-      success: function(res) {
-        if (res.confirm) {
-          let data = {
-            email: 18802090814,
-            password: 123456
-          }
-          loginApi(data).then((res) => {
-            console.log(res)
-          },(res)=>{
-            console.log('====',res)
-          })
-        } else if (res.cancel) {
-          console.log('用户点击取消')
-        }
-      }
-    })*/
-    // getUserInfoApi().then((res)=>{
-    //   console.log(res.data)
-    // })
   },
 
   onLoad() {
