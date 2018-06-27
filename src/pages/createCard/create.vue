@@ -79,14 +79,14 @@
         <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" ></image></view>
         <view class="ip_cont">
           <view class="ipt_blo">
-            <text class="getcode">获取验证码</text>
-            <input placeholder="请输入手机号" type="" name="" />
+            <text class="getcode" @tap="sms">获取验证码</text>
+            <input placeholder="请输入手机号" @blur="codeText" type="" name=""  />
           </view>
           <view class="ipt_blo">
-            <input placeholder="请输入验证码" type="" name="" />
+            <input placeholder="请输入验证码" @blur="phText" type="" name="" />
           </view>
           <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
-          <button class="ip_btn" >完成绑定</button>
+          <button class="ip_btn" @click="toCode">完成绑定</button>
           <view class="hint_2">点击快速绑定手机号码 > ></view>
         </view>
         <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
@@ -109,9 +109,8 @@
 
 <script>
   import mptoast from 'mptoast'
+  import { firstSignApi, smsApi } from '@/api/pages/login'
   import cutImg from '@/components/cutImg'
-  import {firstSignApi} from '@/api/pages/login'
-
   export default {
     components: {
       mptoast,
@@ -125,6 +124,12 @@
           realname: '',
           avatar_id: '',
         },
+        bindPhone: {
+          number: '',
+          code: ''
+        },
+        nowNum : 1,
+        isIp: false,
         isShow: false,
         filePath: '/static/images/new_pic_defaulhead.jpg',
         nowNum : 0,
@@ -168,7 +173,47 @@
           this.firstData.realname = val
         }
       },
+      phText (e) {
+        console.log(e)
+        let val = e.target.value
+        if(val.length>0){
+          this.bindPhone.number = val
+        }
+      },
+      codeText (e) {
+        console.log(e)
+
+        let val = e.target.value
+        if(val.length>0){
+          this.bindPhone.code = val
+        }
+      },
+      toCode () {
+        console.log('绑定手机')
+      },
       toNext (num) {
+        let that = this;
+
+        firstSignApi(that.firstData).then((res)=>{
+          console.log(res)
+          that.nowNum = 2;
+
+          that.iphoneOp();
+        })
+      }, 
+      //  
+      iphoneOp(){
+        this.isIp = true
+      },
+
+      sms() {
+        console.log('获取验证码')
+        let data = {
+          mobile : this.bindPhone.number
+        }
+        smsApi(data).then((res)=>{
+          console.log(res)
+        })
         let that = this
         switch (num) {
           case 0: 

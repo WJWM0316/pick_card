@@ -102,10 +102,11 @@ export const getUserInfo2Api = (data) => {
 }
 
 // 获取首页用户信息
-export const getIndexUsers = () => {
+export const getIndexUsers = (data) => {
   return request({
     method: 'get',
     url: `/users`,
+    data
   })
 }
 
