@@ -35,46 +35,60 @@
     </view>
 
 
-    <view class="op_two " v-if="nowNum === 1">
+    <view class="op_blo op_two " v-if="nowNum === 1">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
-        <input class="one_ipt" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
+        <input class="one_ipt" @blur="inputText1" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt" v-model="firstData.realname"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  />
+        <input class="one_ipt" @blur="inputText2" v-model="firstData.realname"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  />
       </view>
 
       <view class="table_blo row_style_two">
-        <view class="tit">职业方向 <text>请选1个职业方向</text></view>
+        <view class="tit">职业方向  <text>请选1个职业方向</text></view>
         <view class="list_selct">
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
+          <view class="blo" v-for="(item, index) in secondRule.oliData" :class="{'cur':item.isCur}" :key="key" @click="secondOne(index)">{{item.txt}}</view>
         </view>
       </view>
 
       <view class="table_blo row_style_two">
         <view class="tit">擅长领域 <text>请选择1~3个领域</text></view>
         <view class="list_selct">
-          <view class="blo cur">O2O</view>
-          <view class="blo">企业服务</view>
-          <view class="blo">金融</view>
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
+          <view class="blo" v-for="(item, index) in secondRule.rliData" :class="{'cur':item.isCur}" :key="key" @click="secondTwo(index)">{{item.txt}}</view>
         </view>
       </view>
 
+      
+    </view>
+
+    <view class=" op_blo  op_third" v-if="nowNum === 2">
+      <view class="tit">我的人设</view>
+      <view class="table_blo row_style_two">
+        <view class="tit_small">职业标签
+          <text>请选择1~5个职业标签</text>
+        </view>
+        <view class="list_selct">
+          <view class="blo" v-for="(item, index) in thirdRule.jobData" :class="{'cur':item.isCur}" :key="key" @click="thirdOne(index)">{{item.txt}}</view>
+        </view>
+      </view>
+      <view class="table_blo row_style_two">
+        <view class="tit_small">生活标签
+          <text>请选择1~5个生活标签</text>
+        </view>
+        <view class="list_selct">
+          <view class="blo" v-for="(item, index) in thirdRule.liveData" :class="{'cur':item.isCur}" :key="key" @click="thirdTwo(index)">{{item.txt}}</view>
+        </view>
+      </view>
       <view class="table_blo row_style_three">
         <view class="tit">个人签名</view>
-        <textarea class="area" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" />
+        <textarea class="area" @blur="inputText3" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" />
         <text class="astrict">1/1</text>
       </view>
     </view>
 
-    <view class="pop_warp" v-if="nowNum === 2">
+
+    <view class="pop_warp" v-if="nowNum === 3">
       <view class="sign_iphone" >
         <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" ></image></view>
         <view class="ip_cont">
@@ -96,7 +110,11 @@
       </view>
     </view>
     <view class="footer">
-      <button class="next" :class="{'toNext' : step}" @click="toNext(nowNum)">下一步</button>
+      <!-- <button class="next" :class="{'toNext' : step}" @click="toNext(nowNum)" v-if="nowNum === 1">下一步</button>
+      <button class="next" :class="{'toNext' : step}" @click="toNext(nowNum)" v-if="nowNum === 2">下一步</button> -->
+
+      <button class="next toNext" @click="toNext(nowNum)" v-if="secondData.company.length>0&&secondData.occupation.length>0 && secondRule.oli.length>0 &&secondRule.rli.length>0" >下一步</button>
+      <button class="next" v-else >下一步</button>
     </view>
     <mptoast />
     <cut-img :isShow="isShow"
@@ -109,7 +127,8 @@
 
 <script>
   import mptoast from 'mptoast'
-  import { firstSignApi, smsApi } from '@/api/pages/login'
+  import { firstSignApi, secondSignApi, thirdSignApi, smsApi } from '@/api/pages/login'
+  import { getUserInfoApi } from '@/api/pages/user'
   import cutImg from '@/components/cutImg'
   export default {
     components: {
@@ -124,16 +143,124 @@
           realname: '',
           avatar_id: '',
         },
+        secondData: {
+          company: '', //最近任职公司
+          occupation: '',  //occupation
+          realm_label_id: '', //擅长领域id，多个以英文逗号隔开
+          occupation_label_id: '', //职业方向id，多个以英文逗号隔开
+        },
+        secondRule: {
+          occupation_label_id: 3,
+          job: [],
+          rli: [],
+          realm_label_id: 1,
+          oliData: [
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+          ],
+          rliData: [
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+          ],
+        },
+        thirdData: {
+          build_label_id: 0, //人设id，多个以英文逗号隔开
+          sign: '', //个性签名
+          mobile: '',
+          smsCode: '',  //验证码
+        },
+        thirdRule: {
+          job: [],
+          live: [],
+          jobData: [
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+          ],
+          liveData: [
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+            {
+              txt: '运营',
+              isCur: false,
+            },
+          ],
+        },
         bindPhone: {
           number: '',
           code: ''
         },
-        nowNum : 1,
+        nowNum : 2,
         isIp: false,
-        isShow: false,
         filePath: '/static/images/new_pic_defaulhead.jpg',
         isShow: false,
-        nowNum : 0,
       }
     },
     computed: {
@@ -146,6 +273,76 @@
       },
     },
     methods: {
+      secondOne (index) {
+        let that = this
+
+        if(that.secondRule.oli.length>0){
+          let oldIndex = that.secondRule.oli[0]
+
+          if(index == oldIndex){ return }
+
+          that.secondRule.oliData[oldIndex].isCur = false
+        }
+        that.secondRule.oli[0] = index 
+        that.secondRule.oliData[index].isCur = true
+      },
+      secondTwo (index) {
+        let that = this
+        
+
+        if(that.secondRule.rli.length>0){
+          let oldIndex = that.secondRule.rli[0]
+          console.log(that.secondRule.rli.indexOf(index))
+
+          if(that.secondRule.rli.indexOf(index) != -1){
+            return
+          }
+          console.log(that.secondRule.rli.length)
+          console.log(oldIndex)
+          if(that.secondRule.rli.length>=2){
+            that.secondRule.rliData[oldIndex].isCur = false
+            that.secondRule.rli.splice(0, 1)
+          }
+        }
+        
+        that.secondRule.rliData[index].isCur = true
+        that.secondRule.rli.push(index)
+      },
+      thirdOne (index) {
+        let that = this
+
+        if(that.secondRule.oli.length>0){
+          let oldIndex = that.secondRule.oli[0]
+
+          if(index == oldIndex){ return }
+
+          that.secondRule.oliData[oldIndex].isCur = false
+        }
+        that.secondRule.oli[0] = index 
+        that.secondRule.oliData[index].isCur = true
+      },
+      thirdTwo (index) {
+        let that = this
+        
+
+        if(that.secondRule.rli.length>0){
+          let oldIndex = that.secondRule.rli[0]
+          console.log(that.secondRule.rli.indexOf(index))
+
+          if(that.secondRule.rli.indexOf(index) != -1){
+            return
+          }
+          console.log(that.secondRule.rli.length)
+          console.log(oldIndex)
+          if(that.secondRule.rli.length>=2){
+            that.secondRule.rliData[oldIndex].isCur = false
+            that.secondRule.rli.splice(0, 1)
+          }
+        }
+        
+        that.secondRule.rliData[index].isCur = true
+        that.secondRule.rli.push(index)
+      },
       chooseImg () {
         const that = this
         wx.chooseImage({  
@@ -177,8 +374,33 @@
       inputText (e) {
         console.log(e)
         let val = e.target.value
+
         if(val.length>0){
-          this.firstData.realname = val
+            this.firstData['realname'] = val
+        }
+      },
+      inputText1 (e) {
+        console.log(e)
+        let val = e.target.value
+
+        if(val.length>0){
+          this.secondData['company'] = val
+        }
+      },
+      inputText2 (e) {
+        console.log(e)
+        let val = e.target.value
+
+        if(val.length>0){
+            this.secondData['occupation'] = val
+        }
+      },
+      inputText3 (e) {
+        console.log(e)
+        let val = e.target.value
+
+        if(val.length>0){
+            this.thirdData['sign'] = val
         }
       },
       phText (e) {
@@ -201,13 +423,29 @@
       },
       toNext (num) {
         let that = this;
-
-        firstSignApi(that.firstData).then((res)=>{
-          console.log(res)
-          that.nowNum = 2;
-
-          that.iphoneOp();
-        })
+        let data = {}
+        if(that.nowNum == 0){
+          data = that.firstData
+          firstSignApi(data).then((res)=>{
+            console.log(res)
+            that.nowNum = 1;
+          })
+        }else if(that.nowNum == 1){
+          data = that.secondData
+          data.realm_label_id = that.secondRule.rli
+          data.occupation_label_id = that.secondRule.oli
+          secondSignApi(data).then((res)=>{
+            console.log(res)
+            that.nowNum = 2;
+          })
+        }
+        else if(that.nowNum == 2){
+          data = that.thirdData
+          thirdSignApi(data).then((res)=>{
+            console.log(res)
+            that.nowNum = 3;
+          })
+        }
       }, 
       //  
       iphoneOp(){
@@ -281,7 +519,6 @@
       image {
         width:28rpx;
         height:28rpx;
-        background:rgba(195,201,212,1);
         position: absolute;
         right: 33rpx;
         top: 33rpx;
@@ -298,6 +535,7 @@
         line-height:24rpx;
         text-align: center;
         margin-bottom: 28rpx;
+        display:none;
       }
       .hint_2 {
         height:28rpx;
@@ -481,26 +719,40 @@
       margin-left: 28rpx;
     }
   }
-  .op_two {
+  .op_blo {
+    padding: 0 40rpx;
     padding-top: 37rpx;
-    .table_blo {
-      padding: 0 40rpx;
-      margin-bottom: 47rpx;
+    .tit , 
+    .tit_small{
+      height:34rpx;
+      font-size:34rpx;
+      font-family:PingFangHK-Medium;
+      color:rgba(53,57,67,1);
+      line-height:34rpx;
       position: relative;
-      .tit {
-        height:34rpx;
-        font-size:34rpx;
-        font-family:PingFangHK-Medium;
+      margin-bottom: 32rpx;
+      text {
+        font-size:26rpx;
+        font-family:PingFangSC-Light;
+        color:rgba(178,182,194,1);
+        margin-left: 30rpx;
+      }
+      
+    }
+    &.op_third {
+      .table_blo {
+        margin-bottom: 56rpx;
+
+      }
+    }
+    .table_blo {
+      margin-bottom: 80rpx;
+      position: relative;
+      .tit_small {
+        font-size:26rpx;
+        font-family:PingFangSC-Regular;
         color:rgba(53,57,67,1);
-        line-height:34rpx;
-        position: relative;
-        margin-bottom: 32rpx;
-        text {
-          font-size:26rpx;
-          font-family:PingFangSC-Light;
-          color:rgba(178,182,194,1);
-          margin-left: 30rpx;
-        }
+        line-height:26rpx;
       }
       .one_ipt {
         border-bottom:1rpx solid #cccccc;
@@ -521,16 +773,27 @@
           color:rgba(154,161,171,1);
           line-height:60rpx;
           text-align: center;
+          box-sizing: border-box;
+          &.cur {
+            background:rgba(0,208,147,0.05);
+            border:1px solid rgba(0,208,147,1);
+            font-family:SFUIDisplay-Regular;
+            color:rgba(0,208,147,1);
+          }
         }
       }
       .area {
-        border: 1rpx solid #cccccc;
+        //border: 1rpx solid #cccccc;
         width: 100%;
         height: 140rpx;
+        font-size:28rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(53,57,67,1);
+        line-height:28rpx;
       }
       .astrict {
         position: absolute;
-        right: 40rpx;
+        right: 0rpx;
         bottom: 0rpx;
       }
     }

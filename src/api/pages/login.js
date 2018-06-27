@@ -10,11 +10,27 @@ export const loginApi = (data) => {
   })
 }
 
-// 注册
+// 创建第一步
 export const firstSignApi = (data) => {
   return request({
     method: 'put',
     url: '/cur/first',
+    data
+  })
+}
+// 创建第二步
+export const secondSignApi = (data) => {
+  return request({
+    method: 'put',
+    url: '/cur/second',
+    data
+  })
+}
+// 创建第三步
+export const thirdSignApi = (data) => {
+  return request({
+    method: 'put',
+    url: '/cur/third',
     data
   })
 }

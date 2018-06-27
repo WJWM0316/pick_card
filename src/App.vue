@@ -1,5 +1,6 @@
 <script>
 import {getSessionKeyApi, saveBaseUserInfo} from '@/api/pages/login'
+import {setUserGroup} from '@/api/pages/cardcase'
 export default {
   globalData : {
     userInfo: null
@@ -15,11 +16,18 @@ export default {
     
     console.log('================== >>>>',res)
     if(!res.shareTicket){return}
-      console.log('-asdasdasdhjgasgdkhasdhjkga')
      wx.getShareInfo({
       shareTicket: res.shareTicket,
       success: (res) => {
         console.log('已成功获取到加密信息',res)
+        let data = {
+          key: 'openid',
+          vi: res.vi,
+          encryptedData: res.encryptedData
+        }
+        setUserGroup().then((res)=>{
+          console.log(res)
+        })
       },fail: (res)=> {
         console.log('shibai',res)
       }

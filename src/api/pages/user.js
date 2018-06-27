@@ -128,3 +128,13 @@ export const getLikeList = (data) => {
     data
   })
 }
+
+
+//群名片
+export const getGroup = (data) => {
+  return request({
+    method: 'post',
+    url: `/group/setUserGroup`,
+    data
+  })
+}
