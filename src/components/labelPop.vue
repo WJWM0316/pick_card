@@ -1,6 +1,6 @@
 <template>
 	<view class="labelPop" v-if="isShow" @touchmove.stop="preventEvevt">
-		<view class="inner">
+		<view class="inner" v-if="type === 'labelBox'">
 			<view class="title">请选择1~3个领域<image @tap.stop="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
 			<view class="con">
 				<checkbox-group class="labelBox" @change="checkboxChange">
@@ -9,8 +9,15 @@
 						<text class="label">{{item}}</text>
 					</label>
 				</checkbox-group>
-				
 				<button @tap.stop="save" class="btn">保存</button>
+			</view>
+		</view>
+		<view class="inner custom" v-show="type === 'custom'">
+			<view class="title">添加自定义标签<image @tap.stop="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
+			<view class="con">
+				<input class="labelInput" type="text" v-model="customText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" data-num="5"/>
+				<text class="textNum">{{10 - customText.length}}</text>
+				<button @tap.stop="addFun" class="btn">添加标签</button>
 			</view>
 		</view>
 	</view>
@@ -21,6 +28,10 @@
 			isShow: {
 				type: Boolean,
 				default: false
+			},
+			type: {
+				type: String,
+				default: 'labelBox'
 			}
 		},
 		data () {
@@ -45,17 +56,23 @@
 					'萨达大师',
 					'奥术大师',
 				],
-				checkedList: []
+				checkedList: [],
+				customText: ''
 			}
 		},
 		watch: {
-			isShow () {}
+			isShow () {},
+			type () {},
+			customText (val) {}
 		},
 		methods: {
 			getLabel (index) {
 				return index
 			},
 			close () {
+				this.$emit('close')
+			},
+			addFun () {
 				this.$emit('close')
 			},
 			save () {
@@ -68,6 +85,9 @@
 				})
 				let showList = []
 				this.$emit('getLabel', labelIndex, labelText)
+			},
+			change () {
+				console.log(1111111111)
 			},
 			checkboxChange (e) {
 				this.checkedList = e.mp.detail.value
@@ -146,6 +166,30 @@
 					color: #fff;
 					text-align: center;
 					margin: 10rpx auto 0;
+				}
+			}
+		}
+		.custom {
+			.con {
+				position: relative;
+				.labelInput {
+					padding: 0 40rpx;
+					box-sizing: border-box;
+					width:550rpx;
+					height:88rpx;
+					background:rgba(249,249,249,1);
+					border-radius:44rpx;
+					margin: 0 auto 52rpx;
+					color: #353943;
+					font-size: 28rpx;
+					display: block;
+				}
+				.textNum {
+					position: absolute;
+					top: 85rpx;
+					right: 100rpx;
+					font-size: 26rpx;
+					color: #B2B6C2;
 				}
 			}
 		}

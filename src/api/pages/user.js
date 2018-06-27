@@ -9,7 +9,7 @@ export const getUserInfoApi = (method,data) => {
   })
 }
 // 更新当前用户信息
-export const upDataUserInfoApi = (method,data) => {
+export const upDataUserInfoApi = (data) => {
   return request({
     method: 'put',
     url: '/cur/user_info',
@@ -27,18 +27,66 @@ export const getMoreUserInfoApi = (method,data) => {
 
 
 // 获取当前用户教育经历
-export const getEducationsInfoApi = (method,data) => {
+export const getEducationsInfoApi = (data) => {
   return request({
     method: 'get',
     url: '/cur/educations',
     data
   })
 }
+// 添加当前用户教育经历
+export const postEducationsInfoApi = (data) => {
+  return request({
+    method: 'post',
+    url: '/cur/educations',
+    data
+  })
+}
+// 修改当前用户教育经历
+export const putEducationsInfoApi = (data) => {
+  return request({
+    method: 'put',
+    url: '/cur/educations',
+    data
+  })
+}
+// 删除当前用户教育经历
+export const deleteEducationsInfoApi = (data) => {
+  return request({
+    method: 'delete',
+    url: '/cur/educations',
+    data
+  })
+}
 
 // 获取当前工作经历
-export const getWorkInfoApi = (method,data) => {
+export const getWorkInfoApi = (data) => {
   return request({
     method: 'get',
+    url: '/cur/careers',
+    data
+  })
+}
+// 添加当前工作经历
+export const postWorkInfoApi = (data) => {
+  return request({
+    method: 'post',
+    url: '/cur/careers',
+    data
+  })
+}
+// 修改当前工作经历
+export const putWorkInfoApi = (data) => {
+  return request({
+    method: 'put',
+    url: '/cur/careers',
+    data
+  })
+}
+// 删除当前工作经历
+export const deleteWorkInfoApi = (data) => {
+  return request({
+    method: 'delete',
     url: '/cur/careers',
     data
   })
@@ -128,7 +176,6 @@ export const getLikeList = (data) => {
     data
   })
 }
-
 
 //群名片
 export const getGroup = (data) => {

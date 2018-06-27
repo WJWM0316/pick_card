@@ -6,5 +6,11 @@ export default {
       commit(types.needAuthorize, updata)
       resolve()
     })
+  },
+  userInfo: ({commit}, updata) => {
+    return new Promise((resolve, reject) => {
+      commit(types.userInfo, updata)
+      resolve()
+    })
   }
 }

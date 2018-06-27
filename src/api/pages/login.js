@@ -38,7 +38,6 @@ export const thirdSignApi = (data) => {
 
 // 用户允许授权后需返回数据给该接口
 export const grantInformationApi = (data) => {
-  console.log(data)
   return request({
     url: '/auth/grantInformation',
     data,

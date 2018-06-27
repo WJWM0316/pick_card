@@ -260,17 +260,14 @@
         nowNum : 2,
         isIp: false,
         filePath: '/static/images/new_pic_defaulhead.jpg',
+<<<<<<< HEAD
         isShow: false,
+=======
+        nowNum : 0,
+>>>>>>> 0049fc7302e8c7cc148255db9fdf8dd42f997efb
       }
     },
     computed: {
-      step () {
-        // switch (this.nowNum) {
-        //   case 0:
-        //     
-        //     break
-        // }
-      },
     },
     methods: {
       secondOne (index) {

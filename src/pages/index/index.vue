@@ -216,12 +216,38 @@
       toSwop () {
         this.$mptoast('选择')
 
+<<<<<<< HEAD
         wx.navigateTo({
           url: `/pages/swopList/main`
         })
       },
       toCreate () {
         this.$mptoast('创建')
+=======
+      that.moveData={
+        isMove: true,
+        style: '', 
+      }
+    },
+    tMove (e) {
+      let touchMove = e.touches[0].pageX
+      let touchDot = this.touchDot
+      let status = false
+      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));  */
+      // 向左滑动    
+      if (touchMove - touchDot <= -40 && this.time < 10) {  
+        console.log('左滑页面')
+        if(this.moveData.isMove){
+          this.unLike()
+        }
+      }  
+      // 向右滑动  
+      else if (touchMove - touchDot >= 40 && this.time < 10) {  
+        console.log('向右滑动');  
+        if(this.moveData.isMove){
+          this.like()
+        }
+>>>>>>> 0049fc7302e8c7cc148255db9fdf8dd42f997efb
 
         wx.navigateTo({
           url: `/pages/createCard/main`
@@ -315,7 +341,7 @@
         }
       }
     },
-
+  },
     onShareAppMessage: function (res) {
       console.log(res)
       wx.showShareMenu({
@@ -384,10 +410,10 @@
   @keyframes outRight {
     from {
     }
-
     to {
       -webkit-transform: translate3d(200%, 0, 0);
       transform: translate3d(200%, 0, 0);
+
     }
   }
   .outRight {
