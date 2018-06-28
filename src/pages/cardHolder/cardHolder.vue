@@ -1,6 +1,6 @@
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
-  .content {
+  .container {
     height: 930rpx;
     position: relative;
     padding-bottom: 120rpx;
@@ -235,7 +235,6 @@
   import mptoast from 'mptoast'
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
-  import {request} from '@/api/require'
   import { getUserInfoApi, getIndexUsers } from '@/api/pages/user'
 export default {
   interval: '',

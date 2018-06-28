@@ -10,8 +10,8 @@
         <block v-for="(item, index) in usersInfo" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
-            'fadeIn animated test': nowIndex==index, 
-            'fadeOutLeft animated test': nowIndex-1==index&&moveData.style=='left',  'fadeOutRight animated test': 
+            'test': nowIndex==index, 
+            'outLeft animated test': nowIndex-1==index&&moveData.style=='left',  'outRight animated test': 
             nowIndex-1==index&&moveData.style=='right'
           }" 
           @tap="toDeatil(item)" 
@@ -54,6 +54,17 @@
             <image src="/static/images/home_btn_like_nor@3x.png"></image>
           </button>
         </view>
+        <image class="moveImg moveLeft"  src="/static/images/home_toast_unlike@3x.png"
+        :class="{'fadeOutLeft animated show': 
+          moveData.style=='left'
+        }" 
+        ></image>
+        <image class="moveImg moveRight"  src="/static/images/home_toast_like@3x.png"
+        :class="{'fadeOutRight animated show': 
+          moveData.style=='right'
+        }"  
+        ></image>
+        　
       </view>
     </view>
     <view class="footer">
@@ -66,8 +77,8 @@
         <view class="r_blo">
           <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
-        <view class="r_blo">
-          <image class="detail" src="/static/images/home_tab_btn_share_nor@3x.png"></image>
+        <view class="r_blo" @click="isShare2">
+          <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
         </view>
       </view>
     </view>
@@ -75,8 +86,8 @@
     <mptoast />
     
     <!-- 分享弹窗 -->
-    <!-- <view class="pop_warp" v-if="isShare">
-      <view class="share_pop">
+    <view class="pop_warp" v-if="isPop">
+      <view class="share_pop" v-if="isShare"> 
         <image @click="cloSahre" class="share_clo" src="/static/images/popup_btn_close_nor@3x.png"></image>
         <image class="share_cont" src="/static/images/popup_pic_share@3x.png"></image>
         <view class="tit" @tap="toCardHolder">分享你的趣名片</view>
@@ -84,41 +95,30 @@
 
         <view class="btns">
           <button class="btn friend" @click="likeOp('left')">
-            <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            <view class="img_warp">
+              <image src="/static/images/details_icon_wechat@3x.png"></image>
+            </view>
             <view class="bt_txt">分享到微信</view>
           </button>
           <button class="btn friends" @tap="likeOp('right')">
-            <image src="/static/images/home_btn_like_nor@3x.png"></image>
+            <view class="img_warp">
+              <image src="/static/images/float_btn_share@3x.png"></image>
+            </view>
             <view class="bt_txt">分享朋友圈</view>
           </button>
         </view>
       </view>
-    </view> -->
-
-    <!-- 分享弹窗 -->
-    <view class="pop_warp" v-if="isShare">
-      <view class="guidance_pop" v-if="gdData.isGd" @click="gdOp">
+      <view class="guidance_pop" v-if="gdData.isGd" @click="firstGDClick">
         <image class="gd_cont" v-if="gdData.step == 1" src="/static/images/dafult_pic01@3x.png"></image>
         <image class="gd_cont" v-else src="/static/images/dafult_pic02@3x.png"></image>
         <view class="txt" @tap="toCardHolder">不感兴趣，没关系，看看下一个人吧 </view>
         <view class="txt">把卡片往左滑，或者点这个按钮也可以哦～</view>
-        <view class="gd_bot">
-          <view class="bot_blo " v-if="gdData.step==1">
-            <image class="bot_btn gd_left_icon1" src="/static/images/dafult_icom_unlike@3x.png"></image>
-            <image class="blo_line gd_left_icon2" src="/static/images/dafult_line_left@3x.png"></image>
-          </view>
-
-          <view class="bot_blo " v-else>
-            <image class="blo_line gd_right_icon2" src="/static/images/dafult_line_right@3x.png">
-            
-            </image>
-            <image class="bot_btn gd_right_icon1" src="/static/images/dafult_icom_like@3x.png"></image>
-          </view>
+        <view class="bot_cont">
+          <image class="bot_img bot_left_icon1" src="/static/images/dafult_icom_unlike@3x.png" v-if="gdData.step==1"></image>
+          <image class="bot_img bot_right_icon1" src="/static/images/dafult_icom_like@3x.png" v-else></image>
         </view>
-        
       </view>
     </view>
-    
   </view>
 </template>
 <script>
@@ -126,14 +126,16 @@
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
+
 export default {
-  interval: '',
+  
   components: {
     mptoast,
     authorizePop
   },
   data () {
     return { 
+      interval: null,
       usersInfo: [],
       touchDot: 0,
       time: 0,
@@ -151,13 +153,55 @@ export default {
     }
   },
 
+
   methods: {
+    //是否第一次进入 展示引导图
+    isFirst(){
+      let that = this
+      try {
+        var value = wx.getStorageSync('pickCardFirst')
+        if (!value) {
+          that.gdData = {
+            isGd: true,
+            step: 1
+          }
+          that.isPop = true
+            // Do something with return value
+        }
+      } catch (e) {
+        // Do something when catch error
+      }
+    },
+    firstGDClick(){
+      if(this.gdData.step == 1){
+        this.gdData.step = 2
+      }else if(this.gdData.step == 2){
+        this.gdData = {
+          isGd: false,
+          step: 1
+        }
+        this.isPop = false
+        try {
+            wx.setStorageSync('pickCardFirst', '1')
+        } catch (e) {    
+        }
+      }
+    },
     cloSahre(){
-      this.isShare = false
+      this.isPop = false
+    },
+    isShare2 () {
+      this.isPop = true
+      this.isShare = true
     },
     toDeatil (item) {
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
+      })
+    },
+    toCardHolder () {
+      wx.navigateTo({
+        url: `/pages/cardHolder/main`
       })
     },
     toCenter () {
@@ -165,32 +209,21 @@ export default {
         url: `/pages/center/main`
       })
     },
-    toCardHolder () {
-      this.$mptoast('名片夹')
-      wx.navigateTo({
-        url: `/pages/cardHolder/main`
-      })
-    },
     toFiltrate () {
-      this.$mptoast('筛选')
-
       wx.navigateTo({
         url: `/pages/filtrate/main`
       })
     },
     toSwop () {
-      this.$mptoast('选择')
-
       wx.navigateTo({
         url: `/pages/swopList/main`
       })
     },
     toCreate () {
-      this.$mptoast('创建')
-
-      wx.navigateTo({
-        url: `/pages/createCard/main`
-      })
+      that.moveData={
+        isMove: true,
+        style: '', 
+      }
     },
     tStart (e) {
       let that = this
@@ -208,8 +241,9 @@ export default {
       let touchMove = e.touches[0].pageX
       let touchDot = this.touchDot
       let status = false
-      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));  */
+      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot)); */
       // 向左滑动    
+
       if (touchMove - touchDot <= -40 && this.time < 10) {  
         console.log('左滑页面')
         status = 'left'
@@ -228,7 +262,6 @@ export default {
       this.time = 0;  
     },
     likeOp (status){
-      console.log(status)
       let data = this.usersInfo[this.nowIndex]
       let msg = {
         to_uid: '123123',//data.unionid
@@ -259,7 +292,7 @@ export default {
 
       console.log(this.nowIndex)
 
-      if(this.usersInfo.length-this.nowIndex == 12){
+      if(this.usersInfo.length-this.nowIndex == 4){
         console.log('next============todo=====')
         let data2 = {
           id: this.nextId,
@@ -273,12 +306,12 @@ export default {
 
         })
       }
+
       if(this.usersInfo.length==this.nowIndex){
         this.$mptoast('没有更多名片')
       }
-    },
+    }
   },
-
   onShareAppMessage: function (res) {
     console.log(res)
     wx.showShareMenu({
@@ -296,7 +329,6 @@ export default {
 
   onLoad(res) {
 
-
     let that = this
     let data = {
       id: '',
@@ -311,6 +343,9 @@ export default {
       that.usersInfo = res.data
       console.log(res.data, 22222)
     })
+
+
+    that.isFirst()
   },
   onShow (res) {
     console.log('onshaow',res)
@@ -322,12 +357,57 @@ export default {
         }
       })
     }
-    
   }
 }
 </script>
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
+  @keyframes outLeft {
+    from {
+    }
+
+    to {
+      -webkit-transform: translate3d(-200%, 0, 0);
+      transform: translate3d(-200%, 0, 0);
+    }
+  }
+  .outLeft {
+    -webkit-animation-name: outLeft;
+    animation-name: outLeft;
+    z-index: 1;
+  }
+  @keyframes outRight {
+    from {
+    }
+    to {
+      -webkit-transform: translate3d(200%, 0, 0);
+      transform: translate3d(200%, 0, 0);
+
+    }
+  }
+  .outRight {
+    -webkit-animation-name: outRight;
+    animation-name: outRight;
+    z-index: 1;
+  }
+  .moveImg {
+    width:140rpx;
+    height:140rpx;
+    position: absolute;
+    border-radius: 50%;
+    top: 311rpx;
+    display: none;
+    &.moveRight {
+      right: 160rpx;
+    }
+    &.moveLeft {
+      left: 160rpx;
+    }
+    &.show {
+      display: block;
+    }
+  }
+  
   .pop_warp {
     background:rgba(0,0,0,0.7);
     position: fixed;
@@ -352,31 +432,25 @@ export default {
         text-align: center;
         margin-bottom: 14rpx;
       }
-      .gd_bot {
-        .blo_line {
-          width:227rpx;
-          height:273rpx;
+      .bot_cont {
+        width: 350rpx;
+        height: 226rpx;
+        position: relative;
+        margin: 0 auto;
+        margin-top: 47rpx;
+        .bot_img {
+          width: 350rpx;
+          height: 226rpx;
+          position: absolute;
         }
-        .bot_btn {
-          width:132rpx;
-          height:132rpx;
-          border-radius: 50%;
-          position: relative;
-
+        .bot_left_icon1 {
+          margin-right: 20rpx;
         }
-        .bot_blo {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: flex-end;
-        } 
+        .bot_right_icon1 {
+          margin-left: 15rpx;
+        }
       }
-      .gd_left_icon1 {
-        margin-right: 20rpx;
-      }
-      .gd_right_icon1 {
-        margin-left: 15rpx;
-      }
+      
     }
     .share_pop {
       width:670rpx;
@@ -431,9 +505,16 @@ export default {
           background:rgba(0,208,147,1);
           &.friend {
             margin-right: 100rpx;
+            image {
+              width:50rpx;
+              height:42rpx;
+            }
           }
-          .friends {
-
+          &.friends {
+            image {
+              width:50rpx;
+              height:49rpx;
+            }
           }
           .bt_txt {
             font-size:28rpx;
@@ -442,10 +523,16 @@ export default {
             line-height:26rpx;
           }
           image {
+            margin-bottom: 15rpx;
+          }
+          .img_warp {
             width:104rpx;
             height:104rpx;
+            background:rgba(0,208,147,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             border-radius: 50%;
-            margin-bottom: 15rpx;
           }
         }
       }
@@ -525,7 +612,7 @@ export default {
           position: absolute;
           left: 0;
           top: 0;
-          z-index: -1;
+          //z-index: -1;
         }
         .location {
           width:140rpx;
@@ -623,6 +710,7 @@ export default {
       left: 50%;
       margin-left: -189rpx;
       width: 378rpx;
+      z-index: 10;
       .btn {
         width:132rpx;
         height:132rpx;
