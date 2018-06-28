@@ -114,7 +114,15 @@
 
 <style lang="less" type="text/less" scoped>
   .container {
+    padding: 0 40rpx;
     padding-bottom: 160rpx;
+  }
+  .hint {
+    height:120rpx;
+    font-size:26rpx;
+    font-family:PingFangSC-Light;
+    color:rgba(154,161,171,1);
+    line-height:120rpx;
   }
   .footer {
     position: fixed;
@@ -251,9 +259,7 @@
     }
   }
   .op_two {
-    padding-top: 37rpx;
     .table_blo {
-      padding: 0 40rpx;
       margin-bottom: 47rpx;
       position: relative;
       .tit {
