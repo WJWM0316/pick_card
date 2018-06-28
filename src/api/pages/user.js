@@ -46,7 +46,7 @@ export const postEducationsInfoApi = (data) => {
 export const putEducationsInfoApi = (data) => {
   return request({
     method: 'put',
-    url: '/cur/educations',
+    url: `/cur/educations/${data.id}`,
     data
   })
 }
@@ -54,7 +54,7 @@ export const putEducationsInfoApi = (data) => {
 export const deleteEducationsInfoApi = (data) => {
   return request({
     method: 'delete',
-    url: '/cur/educations',
+    url: `/cur/educations/${data.id}`,
     data
   })
 }
@@ -79,7 +79,7 @@ export const postWorkInfoApi = (data) => {
 export const putWorkInfoApi = (data) => {
   return request({
     method: 'put',
-    url: '/cur/careers',
+    url: `/cur/careers/${data.id}`,
     data
   })
 }
@@ -87,10 +87,32 @@ export const putWorkInfoApi = (data) => {
 export const deleteWorkInfoApi = (data) => {
   return request({
     method: 'delete',
-    url: '/cur/careers',
+    url: `/cur/careers/${data.id}`,
     data
   })
 }
+
+
+
+// 添加或者更新当前用户更多信息
+export const putMoreApi = (data) => {
+  return request({
+    method: 'put',
+    url: `/cur/more_user_info`,
+    data
+  })
+}
+
+// 更改隐私设置
+export const putPrivacyApi = (data) => {
+  return request({
+    method: 'put',
+    url: `/cur/user_info_privacy`,
+    data
+  })
+}
+
+
 
 // 获取其他人用户信息
 export const getUserInfo2Api = (data) => {

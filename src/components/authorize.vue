@@ -53,7 +53,6 @@ open-type="getUserInfo" type="primary">授权</button>
 	        console.log('获取用户授权成功并交换userinfo成功', res)
 	        wx.setStorageSync('token', res.data.token) // 更新token状态
             wx.setStorageSync('key', res.data.key)
-	        wx.removeStorageSync('key') // 用完就扔
 	        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
 	        this.$store.dispatch('userInfo', res.data.data)
 	        this.$store.dispatch('needAuthorize', false)

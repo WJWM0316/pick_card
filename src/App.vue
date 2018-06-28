@@ -84,12 +84,14 @@ export default {
                 if(_this.test){
                   _this.testShare(res.data.key)
                 }
-              } 
+              }
+
               if (res.code === 0) {
                 console.log('用户在其他平台已完成授权，不需要再次授权')
                 // 获取用户信息存于store
                 getUserInfoApi().then(res => {
                   _this.$store.dispatch('userInfo', res.data)
+                  console.log('已将个人信息存入store', _this.$store.getters.userInfo)
                 })
               }
               if (res.code === 201) {
@@ -103,9 +105,6 @@ export default {
         })
       })
     }
-  },
-  created () {
-    let that = this
   }
 }
 </script>

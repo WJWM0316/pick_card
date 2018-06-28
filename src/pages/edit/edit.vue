@@ -51,16 +51,6 @@
 					    </view>
 						</picker>
 					</view>
-					<!-- <view class="right">
-						<label class="label">设计</label>
-						<label class="label">设计</label>
-						<label class="label">设计</label>
-						<label class="label">设计</label>
-						<label class="label">设计</label>
-						<label class="label">设计</label>
-						<label class="label">设计</label>
-						<label class="label">设计</label>
-					</view> -->
 				</view>
 			</view>
 			<view class="item">
@@ -198,7 +188,7 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
-			this.userInfo = this.$store.getters('userInfo')
+			this.userInfo = this.$store.getters.userInfo
 			this.region = [this.userInfo.user_location]
 		},
 		onReady () {

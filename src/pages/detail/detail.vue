@@ -1,10 +1,10 @@
 <template>
-	<view class="detail">
+	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
 		<view class="main card">
-			<image class="headImg" :src="userInfo.headimgurl"></image>
+			<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.bigImgUrl"></image>
 			<view class="content">
-				<view class="mycard" v-if="false">
+				<view class="mycard" v-if="!isSelf" @tap.stop="jumpMy">
 					<image class="icon" src="/static/images/float_icon_add@3x.png"></image>
 					<text>我的名片</text>
 				</view>
@@ -14,7 +14,7 @@
 						<image class="sex" src="/static/images/details_icon_female@3x.png" v-if="userInfo.gender === 2"></image>
 						<image class="sex" src="/static/images/details_icon_man@3x.png"></image>
 					</view>
-					<image class="share" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit(1)"></image>
+					<image class="share" v-if="isSelf" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')"></image>
 				</view>
 				<view class="job">{{userInfo.company}}</view>
 				<view class="company">{{userInfo.company}}</view>
@@ -59,45 +59,46 @@
 			</view>
 		</view>
 		<!-- 工作經歷 -->
-		<view class="other card" v-if="workInfo.length > 0">
+		<view class="other card" v-if="workInfo.length > 0 && !isSelf">
 			<view class="content">
-				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
 					<text class="msg">工作经历</text>
 				</view>
-				<view class="litm" v-for="(item, index) in workInfo" v-if="index < 2">
-					<view class="date">{{workInfo.start_time_desc}} - {{workInfo.end_time_desc}}</view>
-					<view class="job">{{workInfo.position}}</view>
-					<view class="company">{{workInfo.name}}</view>
+				<view class="litm" v-for="(item, index) in workInfo" v-if="index < showWorkNum || isSelf" :key="index">
+					<view class="date">{{item.start_time_desc}} - {{item.end_time_desc}}<image class="share" v-if="isSelf" @tap.stop="toEdit('work', item.id)" src="/static/images/deta_btn_edit@3x.png"></image></view>
+					<view class="job">{{item.position}}</view>
+					<view class="company">{{item.name}}</view>
 				</view>
-				<button class="open" v-show="workInfo.length > 2">展开查看更多</button>
+				<button class="open" v-if="!isSelf" v-show="workInfo.length > 2" @tap="open(1)"><text v-show="showWorkNum === 2">展开查看更多</text><text v-show="showWorkNum > 2">收起</text></button>
+				<button class="open" v-if="isSelf" @tap="add(1)"><image class="iconAdd" src="/static/images/data_icon_add@3x.png"></image><text>添加工作经历</text></button>
 			</view>
 		</view>	
 		<!-- 教育經歷 -->
-		<view class="other card" v-if="educationsInfo.length > 0">
+		<view class="other card"  v-if="educationsInfo.length > 0 && !isSelf">
 			<view class="content">
-				<image class="share" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
 					<text class="msg">教育经历</text>
 				</view>
-				<view class="litm" v-for="(item, index) in educationsInfo" v-if="index < 2">
-					<view class="date">{{item.start_time_desc}} - {{item.end_time_desc}}</view>
+				<view class="litm" v-for="(item, index) in educationsInfo" v-if="index < showEducationNum || isSelf" :key="index">
+					<view class="date">{{item.start_time_desc}} - {{item.end_time_desc}}<image class="share" v-if="isSelf"  @tap.stop="toEdit('education', item.id)"src="/static/images/deta_btn_edit@3x.png"></image></view>
 					<view class="school">{{item.name}}</view>
 				</view>
-				<button class="open" v-show="educationsInfo.length > 2">展开查看更多</button>
+				<button class="open" v-if="!isSelf" v-show="educationsInfo.length > 2" @tap="open(2)"><text v-show="showEducationNum === 2">展开查看更多</text><text v-show="showEducationNum > 2">收起</text></button>
+				<button class="open" v-if="isSelf" @tap="add(2)"><image class="iconAdd" src="/static/images/data_icon_add@3x.png"></image><text>添加教育经历</text></button>
+
 			</view>
 		</view>	
 		<!-- 更多介紹 -->
 		<view class="other card more">
 			<view class="content">
-				<image class="share more" src="/static/images/deta_btn_edit@3x.png"></image>
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_more@3x.png"></image>
 					<text class="msg">更多介紹</text>
+					<image class="share more" v-if="isSelf" @tap="toEdit('more')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
-				<view class="article">我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我我就是不写个性签名我就是不写个性签名 我</view>
+				<view class="article"></view>
 
 				<view class="imgBox">
 					<image  v-for="(i, index) in 9" :key="index" class="img" src="/static/images/img.jpg" @tap.stop="previewImg('/static/images/img.jpg')"></image>
@@ -105,16 +106,16 @@
 			</view>
 		</view>
 		<view class="btnControl" v-if="!isSelf">
-			<button class="btn apply" @tap="applyFun" v-if="userInfo.handle_status === 1">申请和TA交换名片</button>
-			<button class="btn applying" v-if="userInfo.handle_status === 2">已申请和TA交换名片</button>
-			<button class="btn applyed"  v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
-			<button class="btn remove" v-if="userInfo .handle_status === 4 && false">移除名片</button>
+			<button class="btn apply" @tap="applyFun('launch')" v-if="userInfo.handle_status === 1">申请和TA交换名片</button>
+			<button class="btn applying" v-if="userInfo.handle_status === 2" disabled=true>已申请和TA交换名片</button>
+			<button class="btn applyed" @tap="applyFun('agree')" v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
+			<button class="btn remove" @tap="applyFun('remove')" v-if="userInfo .handle_status === 4">移除名片</button>
 		</view>
 	</view>
 </template>
 <script>
 	import MpRadio from 'mp-weui/packages/radio'
-	import {getUserInfo2Api, getUserInfoApi, getEducationsInfoApi, getWorkInfoApi, indexLike} from '@/api/pages/user'
+	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike} from '@/api/pages/user'
 	export default {
 		components: {
 	   	'mp-radio': MpRadio
@@ -127,7 +128,10 @@
 				userInfo: {},
 				educationsInfo: [],
 				workInfo: [],
-				labelInfo: []
+				labelInfo: [],
+				moreInfo: {},
+				showWorkNum: 2,
+				showEducationNum: 2
 			}
 		},
 		onLoad (option) {
@@ -137,52 +141,102 @@
 				this.isSelf = true
 			}
 		},
-		onReady () {
+		onShow () {
 			if (this.isSelf) {
 				console.log('是本人')
-				return Promise.all([this.getMyUserInfo(), this.getEducationsInfo(), this.getWorkInfo()])
+				this.getUserUnfo()
 			} else {
 				console.log('非本人')
-				return Promise.all([this.getOtherUserInfo()])
+				this.getOtherUserInfo()
 			}
 		},
 		methods: {
-			applyFun () {
-				console.log(11111111111)
-				const data = {
-					to_uid: this.vkey
+			open (type) {
+				if (type === 1) {
+					if (this.showWorkNum === 2) {
+						this.showWorkNum = this.workInfo.length
+					} else {
+						this.showWorkNum = 2
+					}
+				} else {
+					if (this.showEducationNum === 2) {
+						this.showEducationNum = this.educationsInfo.length
+					} else {
+						this.showEducationNum = 2
+					}
 				}
-				indexLike(data).then(res => {
-				})
-			},                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-			getMyUserInfo () {
+			},
+			add (type) {
+				if (type === 1) {
+					this.toEdit('work')
+				} else {
+					this.toEdit('education')
+				}
+			},
+			applyFun (type) {
+				const data = {
+					to_uid: this.userInfo.id,
+					remarks: '约么'
+				}
+				if (type === 'launch') {
+					indexLike(data).then(res => {
+						this.userInfo.handle_status = 2
+					})
+				} else if (type === 'agree') {
+					putLike(data).then(res => {
+					})
+				} else {
+					delLike(data).then(res => {
+					})
+				}
+			},
+			jumpMy () {
+				const vkey = wx.getStorageSync('vkey')
+				wx.navigateTo({
+	        url: `/pages/detail/main?vkey=${vkey}`
+	      })
+			},
+			toEdit (type, id) {
+				switch (type) {
+					case 'edit': 
+						wx.navigateTo({
+			        url: `/pages/edit/main?vkey=${this.vkey}`
+			      })
+			      break
+			    case 'work': 
+						wx.navigateTo({
+			        url: `/pages/experience/main?type=work&id=${id}`
+			      })
+			      break
+			    case 'education': 
+						wx.navigateTo({
+			        url: `/pages/experience/main?type=education&id=${id}`
+			      })
+			      break
+			    case 'more': 
+						wx.navigateTo({
+			        url: `/pages/more/main`
+			      })
+			      break
+				}
+			},
+			getUserUnfo () {
 				return getUserInfoApi().then(res => {
 					this.userInfo = res.data
+					this.educationsInfo = res.data.other_info.education_info
+					this.workInfo = res.data.other_info.career_info
+					this.labelInfo = res.data.other_info.label_info
+					this.moreInfo = res.data.other_info.more_info
 				})
-			},
-			getEducationsInfo () {
-				return getEducationsInfoApi().then(res => {
-					this.educationsInfo = res.data
-				})
-			},
-			getWorkInfo () {
-				return getWorkInfoApi().then(res => {
-					this.workInfo = res.data
-				})
-			},
+			},                                                                                                                             
 			getOtherUserInfo () {
 				return getUserInfo2Api(this.vkey).then(res => {
 					this.userInfo = res.data
 					this.educationsInfo = res.data.other_info.education_info,
 					this.workInfo = res.data.other_info.career_info
 					this.labelInfo = res.data.other_info.label_info
-					console.log(this.userInfo, this.educationsInfo)
+					this.moreInfo = res.data.other_info.more_info
 				})
-			},
-			toEdit (e) {
-				wx.navigateTo({
-	        url: `/pages/edit/main?vkey=${this.vkey}`
-	      })
 			},
 			previewImg (curImg) {
 				wx.previewImage({
@@ -193,10 +247,14 @@
 		}
 	}
 </script>
-<style lang="less" type="text/less">
+<style lang="less" type="text/less" scoped>
+	@import url('~@/assets/css/mixins.less');
 	.detail {
 		background: #FAFBFC;
 		padding: 30rpx 40rpx 170rpx;
+		&.self {
+			padding-bottom: 30rpx;
+		}
 		.card {
 			width: 100%;
 			background: #fff;
@@ -210,8 +268,8 @@
 		}
 		.main {
 			.headImg {
-				width: 700rpx;
-				height: 700rpx;
+				width: 670rpx;
+				height: 670rpx;
 			}
 			.content {
 				padding: 40rpx 30rpx 40rpx 40rpx;
@@ -242,6 +300,7 @@
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
+					.setEllipsis();
 					.name {
 						font-size: 48rpx;
 						color: ##353943;
@@ -257,6 +316,9 @@
 						width: 32rpx;
 						height: 32rpx;
 						float: right;
+						.more {
+							margin-top: 4rpx;
+						}
 					}
 				}
 				.job {
@@ -308,17 +370,14 @@
 				padding: 50rpx 40rpx;
 				position: relative;
 				.share {
-					position: absolute;
 					width: 32rpx;
 					height: 32rpx;
-					right: 40rpx;
-					top: 128rpx;
-					&.more {
-						top: 55rpx;	
-					}
+					float: right;
 				}
 				.title {
 					height: 40rpx;
+					line-height: 40rpx;
+					font-weight: Medium;
 					.icon {
 						width: 40rpx;
 						height: 40rpx;
@@ -375,6 +434,11 @@
 					border-radius:50px;
 					border:1rpx solid rgba(220,227,238,1);
 					margin-top: 40rpx;
+					.iconAdd {
+						width: 24rpx;
+						height: 24rpx;
+						margin-right: 20rpx;
+					}
 				}
 				.article {
 					margin-top: 28rpx;

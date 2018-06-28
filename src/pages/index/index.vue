@@ -6,7 +6,7 @@
       <view class="right" @click="toSwop">交换申请<view class="new">NEW</view></view>
     </view>
     <view class="content">
-      <view class="peopList" >
+      <view class="peopList">
         <block v-for="(item, index) in usersInfo" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
@@ -71,7 +71,7 @@
       <view class="left">
         <view class="name cur" @tap="toCreate">Pick</view>
         <view class="name" @tap="toCardHolder">名片夹</view>
-        <view class="name">我的名片</view>
+        <view class="name"  @tap="toCenter">我的名片</view>
       </view>
       <view class="right">
         <view class="r_blo">
@@ -126,224 +126,226 @@
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
-  export default {
-    interval: '',
-    components: {
-      mptoast,
-      authorizePop
-    },
-    data () {
-      return { 
-        usersInfo: [],
-        touchDot: 0,
-        time: 0,
-        nowIndex: 0,
-        moveData: {
-          isMove: false,
-          style: '',  //left or right
-        },
-        isShare: false,
-        isPop: false,
-        gdData : {
-          isGd: false,
-          step: 1
-        },
-        getPage: {
-          page: 1,
-          count: 20,
-        }
-      }
-    },
 
-    methods: {
-      //是否第一次进入 展示引导图
-      isFirst(){
-        let that = this
-        try {
-          var value = wx.getStorageSync('pickCardFirst')
-          if (!value) {
-            that.gdData = {
-              isGd: true,
-              step: 1
-            }
-            that.isPop = true
-              // Do something with return value
-          }
-        } catch (e) {
-          // Do something when catch error
-        }
+export default {
+  
+  components: {
+    mptoast,
+    authorizePop
+  },
+  data () {
+    return { 
+      interval: null,
+      usersInfo: [],
+      touchDot: 0,
+      time: 0,
+      nowIndex: 0,
+      moveData: {
+        isMove: false,
+        style: '',  //left or right
       },
-      firstGDClick(){
-        if(this.gdData.step == 1){
-          this.gdData.step = 2
-        }else if(this.gdData.step == 2){
-          this.gdData = {
-            isGd: false,
+      nextId: '', // 
+      isShare: false,
+      gdData : {
+        isGd: true,
+        step: 1
+      },
+      getPage: {
+        page: 1,
+        count: 20,
+      }
+    }
+  },
+
+
+  methods: {
+    //是否第一次进入 展示引导图
+    isFirst(){
+      let that = this
+      try {
+        var value = wx.getStorageSync('pickCardFirst')
+        if (!value) {
+          that.gdData = {
+            isGd: true,
             step: 1
           }
-          this.isPop = false
-          try {
-              wx.setStorageSync('pickCardFirst', '1')
-          } catch (e) {    
-          }
+          that.isPop = true
+            // Do something with return value
         }
-      },
-      cloSahre(){
+      } catch (e) {
+        // Do something when catch error
+      }
+    },
+    firstGDClick(){
+      if(this.gdData.step == 1){
+        this.gdData.step = 2
+      }else if(this.gdData.step == 2){
+        this.gdData = {
+          isGd: false,
+          step: 1
+        }
         this.isPop = false
-      },
-      isShare2 () {
-        console.log(111)
-        this.isPop = true
-        this.isShare = true
-
-      },
-      toDeatil (item) {
-        console.log(item, 22222222222)
-        wx.navigateTo({
-          url: `/pages/detail/main?vkey=${item.vkey}`
-        })
-      },
-      toCardHolder () {
-        this.$mptoast('名片夹')
-        wx.navigateTo({
-          url: `/pages/cardHolder/main`
-        })
-      },
-      toFiltrate () {
-        this.$mptoast('筛选')
-
-        wx.navigateTo({
-          url: `/pages/filtrate/main`
-        })
-      },
-      toSwop () {
-        this.$mptoast('选择')
-        wx.navigateTo({
-          url: `/pages/swopList/main`
-        })
-      },
-      toCreate () {
-        this.$mptoast('创建')
-        wx.navigateTo({
-          url: `/pages/createCard/main`
-        })
-      },
-      tStart (e) {
-        let that = this
-        that.touchDot = e.touches[0].pageX
-        that.interval =  setInterval(function () {  
-           that.time++;  
-        }, 100);  
-
-        that.moveData={
-          isMove: true,
-          style: '', 
+        try {
+            wx.setStorageSync('pickCardFirst', '1')
+        } catch (e) {    
         }
-      },
-      tMove (e) {
-        let touchMove = e.touches[0].pageX
-        let touchDot = this.touchDot
-        let status = false
-        /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot)); */
-        // 向左滑动    
+      }
+    },
+    cloSahre(){
+      this.isPop = false
+    },
+    isShare2 () {
+      this.isPop = true
+      this.isShare = true
+    },
+    toDeatil (item) {
+      wx.navigateTo({
+        url: `/pages/detail/main?vkey=${item.vkey}`
+      })
+    },
+    toCardHolder () {
+      wx.navigateTo({
+        url: `/pages/cardHolder/main`
+      })
+    },
+    toCenter () {
+      wx.navigateTo({
+        url: `/pages/center/main`
+      })
+    },
+    toFiltrate () {
+      wx.navigateTo({
+        url: `/pages/filtrate/main`
+      })
+    },
+    toSwop () {
+      wx.navigateTo({
+        url: `/pages/swopList/main`
+      })
+    },
+    toCreate () {
+      that.moveData={
+        isMove: true,
+        style: '', 
+      }
+    },
+    tStart (e) {
+      let that = this
+      that.touchDot = e.touches[0].pageX
+      that.interval =  setInterval(function () {  
+         that.time++;  
+      }, 100);  
 
-        if (touchMove - touchDot <= -40 && this.time < 10) {  
-          console.log('左滑页面')
-          status = 'left'
-        }  
-        // 向右滑动  
-        else if (touchMove - touchDot >= 40 && this.time < 10) {  
-          status = 'right'
-        }  
+      that.moveData={
+        isMove: true,
+        style: '', 
+      }
+    },
+    tMove (e) {
+      let touchMove = e.touches[0].pageX
+      let touchDot = this.touchDot
+      let status = false
+      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot)); */
+      // 向左滑动    
 
-        if(this.moveData.isMove && status){
-          this.likeOp(status)
-        }
-      },
-      tEnd (e) {
-        clearInterval(this.interval); // 清除setInterval  
-        this.time = 0;  
-      },
-      likeOp (status){
-        console.log(status)
-        let data = this.usersInfo[this.nowIndex]
-        let msg = {
-          to_uid: '123123',//data.unionid
-          remarks: 'biangbiangbiangqiang'
-        }
+      if (touchMove - touchDot <= -40 && this.time < 10) {  
+        console.log('左滑页面')
+        status = 'left'
+      }  
+      // 向右滑动  
+      else if (touchMove - touchDot >= 40 && this.time < 10) {  
+        status = 'right'
+      }  
 
-        if(status && status == 'right') {
-          indexLike(msg).then((res)=>{
-            console.log(res)
-            this.nowIndex ++
-            this.moveData={
-              isMove: false,
-              style: 'right', 
-            }
-          },(res)=>{
-            console.log(res)
-            this.$mptoast(res.msg)
-          })
-        }else if(status && status == 'left'){
+      if(this.moveData.isMove && status){
+        this.likeOp(status)
+      }
+    },
+    tEnd (e) {
+      clearInterval(this.interval); // 清除setInterval  
+      this.time = 0;  
+    },
+    likeOp (status){
+      let data = this.usersInfo[this.nowIndex]
+      let msg = {
+        to_uid: '123123',//data.unionid
+        remarks: 'biangbiangbiangqiang'
+      }
+      if(status && status == 'right') {
+        indexLike(msg).then((res)=>{
+          console.log(res)
+          this.nowIndex ++
           this.moveData={
             isMove: false,
-            style: 'left', 
+            style: 'right', 
           }
-          this.nowIndex ++
-        } 
-        console.log(this.nowIndex)
-        if(this.usersInfo.length-this.nowIndex == 4){
-          this.getPage.page++
-          getIndexUsers(this.getPage).then((res)=>{
-            console.log(res)
-            this.usersInfo = [...this.usersInfo,...res.data]
-          })
-        }
+        },(res)=>{
+          console.log(res)
+          this.$mptoast(res.msg)
+        })
 
-        if(this.usersInfo.length==this.nowIndex){
-          this.$mptoast('没有更多名片')
+      }else if(status && status == 'left'){
+        this.moveData = {
+          isMove: false,
+          style: 'left', 
         }
+        this.nowIndex ++
+      } 
+
+      console.log(this.nowIndex)
+
+      if(this.usersInfo.length-this.nowIndex == 4){
+        console.log('next============todo=====')
+
+        this.getPage.page++
+        getIndexUsers(this.getPage).then((res)=>{
+          console.log(res)
+          this.usersInfo = [...this.usersInfo,...res.data]
+          console.log(this.usersInfo)
+          if(this.usersInfo.length==this.nowIndex){
+            this.$mptoast('没有更多名片')
+          }
+        })
       }
     },
-    onShareAppMessage: function (res) {
-      console.log(res)
-      wx.showShareMenu({
-        withShareTicket: true
-      })
-      if (res.from === 'button') {
-        // 来自页面内转发按钮
-        console.log(res.target)
-      }
-      return {
-        title: '自定义转发标题',
-        path: '/pages/index/main?type=share'
-      }
-    },
+  },
 
-    onLoad(res) {
+  onShareAppMessage: function (res) {
+    console.log(res)
+    wx.showShareMenu({
+      withShareTicket: true
+    })
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '自定义转发标题',
+      path: '/pages/index/main?type=share'
+    }
+  },
+
+  onLoad(res) {
       let that = this
       getIndexUsers(this.getPage).then((res)=>{
         console.log(res)
         that.usersInfo = res.data
         console.log(res.data, 22222)
       })
-
-
-      that.isFirst()
-    },
-    onShow (res) {
-      console.log('onshaow',res)
-      if(res&&res.shareTickets){
-        wx.getShareInfo({
-          shareTicket: res.shareTickets[0],
-          success: (res) => {
-            console.log('已成功获取到加密信息',res)
-          }
-        })
-      }
-      
+    that.isFirst()
+  },
+  onShow (res) {
+    console.log('onshaow',res)
+    if(res&&res.shareTickets){
+      wx.getShareInfo({
+        shareTicket: res.shareTickets[0],
+        success: (res) => {
+          console.log('已成功获取到加密信息',res)
+        }
+      })
     }
   }
+}
 </script>
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");

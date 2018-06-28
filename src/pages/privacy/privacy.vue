@@ -1,0 +1,247 @@
+<template>
+	<view class="privacy">
+		<view class="item">
+			<view class="itemCon">
+				<view class="left">手机号码</view>
+				<view class="right">
+					<picker mode='selector' @change="mobileChange" :value="mobile" :range="list">
+						<view class="picker">
+				     	{{list[mobile]}}
+				    </view>
+					</picker>
+				</view>
+			</view>
+		</view>
+		<view class="item">
+			<view class="itemCon">
+				<view class="left">微信号</view>
+				<view class="right">
+					<picker mode='selector' @change="weChatChange" :value="weChat" :range="list">
+						<view class="picker">
+				     	{{list[weChat]}}
+				    </view>
+					</picker>
+				</view>
+			</view>
+		</view>
+		<view class="item">
+			<view class="itemCon">
+				<view class="left">邮箱</view>
+				<view class="right">
+					<picker mode='selector' @change="emailChange" :value="email" :range="list">
+						<view class="picker">
+				     	{{list[email]}}
+				    </view>
+					</picker>
+				</view>
+			</view>
+		</view>
+		<view class="item">
+			<view class="itemCon">
+				<view class="left">右滑直接交换名片</view>
+				<view class="right">
+					<switch checked @change="switchChange" color="#00D093"/>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+<script>
+	import {mapState} from 'vuex'
+	import {putPrivacyApi} from '@/api/pages/user'
+	export default {
+		components: {
+	  },
+		data () {
+			return {
+				list: ['互换名片后可见', '任何人可见', '任何人都不可见'],
+				mobile: 0,
+				weChat: 0,
+				email: 0,
+				card: 1,
+			}
+		},
+		computed: {
+			...mapState({
+				userInfo: state => state.global.userInfo
+			}),
+		},
+		onLoad (option) {
+			this.vkey = option.vkey
+			// if (this.userInfo && this.userInfo.other_info.more_info) {
+			// 	this.info = this.userInfo.other_info.more_info
+			// }
+		},
+		onShow () {
+		},
+		methods: {
+			mobileChange (e) {
+				this.mobile = e.mp.detail.value
+				this.submit()
+			},
+			weChatChange (e) {
+				this.weChat = e.mp.detail.value
+				this.submit()
+			},
+			emailChange (e) {
+				this.email = e.mp.detail.value
+				this.submit()
+			},
+			switchChange (e) {
+				if (e.mp.detail.value) {
+					this.card = 1
+				} else {
+					this.card = 0
+				}
+				this.submit()
+			},
+			submit () {
+				const data = {
+					privacy_mobile: parseInt(this.mobile) + 1,
+					privacy_wechat: parseInt(this.weChat) + 1,
+					privacy_email: parseInt(this.email) + 1,
+					can_change_card: this.card
+				}
+				putPrivacyApi(data).then(res => {
+					console.log(res, "设置成功")
+				})
+			}
+	  }
+	}
+</script>
+<style lang="less" type="text/less" scoped>
+.privacy {
+	width: 100%;
+	min-height: 100%;
+	background: #F5F7FA;
+	padding-top: 20rpx;
+	box-sizing: border-box;
+	.item {
+			padding: 0 0 0 50rpx;
+	    height: 120rpx;
+	    background: #fff;
+			.itemCon {
+				padding-right: 50rpx;
+				height: 100%;
+				border-bottom: 1rpx solid rgba(53,57,67,0.1);
+				box-sizing: border-box;
+				display: flex;
+		    align-items: center;
+		    justify-content: space-between;
+		    font-size: 28rpx;
+				line-height: 28rpx;
+				&.labelBox {
+					justify-content: start;
+					aligh-items: space-between;
+					flex-wrap: wrap;
+					padding: 46rpx 0 40rpx;
+					.left {
+						width: 100%;
+					}
+				}
+		    .left {
+					color: #353943;
+					font-weight: light;
+					padding-left: 22rpx;
+					position: relative;
+					.titleMsg {
+						font-size: 28rpx;
+						color: #C3C9D4;
+						float: right;
+					}
+					&.requst::after {
+						content: '*';
+						color: #FF3636;
+						font-size: 28rpx;
+						position: absolute;
+						top: 50%;
+						margin-top: -8rpx;
+						left: 0;
+					}
+		  	}
+		  	.right {
+					text-align: right;
+					overflow: hidden;
+					input {
+						width: 450rpx;
+						height: 120rpx;
+						line-height: 120rpx;
+					}
+					.placeholder {
+						color: #B2B6C2;
+					}
+					.radio {
+						font-size: 0;
+						margin-left: 50rpx;
+						width: 44rpx;
+						height: 44rpx;
+						text {
+							font-size: 28rpx;
+							vertical-align: middle;
+							margin-left: 12rpx;
+						}
+					}
+					.picker {
+						height: 120rpx;
+						line-height: 120rpx;
+						font-size: 28rpx;
+						color: #353943;
+						.placeholder {
+							color: #C3C9D4;
+						}
+					}
+					.label {
+						float: left;
+						margin-right: 22rpx;
+						margin-top: 26rpx;
+						text-align: center;
+						width: 146rpx;
+						height: 58rpx;
+						border-radius: 29rpx;
+						border: 1rpx solid rgba(178,182,194,0.4);
+						box-sizing: border-box;
+						color: #9AA1AB;
+						line-height: 58rpx;
+						&:nth-child(4n) {
+							margin-right: 0;
+						}
+					}
+					.fieldBox {
+						white-space: nowrap;
+					}
+		  	}
+			}
+			&.sign {
+				height: 180rpx;
+				padding: 30rpx 50rpx;
+				box-sizing: border-box;
+				.itemCon {
+					display: block;
+				}
+				textarea {
+					width: 100%;
+					height: 74rpx;
+					font-size: 28rpx;
+					line-height: 1.4;
+					overflow:hidden;
+				}
+				.number {
+					float: right;
+					color: #B2B6C2;
+					margin-top: 10rpx;
+					font-weight: light;
+					line-height: 40rpx;
+					font-size:28rpx;
+				}
+			}
+			&:last-child {
+				.itemCon {
+					border: none;
+				}
+			}
+	}
+	switch {
+		
+	}
+}
+</style>

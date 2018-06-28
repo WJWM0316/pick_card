@@ -228,7 +228,7 @@ export const request2 = ({ method = 'post', url, data = {}, needKey = true, isLo
 }
 
 // 上传微信文件到服务器
-export const upload = ({ url, filePath, data = {}, setting = {}, isLoading = true } = {}) => {
+export const upload = ({ url, filePath, data = {}, setting = {}, isLoading = false } = {}) => {
   return new Promise((resolve, reject) => {
     if (url.indexOf('http') === -1) {
       url = config.baseHost + url
