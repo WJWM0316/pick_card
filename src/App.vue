@@ -11,10 +11,7 @@ export default {
   },
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch (res) {
-
     this.checkLogin()
-    
-    console.log('================== >>>>',res)
     if(!res.shareTicket){return}
       console.log('-asdasdasdhjgasgdkhasdhjkga')
      wx.getShareInfo({
@@ -54,12 +51,17 @@ export default {
               // 为了获取用户信息
               if (res.data.key) {
                 wx.setStorageSync('key', res.data.key)
+              }
+              // 为了获取用户信息
+              if (res.data.vkey) {
+                wx.setStorageSync('vkey', res.data.vkey)
               } 
               if (res.code === 0) {
                 console.log('用户在其他平台已完成授权，不需要再次授权')
                 // 获取用户信息存于store
                 getUserInfoApi().then(res => {
                   _this.$store.dispatch('userInfo', res.data)
+                  console.log('已将个人信息存入store', _this.$store.getters.userInfo)
                 })
               }
               if (res.code === 201) {
@@ -73,9 +75,6 @@ export default {
         })
       })
     }
-  },
-  created () {
-    let that = this
   }
 }
 </script>

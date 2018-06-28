@@ -6,7 +6,7 @@
       <view class="right" @click="toSwop">交换申请<view class="new">NEW</view></view>
     </view>
     <view class="content">
-      <view class="peopList" >
+      <view class="peopList">
         <block v-for="(item, index) in usersInfo" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
@@ -60,7 +60,7 @@
       <view class="left">
         <view class="name cur" @tap="toCreate">Pick</view>
         <view class="name" @tap="toCardHolder">名片夹</view>
-        <view class="name">我的名片</view>
+        <view class="name"  @tap="toCenter">我的名片</view>
       </view>
       <view class="right">
         <view class="r_blo">
@@ -156,9 +156,13 @@ export default {
       this.isShare = false
     },
     toDeatil (item) {
-      console.log(item, 22222222222)
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
+      })
+    },
+    toCenter () {
+      wx.navigateTo({
+        url: `/pages/center/main`
       })
     },
     toCardHolder () {
@@ -206,19 +210,6 @@ export default {
       let status = false
       /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));  */
       // 向左滑动    
-      if (touchMove - touchDot <= -40 && this.time < 10) {  
-        console.log('左滑页面')
-        if(this.moveData.isMove){
-          this.unLike()
-        }
-      }  
-      // 向右滑动  
-      else if (touchMove - touchDot >= 40 && this.time < 10) {  
-        console.log('向右滑动');  
-        if(this.moveData.isMove){
-          this.like()
-        }
-
       if (touchMove - touchDot <= -40 && this.time < 10) {  
         console.log('左滑页面')
         status = 'left'
@@ -282,16 +273,10 @@ export default {
 
         })
       }
-      this.nowIndex ++
-    },
-  },
-
-  onLoad() {
-
       if(this.usersInfo.length==this.nowIndex){
         this.$mptoast('没有更多名片')
       }
-    }
+    },
   },
 
   onShareAppMessage: function (res) {

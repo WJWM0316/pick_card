@@ -32,7 +32,6 @@ import Vue from 'vue'
   export const uploadImage = (file, options = {}) => {
     const onTaskInit = options.onTaskInit && typeof options.onTaskInit === 'function' ? options.onTaskInit : uploadTask => {}
     const onProgress = options.onProgress && typeof options.onProgress === 'function' ? options.onProgress : res => {}
-
     return new Promise((resolve, reject) => {
       const filePath = file.path
       const filePaths = filePath.split('/')
@@ -89,6 +88,7 @@ import Vue from 'vue'
    */
   export const uploadImages = (files, options = {}) => {
     const promises = []
+    console.log(files, 3333333333)
     files.forEach((file, index) => {
       const onItemTaskInit = options.onItemTaskInit && typeof options.onItemTaskInit === 'function' ? options.onItemTaskInit : () => {}
       const onItemProgress = options.onItemProgress && typeof options.onItemProgress === 'function' ? options.onItemProgress : () => {}
@@ -103,7 +103,8 @@ import Vue from 'vue'
           onItemProgress(res, file, index)
         }
       }
-      promises.push(this.uploadImage(file, itemOptions).then(res => {
+      console.log(file, 2121212121)
+      promises.push(uploadImage(file, itemOptions).then(res => {
         onItemSuccess(res, file, index)
         return Promise.resolve(res, file, index)
       }).catch(e => {

@@ -1,11 +1,11 @@
 <template>
 	<view class="experience">
-		<view class="work" v-if="type == 'work'">
+		<view class="work" v-if="option.type == 'work'">
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">公司</view>
 					<view class="right">
-						<input type="text" v-model="name" placeholder="请输入公司名字" placeholder-style="color:#B2B6C2">
+						<input type="text" v-model="info.name" placeholder="请输入公司名字" placeholder-style="color:#B2B6C2">
 					</view>
 				</view>
 			</view>
@@ -13,7 +13,7 @@
 				<view class="itemCon">
 					<view class="left requst">职位</view>
 					<view class="right">
-						<input type="text" v-model="position" placeholder="请输入您的职位" placeholder-style="color:#B2B6C2">
+						<input type="text" v-model="info.position" placeholder="请输入您的职位" placeholder-style="color:#B2B6C2">
 					</view>
 				</view>
 			</view>
@@ -21,9 +21,9 @@
 				<view class="itemCon">
 					<view class="left requst">开始时间</view>
 					<view class="right">
-						<picker mode='date' @change="startDateChange" :value="startTime" fields=month>
+						<picker mode='date' @change="startDateChange" :value="info.start_time_desc" fields=month>
 							<view class="picker">
-					      <text class="placeholder" v-show="startTime === ''">开始时间</text>{{startTime}}
+					      <text class="placeholder" v-show="info.start_time_desc === ''">开始时间</text>{{info.start_time_desc}}
 					    </view>
 						</picker>
 					</view>
@@ -33,21 +33,21 @@
 				<view class="itemCon">
 					<view class="left requst">结束时间</view>
 					<view class="right">
-						<picker mode='date' @change="endDateChange" :value="endTime" fields=month>
+						<picker mode='date' @change="endDateChange" :value="info.end_time_desc" fields=month>
 							<view class="picker">
-					      <text class="placeholder" v-show="endTime === ''">结束时间</text>{{endTime}}
+					      <text class="placeholder" v-show="info.end_time_desc === ''">结束时间</text>{{info.end_time_desc}}
 					    </view>
 						</picker>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="education" v-if="type == 'education'">
+		<view class="education" v-if="option.type == 'education'">
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">学校</view>
 					<view class="right">
-						<input type="text" v-model="name" placeholder="请输入学校名称" placeholder-style="color:#B2B6C2">
+						<input type="text" v-model="info.name" placeholder="请输入学校名称" placeholder-style="color:#B2B6C2">
 					</view>
 				</view>
 			</view>
@@ -55,9 +55,9 @@
 				<view class="itemCon">
 					<view class="left requst">开始时间</view>
 					<view class="right">
-						<picker mode='date' @change="startDateChange" :value="startTime">
+						<picker mode='date' @change="startDateChange" :value="info.start_time_desc" fields=month>
 							<view class="picker">
-					      <text class="placeholder" v-show="startTime === ''">开始时间</text>{{startTime}}
+					      <text class="placeholder" v-show="info.start_time_desc === ''">开始时间</text>{{info.start_time_desc}}
 					    </view>
 						</picker>
 					</view>
@@ -67,9 +67,9 @@
 				<view class="itemCon">
 					<view class="left requst">结束时间</view>
 					<view class="right">
-						<picker mode='date' @change="endDateChange" :value="endTime">
+						<picker mode='date' @change="endDateChange" :value="info.end_time_desc" fields=month>
 							<view class="picker">
-					      <text class="placeholder" v-show="endTime === ''" custom-item="至今">结束时间</text>{{endTime}}
+					      <text class="placeholder" v-show="info.end_time_desc === ''">结束时间</text>{{info.end_time_desc}}
 					    </view>
 						</picker>
 					</view>
@@ -77,63 +77,165 @@
 			</view>
 		</view>
 		<view class="btn">
-			<button class="remove">删除</button>
+			<button class="remove" @tap="remove" v-show="option.id !== 'undefined'">删除</button>
 			<button class="save" @tap="save">保存</button>
 		</view>
 	</view>
 </template>
 <script>
-	import {getEducationsInfoApi, postEducationsInfoApi, putEducationsInfoApi, deleteEducationsInfoApi} from '@/api/pages/user'
+	import {getEducationsInfoApi, postEducationsInfoApi, putEducationsInfoApi, deleteEducationsInfoApi, getWorkInfoApi, postWorkInfoApi, putWorkInfoApi, deleteWorkInfoApi} from '@/api/pages/user'
+	import {mapState} from 'vuex'
 	export default {
 		components: {
 	  },
 		data () {
 			return {
+				option: {},
 				type: '',
-				name: '',
-				position: '',
-				startTime: '',
-				endTime: ''
+				info: {
+					name: '',
+					position: '',
+					start_time_desc: '',
+					end_time_desc: ''
+				}
 			}
 		},
+		computed: {
+			...mapState({
+				userInfo: state => state.global.userInfo
+			})
+		},
 		onLoad (option) {
-			this.type = option.type
-			this.vkey = option.vkey
+			this.option = option
+			
+		},
+		onShow () {
+			if (this.option.id !== 'undefined') {
+				this.getInfo()
+			} else {
+				this.info = {
+					name: '',
+					position: '',
+					start_time_desc: '',
+					end_time_desc: ''
+				}
+			}
 		},
 		onReady () {
 		},
 		methods: {
 			save () {
-				if (this.type === 'education') {
-					const data = {
-						name: this.name,
-						start_time : this.startTime,
-						end_time: this.endTime
+				function saveFun () {
+					wx.showToast({
+						title: '保存成功',
+						icon: 'success',
+						success: function () {
+							setTimeout(function () {
+								wx.navigateBack({
+									delta: 1
+								})
+							}, 1000)
+						}
+					})
+				}
+				const {type, id} = this.option
+				if (type === 'education') {
+					let data = {
+						name: this.info.name,
+						start_time : new Date(this.info.start_time_desc).getTime().toString().slice(0, 10),
+						end_time: new Date(this.info.end_time_desc).getTime().toString().slice(0, 10)
 					}
-					postEducationsInfoApi(data).then(res => {
-
+					if (id !== 'undefined') {
+						data.id = id
+						putEducationsInfoApi(data).then(res => {
+							saveFun()
+						})
+					} else {
+						postEducationsInfoApi(data).then(res => {
+							saveFun()
+						})
+					}
+				} else if (type === 'work') {
+					let data = {
+						name: this.info.name,
+						position: this.info.position,
+						start_time : new Date(this.info.start_time_desc).getTime().toString().slice(0, 10),
+						end_time: new Date(this.info.end_time_desc).getTime().toString().slice(0, 10)
+					}
+					if (id !== 'undefined') {
+						data.id = id
+						putWorkInfoApi(data).then(res => {
+							saveFun()
+						})
+					} else {
+						postWorkInfoApi(data).then(res => {
+							saveFun()
+						})
+					}
+					
+				}
+			},
+			remove () {
+				function removeFun () {
+					wx.showToast({
+						title: '删除成功',
+						icon: 'success',
+						success: function () {
+							setTimeout(function () {
+								wx.navigateBack({
+									delta: 1
+								})
+							}, 1000)
+						}
+					})
+				}
+				const {type, id} = this.option
+				if (type === 'education') {
+					deleteEducationsInfoApi({id}).then(res => {
+						removeFun()
+					})
+				} else if (type === 'work') {
+					deleteWorkInfoApi({id}).then(res => {
+						removeFun()
 					})
 				}
 				
 			},
+			getInfo () {
+				console.log(this.userInfo.other_info)
+				const {type, id} = this.option
+				let list = {}
+				if (type === 'work') {
+					list = this.userInfo.other_info.career_info
+				} else {
+					list = this.userInfo.other_info.education_info
+				}
+				console.log(list, 22222)
+				list.filter(item => {
+					if (item.id == id) {
+						this.info = item
+					}
+				})
+				
+			},
 			startDateChange (e) {
-				this.startTime = e.mp.detail.value
+				this.info.start_time_desc = e.mp.detail.value
 			},
 			endDateChange (e) {
-				this.endTime = e.mp.detail.value
-				if (this.startTime === this.endTime) {
+				this.info.end_time_desc = e.mp.detail.value
+				if (this.info.start_time_desc === this.info.end_time_desc) {
 					wx.showToast({
 						title: '结束时间不能等于开始时间',
 						icon: 'none'
 					})
-					this.endTime = ''
+					this.info.end_time_desc = ''
 				}
-				if (this.startTime > this.endTime) {
+				if (this.info.start_time_desc > this.info.end_time_desc) {
 					wx.showToast({
 						title: '结束时间不能小于开始时间',
 						icon: 'none'
 					})
-					this.endTime = ''
+					this.info.end_time_desc = ''
 				}
 
 			}
@@ -280,8 +382,10 @@
 			background: #fff;
 			left: 0;
 			bottom: 0;
+			display: flex;
 			overflow: hidden;
 			.remove {
+				flex-basic: 260rpx;
 				width: 260rpx;
 				height: 98rpx;
 				line-height: 98rpx;
@@ -290,16 +394,16 @@
 				background: #DCE3EE;
 				float: left;
 				border-radius: 50rpx;
+				margin-right: 30rpx;
 			}
 			.save {
-				width: 380rpx;
+				flex: 1;
 				height: 98rpx;
 				line-height: 98rpx;
 				font-size:32rpx;
 				color: #fff;
 				background: #00D093;
 				float: left;
-				margin-left: 30rpx;
 				border-radius: 50rpx;
 			}
 		}
