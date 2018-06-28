@@ -11,7 +11,7 @@
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">姓名</view>
-					<view class="right"><input type="text" placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model="userInfo.realname"></view>
+					<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model="userInfo.realname"></view>
 				</view>
 			</view>
 			<view class="item">
@@ -71,7 +71,7 @@
 				<view class="itemCon">
 					<view class="left requst">职业</view>
 					<view class="right">
-						<input type="text" placeholder="请输入职业" placeholder-style="color:#B2B6C2" v-model="userInfo.occupation">
+						<input type="text" maxlength="20" placeholder="请输入职业" placeholder-style="color:#B2B6C2" v-model="userInfo.occupation">
 					</view>
 				</view>
 			</view>
@@ -79,7 +79,7 @@
 				<view class="itemCon">
 					<view class="left requst">最近入职公司</view>
 					<view class="right">
-						<input type="text" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2"  v-model="userInfo.company">
+						<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2"  v-model="userInfo.company">
 					</view>
 				</view>
 			</view>
@@ -87,7 +87,7 @@
 				<view class="itemCon">
 					<view class="left">公司地址</view>
 					<view class="right">
-						<input type="text" placeholder="请输入公司地址" placeholder-style="color:#B2B6C2" v-model="userInfo.company_location">
+						<input type="text" maxlength="20" placeholder="请输入公司地址" placeholder-style="color:#B2B6C2" v-model="userInfo.company_location">
 					</view>
 				</view>
 			</view>
@@ -202,10 +202,11 @@
 				this.filePath = url
 			},
 			saveUserInfo () {
+				let user_location
 				if (this.region[1]) {
-					let user_location = this.region[0] + this.region[1]
+					user_location = this.region[0] + this.region[1]
 				} else {
-					let user_location = this.region[0]
+					user_location = this.region[0]
 				}
 				let data = {
 					avatar_id: this.userInfo.avatar_id,
@@ -224,7 +225,11 @@
 					// build_label_id: 33
 				}
 				console.log(data)
-				upDataUserInfoApi(data).then(res => {})
+				upDataUserInfoApi(data).then(res => {
+					wx.navigateBack({
+						delta: 1
+					})
+				})
 			},
 			closePop () {
 				this.showLablePop = false

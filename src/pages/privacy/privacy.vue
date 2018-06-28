@@ -40,7 +40,7 @@
 			<view class="itemCon">
 				<view class="left">右滑直接交换名片</view>
 				<view class="right">
-					<switch checked @change="switchChange" color="#00D093"/>
+					<switch :checked="card === 1" @change="switchChange" color="#00D093"/>
 				</view>
 			</view>
 		</view>
@@ -48,12 +48,13 @@
 </template>
 <script>
 	import {mapState} from 'vuex'
-	import {putPrivacyApi} from '@/api/pages/user'
+	import {putPrivacyApi, getUserInfoApi} from '@/api/pages/user'
 	export default {
 		components: {
 	  },
 		data () {
 			return {
+				userInfo: {},
 				list: ['互换名片后可见', '任何人可见', '任何人都不可见'],
 				mobile: 0,
 				weChat: 0,
@@ -61,20 +62,22 @@
 				card: 1,
 			}
 		},
-		computed: {
-			...mapState({
-				userInfo: state => state.global.userInfo
-			}),
-		},
 		onLoad (option) {
 			this.vkey = option.vkey
-			// if (this.userInfo && this.userInfo.other_info.more_info) {
-			// 	this.info = this.userInfo.other_info.more_info
-			// }
 		},
 		onShow () {
+			this.getUserInfo()
 		},
 		methods: {
+			getUserInfo () {
+				getUserInfoApi().then(res => {
+					this.userInfo = res.data
+					this.mobile = this.userInfo.privacy_mobile - 1
+					this.weChat = this.userInfo.privacy_wechat - 1
+					this.email = this.userInfo.privacy_email - 1
+					this.card = this.userInfo.can_change_card
+				})
+			},
 			mobileChange (e) {
 				this.mobile = e.mp.detail.value
 				this.submit()
