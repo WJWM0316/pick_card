@@ -118,6 +118,15 @@
           <image class="bot_img bot_right_icon1" src="/static/images/dafult_icom_like@3x.png" v-else></image>
         </view>
       </view>
+
+      <!-- 跳转创建 -->
+      <view class="createMe" v-if="toMeCreate">
+        <image class="close"  @tap="cloCrea" src="/static/images/popup_btn_close_nor@3x.png"></image>
+        <image class="head" src="/static/images/img.jpg"></image>
+        <view class="title">Opps！你还没创建自己的名片</view>
+        <view class="msg">要和这几位大咖交换名片的话， 点击下方按钮，创建自己的名片吧!</view>
+        <button class="btn" @tap="toCreate" type="primary">创建自己的名片</button>
+      </view>
     </view>
   </view>
 </template>
@@ -144,12 +153,17 @@ export default {
         isMove: false,
         style: '',  //left or right
       },
-      nextId: '', // 
       isShare: false,
       gdData : {
-        isGd: true,
+        isGd: false,
         step: 1
-      }
+      },  //
+      getPage: {
+        page: 1,
+        count: 20,
+      },// 首页列表信息参数
+      toMeCreate: false,
+      isPop: false,
     }
   },
 
@@ -189,6 +203,11 @@ export default {
     },
     cloSahre(){
       this.isPop = false
+      this.isShare=false
+    },
+    cloCrea(){
+      this.isPop = false
+      this.toMeCreate=false
     },
     isShare2 () {
       this.isPop = true
@@ -220,10 +239,10 @@ export default {
       })
     },
     toCreate () {
-      that.moveData={
-        isMove: true,
-        style: '', 
-      }
+      this.cloCrea()
+      wx.navigateTo({
+        url: `/pages/createCard/main`
+      })
     },
     tStart (e) {
       let that = this
@@ -264,14 +283,12 @@ export default {
     likeOp (status){
       let data = this.usersInfo[this.nowIndex]
       let msg = {
-        to_uid: '123123',//data.unionid
+        to_uid: '123123', //data.unionid
         remarks: 'biangbiangbiangqiang'
       }
-
       if(status && status == 'right') {
         indexLike(msg).then((res)=>{
           console.log(res)
-          this.nextId = this.usersInfo[this.nowIndex+1].id
           this.nowIndex ++
           this.moveData={
             isMove: false,
@@ -281,37 +298,33 @@ export default {
           console.log(res)
           this.$mptoast(res.msg)
         })
+
       }else if(status && status == 'left'){
-        this.moveData={
+        this.moveData = {
           isMove: false,
           style: 'left', 
         }
         this.nowIndex ++
       } 
 
-
       console.log(this.nowIndex)
 
       if(this.usersInfo.length-this.nowIndex == 4){
         console.log('next============todo=====')
-        let data2 = {
-          id: this.nextId,
-          count: 10,
-          orderBy: 'asc'
-        }
-        getIndexUsers(data2).then((res)=>{
+
+        this.getPage.page++
+        getIndexUsers(this.getPage).then((res)=>{
           console.log(res)
           this.usersInfo = [...this.usersInfo,...res.data]
           console.log(this.usersInfo)
-
+          if(this.usersInfo.length==this.nowIndex){
+            this.$mptoast('没有更多名片')
+          }
         })
       }
-
-      if(this.usersInfo.length==this.nowIndex){
-        this.$mptoast('没有更多名片')
-      }
-    }
+    },
   },
+
   onShareAppMessage: function (res) {
     console.log(res)
     wx.showShareMenu({
@@ -328,24 +341,24 @@ export default {
   },
 
   onLoad(res) {
-
     let that = this
-    let data = {
-      id: '',
-      count: 10,
-      orderBy: 'asc'
-    }
-    if(!this.nextId){
-      data = {}
-    }
-    getIndexUsers(data).then((res)=>{
+    getIndexUsers(this.getPage).then((res)=>{
       console.log(res)
       that.usersInfo = res.data
       console.log(res.data, 22222)
     })
 
 
+    setTimeout(()=>{
+      if(this.$store.getters.userInfo.step<4){
+        this.isPop = true
+        this.toMeCreate=true
+      }
+      console.log('==============',this.$store.getters.userInfo)
+    },1000)
     that.isFirst()
+
+    
   },
   onShow (res) {
     console.log('onshaow',res)
@@ -362,6 +375,52 @@ export default {
 </script>
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
+
+
+  .createMe {
+    width:670rpx;
+    background: #fff;
+    border-radius: 18rpx;
+    padding: 40rpx 50rpx;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    .close {
+      width: 28rpx;
+      height: 28rpx;
+      position: absolute;
+      top: 40rpx;
+      right: 40rpx;
+    }
+    .head {
+      width:342rpx;
+      height:324rpx;
+      margin: 0 auto;
+      display: block;
+    }
+    .title {
+      margin-top: 40rpx;
+      font-size: 34rpx;
+      color: #353943;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+    .msg {
+      margin-top: 28rpx;
+      font-size:28rpx;
+      color:#9AA1AB;
+      line-height: 1.4;
+      font-weight: light;
+    }
+    .btn {
+      margin-top: 54rpx;
+      width:100%;
+      height:98rpx;
+      line-height:98rpx;
+      background:rgba(0,208,147,1);
+      border-radius:49rpx;
+    }
+  }
   @keyframes outLeft {
     from {
     }
@@ -416,6 +475,9 @@ export default {
     right: 0;
     bottom: 0;
     z-index: 1001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .guidance_pop {
       .gd_cont {
         width: 479rpx;
@@ -502,7 +564,9 @@ export default {
         .btn {
           width:140rpx;
           height:104rpx;
-          background:rgba(0,208,147,1);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           &.friend {
             margin-right: 100rpx;
             image {
@@ -523,15 +587,12 @@ export default {
             line-height:26rpx;
           }
           image {
-            margin-bottom: 15rpx;
           }
           .img_warp {
             width:104rpx;
             height:104rpx;
             background:rgba(0,208,147,1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin-bottom: 15rpx;
             border-radius: 50%;
           }
         }
