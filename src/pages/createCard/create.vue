@@ -403,6 +403,35 @@
         labelType: '1,2,3,4' //标签类型。1擅长领域,2生活标签,3职业方向,4职业素养
       } 
 
+      console.log('==============',this.$store.getters.userInfo)
+
+      if(this.$store.getters.userInfo){
+        let userInfo = this.$store.getters.userInfo
+        this.firstData = {
+          gender: userInfo.gender,
+          nickname: userInfo.nickname,
+          avatar_id: userInfo.avatar_id,
+        }
+
+        this.filePath = userInfo.avatar_info.middleImgUrl
+        this.secondData={
+          company: userInfo.company, 
+          occupation: userInfo.occupation, 
+          realm_label_id: '', 
+          occupation_label_id: '', 
+        }
+        this.thirdData =  {
+          build_label_id: [], //人设id，多个以英文逗号隔开
+          sign: userInfo.sign, //个性签名
+        }
+
+        this.bindPhone= {
+          isPh: false,
+          number: userInfo.mobile,
+          code: ''
+        }
+      }
+
       postGetLabelByIds(data).then((res)=>{
         console.log(res)
         res.data.forEach((value,index,array)=>{
