@@ -142,12 +142,15 @@
           isMove: false,
           style: '',  //left or right
         },
-        nextId: '', // 
         isShare: false,
         isPop: false,
         gdData : {
           isGd: false,
           step: 1
+        },
+        getPage: {
+          page: 1,
+          count: 20,
         }
       }
     },
@@ -215,40 +218,12 @@
       },
       toSwop () {
         this.$mptoast('选择')
-
-<<<<<<< HEAD
         wx.navigateTo({
           url: `/pages/swopList/main`
         })
       },
       toCreate () {
         this.$mptoast('创建')
-=======
-      that.moveData={
-        isMove: true,
-        style: '', 
-      }
-    },
-    tMove (e) {
-      let touchMove = e.touches[0].pageX
-      let touchDot = this.touchDot
-      let status = false
-      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));  */
-      // 向左滑动    
-      if (touchMove - touchDot <= -40 && this.time < 10) {  
-        console.log('左滑页面')
-        if(this.moveData.isMove){
-          this.unLike()
-        }
-      }  
-      // 向右滑动  
-      else if (touchMove - touchDot >= 40 && this.time < 10) {  
-        console.log('向右滑动');  
-        if(this.moveData.isMove){
-          this.like()
-        }
->>>>>>> 0049fc7302e8c7cc148255db9fdf8dd42f997efb
-
         wx.navigateTo({
           url: `/pages/createCard/main`
         })
@@ -300,7 +275,6 @@
         if(status && status == 'right') {
           indexLike(msg).then((res)=>{
             console.log(res)
-            this.nextId = this.usersInfo[this.nowIndex+1].id
             this.nowIndex ++
             this.moveData={
               isMove: false,
@@ -317,22 +291,12 @@
           }
           this.nowIndex ++
         } 
-
-
         console.log(this.nowIndex)
-
         if(this.usersInfo.length-this.nowIndex == 4){
-          console.log('next============todo=====')
-          let data2 = {
-            id: this.nextId,
-            count: 10,
-            orderBy: 'asc'
-          }
-          getIndexUsers(data2).then((res)=>{
+          this.getPage.page++
+          getIndexUsers(this.getPage).then((res)=>{
             console.log(res)
             this.usersInfo = [...this.usersInfo,...res.data]
-            console.log(this.usersInfo)
-
           })
         }
 
@@ -341,7 +305,6 @@
         }
       }
     },
-  },
     onShareAppMessage: function (res) {
       console.log(res)
       wx.showShareMenu({
@@ -358,17 +321,8 @@
     },
 
     onLoad(res) {
-
       let that = this
-      let data = {
-        id: '',
-        count: 10,
-        orderBy: 'asc'
-      }
-      if(!this.nextId){
-        data = {}
-      }
-      getIndexUsers(data).then((res)=>{
+      getIndexUsers(this.getPage).then((res)=>{
         console.log(res)
         that.usersInfo = res.data
         console.log(res.data, 22222)
@@ -533,7 +487,9 @@
         .btn {
           width:140rpx;
           height:104rpx;
-          background:rgba(0,208,147,1);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           &.friend {
             margin-right: 100rpx;
             image {
@@ -554,15 +510,12 @@
             line-height:26rpx;
           }
           image {
-            margin-bottom: 15rpx;
           }
           .img_warp {
             width:104rpx;
             height:104rpx;
             background:rgba(0,208,147,1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin-bottom: 15rpx;
             border-radius: 50%;
           }
         }

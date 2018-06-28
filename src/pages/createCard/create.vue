@@ -20,7 +20,7 @@
         </view>
       </view>
       <!-- //focus="{{focus}}" -->
-      <input class="one_name" @blur="inputText" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangHK-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名"  />
+      <input class="one_name" @blur="inputText" v-model="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangHK-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="10" />
 
       <view class="one_gender">
         <view class="gender boy" @click.stop="gender(1)">
@@ -35,41 +35,39 @@
     </view>
 
 
-    <view class="op_blo op_two " v-if="nowNum === 1">
+    <view class="op_blo op_two " v-if="nowNum === 1 && listData.length>0">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
-        <input class="one_ipt" @blur="inputText1" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
+        <input class="one_ipt" v-model="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt" @blur="inputText2" v-model="firstData.realname"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  />
+        <input class="one_ipt"  v-model="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  />
       </view>
 
       <view class="table_blo row_style_two">
         <view class="tit">职业方向  <text>请选1个职业方向</text></view>
         <view class="list_selct">
-          <view class="blo" v-for="(item, index) in secondRule.oliData" :class="{'cur':item.isCur}" :key="key" @click="secondOne(index)">{{item.txt}}</view>
+          <view class="blo" v-for="(item, index) in listData[2].son" :class="{'cur':item.isCur}" :key="key" @click="secondOne(index)">{{item.name}}</view>
         </view>
       </view>
 
       <view class="table_blo row_style_two">
         <view class="tit">擅长领域 <text>请选择1~3个领域</text></view>
         <view class="list_selct">
-          <view class="blo" v-for="(item, index) in secondRule.rliData" :class="{'cur':item.isCur}" :key="key" @click="secondTwo(index)">{{item.txt}}</view>
+          <view class="blo" v-for="(item, index) in listData[0].son" :class="{'cur':item.isCur}" :key="key" @click="secondTwo(index)">{{item.name}}</view>
         </view>
       </view>
-
-      
     </view>
 
-    <view class=" op_blo  op_third" v-if="nowNum === 2">
+    <view class=" op_blo  op_third" v-if="nowNum === 2 && thirdData">
       <view class="tit">我的人设</view>
       <view class="table_blo row_style_two">
         <view class="tit_small">职业标签
           <text>请选择1~5个职业标签</text>
         </view>
         <view class="list_selct">
-          <view class="blo" v-for="(item, index) in thirdRule.jobData" :class="{'cur':item.isCur}" :key="key" @click="thirdOne(index)">{{item.txt}}</view>
+          <view class="blo" v-for="(item, index) in thirdRule.jobData" :class="{'cur':item.isCur}" :key="key" @click="thirdOp(index,'work')">{{item.name}}</view>
         </view>
       </view>
       <view class="table_blo row_style_two">
@@ -77,44 +75,52 @@
           <text>请选择1~5个生活标签</text>
         </view>
         <view class="list_selct">
-          <view class="blo" v-for="(item, index) in thirdRule.liveData" :class="{'cur':item.isCur}" :key="key" @click="thirdTwo(index)">{{item.txt}}</view>
+          <view class="blo" v-for="(item, index) in thirdRule.liveData" :class="{'cur':item.isCur}" :key="key" @click="thirdOp(index,'live')">{{item.name}}</view>
         </view>
       </view>
       <view class="table_blo row_style_three">
         <view class="tit">个人签名</view>
-        <textarea class="area" @blur="inputText3" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" />
-        <text class="astrict">1/1</text>
+        <textarea maxlength="25" class="area" v-model="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" />
+        <text class="astrict">{{thirdData.sign.length}}/25</text>
       </view>
     </view>
 
 
-    <view class="pop_warp" v-if="nowNum === 3">
+    <view class="pop_warp" v-if="bindPhone.isPh">
       <view class="sign_iphone" >
         <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" ></image></view>
         <view class="ip_cont">
           <view class="ipt_blo">
             <text class="getcode" @tap="sms">获取验证码</text>
-            <input placeholder="请输入手机号" @blur="codeText" type="" name=""  />
+            <input placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  />
           </view>
           <view class="ipt_blo">
-            <input placeholder="请输入验证码" @blur="phText" type="" name="" />
+            <input placeholder="请输入验证码" maxlength="6" v-model="bindPhone.code" type="" name="" />
           </view>
           <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
           <button class="ip_btn" @click="toCode">完成绑定</button>
           <view class="hint_2">点击快速绑定手机号码 > ></view>
         </view>
-        <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
-        <button class="ip_btn">完成绑定</button>
-        <view class="hint_1">点击快速绑定手机号码 > ></view>
-
+        
       </view>
     </view>
     <view class="footer">
-      <!-- <button class="next" :class="{'toNext' : step}" @click="toNext(nowNum)" v-if="nowNum === 1">下一步</button>
-      <button class="next" :class="{'toNext' : step}" @click="toNext(nowNum)" v-if="nowNum === 2">下一步</button> -->
-
-      <button class="next toNext" @click="toNext(nowNum)" v-if="secondData.company.length>0&&secondData.occupation.length>0 && secondRule.oli.length>0 &&secondRule.rli.length>0" >下一步</button>
-      <button class="next" v-else >下一步</button>
+      <block v-if="nowNum === 0">
+        <button class="next toNext" @click="toNext(nowNum)" v-if="firstData.gender!==0 && firstData.avatar_id&&firstData.nickname.length>0">
+        下一步
+        </button>
+        <button class="next" v-else >下一步</button>
+      </block>
+      <block v-if="nowNum === 1">
+        <button class="next toNext" @click="toNext(nowNum)" v-if="secondData.company.length>0&& secondData.occupation.length>0&&secondRule.rli.length>0 && secondRule.oli.length>0 ">下一步</button>
+        
+        <button class="next" v-else >下一步</button>
+      </block>
+      
+      <block v-if="nowNum === 2">
+        <button class="next toNext"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">下一步</button>
+        <button class="next" v-else >下一步</button>
+      </block>
     </view>
     <mptoast />
     <cut-img :isShow="isShow"
@@ -127,7 +133,7 @@
 
 <script>
   import mptoast from 'mptoast'
-  import { firstSignApi, secondSignApi, thirdSignApi, smsApi } from '@/api/pages/login'
+  import { firstSignApi, secondSignApi, thirdSignApi, smsApi,postGetLabelByIds,postGetCreatedThreeLable } from '@/api/pages/login'
   import { getUserInfoApi } from '@/api/pages/user'
   import cutImg from '@/components/cutImg'
   export default {
@@ -137,10 +143,11 @@
     },
     data () {
       return {
+        listData: [],  //第二步
         focus: false,
         firstData: {
           gender: 0, //性别 1女 2男 0没有选择
-          realname: '',
+          nickname: '',
           avatar_id: '',
         },
         secondData: {
@@ -150,127 +157,83 @@
           occupation_label_id: '', //职业方向id，多个以英文逗号隔开
         },
         secondRule: {
-          occupation_label_id: 3,
-          job: [],
+          oli: [],
           rli: [],
-          realm_label_id: 1,
-          oliData: [
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-          ],
-          rliData: [
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-          ],
         },
         thirdData: {
-          build_label_id: 0, //人设id，多个以英文逗号隔开
+          build_label_id: [], //人设id，多个以英文逗号隔开
           sign: '', //个性签名
-          mobile: '',
-          smsCode: '',  //验证码
+          //mobile: '',
+          //smsCode: '',  //验证码
+          //key: '',
+          //iv: '',
+          //encryptedData: '',
         },
         thirdRule: {
-          job: [],
+          jobData: [],
+          liveData: [],
+          job:[],
           live: [],
-          jobData: [
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-          ],
-          liveData: [
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-            {
-              txt: '运营',
-              isCur: false,
-            },
-          ],
         },
         bindPhone: {
+          isPh: false,
           number: '',
           code: ''
         },
-        nowNum : 2,
+        nowNum : 0,
         isIp: false,
         filePath: '/static/images/new_pic_defaulhead.jpg',
-<<<<<<< HEAD
         isShow: false,
-=======
-        nowNum : 0,
->>>>>>> 0049fc7302e8c7cc148255db9fdf8dd42f997efb
       }
     },
     computed: {
     },
     methods: {
+      getPhone(e){
+        //bindgetphonenumber 从1.2.0 开始支持，但是在1.5.3以下版本中无法使用wx.canIUse进行检测，建议使用基础库版本进行判断。
+        if(!e.mp.detail.iv){
+          this.bindPhone.isPh = true
+        }else {
+          
+          this.thirdData.key = wx.getStorageSync('key')
+          this.thirdData.iv = e.mp.detail.iv
+          this.thirdData.encryptedData = e.mp.detail.encryptedData
+          this.thirdPost(1)
+        }
+      },
+      thirdPost(type){
+        let job = [],
+              live = []
+        this.thirdRule.job.forEach((value,index)=>{
+          console.log(value)
+          this.thirdData['build_label_id'].push(this.thirdRule.jobData[value])
+      　 });
+        this.thirdRule.live.forEach((value,index)=>{
+          console.log(value)
+          this.thirdData['build_label_id'].push(this.thirdRule.liveData[value])
+      　 });
+        //this.thirdData['build_label_id'] = [job,live]
+
+        if(type==1){
+          
+        }else {
+          this.thirdData['mobile'] = this.bindPhone.number
+          this.thirdData['smsCode'] = this.bindPhone.code
+        }
+        thirdSignApi(this.thirdData).then((res)=>{
+          console.log(res)
+          if(res.http_status==200){
+            this.$mptoast('创建成功')
+
+            wx.switchTab({
+              url: `/pages/index/main`
+            })
+          }
+          //that.nowNum = 3;
+        })
+      },
       secondOne (index) {
+        console.log(index)
         let that = this
 
         if(that.secondRule.oli.length>0){
@@ -278,15 +241,13 @@
 
           if(index == oldIndex){ return }
 
-          that.secondRule.oliData[oldIndex].isCur = false
+          that.listData[2].son[oldIndex].isCur = false
         }
         that.secondRule.oli[0] = index 
-        that.secondRule.oliData[index].isCur = true
+        that.listData[2].son[index].isCur = true
       },
       secondTwo (index) {
         let that = this
-        
-
         if(that.secondRule.rli.length>0){
           let oldIndex = that.secondRule.rli[0]
           console.log(that.secondRule.rli.indexOf(index))
@@ -296,49 +257,43 @@
           }
           console.log(that.secondRule.rli.length)
           console.log(oldIndex)
-          if(that.secondRule.rli.length>=2){
-            that.secondRule.rliData[oldIndex].isCur = false
+          if(that.secondRule.rli.length>=3){
+            that.listData[0].son[oldIndex].isCur = false
             that.secondRule.rli.splice(0, 1)
           }
         }
         
-        that.secondRule.rliData[index].isCur = true
+        that.listData[0].son[index].isCur = true
         that.secondRule.rli.push(index)
       },
-      thirdOne (index) {
+      thirdOp (index,style) {
         let that = this
-
-        if(that.secondRule.oli.length>0){
-          let oldIndex = that.secondRule.oli[0]
-
-          if(index == oldIndex){ return }
-
-          that.secondRule.oliData[oldIndex].isCur = false
+        let str = ''
+        let str2 = ''
+        if(style == 'work'){
+          str = 'jobData'
+          str2 = 'job'
+        }else if(style == 'live'){
+          str = 'liveData'
+          str2 = 'live'
         }
-        that.secondRule.oli[0] = index 
-        that.secondRule.oliData[index].isCur = true
-      },
-      thirdTwo (index) {
-        let that = this
-        
+        if(that.thirdRule[str2].length>0){
+          let oldIndex = that.thirdRule[str2][0]
+          console.log(that.thirdRule[str2].indexOf(index))
 
-        if(that.secondRule.rli.length>0){
-          let oldIndex = that.secondRule.rli[0]
-          console.log(that.secondRule.rli.indexOf(index))
-
-          if(that.secondRule.rli.indexOf(index) != -1){
+          if(that.thirdRule[str2].indexOf(index) != -1){
             return
           }
-          console.log(that.secondRule.rli.length)
+          console.log(that.thirdRule[str2].length)
           console.log(oldIndex)
-          if(that.secondRule.rli.length>=2){
-            that.secondRule.rliData[oldIndex].isCur = false
-            that.secondRule.rli.splice(0, 1)
+          if(that.thirdRule[str2].length>=5){
+            that.thirdRule[str][oldIndex].isCur = false
+            that.thirdRule[str2].splice(0, 1)
           }
         }
         
-        that.secondRule.rliData[index].isCur = true
-        that.secondRule.rli.push(index)
+        that.thirdRule[str][index].isCur = true
+        that.thirdRule[str2].push(index)
       },
       chooseImg () {
         const that = this
@@ -368,57 +323,17 @@
           that.firstData.gender = res
         }
       },
-      inputText (e) {
-        console.log(e)
-        let val = e.target.value
-
-        if(val.length>0){
-            this.firstData['realname'] = val
-        }
-      },
-      inputText1 (e) {
-        console.log(e)
-        let val = e.target.value
-
-        if(val.length>0){
-          this.secondData['company'] = val
-        }
-      },
-      inputText2 (e) {
-        console.log(e)
-        let val = e.target.value
-
-        if(val.length>0){
-            this.secondData['occupation'] = val
-        }
-      },
-      inputText3 (e) {
-        console.log(e)
-        let val = e.target.value
-
-        if(val.length>0){
-            this.thirdData['sign'] = val
-        }
-      },
-      phText (e) {
-        console.log(e)
-        let val = e.target.value
-        if(val.length>0){
-          this.bindPhone.number = val
-        }
-      },
-      codeText (e) {
-        console.log(e)
-
-        let val = e.target.value
-        if(val.length>0){
-          this.bindPhone.code = val
-        }
-      },
       toCode () {
+        this.thirdPost(2)
+        this.bindPhone = {
+          isPh: false,
+          number: '',
+          code: ''
+        }
         console.log('绑定手机')
       },
       toNext (num) {
+        console.log(num)
         let that = this;
         let data = {}
         if(that.nowNum == 0){
@@ -428,20 +343,42 @@
             that.nowNum = 1;
           })
         }else if(that.nowNum == 1){
+
           data = that.secondData
-          data.realm_label_id = that.secondRule.rli
-          data.occupation_label_id = that.secondRule.oli
+
+
+          data.realm_label_id = '10'
+          data.occupation_label_id = '96'
           secondSignApi(data).then((res)=>{
             console.log(res)
             that.nowNum = 2;
+          },(res)=>{
+            this.$mptoast(res.msg)
+            console.log(res)
+          })
+
+          postGetCreatedThreeLable({
+            id : data.occupation_label_id 
+          }).then((res)=>{
+            that.nowNum = 2;
+            res.data.forEach((value,index)=>{
+              value.forEach((item,idx)=>{
+                item['isCur'] = false
+          　   });
+          　 });
+            that.thirdRule.jobData = res.data[0]
+            that.thirdRule.liveData = res.data[1]
+
+            console.log(res)
+          },(res)=>{
+            this.$mptoast(res.msg)
+            console.log(res)
           })
         }
         else if(that.nowNum == 2){
-          data = that.thirdData
-          thirdSignApi(data).then((res)=>{
-            console.log(res)
-            that.nowNum = 3;
-          })
+          for(let i = 0;that.secondRule.rli.length>0;i++){
+            
+          }
         }
       }, 
       //  
@@ -458,23 +395,28 @@
           console.log(res)
         })
         let that = this
-        switch (num) {
-          case 0: 
-            if (this.firstData.gender === 0 || this.firstData.realname === '' || this.firstData.avatar_id === '') {
-              wx.showToast({
-                title: '信息未完善',
-                icon: 'none'
-              })
-              return false
-            }
-            firstSignApi(this.firstData).then((res)=>{
-              console.log(res)
-              that.nowNum = 1
-            })
-            break
-        }
       }
-    }
+    },
+    onLoad(){
+      let that = this
+      let data = {
+        labelType: '1,2,3,4' //标签类型。1擅长领域,2生活标签,3职业方向,4职业素养
+      } 
+
+      postGetLabelByIds(data).then((res)=>{
+        console.log(res)
+        res.data.forEach((value,index,array)=>{
+          value.son.forEach((item,idx,ary)=>{
+            item['isCur'] = false
+      　   });
+      　 });
+
+        console.log(res.data)
+        that.listData = res.data
+      },(res)=>{
+        
+      })
+    },
   }
 </script>
 
@@ -760,7 +702,8 @@
         flex-wrap: wrap;
 
         .blo {
-          width:136rpx;
+          //width:136rpx;
+          padding: 0 30rpx;
           height:60rpx;
           border-radius:34rpx;
           border:1rpx solid rgba(220,227,238,1);

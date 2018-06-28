@@ -106,6 +106,7 @@ export const getIndexUsers = (data) => {
   return request({
     method: 'get',
     url: `/users`,
+    isLoading: false,
     data
   })
 }
@@ -135,6 +136,7 @@ export const applyApi = (data) => {
 export const indexLike = (data) => {
   return request({
     method: 'post',
+    isLoading: false,
     url: `/cur/applys`,
     data
   })

@@ -35,6 +35,25 @@ export const thirdSignApi = (data) => {
   })
 }
 
+// 获取标签接口
+export const postGetLabelByIds = (data) => {
+  return request({
+    method: 'post',
+    url: '/label/getLabelByIds',
+    data,
+    isLoading: false
+  })
+}
+// 获取创建第三步人设标签与生活标签
+export const postGetCreatedThreeLable = (data) => {
+  return request({
+    method: 'post',
+    url: '/label/getCreatedThreeLabel',
+    data,
+    isLoading: false
+  })
+}
+
 
 // 用户允许授权后需返回数据给该接口
 export const grantInformationApi = (data) => {
@@ -73,7 +92,7 @@ export const isBindPhoneApi = (data) => {
 // 获取短信验
 export const smsApi = (data) => {
   return request({
-    url: '/auto/getSmsCode',
+    url: '/auth/getSmsCode',
     data
   })
 }

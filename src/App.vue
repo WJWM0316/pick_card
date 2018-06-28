@@ -8,31 +8,21 @@ export default {
   },
   data () {
     return {
+      test: false,
+      testData: {}
     }
   },
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch (res) {
-
-    this.checkLogin()
-    
-    console.log('================== >>>>',res)
-    if(!res.shareTicket){return}
-     wx.getShareInfo({
-      shareTicket: res.shareTicket,
-      success: (res) => {
-        console.log('已成功获取到加密信息',res)
-        let data = {
-          key: 'openid',
-          vi: res.vi,
-          encryptedData: res.encryptedData
-        }
-        setUserGroup().then((res)=>{
-          console.log(res)
-        })
-      },fail: (res)=> {
-        console.log('shibai',res)
-      }
+    wx.showShareMenu({
+      withShareTicket: true
     })
+    console.log(res)
+    if(res&&res.shareTicket){
+      this.test = res.shareTicket
+    }
+    this.checkLogin()
+
   },
 
    // 捕获 app error
@@ -43,10 +33,38 @@ export default {
     /**
      * 检测是否已登录
      */
+    testShare(key){
+      wx.showShareMenu({
+        withShareTicket: true
+      })
+      console.log('=-=-=-=-=-==key',key)
+       wx.getShareInfo({
+        shareTicket: this.test,
+        success: (res) => {
+          console.log('已成功获取到加密信息',res)
+          let data = {
+            key: key,
+            iv: res.iv,
+            encryptedData: res.encryptedData
+          }
+          setUserGroup(data).then((res)=>{
+            console.log('============',res)
+          },(res)=>{
+            console.log('============',res)
+          }).catch(function(err) {
+            // 最后的catch()方法可以捕获在这一条Promise链上的异常
+            console.log('出错：' + err); // 出错：reject
+          });
+        },fail: (res)=> {
+          console.log('shibai',res)
+        }
+      })
+    },
     checkLogin () {
       return new Promise((resolve, reject) => {
         // 调用微信登录获取本地session_key
         const _this = this
+        console.log(_this.test)
         wx.login({
           success: function (res) {
             // console.log('rquire login', res)
@@ -62,6 +80,10 @@ export default {
               // 为了获取用户信息
               if (res.data.key) {
                 wx.setStorageSync('key', res.data.key)
+                //test群
+                if(_this.test){
+                  _this.testShare(res.data.key)
+                }
               } 
               if (res.code === 0) {
                 console.log('用户在其他平台已完成授权，不需要再次授权')
