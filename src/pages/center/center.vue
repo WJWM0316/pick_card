@@ -1,6 +1,6 @@
 <template>
 	<view class="center">
-		<view class="main">
+		<view class="main" @tap.stop="toDetail">
 			<view class="head">
 				<view class="msg">
 					<view class="name">{{info.nickname}}</view>
@@ -17,7 +17,7 @@
 		</view>
 		<viwe class="setting">
 			<view class="inner">
-				<view class="item" @tap="toJump()">
+				<view class="item" @tap.stop="toJump()">
 					<view class="itemCon">
 						<view class="left">隐私设置</view>
 						<view class="right">
@@ -43,15 +43,13 @@
 </template>
 <script>
 	import {mapState} from 'vuex'
-	import {putPrivacyApi} from '@/api/pages/user'
+	import {putPrivacyApi, getUserInfoApi} from '@/api/pages/user'
 	export default {
 		components: {
 	  },
 		data () {
 			return {
-				info: {
-
-				}
+				info: {}
 			}
 		},
 		computed: {
@@ -61,8 +59,8 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
-			if (this.userInfo && this.userInfo.other_info.more_info) {
-				this.info = this.userInfo.other_info.more_info
+			if (this.userInfo) {
+				this.info = this.userInfo
 			}
 		},
 		onShow () {
@@ -72,11 +70,17 @@
 				wx.navigateTo({
 	        url: `/pages/privacy/main`
 	      })
+			},
+			toDetail () {
+				wx.navigateTo({
+	        url: `/pages/detail/main?vkey=${this.userInfo.vkey}`
+	      })
 			}
 	  }
 	}
 </script>
 <style lang="less" type="text/less" scoped>
+@import url('~@/assets/css/mixins.less');
 .center {
 	padding: 28rpx 40rpx;
 	min-height: 100%;
@@ -118,7 +122,11 @@
 			color: #9AA1AB;
 			line-height:26rpx;
 			font-size: 26rpx;
+			.product {
+				.setEllipsis();
+			}
 			.position {
+				.setEllipsis();
 				margin-top: 16rpx;
 			}
 			.icon {

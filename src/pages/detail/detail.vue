@@ -59,7 +59,7 @@
 			</view>
 		</view>
 		<!-- 工作經歷 -->
-		<view class="other card" v-if="workInfo.length > 0 && !isSelf">
+		<view class="other card" v-if="workInfo && workInfo.length > 0 || isSelf">
 			<view class="content">
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
@@ -75,7 +75,7 @@
 			</view>
 		</view>	
 		<!-- 教育經歷 -->
-		<view class="other card"  v-if="educationsInfo.length > 0 && !isSelf">
+		<view class="other card"  v-if="educationsInfo && educationsInfo.length > 0 || isSelf">
 			<view class="content">
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
@@ -98,10 +98,9 @@
 					<text class="msg">更多介紹</text>
 					<image class="share more" v-if="isSelf" @tap="toEdit('more')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
-				<view class="article"></view>
-
-				<view class="imgBox">
-					<image  v-for="(i, index) in 9" :key="index" class="img" src="/static/images/img.jpg" @tap.stop="previewImg('/static/images/img.jpg')"></image>
+				<view class="article">{{moreInfo.content}}</view>
+				<view class="imgBox" v-if="moreInfo.img_info && moreInfo.img_info.length > 0">
+					<image  v-for="(i, index) in moreInfo.img_info" :key="index" class="img" :src="i.smallImgUrl" @tap.stop="previewImg(index)"></image>
 				</view>
 			</view>
 		</view>
@@ -238,10 +237,14 @@
 					this.moreInfo = res.data.other_info.more_info
 				})
 			},
-			previewImg (curImg) {
+			previewImg (index) {
+				let list = []
+				this.moreInfo.img_info.forEach(item => {
+					list.push(item.bigImgUrl)
+				})
 				wx.previewImage({
-				  current: curImg, // 当前显示图片的http链接
-				  urls: this.imgList // 需要预览的图片http链接列表
+				  current: list[index], // 当前显示图片的http链接
+				  urls: list // 需要预览的图片http链接列表
 				})
 			}
 		}
@@ -316,9 +319,9 @@
 						width: 32rpx;
 						height: 32rpx;
 						float: right;
-						.more {
-							margin-top: 4rpx;
-						}
+					}
+					more {
+						margin-top: 4rpx;
 					}
 				}
 				.job {
@@ -326,23 +329,27 @@
 					line-height: 34rpx;
 					color: #353943;
 					margin-top: 20rpx;
+					.setEllipsis();
 				}
 				.company {
 					font-size: 28rpx;
 					line-height: 28rpx;
 					color: #C3C9D4;
 					margin-top: 13rpx;
+					.setEllipsis();
 				}
 				.signature {
 					color: #B2B6C2;
 					font-size: 28rpx;
 					line-height: 28rpx;
 					margin: 40rpx 0 40rpx;
+					.setEllipsis();
 				}
 				.itemMsg {
 					margin-bottom: 30rpx;
 					display: flex;
 					align-items: center;
+					.setEllipsis();
 					.icon {
 						width: 30rpx;
 						height: 30rpx;

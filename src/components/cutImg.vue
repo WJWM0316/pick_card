@@ -10,7 +10,6 @@
    </view>
 </template>
 <script>
-  import { request } from '@/api/require'
   import { uploadImage } from '@/mixins/uploader'
   export default {
     props: {
@@ -156,9 +155,6 @@
           console.log(res)
           uploadImage(data, {
             onItemSuccess: (resp, file, index) => {
-              console.log(file)
-              // that.images.push(file)
-              // that.$apply()
             }
           }).then(res => {
             console.log(res, 1)

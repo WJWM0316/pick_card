@@ -110,10 +110,12 @@
 	    	this.info.img_id = array.join(',')
 	    	const data = {
 	    		content: this.info.content,
-	    		//img_id: this.info.img_id
+	    		img_id: this.info.img_id
 	    	}
 	    	putMoreApi(data).then(res => {
-	    		console.log('上传成功')
+	    		wx.navigateBack({
+						delta: 1
+					})
 	    	})
 	    },
 	    remove (index) {
