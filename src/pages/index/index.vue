@@ -197,6 +197,8 @@ export default {
         this.isPop = false
         try {
             wx.setStorageSync('pickCardFirst', '1')
+            this.isPop = true
+            this.toMeCreate=true
         } catch (e) {    
         }
       }
@@ -350,15 +352,17 @@ export default {
 
 
     setTimeout(()=>{
-      if(this.$store.getters.userInfo.step<4){
+      var value = wx.getStorageSync('pickCardFirst')
+      if(this.$store.getters.userInfo.step<4 && value){
         this.isPop = true
         this.toMeCreate=true
       }
       console.log('==============',this.$store.getters.userInfo)
-    },1000)
-    that.isFirst()
 
-    
+
+    },1000)
+
+    that.isFirst()
   },
   onShow (res) {
     console.log('onshaow',res)
