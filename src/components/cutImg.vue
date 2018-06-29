@@ -1,9 +1,11 @@
 <template>
   <view class="upload" v-if="isShow">
-    <view class="master"><image src="/static/images/new_pic_tailor@3x.png" @touchstart='canvas_start' @touchmove='canvas_move' @touchend='canvas_end'></image></view>
-    <canvas id='cover-preview'  disable-scroll='true' canvas-id='cover-preview'> 
-      <cover-view id='croper'></cover-view>  
-   </canvas>
+    <canvas id='cover-preview' canvas-id='cover-preview' disable-scroll=true @touchstart='canvas_start' @touchmove='canvas_move' @touchend='canvas_end'> 
+      <cover-view id='croper' ></cover-view>  
+    </canvas>
+<!--    <canvas id='masterBg' canvas-id='cover-marster' disable-scroll=true @touchstart='canvas_start' @touchmove='canvas_move' @touchend='canvas_end'>
+      <cover-view id='master'><cover-image class="bg" src="/static/images/new_pic_tailor@3x.png" ></cover-image></cover-view>
+   </canvas> -->
    <button id="croper-sure" @tap='cancel_croper'>取消</button>
    <button id="croper-cancel" @tap='upload_bg'>完成</button>
    <button class="open" open-type="openSetting" @tap="change" v-if="openSet">打开授权设置页</button>
@@ -19,8 +21,8 @@
       },
       filePath: {
         type: String,
-        default: ''
-      }
+        default: 'https://cdnstatic-test.card.ziwork.com/dev/avatar/2018-06-29/8ff089c17e93cc97ae1b2b64a1bfe53e.png'
+      } 
     },
     data () {
       return {
@@ -42,6 +44,21 @@
     },
     mounted () {
       this.ctx = wx.createCanvasContext('cover-preview')
+      console.log(this.filePath, 33333333)
+      this.change_cover()
+      // let master = wx.createCanvasContext('master')
+      // let windowWidth, windowHeight
+      // wx.getSystemInfo({
+      //   success: function(res) {
+      //     windowWidth = res.windowWidth
+      //     windowHeight = res.windowHeight
+      //     console.log(windowWidth, windowHeight, 11111111111111111111111)
+      //     master.fillStyle = 'rgba(0, 0, 0, 0.7)'
+      //     master.fillRect(0, 0, windowWidth, windowHeight)
+      //     master.draw()
+      //   }
+      // })
+      
       // if (this.bg_url) {
       //   wx.getSetting({
       //     success(res) {
@@ -55,6 +72,9 @@
       //   })
       // }
     },
+    onShow () {
+      console.log(this.filePath, 22222222222)
+    },
     watch: {
       isShow (val) {
         if (val) {
@@ -63,203 +83,200 @@
           this.$emit('isHide')
         }
       },
-      filePath () {}
+      filePath (val) {
+        console.log(val, 1111111111)
+      }
     },
     methods: {
-    //选择并将图片输出到canvas  
-    change_cover:function(){  
-      var that = this;  
-      wx.getImageInfo({  
-        src: that.filePath,  
-        success: function (res) {  
-          console.log(res, 1111111111) 
-          that.tempWidth = res.width;  
-          that.tempHeight = res.height;
-          that.ctx.drawImage(that.filePath,0, 0, 375,res.height/res.width*375);  
-          that.ctx.draw();  
-        }  
-      }) 
-    },  
-    //监听手指触摸事件，并判断是移动还是缩放，并记录初始状态  
-    canvas_start:function(e){
-      var touches = e.touches.length;
-      this.isControl(e.touches[0].pageX, e.touches[0].pageX)
-      if (!this.isTouch) { return }
-      if(touches == 1){  
-        this._touches = 1;  
-        this.start_position = { x: e.touches[0].pageX, y: e.touches[0].pageY, timeStamp:e.timeStamp}  
-      }else if(touches == 2){  
-        this._touches = 2;  
-        this.start_position = { x: e.touches[0].pageX, y: e.touches[0].pageY, x1: e.touches[1].pageX, y1: e.touches[1].pageY, timeStamp: e.timeStamp }  
-      }else{  
-        this._touches = 1;  
-      }
-    },  
-    //监听手指移动事件，并做出相应调整  
-    canvas_move: function (e) {  
-      var touches = e.touches.length
-      console.log(e)
-      if (!this.isTouch) { return }
-      if (this._touches == 1 && e.timeStamp - this.start_position.timeStamp > 150) {
-        let x = this.old_x + e.touches[0].pageX - this.start_position.x
-        let y = this.old_y + e.touches[0].pageY - this.start_position.y
-        console.log(x, y)
-        this.ctx.drawImage(this.filePath, x, y, 375 * this.new_scale, this.tempHeight / this.tempWidth * 375 * this.new_scale);  
-        this.ctx.draw();  
-        this.is_move = true;  
-      } else if (this._touches == 2 && e.timeStamp - this.start_position.timeStamp > 150) {
-        console.log(e.touches[0].pageX, 222)
-        var change_x = Math.abs(Math.abs(e.touches[0].pageX - e.touches[1].pageX) - Math.abs(this.start_position.x - this.start_position.x1));  
-        var change_y = Math.abs(Math.abs(e.touches[0].pageY - e.touches[1].pageY) - Math.abs(this.start_position.y - this.start_position.y1));  
-        if(change_x - change_y > 10){  
-          this.old_scale = Math.abs(e.touches[0].pageX - e.touches[1].pageX) / Math.abs(this.start_position.x - this.start_position.x1);  
+      //选择并将图片输出到canvas  
+      change_cover:function(){  
+        var that = this;  
+        wx.getImageInfo({  
+          src: that.filePath,  
+          success: function (res) {  
+            that.tempWidth = res.width;  
+            that.tempHeight = res.height;
+            that.ctx.drawImage(that.filePath,0, 0, 375,res.height/res.width*375);  
+            that.ctx.draw();  
+          }  
+        }) 
+      },  
+      //监听手指触摸事件，并判断是移动还是缩放，并记录初始状态  
+      canvas_start:function(e){
+        var touches = e.touches.length;
+        this.isControl(e.touches[0].x, e.touches[0].x)
+        if(touches == 1){  
+          this._touches = 1;  
+          this.start_position = { x: e.touches[0].x, y: e.touches[0].y, timeStamp:e.timeStamp}  
+        }else if(touches == 2){  
+          this._touches = 2;  
+          this.start_position = { x: e.touches[0].x, y: e.touches[0].y, x1: e.touches[1].x, y1: e.touches[1].y, timeStamp: e.timeStamp }  
         }else{  
-          this.old_scale = Math.abs(e.touches[0].pageY - e.touches[1].pageY) / Math.abs(this.start_position.y - this.start_position.y1);  
-        }  
-        this.ctx.drawImage(this.filePath, this.old_x, this.old_y, 375 * this.old_scale * this.new_scale, this.tempHeight / this.tempWidth * 375 * this.old_scale * this.new_scale);  
-        this.ctx.draw();  
-        this.is_move = true;  
-      }else{  
-        this.is_move = false;  
-      }  
-    },  
-    //监听手指离开动作，并保存当前状态数据  
-    canvas_end: function (e) {  
-      console.log(e, 22)
-      if (!this.isTouch) { return }
-      if (this._touches == 1 && this.is_move) {
-        this.old_x = this.old_x + e.mp.changedTouches[0].pageX - this.start_position.x;  
-        this.old_y = this.old_y + e.mp.changedTouches[0].pageY - this.start_position.y;  
-      } else if (this._touches == 2 && this.is_move) {  
-        this.new_scale = this.old_scale * this.new_scale;  
-      }     
-    },  
-    //确定并上传背景图  
-    upload_bg:function(){  
-      var that = this;  
-      var screenWidth = wx.getSystemInfoSync().screenWidth;  
-      // console.log(screenWidth);  
-      wx.canvasToTempFilePath({  
-        x: 0,  
-        y: screenWidth / 750 * 208,  
-        width: screenWidth,  
-        height: screenWidth / 750 * 661,  
-        destWidth: 1000,  
-        destHeight: 1000,  
-        quality: 1,  
-        canvasId: 'cover-preview',  
-        success: function (res) {    
-          //res.tempFilePath即为生成的图片路径
-          that.bg_url = res.tempFilePath
-          const data = {
-            path: res.tempFilePath,
-            size: 0
-          }
-          console.log(res)
-          uploadImage(data, {
-            onItemSuccess: (resp, file, index) => {
-            }
-          }).then(res => {
-            console.log(res, 1)
-            that.ctx.clearActions()
-            that.$emit('isHide')
-            that.$emit('getImgcut', res.file.fileId, that.bg_url)
-            // wx.showModal({
-            //   title: '上传成功',
-            //   content: '是否需要保存至相册',
-            //   success: function (res) {
-            //     if (res.confirm) {
-            //       that.save_img()
-            //     } else {
-            //       that.isShow = false
-            //     }
-                
-            //   }
-            // })
-          }).catch((e, index) => {
-            console.log(e, 2)
-          })
-                 
-        }  
-      })  
-    },  
-    //取消图片预览编辑  
-    cancel_croper:function(){
-      this.$emit('isHide', false)
-      this.ctx.clearActions() 
-    },
-    save_img () {
-      var that = this;
-      wx.getSetting({
-        success(res) {
-          console.log(res, res.authSetting['scope.writePhotosAlbum'])
-          if (!res.authSetting['scope.writePhotosAlbum']) {
-            wx.authorize({
-              scope: 'scope.writePhotosAlbum',
-              success() {
-                that.openSet = false
-                wx.saveImageToPhotosAlbum({
-                  filePath: that.bg_url,
-                  success: function (e) {
-                    console.log('保存成功', e)
-                    wx.showToast({
-                      title: '保存成功',
-                      icon: 'success'
-                    })
-                    that.isShow = false
-                    that.$emit('isHide')
-                  },
-                  fail: function (e) {
-                    console.log('保存失败', e)
-                  }
-                })
-              },
-              fail (res) {
-                console.log(111, res)
-                if (res.errMsg === 'authorize:fail auth deny') {
-                  that.openSet = true
-                } 
-              }
-            })
-          } else {
-            wx.saveImageToPhotosAlbum({
-              filePath: that.bg_url,
-              success: function (e) {
-                console.log('保存成功', e)
-                that.$emit('isHide')
-                wx.navigateBack({
-                  delta: 1
-                })
-              },
-              fail: function (e) {
-                console.log('保存失败', e)
-              }
-            })
-          }
-        },
-        fail(res) {
-          console.log(res, 1)
+          this._touches = 1;  
         }
-      })
-    },
-    isControl (x, y) {
-      const that = this
-      // wx.canvasGetImageData({
-      //   canvasId: 'cover-preview',
-      //   x: x,
-      //   y: y,
-      //   width: 1,
-      //   height: 1,
-      //   success(res) {
-      //     if (res.data[0] !== 0 || res.data[1] !== 0 || res.data[2] !== 0 || res.data[3] !== 0) {
-      //       that.isTouch = true
-      //     } else {
-      //       that.isTouch = false
-      //     }
-      //   }
-      // })
+      },  
+      //监听手指移动事件，并做出相应调整  
+      canvas_move: function (e) {  
+        var touches = e.touches.length
+        console.log(e)
+        if (this._touches == 1 && e.timeStamp - this.start_position.timeStamp > 150) {
+          let x = this.old_x + e.touches[0].x - this.start_position.x
+          let y = this.old_y + e.touches[0].y - this.start_position.y
+          console.log(x, y)
+          this.ctx.drawImage(this.filePath, x, y, 375 * this.new_scale, this.tempHeight / this.tempWidth * 375 * this.new_scale);  
+          this.ctx.draw();  
+          this.is_move = true;  
+        } else if (this._touches == 2 && e.timeStamp - this.start_position.timeStamp > 150) {
+          console.log(e.touches[0].x, 222)
+          var change_x = Math.abs(Math.abs(e.touches[0].x - e.touches[1].x) - Math.abs(this.start_position.x - this.start_position.x1));  
+          var change_y = Math.abs(Math.abs(e.touches[0].y - e.touches[1].y) - Math.abs(this.start_position.y - this.start_position.y1));  
+          if(change_x - change_y > 10){  
+            this.old_scale = Math.abs(e.touches[0].x - e.touches[1].x) / Math.abs(this.start_position.x - this.start_position.x1);  
+          }else{  
+            this.old_scale = Math.abs(e.touches[0].y - e.touches[1].y) / Math.abs(this.start_position.y - this.start_position.y1);  
+          }  
+          this.ctx.drawImage(this.filePath, this.old_x, this.old_y, 375 * this.old_scale * this.new_scale, this.tempHeight / this.tempWidth * 375 * this.old_scale * this.new_scale);  
+          this.ctx.draw();  
+          this.is_move = true;  
+        }else{  
+          this.is_move = false;  
+        }  
+      },  
+      //监听手指离开动作，并保存当前状态数据  
+      canvas_end: function (e) {  
+        if (this._touches == 1 && this.is_move) {
+          this.old_x = this.old_x + e.mp.changedTouches[0].x - this.start_position.x;  
+          this.old_y = this.old_y + e.mp.changedTouches[0].y - this.start_position.y;  
+        } else if (this._touches == 2 && this.is_move) {  
+          this.new_scale = this.old_scale * this.new_scale;  
+        }     
+      },  
+      //确定并上传背景图  
+      upload_bg:function(){  
+        var that = this;  
+        var screenWidth = wx.getSystemInfoSync().screenWidth;  
+        // console.log(screenWidth);  
+        wx.canvasToTempFilePath({  
+          x: 0,  
+          y: screenWidth / 750 * 208,  
+          width: screenWidth,  
+          height: screenWidth / 750 * 661,  
+          destWidth: 1000,  
+          destHeight: 1000,  
+          quality: 1,  
+          canvasId: 'cover-preview',  
+          success: function (res) {    
+            //res.tempFilePath即为生成的图片路径
+            that.bg_url = res.tempFilePath
+            const data = {
+              path: res.tempFilePath,
+              size: 0
+            }
+            console.log(res)
+            uploadImage(data, {
+              onItemSuccess: (resp, file, index) => {
+              }
+            }).then(res => {
+              console.log(res, 1)
+              // that.ctx.clearActions()
+              that.$emit('isHide')
+              that.$emit('getImgcut', res.file.fileId, that.bg_url)
+              // wx.showModal({
+              //   title: '上传成功',
+              //   content: '是否需要保存至相册',
+              //   success: function (res) {
+              //     if (res.confirm) {
+              //       that.save_img()
+              //     } else {
+              //       that.isShow = false
+              //     }
+                  
+              //   }
+              // })
+            }).catch((e, index) => {
+              console.log(e, 2)
+            })
+                   
+          }  
+        })  
+      },  
+      //取消图片预览编辑  
+      cancel_croper:function(){
+        this.$emit('isHide', false)
+        // this.ctx.clearActions() 
+      },
+      save_img () {
+        var that = this;
+        wx.getSetting({
+          success(res) {
+            console.log(res, res.authSetting['scope.writePhotosAlbum'])
+            if (!res.authSetting['scope.writePhotosAlbum']) {
+              wx.authorize({
+                scope: 'scope.writePhotosAlbum',
+                success() {
+                  that.openSet = false
+                  wx.saveImageToPhotosAlbum({
+                    filePath: that.bg_url,
+                    success: function (e) {
+                      console.log('保存成功', e)
+                      wx.showToast({
+                        title: '保存成功',
+                        icon: 'success'
+                      })
+                      that.isShow = false
+                      that.$emit('isHide')
+                    },
+                    fail: function (e) {
+                      console.log('保存失败', e)
+                    }
+                  })
+                },
+                fail (res) {
+                  console.log(111, res)
+                  if (res.errMsg === 'authorize:fail auth deny') {
+                    that.openSet = true
+                  } 
+                }
+              })
+            } else {
+              wx.saveImageToPhotosAlbum({
+                filePath: that.bg_url,
+                success: function (e) {
+                  console.log('保存成功', e)
+                  that.$emit('isHide')
+                  wx.navigateBack({
+                    delta: 1
+                  })
+                },
+                fail: function (e) {
+                  console.log('保存失败', e)
+                }
+              })
+            }
+          },
+          fail(res) {
+            console.log(res, 1)
+          }
+        })
+      },
+      isControl (x, y) {
+        const that = this
+        // wx.canvasGetImageData({
+        //   canvasId: 'cover-preview',
+        //   x: x,
+        //   y: y,
+        //   width: 1,
+        //   height: 1,
+        //   success(res) {
+        //     if (res.data[0] !== 0 || res.data[1] !== 0 || res.data[2] !== 0 || res.data[3] !== 0) {
+        //       that.isTouch = true
+        //     } else {
+        //       that.isTouch = false
+        //     }
+        //   }
+        // })
+      }
     }
-  }
 }
 
 </script>
@@ -273,18 +290,6 @@
     z-index: 2222;
     background: #fff;
   }
-  .master {
-    width: 100%;  
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    image {
-      width: 100%;  
-      height: 100%;
-    }
-  }
   #cover-preview{  
     width: 100%;  
     height: 100%;
@@ -294,12 +299,14 @@
     z-index: 1;
   }
   #croper{  
-    width: 662rpx;  
-    height: 662rpx;  
+    width: 100%;  
+    height: 100%;  
     position: absolute;  
-    top: 208rpx;  
-    left: 44rpx;
-    border-radius: 18rpx;
+    top: 0;  
+    left: 0;
+    background: url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/new_pic_tailor%403x.png') no-repeat;
+    background-size: 100% 100%;
+    z-index: -1;
   }  
     
   #croper-sure{  
@@ -333,4 +340,18 @@
   .open {
     opacity: 0;
   }
+  #masterBg {
+    width: 100%;
+    height: 100%;
+    display: block !important;
+    #master {
+      width: 100%;
+      height: 100%;
+      .bg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+}
+  
 </style>

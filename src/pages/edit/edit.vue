@@ -136,28 +136,28 @@
 			@close="close"
 			@getLabel="getLabel"
 		></label-pop>
-		<cut-img :isShow="isShow"
+<!-- 		<cut-img :isShow="isShow"
 						 :filePath="filePath"
 						 @getImgcut="getImgcut"
 						 @isHide="isHide"
-		></cut-img>
+		></cut-img> -->
 	</view>
 </template>
 <script>
-	import cutImg from '@/components/cutImg'
+	// import cutImg from '@/components/cutImg'
 	import labelPop from '@/components/labelPop'
 	import {upDataUserInfoApi} from '@/api/pages/user'
+	import { uploadImage } from '@/mixins/uploader'
 	export default {
 		components: {
 			labelPop,
-			cutImg
+			// cutImg
 	  },
 	  watch: {
 	  	userInfo (val) {
 	  		if (this.userInfo.avatar_id !== '' && this.userInfo.realname !== '' && this.userInfo.gender !== ''  && this.userInfo.occupation !== '' && this.userInfo.mobile !== '') {
 	  			this.isLight = true
 	  		}
-	  		console.log(val)
 	  	},
 	  },
 		data () {
@@ -182,7 +182,7 @@
 				career: null,
 				checkedIndexList: [],
 				checkedTextList: [],
-				filePath: 'https://cdnstatic-test.card.ziwork.com/dev/avatar/2018-06-26/9a6ba4d71906efbb8fa35ab7adb87887.png?x-oss-process=image/resize,p_20',
+				filePath: '',
 				isShow: false
 			}
 		},
@@ -191,11 +191,12 @@
 			this.userInfo = this.$store.getters.userInfo
 			this.region = [this.userInfo.user_location]
 
-			if(this.userInfo&&this.userInfo.avatar_info&&this.userInfo.avatar_info.middleImgUrl){
+			if(this.userInfo && this.userInfo.avatar_info && this.userInfo.avatar_info.middleImgUrl){
 				this.filePath = this.userInfo.avatar_info.middleImgUrl
 			}
 		},
-		onReady () {
+		onShow () {
+			this.isShow = false
 		},
 		methods: {
 			isHide (e) {
@@ -263,15 +264,24 @@
 			chooseImg () {
 				const that = this
 				wx.chooseImage({  
-		          count: 1, // 默认9  
-		          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
-		          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
-		          success: function (res0) {  
-		            that.filePath = res0.tempFilePaths[0]
-		            console.log(that.filePath)
-		            that.isShow = true
-		          }  
-		        })  
+          count: 1, // 默认9  
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
+          success: function (res0) {  
+            that.filePath = res0.tempFilePaths[0]
+            const data = {
+              path: that.filePath,
+              size: 0
+            }
+            uploadImage(data, {
+              onItemSuccess: (resp, file, index) => {
+              }
+            }).then(res => {
+            }).catch((e, index) => {
+              console.log(e, 2)
+            })
+          }  
+        })  
 			}
 		}
 			

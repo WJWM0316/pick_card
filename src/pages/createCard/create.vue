@@ -123,11 +123,11 @@
       </block>
     </view>
     <mptoast />
-    <cut-img :isShow="isShow"
+<!--     <cut-img :isShow="isShow"
              :filePath="filePath"
              @getImgcut="getImgcut"
              @isHide="isHide"
-    ></cut-img>
+    ></cut-img> -->
   </div>
 </template>
 
@@ -135,11 +135,12 @@
   import mptoast from 'mptoast'
   import { firstSignApi, secondSignApi, thirdSignApi, smsApi,postGetLabelByIds,postGetCreatedThreeLable } from '@/api/pages/login'
   import { getUserInfoApi } from '@/api/pages/user'
-  import cutImg from '@/components/cutImg'
+  // import cutImg from '@/components/cutImg'
+  import { uploadImage } from '@/mixins/uploader'
   export default {
     components: {
       mptoast,
-      cutImg
+      // cutImg
     },
     data () {
       return {
@@ -290,8 +291,17 @@
           sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
           success: function (res0) {  
             that.filePath = res0.tempFilePaths[0]
-            console.log(that.filePath)
-            that.isShow = true
+            const data = {
+              path: that.filePath,
+              size: 0
+            }
+            uploadImage(data, {
+              onItemSuccess: (resp, file, index) => {
+              }
+            }).then(res => {
+            }).catch((e, index) => {
+              console.log(e, 2)
+            })
           }  
         })  
       },
