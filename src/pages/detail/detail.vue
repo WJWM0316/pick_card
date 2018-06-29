@@ -185,9 +185,11 @@
 					})
 				} else if (type === 'agree') {
 					putLike(data).then(res => {
+						this.userInfo.handle_status = 3
 					})
 				} else {
 					delLike(data).then(res => {
+						this.userInfo.handle_status = 1
 					})
 				}
 			},
