@@ -7,7 +7,7 @@
     </view>
     <view class="content">
       <view class="peopList">
-        <block v-for="(item, index) in usersInfo" :key="key" >
+        <block v-for="(item, index) in usersList" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
             'test': nowIndex==index, 
@@ -32,7 +32,8 @@
               </view>
             </view>
             <view class="bottom">
-              <view class="signature">这个人很懒，不想写个性签名~</view>
+              <view class="signature" v-if="item.sign.length>0">{{item.sign}}</view>
+              <view class="signature" v-else>这个人很懒，不想写个性签名~</view>
               <view class="labelList">
                 <view class="label_blo">
                   移动互联网
@@ -70,7 +71,7 @@
     </view>
     <view class="footer">
       <view class="left">
-        <view class="name cur" @tap="toCreate">Pick</view>
+        <view class="name cur" @tap="toCre">Pick</view>
         <view class="name" @tap="toCardHolder">名片夹</view>
         <view class="name"  @tap="toCenter">我的名片</view>
       </view>
@@ -126,13 +127,14 @@
         <image class="head" src="/static/images/img.jpg"></image>
         <view class="title">Opps！你还没创建自己的名片</view>
         <view class="msg">要和这几位大咖交换名片的话， 点击下方按钮，创建自己的名片吧!</view>
-        <button class="btn" @tap="toCreate" type="primary">创建自己的名片</button>
+        <button class="btn" @tap="toCre" type="primary">创建自己的名片</button>
       </view>
     </view>
   </view>
 </template>
 <script>
   import mptoast from 'mptoast'
+  import App from '@/App'
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
@@ -146,7 +148,12 @@ export default {
   data () {
     return { 
       interval: null,
-      usersInfo: [],
+      usersList: [],
+      userInfo: [],
+      toCreate: {
+        isToCreate: false,
+        num: 0
+      },
       touchDot: 0,
       time: 0,
       nowIndex: 0,
@@ -241,7 +248,7 @@ export default {
         url: `/pages/swopList/main`
       })
     },
-    toCreate () {
+    toCre () {
       this.cloCrea()
       wx.navigateTo({
         url: `/pages/createCard/main`
@@ -282,15 +289,30 @@ export default {
       clearInterval(this.interval); // 清除setInterval  
       this.time = 0;  
     },
+    isCreate (){
+      var value = wx.getStorageSync('pickCardFirst')
+      if(this.userInfo.step<4 && value){
+        this.isPop = true
+        this.toMeCreate=true
+      }
+    },
     likeOp (status){
-      let data = this.usersInfo[this.nowIndex]
+      let that = this
+      let data = this.usersList[this.nowIndex]
       let msg = {
         to_uid: data.id, //data.unionid
       }
       if(status && status == 'right') {
         indexLike(msg).then((res)=>{
           console.log(res)
+
           this.nowIndex ++
+        if(!this.toCreate.isToCreate){
+          that.isCreate()
+          this.toCreate.isToCreate = true
+        }
+          
+
           this.moveData={
             isMove: false,
             style: 'right', 
@@ -306,13 +328,20 @@ export default {
           style: 'left', 
         }
         this.nowIndex ++
+        this.toCreate.num++
+        if(this.toCreate.num == 2 && !this.toCreate.isToCreate){
+          that.isCreate()
+
+          this.toCreate.isToCreate = true
+        }
+
       } 
-      if(this.usersInfo.length-this.nowIndex == 4){
+      if(this.usersList.length-this.nowIndex == 4){
         console.log('next============todo=====')
         this.getPage.page++
         getIndexUsers(this.getPage).then((res)=>{
-          this.usersInfo = [...this.usersInfo,...res.data]
-          if(this.usersInfo.length==this.nowIndex){
+          this.usersList = [...this.usersList,...res.data]
+          if(this.usersList.length==this.nowIndex){
             this.$mptoast('没有更多名片')
           }
         })
@@ -332,24 +361,32 @@ export default {
       path: '/pages/index/main?type=share'
     }
   },
+  
 
   onLoad(res) {
-    console.log('===',this)
-
     let that = this
-    console.log(this.$root, this.$parent, 1111111111)
-    getIndexUsers(this.getPage).then((res)=>{
-      that.usersInfo = res.data
+
+    App.methods.checkLogin().then((res)=>{
+      getIndexUsers(this.getPage).then((res)=>{
+        that.usersList = res.data
+      })
+
+      getUserInfoApi().then((res)=>{
+        that.userInfo = res.data
+        console.log('=============当前用户信息',res)
+      })
+      /*setTimeout(()=>{
+        var value = wx.getStorageSync('pickCardFirst')
+        if(this.$store.getters.userInfo.step<4 && value){
+          this.isPop = true
+          this.toMeCreate=true
+        }
+      },1000)*/
+    },(res)=>{
+      console.log('登陆失败',res)
     })
 
-
-    setTimeout(()=>{
-      var value = wx.getStorageSync('pickCardFirst')
-      if(this.$store.getters.userInfo.step<4 && value){
-        this.isPop = true
-        this.toMeCreate=true
-      }
-    },1000)
+    
 
     that.isFirst()
   },

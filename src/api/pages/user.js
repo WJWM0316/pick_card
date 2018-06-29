@@ -1,11 +1,10 @@
 import {request} from '../require.js'
 
 // 获取当前用户信息
-export const getUserInfoApi = (method,data) => {
+export const getUserInfoApi = (method) => {
   return request({
     method: 'get',
     url: '/cur/user_info',
-    data
   })
 }
 // 更新当前用户信息
