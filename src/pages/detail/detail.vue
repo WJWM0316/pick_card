@@ -91,7 +91,7 @@
 			</view>
 		</view>	
 		<!-- 更多介紹 -->
-		<view class="other card more">
+		<view class="other card more" v-if="moreInfo.content !== '' || moreInfo.img_info.length > 0">
 			<view class="content">
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_more@3x.png"></image>
