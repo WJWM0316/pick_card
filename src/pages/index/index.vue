@@ -32,7 +32,8 @@
               </view>
             </view>
             <view class="bottom">
-              <view class="signature">这个人很懒，不想写个性签名~</view>
+              <view class="signature" v-if="item.sign.length>0">{{item.sign}}</view>
+              <view class="signature" v-else>这个人很懒，不想写个性签名~</view>
               <view class="labelList">
                 <view class="label_blo">
                   移动互联网
@@ -70,7 +71,7 @@
     </view>
     <view class="footer">
       <view class="left">
-        <view class="name cur" @tap="toCreate">Pick</view>
+        <view class="name cur" @tap="toCre">Pick</view>
         <view class="name" @tap="toCardHolder">名片夹</view>
         <view class="name"  @tap="toCenter">我的名片</view>
       </view>
@@ -126,7 +127,7 @@
         <image class="head" src="/static/images/img.jpg"></image>
         <view class="title">Opps！你还没创建自己的名片</view>
         <view class="msg">要和这几位大咖交换名片的话， 点击下方按钮，创建自己的名片吧!</view>
-        <button class="btn" @tap="toCreate" type="primary">创建自己的名片</button>
+        <button class="btn" @tap="toCre" type="primary">创建自己的名片</button>
       </view>
     </view>
   </view>
@@ -148,7 +149,7 @@ export default {
     return { 
       interval: null,
       usersList: [],
-      usersInfo: [],
+      userInfo: [],
       toCreate: {
         isToCreate: false,
         num: 0
@@ -247,7 +248,7 @@ export default {
         url: `/pages/swopList/main`
       })
     },
-    toCreate () {
+    toCre () {
       this.cloCrea()
       wx.navigateTo({
         url: `/pages/createCard/main`
@@ -288,7 +289,15 @@ export default {
       clearInterval(this.interval); // 清除setInterval  
       this.time = 0;  
     },
+    isCreate (){
+      var value = wx.getStorageSync('pickCardFirst')
+      if(this.userInfo.step<4 && value){
+        this.isPop = true
+        this.toMeCreate=true
+      }
+    },
     likeOp (status){
+      let that = this
       let data = this.usersList[this.nowIndex]
       let msg = {
         to_uid: data.id, //data.unionid
@@ -299,7 +308,7 @@ export default {
 
           this.nowIndex ++
         if(!this.toCreate.isToCreate){
-          this.isCreate()
+          that.isCreate()
           this.toCreate.isToCreate = true
         }
           
@@ -321,7 +330,8 @@ export default {
         this.nowIndex ++
         this.toCreate.num++
         if(this.toCreate.num == 2 && !this.toCreate.isToCreate){
-          this.isCreate()
+          that.isCreate()
+
           this.toCreate.isToCreate = true
         }
 
@@ -351,12 +361,9 @@ export default {
       path: '/pages/index/main?type=share'
     }
   },
-  isCreate (){
-
-  },
+  
 
   onLoad(res) {
-    console.log('===',App)
     let that = this
 
     App.methods.checkLogin().then((res)=>{
@@ -365,7 +372,7 @@ export default {
       })
 
       getUserInfoApi().then((res)=>{
-        that.usersInfo = res.data
+        that.userInfo = res.data
         console.log('=============当前用户信息',res)
       })
       /*setTimeout(()=>{
