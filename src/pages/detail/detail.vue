@@ -136,9 +136,10 @@
 		onLoad (option) {
 			this.vkey = option.vkey
 			const vkey = this.vkey
-			console.log(111111, vkey)
 			if (vkey === wx.getStorageSync('vkey')) {
 				this.isSelf = true
+			} else {
+				this.isSelf = false
 			}
 		},
 		onShow () {
