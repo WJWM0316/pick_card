@@ -194,7 +194,6 @@
         if(!e.mp.detail.iv){
           this.bindPhone.isPh = true
         }else {
-          
           this.thirdData.key = wx.getStorageSync('key')
           this.thirdData.iv = e.mp.detail.iv
           this.thirdData.encryptedData = e.mp.detail.encryptedData
@@ -213,19 +212,16 @@
           this.thirdData['build_label_id'].push(this.thirdRule.liveData[value])
       　 });
         //this.thirdData['build_label_id'] = [job,live]
-
         if(type==1){
-          
         }else {
           this.thirdData['mobile'] = this.bindPhone.number
           this.thirdData['smsCode'] = this.bindPhone.code
         }
         thirdSignApi(this.thirdData).then((res)=>{
-          console.log(res)
           if(res.http_status==200){
             this.$mptoast('创建成功')
-
-            wx.switchTab({
+            this.nowNum = 0
+            wx.redirectTo({
               url: `/pages/index/main`
             })
           }
@@ -235,12 +231,9 @@
       secondOne (index) {
         console.log(index)
         let that = this
-
         if(that.secondRule.oli.length>0){
           let oldIndex = that.secondRule.oli[0]
-
           if(index == oldIndex){ return }
-
           that.listData[2].son[oldIndex].isCur = false
         }
         that.secondRule.oli[0] = index 
@@ -250,13 +243,10 @@
         let that = this
         if(that.secondRule.rli.length>0){
           let oldIndex = that.secondRule.rli[0]
-          console.log(that.secondRule.rli.indexOf(index))
 
           if(that.secondRule.rli.indexOf(index) != -1){
             return
           }
-          console.log(that.secondRule.rli.length)
-          console.log(oldIndex)
           if(that.secondRule.rli.length>=3){
             that.listData[0].son[oldIndex].isCur = false
             that.secondRule.rli.splice(0, 1)
@@ -279,13 +269,10 @@
         }
         if(that.thirdRule[str2].length>0){
           let oldIndex = that.thirdRule[str2][0]
-          console.log(that.thirdRule[str2].indexOf(index))
 
           if(that.thirdRule[str2].indexOf(index) != -1){
             return
           }
-          console.log(that.thirdRule[str2].length)
-          console.log(oldIndex)
           if(that.thirdRule[str2].length>=5){
             that.thirdRule[str][oldIndex].isCur = false
             that.thirdRule[str2].splice(0, 1)
@@ -311,7 +298,6 @@
       getImgcut (fileId, filePath) {
         this.filePath = filePath
         this.firstData.avatar_id = fileId
-        console.log(fileId, filePath, 11111111111111111111111111)
       },
       isHide () {
         this.isShow = false
@@ -330,31 +316,24 @@
           number: '',
           code: ''
         }
-        console.log('绑定手机')
       },
       toNext (num) {
-        console.log(num)
         let that = this;
         let data = {}
         if(that.nowNum == 0){
           data = that.firstData
           firstSignApi(data).then((res)=>{
-            console.log(res)
             that.nowNum = 1;
           })
         }else if(that.nowNum == 1){
 
           data = that.secondData
-
-
           data.realm_label_id = '10'
           data.occupation_label_id = '96'
           secondSignApi(data).then((res)=>{
-            console.log(res)
             that.nowNum = 2;
           },(res)=>{
             this.$mptoast(res.msg)
-            console.log(res)
           })
 
           postGetCreatedThreeLable({
@@ -368,11 +347,8 @@
           　 });
             that.thirdRule.jobData = res.data[0]
             that.thirdRule.liveData = res.data[1]
-
-            console.log(res)
           },(res)=>{
             this.$mptoast(res.msg)
-            console.log(res)
           })
         }
         else if(that.nowNum == 2){
