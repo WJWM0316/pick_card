@@ -334,6 +334,8 @@ export default {
   },
 
   onLoad(res) {
+    console.log('===',this)
+
     let that = this
     console.log(this.$root, this.$parent, 1111111111)
     getIndexUsers(this.getPage).then((res)=>{

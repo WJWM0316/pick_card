@@ -190,6 +190,10 @@
 			this.vkey = option.vkey
 			this.userInfo = this.$store.getters.userInfo
 			this.region = [this.userInfo.user_location]
+
+			if(this.userInfo&&this.userInfo.avatar_info&&this.userInfo.avatar_info.middleImgUrl){
+				this.filePath = this.userInfo.avatar_info.middleImgUrl
+			}
 		},
 		onReady () {
 		},
@@ -259,15 +263,15 @@
 			chooseImg () {
 				const that = this
 				wx.chooseImage({  
-          count: 1, // 默认9  
-          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
-          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
-          success: function (res0) {  
-            that.filePath = res0.tempFilePaths[0]
-            console.log(that.filePath)
-            that.isShow = true
-          }  
-        })  
+		          count: 1, // 默认9  
+		          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
+		          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
+		          success: function (res0) {  
+		            that.filePath = res0.tempFilePaths[0]
+		            console.log(that.filePath)
+		            that.isShow = true
+		          }  
+		        })  
 			}
 		}
 			
