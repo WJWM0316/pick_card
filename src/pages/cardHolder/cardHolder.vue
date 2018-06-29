@@ -340,6 +340,7 @@ export default {
 
   onLoad() {
     let that = this
+
     getIndexUsers().then((res)=>{
       that.usersInfo = res
       console.log(res)

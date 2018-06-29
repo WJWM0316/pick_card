@@ -334,6 +334,8 @@ export default {
   },
 
   onLoad(res) {
+    console.log('===',this)
+
     let that = this
     getIndexUsers(this.getPage).then((res)=>{
       that.usersInfo = res.data
