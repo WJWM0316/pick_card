@@ -213,8 +213,8 @@
     </view>
     <view class="footer">
       <view class="left">
-        <view class="name cur" @tap="toCreate">Pick</view>
-        <view class="name">名片夹</view>
+        <view class="name" @tap="toIndex">Pick</view>
+        <view class="name cur">名片夹</view>
         <view class="name">我的名片</view>
       </view>
       <view class="right">
@@ -267,11 +267,10 @@ export default {
         url: `/pages/swopList/main`
       })
     },
-    toCreate () {
-      this.$mptoast('创建')
-
+    toIndex () {
+      this.$mptoast('选择')
       wx.navigateTo({
-        url: `/pages/createCard/main`
+        url: `/pages/index/main`
       })
     },
     tStart (e) {
