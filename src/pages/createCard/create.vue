@@ -2,7 +2,7 @@
 <template>
   <div class="container" >
     <view class="hintJoined hidden">
-      <image class="hint_img" src=""></image>
+     <!--  <image class="hint_img" src=""></image> -->
       <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有</view>
     </view>
     <view class="op_one " v-if="nowNum === 0">

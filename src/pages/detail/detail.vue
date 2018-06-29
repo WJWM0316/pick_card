@@ -176,7 +176,7 @@
 			},
 			applyFun (type) {
 				const data = {
-					to_uid: this.userInfo.id,
+					id: this.userInfo.id,
 					remarks: '约么'
 				}
 				if (type === 'launch') {
@@ -285,7 +285,7 @@
 					position: absolute;
 					right: 0;
 					top: 60rpx;
-					width:220rpx;
+					width:230rpx;
 					height:88rpx;
 					background: #fff;
 					font-size: 28rpx;

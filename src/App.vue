@@ -85,7 +85,9 @@ export default {
                   _this.testShare(res.data.key)
                 }
               }
-
+              if (res.data.vkey) {
+                wx.setStorageSync('vkey', res.data.vkey)
+              }
               if (res.code === 0) {
                 console.log('用户在其他平台已完成授权，不需要再次授权')
                 // 获取用户信息存于store

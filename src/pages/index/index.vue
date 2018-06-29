@@ -335,6 +335,7 @@ export default {
 
   onLoad(res) {
     let that = this
+    console.log(this.$root, this.$parent, 1111111111)
     getIndexUsers(this.getPage).then((res)=>{
       that.usersInfo = res.data
     })
