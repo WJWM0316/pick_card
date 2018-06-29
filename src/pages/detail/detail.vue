@@ -176,7 +176,7 @@
 			},
 			applyFun (type) {
 				const data = {
-					id: this.userInfo.id,
+					to_uid: this.userInfo.id,
 					remarks: '约么'
 				}
 				if (type === 'launch') {
