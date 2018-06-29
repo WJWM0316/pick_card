@@ -329,7 +329,7 @@ export default {
         }
         this.nowIndex ++
         this.toCreate.num++
-        if(this.toCreate.num == 2 && !this.toCreate.isToCreate){
+        if(this.toCreate.num == 3 && !this.toCreate.isToCreate){
           that.isCreate()
 
           this.toCreate.isToCreate = true
