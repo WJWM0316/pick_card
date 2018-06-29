@@ -7,7 +7,7 @@
     </view>
     <view class="content">
       <view class="peopList">
-        <block v-for="(item, index) in usersInfo" :key="key" >
+        <block v-for="(item, index) in usersList" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
             'test': nowIndex==index, 
@@ -133,6 +133,7 @@
 </template>
 <script>
   import mptoast from 'mptoast'
+  import App from '@/App'
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
@@ -146,7 +147,12 @@ export default {
   data () {
     return { 
       interval: null,
+      usersList: [],
       usersInfo: [],
+      toCreate: {
+        isToCreate: false,
+        num: 0
+      },
       touchDot: 0,
       time: 0,
       nowIndex: 0,
@@ -283,14 +289,21 @@ export default {
       this.time = 0;  
     },
     likeOp (status){
-      let data = this.usersInfo[this.nowIndex]
+      let data = this.usersList[this.nowIndex]
       let msg = {
         to_uid: data.id, //data.unionid
       }
       if(status && status == 'right') {
         indexLike(msg).then((res)=>{
           console.log(res)
+
           this.nowIndex ++
+        if(!this.toCreate.isToCreate){
+          this.isCreate()
+          this.toCreate.isToCreate = true
+        }
+          
+
           this.moveData={
             isMove: false,
             style: 'right', 
@@ -306,13 +319,19 @@ export default {
           style: 'left', 
         }
         this.nowIndex ++
+        this.toCreate.num++
+        if(this.toCreate.num == 2 && !this.toCreate.isToCreate){
+          this.isCreate()
+          this.toCreate.isToCreate = true
+        }
+
       } 
-      if(this.usersInfo.length-this.nowIndex == 4){
+      if(this.usersList.length-this.nowIndex == 4){
         console.log('next============todo=====')
         this.getPage.page++
         getIndexUsers(this.getPage).then((res)=>{
-          this.usersInfo = [...this.usersInfo,...res.data]
-          if(this.usersInfo.length==this.nowIndex){
+          this.usersList = [...this.usersList,...res.data]
+          if(this.usersList.length==this.nowIndex){
             this.$mptoast('没有更多名片')
           }
         })
@@ -332,23 +351,36 @@ export default {
       path: '/pages/index/main?type=share'
     }
   },
+  isCreate (){
+
+  },
 
   onLoad(res) {
-    console.log('===',this)
-
+    console.log('===',App)
     let that = this
-    getIndexUsers(this.getPage).then((res)=>{
-      that.usersInfo = res.data
+
+    App.methods.checkLogin().then((res)=>{
+      getIndexUsers(this.getPage).then((res)=>{
+        that.usersList = res.data
+      })
+
+      getUserInfoApi().then((res)=>{
+        that.usersInfo = res.data
+        console.log('=============当前用户信息',res)
+      })
+
+      /*setTimeout(()=>{
+        var value = wx.getStorageSync('pickCardFirst')
+        if(this.$store.getters.userInfo.step<4 && value){
+          this.isPop = true
+          this.toMeCreate=true
+        }
+      },1000)*/
+    },(res)=>{
+      console.log('登陆失败',res)
     })
 
-
-    setTimeout(()=>{
-      var value = wx.getStorageSync('pickCardFirst')
-      if(this.$store.getters.userInfo.step<4 && value){
-        this.isPop = true
-        this.toMeCreate=true
-      }
-    },1000)
+    
 
     that.isFirst()
   },
