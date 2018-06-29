@@ -299,6 +299,8 @@
               onItemSuccess: (resp, file, index) => {
               }
             }).then(res => {
+              console.log(that.firstData.avatar_id, res.file.fileId, 222222222)
+              that.firstData.avatar_id = res.file.fileId
             }).catch((e, index) => {
               console.log(e, 2)
             })

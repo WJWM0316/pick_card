@@ -277,6 +277,8 @@
               onItemSuccess: (resp, file, index) => {
               }
             }).then(res => {
+            	console.log(res, 3333333)
+            	that.userInfo.avatar_id = res.file.fileId
             }).catch((e, index) => {
               console.log(e, 2)
             })
