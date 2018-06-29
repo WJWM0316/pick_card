@@ -34,27 +34,6 @@
       </view>
     </view>
 
-    <view class="swopList">
-      <view class="swop_blo">
-        <view class="blo_top">
-          <view class="top_msg">
-            <image class="avatar" src=""></image>
-            <view class="msg_detail">
-              <view class="msg_name">asdasdasdasdasd</view>
-              <view class="msg_form">asdasdasdasdasd</view>
-            </view>
-            
-          </view>
-          <view class="top_btn">同意</view>
-        </view>
-
-        <view class="blo_bot">
-          <image class="txt_img" src=""></image>
-          <view class="txt">asdasdasdasdasd</view>
-        </view>
-      </view>
-    </view>
-
     <view class="footer">
       <button class="next toNext" @click="toNext(1)">提交</button>
       <!-- <button class="next" wx:else>完成创建</button> -->

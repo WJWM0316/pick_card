@@ -7,9 +7,9 @@
 
         <view class="blo_top">
           <image class="avatar" src="/static/images/img.jpg"></image>
-          <view class="msg_detail">
-            <view class="msg_name">{{item.apply_user_info.realname}} {{item.apply_user_info.occupation}}</view>
-            <view class="msg_form">{{item.apply_user_info.company}}</view>
+          <view class="msg_detail ellipsis">
+            <view class="msg_name ellipsis">{{item.apply_user_info.realname}} {{item.apply_user_info.occupation}}</view>
+            <view class="msg_form ellipsis">{{item.apply_user_info.company}}</view>
           </view>
           <button class="top_btn" @tap="putApply(item.id,index)" v-if="item.status==0">同意</button>
           <text class="top_status" v-else>已交换</text>

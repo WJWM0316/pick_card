@@ -19,14 +19,15 @@
           @touchend="tEnd" 
           @touchmove="tMove" >
             <view class="top">
-              <image class="bage" src="/static/images/img.jpg"></image>
+              <image class="bage" :src="item.avatar_info.middleImgUrl" v-if="item.avatar_info.middleImgUrl"></image>
+              <image class="bage" src="/static/images/img.jpg" v-else></image>
               <view class="location">
                 <image class="adr" src="/static/images/home_icon_location_nor@3x.png"></image>
                 广州市
               </view>
               <view class="text">
-                <view class="name">{{item.realname}}</view>
-                <view class="title">{{index}}职场学习社区小灯塔</view>
+                <view class="name">{{item.nickname}}</view>
+                <view class="title">{{index}}{{item.occupation}}</view>
                 <image class="detail" src="/static/images/hone_btn_more_nor@3x.png"></image>
               </view>
             </view>
@@ -266,7 +267,6 @@ export default {
       // 向左滑动    
 
       if (touchMove - touchDot <= -40 && this.time < 10) {  
-        console.log('左滑页面')
         status = 'left'
       }  
       // 向右滑动  
@@ -285,8 +285,7 @@ export default {
     likeOp (status){
       let data = this.usersInfo[this.nowIndex]
       let msg = {
-        to_uid: '123123', //data.unionid
-        remarks: 'biangbiangbiangqiang'
+        to_uid: data.id, //data.unionid
       }
       if(status && status == 'right') {
         indexLike(msg).then((res)=>{
@@ -308,17 +307,11 @@ export default {
         }
         this.nowIndex ++
       } 
-
-      console.log(this.nowIndex)
-
       if(this.usersInfo.length-this.nowIndex == 4){
         console.log('next============todo=====')
-
         this.getPage.page++
         getIndexUsers(this.getPage).then((res)=>{
-          console.log(res)
           this.usersInfo = [...this.usersInfo,...res.data]
-          console.log(this.usersInfo)
           if(this.usersInfo.length==this.nowIndex){
             this.$mptoast('没有更多名片')
           }
@@ -328,13 +321,11 @@ export default {
   },
 
   onShareAppMessage: function (res) {
-    console.log(res)
     wx.showShareMenu({
       withShareTicket: true
     })
     if (res.from === 'button') {
       // 来自页面内转发按钮
-      console.log(res.target)
     }
     return {
       title: '自定义转发标题',
@@ -345,9 +336,7 @@ export default {
   onLoad(res) {
     let that = this
     getIndexUsers(this.getPage).then((res)=>{
-      console.log(res)
       that.usersInfo = res.data
-      console.log(res.data, 22222)
     })
 
 
@@ -357,30 +346,21 @@ export default {
         this.isPop = true
         this.toMeCreate=true
       }
-      console.log('==============',this.$store.getters.userInfo)
-
-
     },1000)
 
     that.isFirst()
   },
   onShow (res) {
-    console.log('onshaow',res)
-    if(res&&res.shareTickets){
-      wx.getShareInfo({
-        shareTicket: res.shareTickets[0],
-        success: (res) => {
-          console.log('已成功获取到加密信息',res)
-        }
-      })
-    }
   }
 }
 </script>
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
 
-
+  .container {
+    height: 100vh;
+    background:rgba(250,251,252,1);
+  }
   .createMe {
     width:670rpx;
     background: #fff;
@@ -658,10 +638,11 @@ export default {
       border-radius: 18rpx;
       overflow: hidden;
       position: absolute;
-      border: 1rpx solid red;
+      //border: 1rpx solid red;
       box-sizing: border-box;
       background: #ffffff;
       display: none;
+      box-shadow:0rpx 17rpx 28rpx 0rpx rgba(220,227,238,0.2);
       &.test {
         display: block;
       }
@@ -695,6 +676,7 @@ export default {
           font-family:PingFangHK-Regular;
           color:rgba(255,255,255,1);
           line-height: 50rpx;
+          display: none;
           .adr {
             width:20rpx;
             height:24rpx;
