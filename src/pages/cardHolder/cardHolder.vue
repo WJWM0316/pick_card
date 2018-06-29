@@ -198,24 +198,32 @@
         <view class="ops_blo shareMe">分享喔的名片</view>
         <view class="ops_blo createFlock">创建群名片</view>
       </view>
-      <view class="personageList">
-        <view class="card_block">
-          <view class="blo_msg">
-            <image class="blo_img" src="/static/images/img.jpg"></image>
+      <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" @animationfinish="animationfinish">
+        <swiper-item>
+          <view class="personageList">
+            <view class="card_block">
+              <view class="blo_msg">
+                <image class="blo_img" src="/static/images/img.jpg"></image>
 
-            <view class="msg_name">吕美美</view>
-            <view class="msg_tit">产品经理</view>
-            <view class="msg_company">广州老虎信息科技有限公司</view>
+                <view class="msg_name">吕美美</view>
+                <view class="msg_tit">产品经理</view>
+                <view class="msg_company">广州老虎信息科技有限公司</view>
+              </view>
+            </view>
           </view>
-        </view>
-      </view>
-      <view class="flockList"></view>
+        </swiper-item>
+
+        <swiper-item>
+          <view class="flockList"></view>
+        </swiper-item>
+      </swiper>
+      
     </view>
     <view class="footer">
       <view class="left">
         <view class="name" @tap="toIndex">Pick</view>
         <view class="name cur">名片夹</view>
-        <view class="name">我的名片</view>
+        <view class="name" @tap="toCenter">我的名片</view>
       </view>
       <view class="right">
         <view class="r_blo">
@@ -253,6 +261,11 @@ export default {
   },
 
   methods: {
+    toCenter () {
+      wx.navigateTo({
+        url: `/pages/center/main`
+      })
+    },
     toFiltrate () {
       this.$mptoast('筛选')
 
