@@ -59,8 +59,11 @@
       isShow (val) {
         if (val) {
           this.change_cover()
+        } else {
+          this.$emit('isHide')
         }
-      }
+      },
+      filePath () {}
     },
     methods: {
     //选择并将图片输出到canvas  
@@ -159,7 +162,7 @@
           }).then(res => {
             console.log(res, 1)
             that.ctx.clearActions()
-            that.$emit('isHide', false)
+            that.$emit('isHide')
             that.$emit('getImgcut', res.file.fileId, that.bg_url)
             // wx.showModal({
             //   title: '上传成功',
@@ -204,6 +207,7 @@
                       icon: 'success'
                     })
                     that.isShow = false
+                    that.$emit('isHide')
                   },
                   fail: function (e) {
                     console.log('保存失败', e)
@@ -222,6 +226,7 @@
               filePath: that.bg_url,
               success: function (e) {
                 console.log('保存成功', e)
+                that.$emit('isHide')
                 wx.navigateBack({
                   delta: 1
                 })
@@ -265,7 +270,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 222;
+    z-index: 2222;
     background: #fff;
   }
   .master {

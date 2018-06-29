@@ -368,7 +368,6 @@ export default {
         that.usersInfo = res.data
         console.log('=============当前用户信息',res)
       })
-
       /*setTimeout(()=>{
         var value = wx.getStorageSync('pickCardFirst')
         if(this.$store.getters.userInfo.step<4 && value){
