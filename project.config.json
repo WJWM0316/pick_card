@@ -29,13 +29,19 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": -1,
 			"list": [
 				{
 					"id": 0,
 					"name": "1",
+					"pathName": "pages/flock/main",
+					"query": "id=hxttbzm6"
+				},
+				{
+					"id": 1,
+					"name": "名片夹",
 					"pathName": "pages/cardHolder/main",
-					"query": "vkey=6ohknx4gir"
+					"query": ""
 				}
 			]
 		}

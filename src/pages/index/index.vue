@@ -11,8 +11,8 @@
           <view :index="index" class="peop_blo "
           :class="{
             'test': nowIndex==index, 
-            'outLeft animated test': nowIndex-1==index&&moveData.style=='left',  'outRight animated test': 
-            nowIndex-1==index&&moveData.style=='right'
+            'outLeft animated test': nowIndex-1==index&&moveData.style=='left',  
+            'outRight animated test': nowIndex-1==index&&moveData.style=='right'
           }" 
           @tap="toDeatil(item)" 
           @touchstart="tStart" 
@@ -20,7 +20,7 @@
           @touchmove="tMove" >
             <view class="top">
               <image class="bage" :src="item.avatar_info.middleImgUrl" v-if="item.avatar_info.middleImgUrl"></image>
-              <image class="bage" src="/static/images/img.jpg" v-else></image>
+              <image class="bage" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
               <view class="location">
                 <image class="adr" src="/static/images/home_icon_location_nor@3x.png"></image>
                 广州市
@@ -34,20 +34,13 @@
             <view class="bottom">
               <view class="signature" v-if="item.sign.length>0">{{item.sign}}</view>
               <view class="signature" v-else>这个人很懒，不想写个性签名~</view>
-              <view class="labelList">
-                <view class="label_blo">
-                  移动互联网
-                </view>
-                <view class="label_blo">
-                  移动互联网
-                </view>
-                <view class="label_blo">
-                  移动互联网
-                </view>
+              <view class="labelList" >
+                
               </view>
             </view>
           </view>
         </block>
+        <view></view>
         <view class="btns" >
           <button class="btn delate" @click="likeOp('left')">
             <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
@@ -76,11 +69,12 @@
         <view class="name"  @tap="toCenter">我的名片</view>
       </view>
       <view class="right">
-        <view class="r_blo">
-          <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
-        </view>
+        
         <view class="r_blo" @click="isShare2">
           <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
+        </view>
+        <view class="r_blo">
+          <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
       </view>
     </view>
@@ -96,16 +90,12 @@
         <view class="txt">召唤你的朋友们一起来玩吧！</view>
 
         <view class="btns">
-          <button class="btn friend" @click="likeOp('left')">
-            <view class="img_warp">
-              <image src="/static/images/details_icon_wechat@3x.png"></image>
-            </view>
+          <button class="btn friend" open-type="share">
+            <image class="img_warp" src="/static/images/popup_btn_sharewechat@3x.png"></image>
             <view class="bt_txt">分享到微信</view>
           </button>
-          <button class="btn friends" @tap="likeOp('right')">
-            <view class="img_warp">
-              <image src="/static/images/float_btn_share@3x.png"></image>
-            </view>
+          <button class="btn friends" @tap="toPic">
+            <image class="img_warp" src="/static/images/popup_btn_sharediscover@3x.png"></image>
             <view class="bt_txt">分享朋友圈</view>
           </button>
         </view>
@@ -113,8 +103,16 @@
       <view class="guidance_pop" v-if="gdData.isGd" @click="firstGDClick">
         <image class="gd_cont" v-if="gdData.step == 1" src="/static/images/dafult_pic01@3x.png"></image>
         <image class="gd_cont" v-else src="/static/images/dafult_pic02@3x.png"></image>
-        <view class="txt" @tap="toCardHolder">不感兴趣，没关系，看看下一个人吧 </view>
-        <view class="txt">把卡片往左滑，或者点这个按钮也可以哦～</view>
+        <block v-if="gdData.step==1">
+          <view class="txt">不感兴趣，没关系，看看下一个人吧 </view>
+          <view class="txt">把卡片往左滑，或者点这个按钮也可以哦～</view>
+        </block>
+
+        <block v-else>
+          <view class="txt">想和TA交朋友？快向TA发起交换名片申请吧！ </view>
+          <view class="txt">把卡片往右滑，或者点这个按钮也可以哦～</view>
+        </block>
+
         <view class="bot_cont">
           <image class="bot_img bot_left_icon1" src="/static/images/dafult_icom_unlike@3x.png" v-if="gdData.step==1"></image>
           <image class="bot_img bot_right_icon1" src="/static/images/dafult_icom_like@3x.png" v-else></image>
@@ -167,6 +165,8 @@ export default {
       getPage: {
         page: 1,
         count: 20,
+        occupation_label_id: '',
+        realm_label_id: '',
       },// 首页列表信息参数
       toMeCreate: false,
       isPop: false,
@@ -177,7 +177,7 @@ export default {
     isFirst(){
       let that = this
       try {
-        var value = wx.getStorageSync('pickCardFirst')
+        let value = wx.getStorageSync('pickCardFirst')
         if (!value) {
           that.gdData = {
             isGd: true,
@@ -303,10 +303,10 @@ export default {
           console.log(res)
 
           this.nowIndex ++
-        if(!this.toCreate.isToCreate){
-          that.isCreate()
-          this.toCreate.isToCreate = true
-        }
+          if(!this.toCreate.isToCreate){
+            that.isCreate()
+            this.toCreate.isToCreate = true
+          }
           
 
           this.moveData={
@@ -317,20 +317,22 @@ export default {
           console.log(res)
           this.$mptoast(res.msg)
         })
-
       }else if(status && status == 'left'){
-        this.moveData = {
-          isMove: false,
-          style: 'left', 
-        }
-        this.nowIndex ++
-        this.toCreate.num++
-        if(this.toCreate.num == 3 && !this.toCreate.isToCreate){
-          that.isCreate()
-
-          this.toCreate.isToCreate = true
-        }
-
+        indexUnlike(msg).then((res)=>{
+          this.moveData = {
+            isMove: false,
+            style: 'left', 
+          }
+          this.nowIndex ++
+          this.toCreate.num++
+          if(this.toCreate.num == 3 && !this.toCreate.isToCreate){
+            that.isCreate()
+            this.toCreate.isToCreate = true
+          }
+        },(res)=>{
+          console.log(res)
+          this.$mptoast(res.msg)
+        })
       } 
       if(this.usersList.length-this.nowIndex == 4){
         console.log('next============todo=====')
@@ -381,6 +383,12 @@ export default {
     // },(res)=>{
     //   console.log('登陆失败',res)
     // })
+
+    //筛选
+    if(res.from && res.from == 'filtrate'){
+      this.getPage.occupation_label_id = res.occupation_label_id
+      this.getPage.realm_label_id = res.realm_label_id
+    }
     that.isFirst()
   },
   onShow (res) {
@@ -580,30 +588,18 @@ export default {
         align-items: center;
         .btn {
           width:140rpx;
-          height:104rpx;
           display: flex;
           flex-direction: column;
           align-items: center;
           &.friend {
             margin-right: 100rpx;
-            image {
-              width:50rpx;
-              height:42rpx;
-            }
-          }
-          &.friends {
-            image {
-              width:50rpx;
-              height:49rpx;
-            }
+
           }
           .bt_txt {
             font-size:28rpx;
             font-family:PingFangHK-Regular;
             color:rgba(178,182,194,1);
             line-height:26rpx;
-          }
-          image {
           }
           .img_warp {
             width:104rpx;

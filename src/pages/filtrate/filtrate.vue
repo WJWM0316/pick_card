@@ -3,40 +3,24 @@
   <view class="container" >
     <view class="hint">会根据你选择的条件，来发现你的职场新朋友</view>
     <view class="op_two ">
-      <view class="table_blo row_style_one">
-        <view class="tit">最近任职公司</view>
-        <input class="one_ipt" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
-      </view>
 
       <view class="table_blo row_style_two">
         <view class="tit">职位</view>
         <view class="list_selct">
-          <view class="blo">不限</view>
-          <view class="blo">运营</view>
-          <view class="blo">设计</view>
-          <view class="blo">市场</view>
-          <view class="blo">技术</view>
-          <view class="blo">职能</view>
-          <view class="blo">金融</view>
-          <view class="blo">运营</view>
+          <view class="blo" v-for="(item, index) in jobData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'job')">{{item.name}}</view>
         </view>
       </view>
 
       <view class="table_blo row_style_two">
         <view class="tit">领域</view>
         <view class="list_selct">
-          <view class="blo cur">不限</view>
-          <view class="blo">企业服务</view>
-          <view class="blo">金融</view>
-          <view class="blo">运营</view>
-          <view class="blo">运营</view>
+          <view class="blo" v-for="(item, index) in liveData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'live')">{{item.name}}</view>
         </view>
       </view>
     </view>
 
     <view class="footer">
-      <button class="next toNext" @click="toNext(1)">提交</button>
-      <!-- <button class="next" wx:else>完成创建</button> -->
+      <button class="next toNext" @click="toIndex(1)">提交</button>
     </view>
     <mptoast />
   </view>
@@ -44,7 +28,7 @@
 
 <script>
   import mptoast from 'mptoast'
-  import {firstSignApi} from '@/api/pages/login'
+  import { postGetLabelByIds } from '@/api/pages/login'
 
   export default {
     
@@ -53,17 +37,36 @@
     },
     data () {
       return {
-        focus: false,
-        firstData: {
-          unionid:'test',
-          gender: 0, //性别 1女 2男
-          realname: '',
-          avatar_id: '111',
-        },
-        nowNum : 1,
+        jobData: [],
+        jobAry:[],
+        liveAry:[],
+        liveData: [],
       }
     },
     methods: {
+      toIndex(){
+        let occupation_label_id = this.jobAry.join(',')
+        let realm_label_id = this.liveAry.join(',')
+
+        if(this.jobAry.indexOf(0)<0){
+          occupation_label_id = 0
+        }
+
+        if(this.liveAry.indexOf(0)<0){
+          realm_label_id = 0
+        }
+
+        if(occupation_label_id == 0 && realm_label_id == 0){
+          url = '/pages/index/main'
+        }
+
+        let url =  `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
+
+        wx.redirectTo({
+          url:url
+        })
+      },
+
       gender (res) {
         console.log(res)
         let that = this;
@@ -71,6 +74,7 @@
           that.firstData.gender = res
         }
       },
+
       inputText (e) {
         console.log(e)
 
@@ -79,6 +83,7 @@
           this.firstData.realname = val
         }
       },
+
       toNext (num) {
         let that = this;
 
@@ -86,8 +91,58 @@
           console.log(res)
           that.nowNum = 2
         })
+      },
+
+      clickOp(index,style){
+        let that = this
+        let str = ''
+        let str2 = ''
+        let id = ''
+        if(style == 'job'){
+          str = 'jobData'
+          str2 = 'jobAry'
+        }else if(style == 'live'){
+          str = 'liveData'
+          str2 = 'liveAry'
+        }
+        id = that[str][index].id
+        if(that[str][index].isCur){
+          that[str][index].isCur = false
+          that[str2].splice(that[str2].indexOf(id), 1)
+        }else {
+          that[str][index].isCur = true
+          that[str2].push(id)
+        }
       }
     },
+    onLoad(){
+      let that = this
+      let data = {
+        labelType: '1,3'
+      }
+
+      let def = {
+        id  : 0,
+        name  : '不限',
+        isCur :   false,
+      }
+      postGetLabelByIds(data).then((res)=>{
+        console.log(res)
+
+        res.data.forEach((value,index,array)=>{
+          value.son.forEach((item,idx,ary)=>{
+            item['isCur'] = false
+      　   });
+      　 });
+
+        console.log(res.data)
+
+        that.jobData = [def,...res.data[0].son]
+        that.liveData = [def,...res.data[1].son]
+      },(res)=>{
+        
+      })
+    }
   }
 </script>
 
@@ -265,7 +320,7 @@
         flex-wrap: wrap;
 
         .blo {
-          width:136rpx;
+          padding: 0 30rpx;
           height:60rpx;
           border-radius:34rpx;
           border:1rpx solid rgba(220,227,238,1);
@@ -275,6 +330,12 @@
           color:rgba(154,161,171,1);
           line-height:60rpx;
           text-align: center;
+          &.cur {
+            background:rgba(0,208,147,0.05);
+            border:1px solid rgba(0,208,147,1);
+            font-family:SFUIDisplay-Regular;
+            color:rgba(0,208,147,1);
+          }
         }
       }
       .area {

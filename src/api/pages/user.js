@@ -186,7 +186,8 @@ export const delLike = (data) => {
 export const indexUnlike = (data) => {
   return request({
     method: 'post',
-    url: `/cur/applys`,
+    isLoading: false,
+    url: `/cur/checks`,
     data
   })
 }
@@ -196,6 +197,7 @@ export const indexUnlike = (data) => {
 export const getLikeList = (data) => {
   return request({
     method: 'get',
+    isLoading: false,
     url: `/cur/applys`,
     data
   })
