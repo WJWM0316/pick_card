@@ -190,15 +190,15 @@
 <template>
   <view class="container" >
     <view class="tit">
-      <view class="item cur ">个人名片</view>
-      <view class="item flock">群名片</view>
+      <view class="item" :class="{'cur':nowIndex==0}" @click="select(0)" >个人名片</view>
+      <view class="item flock" :class="{'cur':nowIndex==1}" @click="select(1)" >群名片</view>
     </view>
     <view class="content">
       <view class="ops">
         <view class="ops_blo shareMe">分享喔的名片</view>
         <view class="ops_blo createFlock">创建群名片</view>
       </view>
-      <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" @animationfinish="animationfinish">
+      <swiper duration="500" :current="nowIndex"  circular="true" @change="swiperChange" @animationfinish="animationfinish">
         <swiper-item>
           <view class="personageList">
             <view class="card_block">
@@ -214,7 +214,9 @@
         </swiper-item>
 
         <swiper-item>
-          <view class="flockList"></view>
+          <view class="flockList">
+            阿姨说大哥 v 就撒上就会打给谁都会感觉阿斯顿好结果的顾客撒大哥蝦收到过后就是嘎的建行卡世界各地开花结果撒的客户高科技阿斯顿。 
+          </view>
         </swiper-item>
       </swiper>
       
@@ -253,10 +255,7 @@ export default {
   data () {
     return { 
       usersInfo: [],
-      touchDot: 0,
-      time: 0,
       nowIndex: 0,
-      isMove: false,
     }
   },
 
@@ -266,12 +265,12 @@ export default {
         url: `/pages/center/main`
       })
     },
-    toFiltrate () {
-      this.$mptoast('筛选')
-
-      wx.navigateTo({
-        url: `/pages/filtrate/main`
-      })
+    select (type) {
+      if(type==this.nowIndex){
+        return
+      }else {
+        this.nowIndex = this.nowIndex == 1 ? 0: 1
+      }
     },
     toSwop () {
       this.$mptoast('选择')
@@ -286,41 +285,6 @@ export default {
         url: `/pages/index/main`
       })
     },
-    tStart (e) {
-      let that = this
-      that.touchDot = e.touches[0].pageX
-      that.interval =  setInterval(function () {  
-         that.time++;  
-      }, 100);  
-
-      that.isMove = true;
-    },
-    tMove (e) {
-      let touchMove = e.touches[0].pageX
-      let touchDot = this.touchDot
-      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));  */
-      // 向左滑动    
-      if (touchMove - touchDot <= -40 && this.time < 10) {  
-
-        console.log('左滑页面')
-        if(this.isMove){
-          this.nowIndex ++
-          this.isMove = false
-        }
-
-      }  
-      // 向右滑动  
-      else if (touchMove - touchDot >= 40 && this.time < 10) {  
-        console.log('向右滑动');  
-        if(this.isMove){
-          this.nowIndex ++
-          this.isMove = false
-        }
-      }  
-      else {
-          //this.isMove = falses
-      }
-    },
     tEnd (e) {
       clearInterval(this.interval); // 清除setInterval  
       this.time = 0;  
@@ -329,35 +293,11 @@ export default {
   },
 
   created () {
-    /*wx.showModal({
-      title: '提示',
-      content: 'login',
-      success: function(res) {
-
-        if (res.confirm) {
-          let data = {
-            email: 18802090814,
-            password: 123456
-          }
-          loginApi(data).then((res) => {
-            console.log(res)
-          },(res)=>{
-            console.log('====',res)
-          })
-        } else if (res.cancel) {
-          console.log('用户点击取消')
-        }
-      }
-    })*/
   },
 
   onLoad() {
     let that = this
 
-    getIndexUsers().then((res)=>{
-      that.usersInfo = res
-      console.log(res)
-    })
   }
 }
 </script>
