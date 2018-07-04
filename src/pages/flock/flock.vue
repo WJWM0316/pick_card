@@ -4,7 +4,7 @@
     height: 100vh;
     position: relative;
     padding-bottom: 120rpx;
-    background: #cccccc;
+    background: #fafbfd;
     .flock_msg {
       width:750rpx;
       height:240rpx;
@@ -55,7 +55,7 @@
               content: '';
               border-radius:4rpx;
               position: absolute;
-              top: 12rpx;
+              top: 0rpx;
               right: 0;
             }
           }
@@ -168,7 +168,7 @@
     .quit {
       width:222rpx;
       color:rgba(0,0,0,1);
-      background:rgba(255,255,255,1);
+      background:rgba(255,255,255,1); 
     }
     .joinShare {
       flex: 1;
@@ -199,15 +199,16 @@
     </view>
     <view class="content">
       <view class="peoList">
-        <view class="card_block" v-for="(item, index) in flockInfo">
+        <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList">
           <view class="blo_msg">
             <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
             <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
             <view class="msg_name">{{item.nickname}}</view>
             <view class="msg_tit">{{item.occupation}}</view>
             <view class="msg_company">{{item.company}}</view>
-            <view class="flock_style" @tap="swopSlock" v-if="true">交换名片</view>
-            <view class="flock_style type_2" v-else>已交换</view>
+            <view class="flock_style" @tap="swopSlock(item.id)" v-if="item.id!=userInfo.id && item.status == 1">交换名片</view>
+            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.status == 2 ||item.status == 3)">已申请</view>
+            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.status == 4">已交换</view>
           </view>
         </view>
       </view>
@@ -229,11 +230,12 @@
 </template>
 <script>
   import { joinUserGroup, isJoinUserGroup,getUserGroupInfo, getFriends, deleteFriends, getUserGroupList, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
+  import {  indexLike  } from '@/api/pages/user'
 
 export default {
   data () {
     return { 
-      usersInfo: [],
+      userInfo: [],
       flockInfo:[],
       isJoin: false,
       isFirst: true,
@@ -296,6 +298,11 @@ export default {
           if (res.confirm) {
             indexLike(msg).then((res)=>{
               console.log(res)
+              if(res.http_status == 200){
+
+              }else{
+                this.$mptoast(res.msg)
+              }
             })
             console.log('用户点击确定')
           } else if (res.cancel) {
@@ -316,7 +323,7 @@ export default {
     updateData(){
       let that = this
       getUserGroupInfo(that.msg.vkey).then((res)=>{
-        that.flockInfo = res.data.groupMemberList
+        that.flockInfo = res.data
       })
     },
   },
@@ -328,6 +335,8 @@ export default {
 
     console.log(res,'群详情页面')
     let that = this
+    let user = this.$store.getters.userInfo
+    that.userInfo = user
 
     if(res&&res.id){
       that.msg= {
@@ -345,7 +354,6 @@ export default {
           that.isJoin = true
         }
       })
-
       that.updateData()
     }else {
       this.$mptoast('缺少信息')

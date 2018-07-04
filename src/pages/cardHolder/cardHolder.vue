@@ -3,7 +3,7 @@
   .container {
     height: 930rpx;
     position: relative;
-    padding-bottom: 200rpx;
+    padding-bottom: 250rpx;
   }
   .footer {
     position: fixed;

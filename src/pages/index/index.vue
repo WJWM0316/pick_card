@@ -2,7 +2,7 @@
 <template>
   <view class="container" >
     <view class="op_top">
-      <view class="left" @click="toFiltrate">筛选</view>
+      <view class="left" @click="toFiltrate">筛选<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
       <view class="right" @click="toSwop">交换申请<view class="new">NEW</view></view>
     </view>
     <view class="content">
@@ -35,19 +35,44 @@
               <view class="signature" v-if="item.sign.length>0">{{item.sign}}</view>
               <view class="signature" v-else>这个人很懒，不想写个性签名~</view>
               <view class="labelList" >
-                
+                <block v-for="(itm, idx) in item.other_info.label_info" :key="key">
+                  <view class="label_blo"  v-if="idx<6">
+                    {{itm.name}}
+                  </view>
+                </block>
               </view>
             </view>
           </view>
         </block>
-        <view></view>
+        <!-- 冷却 -->
+        <view class="peop_blo blo_type2 blo_cooling" v-if="isCooling">
+            <image class="cool_img" src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            <view class="cool_time">{{coolTime}}</view>
+            <view class="cool_cont">
+              <view class="blo_hint_txt">你已经看了很多新朋友了，休息一下吧~</view>
+              <view class="blo_hint_txt">分享邀请3位新朋友，即可立刻刷新冷却时间</view>
+            </view>
+            
+        </view>
+        <!-- 到底 -->
+        <view class="peop_blo blo_type2 blo_end" v-if="isEnd">
+            <image class="end_img" src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            <view class="end_cont">
+              <view class="blo_hint_txt">很遗憾...暂时没有新的朋友啦，建议你放宽 筛选范围。也可以分享给小伙伴们，大家 一起来玩趣名片哦！</view>
+            </view>
+        </view>
         <view class="btns" >
-          <button class="btn delate" @click="likeOp('left')">
+          <button class="btn type2" open-type="share" v-if="isCooling || isEnd">
             <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
           </button>
-          <button class="btn like" @tap="likeOp('right')">
-            <image src="/static/images/home_btn_like_nor@3x.png"></image>
-          </button>
+          <block v-else>
+            <button class="btn delate" @click="likeOp('left')">
+              <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            </button>
+            <button class="btn like" @tap="likeOp('right')">
+              <image src="/static/images/home_btn_like_nor@3x.png"></image>
+            </button>
+          </block>
         </view>
         <image class="moveImg moveLeft"  src="/static/images/home_toast_unlike@3x.png"
         :class="{'fadeOutLeft animated show': 
@@ -170,8 +195,10 @@ export default {
         occupation_label_id: '',
         realm_label_id: '',
       },// 首页列表信息参数
-      toMeCreate: false,
       isPop: false,
+      isCooling: false,
+      coolTime: 123123123,
+      isEnd: false,
     }
   },
 
@@ -205,8 +232,8 @@ export default {
         this.isPop = false
         try {
             wx.setStorageSync('pickCardFirst', '1')
-            this.isPop = true
-            this.toMeCreate=true
+            //this.isPop = true
+            //this.toMeCreate=true
         } catch (e) {    
         }
       }
@@ -348,6 +375,28 @@ export default {
           }
         })
       }
+    },
+    //转换时分秒
+    transformTime(s){
+      if(!s){return 0}
+
+      let t;
+      if(s > -1){
+          let hour = Math.floor(s/3600);
+          let min = Math.floor(s/60) % 60;
+          let sec = s % 60;
+          if(hour < 10) {
+              t = '0'+ hour + ":";
+          } else {
+              t = hour + ":";
+          }
+
+          if(min < 10){t += "0";}
+          t += min + ":";
+          if(sec < 10){t += "0";}
+          t += sec.toFixed(2);
+      }
+      return t;
     },
   },
 
@@ -640,6 +689,16 @@ export default {
         text-align: center;
       }
     }
+    .left {
+      .single {
+        width:18rpx;
+        height:12rpx;
+        background:rgba(53,57,67,1);
+        margin-left: 8rpx;
+        position: relative;
+        top: -5rpx;
+      }
+    }
   }
   .content {
     height: 930rpx;
@@ -669,6 +728,44 @@ export default {
       background: #ffffff;
       display: none;
       box-shadow:0rpx 17rpx 28rpx 0rpx rgba(220,227,238,0.2);
+      &.blo_type2 {
+        display: block;
+        //z-index: 100;
+        text-align: center;
+        padding: 0 45rpx;
+        &.cool_img {
+          width:398rpx;
+          height:442rpx;
+          margin: 0 auto;
+          margin-top: 84rpx;
+        }
+        &.end_img {
+          width:422rpx;
+          height:568rpx;
+          margin: 0 auto;
+          margin-top: 62rpx;
+        }
+        .blo_hint_txt {
+          font-size:28rpx;
+          font-family:PingFangSC-Light;
+          color:rgba(53,57,67,1);
+          line-height:35rpx;
+        }
+        .cool_time {
+          font-size:48rpx;
+          font-family:SFUIDisplay-Medium;
+          color:rgba(53,57,67,1);
+          line-height:48rpx;
+          margin: 60rpx 0 20rpx 0;
+        }
+        .cool_cont {
+
+        }
+        .end_cont {
+          margin-top: 30rpx;
+        }
+
+      }
       &.test {
         display: block;
       }
@@ -769,6 +866,7 @@ export default {
             text-align: center;
             border: 1rpx solid rgba(0,208,147,1);
             margin-right: 10rpx;
+            margin-bottom: 14rpx;
           }
         }
       }
@@ -794,6 +892,19 @@ export default {
       }
       .delate {
         background: rgba(220,227,238,1);
+        image {
+          width: 40rpx;
+          height: 40rpx;
+          display: block;
+        }
+      }
+      .type2 {
+        background: rgba(0,208,147,1);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -66rpx;
+        margin-top: -66rpx;
         image {
           width: 40rpx;
           height: 40rpx;
