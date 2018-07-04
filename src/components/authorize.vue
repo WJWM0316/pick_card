@@ -15,6 +15,7 @@ open-type="getUserInfo" type="primary">授权</button>
 	import {getUserInfoApi} from '@/api/pages/user'
 	import { mapState } from 'vuex'
 	import Vue from 'vue'
+	import App from './App'
 	export default {
 		props: {
 			isIndex: {
@@ -41,7 +42,6 @@ open-type="getUserInfo" type="primary">授权</button>
 		mounted () {
 		},
 		methods: {
-
 			checkLogin () {
 	      return new Promise((resolve, reject) => {
 	        // 调用微信登录获取本地session_key
@@ -59,7 +59,7 @@ open-type="getUserInfo" type="primary">授权</button>
 	              }
 	              // 为了获取用户信息
 	              if (res.data.key) {
-
+	              	wx.setStorageSync('key', res.data.key)
 	              }
 	              if (res.data.vkey) {
 	                wx.setStorageSync('vkey', res.data.vkey)
