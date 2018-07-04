@@ -11,7 +11,7 @@
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">姓名</view>
-					<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model="userInfo.realname"></view>
+					<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model="userInfo.nickname"></view>
 				</view>
 			</view>
 			<view class="item">
@@ -131,27 +131,16 @@
 		<section class="btn">
 			<button @tap.stop="saveUserInfo" class="light">保存资料</button>
 		</section>
-		<label-pop 
-			:isShow="showLablePop"
-			@close="close"
-			@getLabel="getLabel"
-		></label-pop>
-<!-- 		<cut-img :isShow="isShow"
-						 :filePath="filePath"
-						 @getImgcut="getImgcut"
-						 @isHide="isHide"
-		></cut-img> -->
 	</view>
 </template>
 <script>
-	// import cutImg from '@/components/cutImg'
 	import labelPop from '@/components/labelPop'
-	import {upDataUserInfoApi} from '@/api/pages/user'
 	import { uploadImage } from '@/mixins/uploader'
+	import {upDataUserInfoApi} from '@/api/pages/user'
+	import {postGetLabelByIds} from '@/api/pages/login'
 	export default {
 		components: {
 			labelPop,
-			// cutImg
 	  },
 	  watch: {
 	  	userInfo (val) {
@@ -171,40 +160,76 @@
 				educationsInfo: {},
 				workInfo: {},
 				region: [],
-				careerList: [
-					'吃鸡吧',
-					'吃鸭吧',
-					'吃狗吧',
-					'吃猫吧',
-					'吃屎吧',
-				],
+				careerList: [],
+				careerListId: [],
 				showLablePop: false, // 擅长领域
 				career: null,
-				checkedIndexList: [],
+				checkedIdList: '',
 				checkedTextList: [],
 				filePath: '',
-				isShow: false
 			}
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
 			this.userInfo = this.$store.getters.userInfo
 			this.region = [this.userInfo.user_location]
-
 			if(this.userInfo && this.userInfo.avatar_info && this.userInfo.avatar_info.middleImgUrl){
 				this.filePath = this.userInfo.avatar_info.middleImgUrl
+				let realm_info = this.userInfo.other_info.realm_info
+				let array = []
+				realm_info.forEach(e => {
+					this.checkedTextList.push(e.name)
+					array.push(e.id)
+				})
+				this.checkedIdList = array.join(',')
+				console.log(this.checkedTextList, this.checkedIdList)
 			}
 		},
 		onShow () {
-			this.isShow = false
+			this.upLoad()
+			this.getJobList()
 		},
 		methods: {
-			isHide (e) {
-				this.isShow = false
+			upLoad () {
+				const info = wx.getStorageSync('cutImgInfo')
+				if (info.path) {
+					const data = {
+						path: info.path,
+						size: info.size
+					}
+					this.filePath = info.path
+					uploadImage(data, {
+		        onItemSuccess: (resp, file, index) => {
+		        }
+		      }).then(res => {
+		        const cutImgInfo = {
+		          fileId: res.file.fileId,
+		          path: res.file.path,
+		          size: res.file.size
+		        }
+						this.userInfo.avatar_id = res.file.fileId
+						wx.removeStorageSync('cutImgInfo')
+		      }).catch((e, index) => {
+		        console.log(e, 2)
+		      })
+				}
+				
 			},
-			getImgcut (fileId, url) {
-				this.userInfo.avatar_id = fileId
-				this.filePath = url
+			getJobList () {
+				const data = {
+					labelType: '3'
+				}
+				postGetLabelByIds(data).then(res => {
+					this.careerListId = res.data[0].son
+					res.data[0].son.forEach((item,index) => {
+						this.careerList.push(item.name)
+						if (item.id === this.userInfo.other_info.occupation_info.id) {
+							console.log(item.id, this.userInfo.other_info.occupation_info.id, 222222)
+							this.career = index
+							this.careerId = item.id
+						}
+					})
+				})
 			},
 			saveUserInfo () {
 				let user_location
@@ -215,21 +240,19 @@
 				}
 				let data = {
 					avatar_id: this.userInfo.avatar_id,
-					realname: this.userInfo.realname,
+					nickname: this.userInfo.nickname,
 					gender: this.userInfo.gender,
 					user_location: user_location,
-					// occupation: this.userInfo.occupation,
+					occupation: this.userInfo.occupation,
 					company: this.userInfo.company,
 					company_location: this.userInfo.company_location,
 					// mobile: this.userInfo.mobile,
 					wechat: this.userInfo.wechat,
 					email: this.userInfo.email,
 					sign: this.userInfo.sign,
-					// occupation_label_id: 11,
-					// realm_label_id: 22,
-					// build_label_id: 33
+					occupation_label_id: this.careerId.toString(),
+					realm_label_id: this.checkedIdList,
 				}
-				console.log(data)
 				upDataUserInfoApi(data).then(res => {
 					wx.navigateBack({
 						delta: 1
@@ -240,7 +263,7 @@
 				this.showLablePop = false
 			},
 			getLabel (a, b) {
-				this.checkedIndexList = a
+				this.checkedIdList = a
 				this.checkedTextList = b
 				this.showLablePop = false
 			},
@@ -253,37 +276,19 @@
 			sexChange(e) {
 				this.userInfo.gender = e.mp.detail.value
 			},
-			careerChange (e) {
-				console.log('picker发送选择改变，携带值为', e.mp.detail.value)
+			careerChange (e) {		
 				this.career = e.mp.detail.value
+				this.careerId = this.careerListId[e.mp.detail.value].id
+				console.log('picker发送选择改变，携带值为', this.careerId)
 			},
 			regionChange (e) {
 				console.log('picker发送选择改变，携带值为', e.mp.detail.value)
 				this.region = e.mp.detail.value
 			},
 			chooseImg () {
-				const that = this
-				wx.chooseImage({  
-          count: 1, // 默认9  
-          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
-          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
-          success: function (res0) {  
-            that.filePath = res0.tempFilePaths[0]
-            const data = {
-              path: that.filePath,
-              size: 0
-            }
-            uploadImage(data, {
-              onItemSuccess: (resp, file, index) => {
-              }
-            }).then(res => {
-            	console.log(res, 3333333)
-            	that.userInfo.avatar_id = res.file.fileId
-            }).catch((e, index) => {
-              console.log(e, 2)
-            })
-          }  
-        })  
+				wx.navigateTo({
+				  url: '/pages/cutInside/main'
+				})
 			}
 		}
 			

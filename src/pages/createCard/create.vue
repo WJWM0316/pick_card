@@ -125,11 +125,6 @@
       </block>
     </view>
     <mptoast />
-<!--     <cut-img :isShow="isShow"
-             :filePath="filePath"
-             @getImgcut="getImgcut"
-             @isHide="isHide"
-    ></cut-img> -->
   </div>
 </template>
 
@@ -137,12 +132,10 @@
   import mptoast from 'mptoast'
   import { firstSignApi, secondSignApi, thirdSignApi, smsApi,postGetLabelByIds,postGetCreatedThreeLable } from '@/api/pages/login'
   import { getUserInfoApi } from '@/api/pages/user'
-  // import cutImg from '@/components/cutImg'
   import { uploadImage } from '@/mixins/uploader'
   export default {
     components: {
       mptoast,
-      // cutImg
     },
     data () {
       return {
@@ -291,35 +284,9 @@
         that.thirdRule[str2].push(index)
       },
       chooseImg () {
-        const that = this
-        wx.chooseImage({  
-          count: 1, // 默认9  
-          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
-          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
-          success: function (res0) {  
-            that.filePath = res0.tempFilePaths[0]
-            const data = {
-              path: that.filePath,
-              size: 0
-            }
-            uploadImage(data, {
-              onItemSuccess: (resp, file, index) => {
-              }
-            }).then(res => {
-              console.log(that.firstData.avatar_id, res.file.fileId, 222222222)
-              that.firstData.avatar_id = res.file.fileId
-            }).catch((e, index) => {
-              console.log(e, 2)
-            })
-          }  
-        })  
-      },
-      getImgcut (fileId, filePath) {
-        this.filePath = filePath
-        this.firstData.avatar_id = fileId
-      },
-      isHide () {
-        this.isShow = false
+        wx.navigateTo({
+          url: '/pages/cutInside/main'
+        })
       },
       gender (res) {
         console.log(res)
@@ -376,7 +343,6 @@
       iphoneOp(){
         this.isIp = true
       },
-
       sms() {
         console.log('获取验证码')
         let data = {
@@ -386,6 +352,31 @@
           console.log(res)
         })
         let that = this
+      },
+      upLoad () {
+        const info = wx.getStorageSync('cutImgInfo')
+        if (info.path) {
+          const data = {
+            path: info.path,
+            size: info.size
+          }
+          this.filePath = info.path
+          console.log(this.filePath, 2222222222222)
+          uploadImage(data, {
+            onItemSuccess: (resp, file, index) => {
+            }
+          }).then(res => {
+            const cutImgInfo = {
+              fileId: res.file.fileId,
+              path: res.file.path,
+              size: res.file.size
+            }
+            this.firstData.avatar_id = res.file.fileId
+            wx.removeStorageSync('cutImgInfo')
+          }).catch((e, index) => {
+            console.log(e, 2)
+          })
+        }
       }
     },
     onLoad(){
@@ -393,7 +384,6 @@
       let data = {
         labelType: '1,2,3,4' //标签类型。1擅长领域,2生活标签,3职业方向,4职业素养
       } 
-
       console.log('==============',this.$store.getters.userInfo)
 
       if(this.$store.getters.userInfo){
@@ -404,7 +394,6 @@
           nickname: userInfo.nickname,
           avatar_id: userInfo.avatar_id,
         }
-
         this.filePath = userInfo.avatar_info.middleImgUrl
         this.secondData={
           company: userInfo.company, 
@@ -423,21 +412,20 @@
           code: ''
         }
       }
-
       postGetLabelByIds(data).then((res)=>{
-        console.log(res)
-        res.data.forEach((value,index,array)=>{
-          value.son.forEach((item,idx,ary)=>{
+        res.data.forEach((value,index,array) => {
+          value.son.forEach((item,idx,ary) => {
             item['isCur'] = false
       　   });
       　 });
-
         console.log(res.data)
         that.listData = res.data
       },(res)=>{
-        
       })
     },
+    onShow () {
+      this.upLoad()
+    }
   }
 </script>
 

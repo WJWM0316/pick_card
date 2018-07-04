@@ -24,8 +24,8 @@ export default {
     window: {
       backgroundTextStyle: 'dark',              // 下拉时的背景颜色(只能选dark跟light其中一个)
       navigationBarTitleText: '趣名片',// 顶部栏中间标题
-      navigationBarBackgroundColor: '#0779fc',  // 顶部栏背景色
-      navigationBarTextStyle: 'light'           // 顶部栏前景色(只能选black跟light其中一个)
+      navigationBarBackgroundColor: '#FF747468',  // 顶部栏背景色
+      navigationBarTextStyle:"black"
     }
   }
 }

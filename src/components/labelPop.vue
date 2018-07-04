@@ -3,26 +3,27 @@
 		<view class="inner" v-if="type === 'labelBox'">
 			<view class="title">请选择1~3个领域<image @tap.stop="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
 			<view class="con">
-				<checkbox-group class="labelBox" @change="checkboxChange">
+				<labelBox class="labelBox">
 					<label  v-for="(item, index) in labelList" :key="index">
-						<checkbox class="checkbox" :value="index + ' ' +item"></checkbox>
-						<text class="label">{{item}}</text>
+						<text class="label" :class="{'check' : item.check}" @tap="select(item, index)">{{item.name}}</text>
 					</label>
-				</checkbox-group>
+				</labelBox>
 				<button @tap.stop="save" class="btn">保存</button>
 			</view>
 		</view>
 		<view class="inner custom" v-show="type === 'custom'">
 			<view class="title">添加自定义标签<image @tap.stop="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
 			<view class="con">
-				<input class="labelInput" type="text" v-model="customText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" data-num="5"/>
-				<text class="textNum">{{10 - customText.length}}</text>
+				<input class="labelInput" focus=true type="text" v-model="customText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" />
+				<text class="textNum" v-show="customText.length > 0">{{10 - customText.length}}</text>
+				<text class="textNum" v-else">10</text>
 				<button @tap.stop="addFun" class="btn">添加标签</button>
 			</view>
 		</view>
 	</view>
 </template>
 <script>
+	import {postGetLabelByIds} from '@/api/pages/login'
 	export default {
 		props: {
 			isShow: {
@@ -36,36 +37,35 @@
 		},
 		data () {
 			return {
-				labelList: [
-					'萨达奥术大师',
-					'萨达大师',
-					'奥术大师',
-					'萨达奥术大师',
-					'萨达大师',
-					'奥术大师',
-					'萨达奥术大师',
-					'萨达大师',
-					'奥术大师',
-					'萨达奥术大师',
-					'萨达大师',
-					'奥术大师',
-					'萨达奥术大师',
-					'萨达大师',
-					'奥术大师',
-					'萨达奥术大师',
-					'萨达大师',
-					'奥术大师',
-				],
+				labelList: [],
 				checkedList: [],
-				customText: ''
+				customText: '',
+				num: 0
 			}
 		},
 		watch: {
-			isShow () {},
+			isShow (val) {
+				if (val) {
+					this.customText = ''
+				}
+			},
 			type () {},
 			customText (val) {}
 		},
+		onLoad () {
+			if (this.type !== 'custom') {
+				this.getLabelList()
+			}
+		},
 		methods: {
+			getLabelList () {
+				const data = {
+					labelType: '1'
+				}
+				postGetLabelByIds(data).then(res => {
+					this.labelList = res.data[0].son
+				})
+			},
 			getLabel (index) {
 				return index
 			},
@@ -73,25 +73,57 @@
 				this.$emit('close')
 			},
 			addFun () {
+				this.$emit('addLable', this.customText)
 				this.$emit('close')
 			},
 			save () {
-				let labelIndex = []
+				if (this.num === 0) {
+					wx.showToast({
+					  title: '请至少选择一个标签',
+					  icon: 'none',
+					  duration: 2000
+					})
+					return
+				}
+				let labelId = []
 				let labelText = []
 				this.checkedList.filter(item => {
-					let a = item.split(' ')
-					labelIndex.push(a[0])
-					labelText.push(a[1])
+					labelId.push(item.id)
+					labelText.push(item.name)
 				})
 				let showList = []
-				this.$emit('getLabel', labelIndex, labelText)
+				labelId = labelId.join(',')
+				this.$emit('getLabel', labelId, labelText)
 			},
-			change () {
-				console.log(1111111111)
-			},
-			checkboxChange (e) {
-				this.checkedList = e.mp.detail.value
-				console.log(e.mp.detail.value)
+			select (item, index) {
+				if (item.check) {
+					let data = this.labelList[index]
+					data.check = false
+					this.labelList.splice(index, 1, data)
+					this.num --
+					this.checkedList.forEach((e, index) => {
+						if (item.id === e.id) {
+							this.checkedList.splice(index, 1)
+						}
+					})
+				} else {
+					let data = this.labelList[index]
+					data.check = true
+					this.labelList.splice(index, 1, data)
+					this.checkedList.push(item)
+					this.num ++
+					if (this.num > 3) {
+						this.labelList.forEach((e,index) => {
+							if (this.checkedList[0].id === e.id) {
+								this.labelList[index].check = false
+								this.num --
+							}
+						})
+						this.checkedList.splice(0, 1)
+
+					}
+				}
+				console.log('已选择', this.checkedList)
 			},
 			preventEvevt (e) {
 				e.preventDefault()
@@ -133,6 +165,11 @@
 			.con {
 				padding: 60rpx 30rpx 40rpx;
 				font-size: 0;
+				.labelBox {
+					height: 500rpx;
+					overflow-y: auto;
+					display: block;
+				}
 				.label {
 					padding: 0 30rpx;
 					font-size: 28rpx;
@@ -146,15 +183,11 @@
 					display: inline-block;
 					margin-right: 20rpx;
 					margin-bottom: 30rpx;
-				}
-				checkbox[checked] + .label {
-					border-color: rgba(0,208,147,1);
-					background: rgba(0,208,147,0.1);
-					color: #00D093;
-				}
-				.labelBox {
-					height: 500rpx;
-					overflow-y: auto;
+					&.check {
+						border-color: rgba(0,208,147,1);
+						background: rgba(0,208,147,0.1);
+						color: #00D093;
+					}
 				}
 				.btn {
 					width: 570rpx;
