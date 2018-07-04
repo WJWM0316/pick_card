@@ -1,20 +1,37 @@
 <template>
-	<view class="characters">
-		<view class='occupation'>
+	<view class="characters" v-if="list.length>0">
+		<view class='occupation' v-show="pageIndex === 0">
 			<view class="title">
-				<view class="titlecon">已选择标签<text class="num">{{allNum}}</text><text>/5</text></view>
+				<view class="titlecon">
+					已选择标签
+					<text class="num">{{pageOneNum}}</text>
+					<text>/5</text>
+				</view>
+				<view class="label-con">
+					<labelBox class="labelBox">
+						<label  v-for="(item, index) in selectList" :key="index" v-if="item.first_level !== 2">
+							<text class="label check" @tap="remove(item, index)">{{item.name}}</text>
+						</label>
+					</labelBox>
+				</view>
 			</view>
 			<view class="label-box">
 				<view class="label-title">
-					职业技能<text class="select">产品</text>
+					职业技能
+					<view class="select">
+						<picker mode='selector' v-if="careerList.length > 0" :range="careerList" @change="careerChange" :value="career">
+							<text class="picker">
+					     {{careerList[career]}}
+					    </text>
+						</picker>
+					</view>
 				</view>
 				<view class="label-con">
-					<checkbox-group class="labelBox" @change="skillFun">
-						<label  v-for="(item, index) in skillList" :key="index">
-							<checkbox class="checkbox" :value="index + ' ' +item"></checkbox>
-							<text class="label">{{item}}</text>
+					<view class="labelBox">
+						<label  v-for="(item, index) in jobList" :key="index">
+							<text class="label" :class="{'check' : item.check}" @tap="select(jobList, index, list[2].id, list[2].son[career].id, item.id)">{{item.name}}</text>
 						</label>
-					</checkbox-group>
+					</view>
 				</view>
 			</view>
 			<view class="label-box">
@@ -22,32 +39,78 @@
 					职业素养
 				</view>
 				<view class="label-con">
-					<checkbox-group class="labelBox" @change="qualityFun">
-						<label  v-for="(item, index) in qualityList" :key="index">
-							<checkbox class="checkbox" :value="index + ' ' +item"></checkbox>
-							<text class="label">{{item}}</text>
+					<labelBox class="labelBox">
+						<label  v-for="(item, index) in quality" :key="index">
+							<text class="label" :class="{'check' : item.check}" @tap="select(quality, index, list[3].id, list[3].id, item.id)">{{item.name}}</text>
 						</label>
-					</checkbox-group>
+					</labelBox>
 				</view>
 			</view>
 			<view class="other">
 				<view class="other-title">找不到想要的标签？</view>
-				<button class="addLabel" @tap="addLabel"><text class="add">+</text>添加自定义职业标签</button>
+				<button class="addLabel" @tap="addLabel(list[2].id)"><text class="add">+</text>添加自定义职业标签</button>
+			</view>
+		</view>
+		<view class='occupation' v-show="pageIndex === 1">
+			<view class="title">
+				<view class="titlecon">
+					已选择标签
+					<text class="num">{{pageTwoNum}}</text>
+					<text>/5</text>
+				</view>
+				<view class="label-con">
+					<labelBox class="labelBox">
+						<label  v-for="(item, index) in selectList" :key="index" v-if="item.first_level === 2">
+							<text class="label check" @tap="remove(item, index)">{{item.name}}</text>
+						</label>
+					</labelBox>
+				</view>
+			</view>
+			<view class="label-box">
+				<view class="label-title">
+					性格
+				</view>
+				<view class="label-con">
+					<view class="labelBox">
+						<label  v-for="(item, index) in character" :key="index">
+							<text class="label" :class="{'check' : item.check}" @tap="select(character, index, list[1].id, list[1].son[0].id, item.id)">{{item.name}}</text>
+						</label>
+					</view>
+				</view>
+			</view>
+			<view class="label-box">
+				<view class="label-title">
+					兴趣
+				</view>
+				<view class="label-con">
+					<labelBox class="labelBox">
+						<label  v-for="(item, index) in likeList" :key="index">
+							<text class="label" :class="{'check' : item.check}" @tap="select(likeList, index, list[1].id, list[1].son[1].id, item.id)">{{item.name}}</text>
+						</label>
+					</labelBox>
+				</view>
+			</view>
+			<view class="other">
+				<view class="other-title">找不到想要的标签？</view>
+				<button class="addLabel" @tap="addLabel(list[1].id)"><text class="add">+</text>添加自定义职业标签</button>
 			</view>
 		</view>
 		<view class="btn">
-			<button class="next">下一步</button>
+			<button class="next" @tap="next" v-show="pageIndex === 0">下一步</button>
+			<button class="next" @tap="save" v-show="pageIndex === 1">保存</button>
 		</view>
 		<label-pop 
 			:isShow="showLablePop"
 			:type="'custom'"
 			@close="close"
-			@getLabel="getLabel"
+			@addLable="getCustom"
 		></label-pop>
 	</view>
 </template>
 <script>
 	import labelPop from '@/components/labelPop'
+	import {postGetLabelByIds, checkLable, saveLable, postUserLabel} from '@/api/pages/login'
+
 	export default {
 		components: {
 			labelPop
@@ -55,37 +118,322 @@
 
 		data () {
 			return {
-				allNum: 0,
-				qualityList: ['1asda','撒大声地', '奥术大师', '阿萨德','1asda','撒大声地', '奥术大师', '阿萨德','1asda','撒大声地', '奥术23大师', '阿萨德'],
-				skillList: ['1asda','撒大123声地', '奥术12大师', '阿萨德','1asda','撒大123声地', '奥23术大师', '阿萨德','123asda','撒1大声地', '奥术2大师', '阿萨德'],
+				list: [],
+				careerList: [],
+				selectList: [],
+				jobList: [],
 				quality: [],
+				character: [],
+				likeList: [],
 				skill: [],
-				showLablePop: false
+				showLablePop: false,
+				career: 0,
+				pageIndex: 0,
+				pageOneNum: 0,
+				pageTwoNum: 0
 			}
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
-			this.userInfo = this.$store.getters('userInfo')
-			this.region = [this.userInfo.user_location]
 		},
-		onReady () {
+		onShow () {
+			this.getList()
+		},
+		watch: {
 		},
 		methods: {
+			next () {
+				if (this.pageOneNum === 0 === 0) {
+					wx.showToast({
+					  title: '请至少选择一个标签',
+					  icon: 'none',
+					  duration: 2000
+					})
+					return
+				}
+				this.pageIndex = 1
+				wx.pageScrollTo({
+				  scrollTop: 0,
+				  duration: 0
+				})
+			},
+			save () {
+				if (this.pageTwoNum === 0) {
+					wx.showToast({
+					  title: '请至少选择一个标签',
+					  icon: 'none',
+					  duration: 2000
+					})
+					return
+				}
+				const data = {
+					uid: this.$store.getters.userInfo.id,
+					idArr: this.selectList
+				}
+				saveLable(data).then(res => {
+					wx.showToast({
+					  title: '保存成功',
+					  icon: 'success',
+					  duration: 1000
+					})
+					wx.navigateBack({
+					  delta: 1
+					})
+				}).catch(e => {
+					wx.showToast({
+					  title: e.msg,
+					  icon: 'none',
+					  duration: 2000
+					})
+				})
+			},
+			careerChange (e) {
+				console.log('picker发送选择改变，携带值为', e.mp.detail.value)
+				this.career = e.mp.detail.value
+				this.jobList = this.list[2].son[this.career].son
+				console.log('已经选择的标签', this.selectList)
+			},
+			getList () {
+				const data = {
+					labelType: '1,2,3,4'
+				}
+				postGetLabelByIds(data).then(res => {
+					this.list = res.data
+					this.careerList = this.list[2].son
+					let array = []
+					this.careerList.forEach(item => {
+						array.push(item.name)
+					})
+					this.careerList = array
+					this.jobList = this.list[2].son[this.career].son
+					this.quality = this.list[3].son
+					this.character = this.list[1].son[0].son
+					this.likeList = this.list[1].son[1].son
+
+
+					const mydata = {
+						uid: this.$store.getters.userInfo.id || 3,
+						ids: '3,4,2'
+					}
+					postUserLabel(mydata).then(res => {
+						this.selectList = res.data
+						for (var i = 0; i < this.selectList.length; i++) {
+							if (this.selectList[i].first_level === 3) {
+								for (var j = 0; j<this.list[2].son.length; j++) {
+									if (this.list[2].son[j].id === this.selectList[i].two_level) {
+										this.list[2].son[j].son[this.selectList[i].index].check = true
+										this.pageOneNum += 1
+									}
+								}
+								// 自定义标签
+								if (this.selectList[i].index === 998) {
+									console.log(111, this.selectList[i].index, 111111)
+									this.pageOneNum += 1
+								}
+							} 
+							else if (this.selectList[i].first_level === 4) {
+								this.list[3].son[this.selectList[i].index].check = true
+								this.pageOneNum += 1
+							} 
+							else if (this.selectList[i].first_level === 2) {
+								for (var j = 0; j<this.list[1].son.length; j++) {
+									if (this.list[1].son[j].id === this.selectList[i].two_level) {
+										this.list[1].son[j].son[this.selectList[i].index].check = true
+										this.pageTwoNum += 1
+									}
+								}
+								// 自定义标签
+								if (this.selectList[i].index === 998) {
+									this.pageTwoNum += 1
+								}
+							}
+						}
+					})
+				})
+			},
+			getCustom (e) {
+				let testing = false
+				this.selectList.forEach(item => {
+					if (item.name === e) {
+						wx.showToast({
+						  title: '该自定义标签已存在，请重新编辑',
+						  icon: 'none',
+						  duration: 2000
+						})
+						testing = true
+					}
+				})
+				if (!testing) {
+					checkLable({name: e}).then(res => {
+						wx.showToast({
+						  title: res.msg,
+						  icon: 'success',
+						  duration: 1000
+						})
+						const data = {
+							id: '',
+							name: e,
+							first_level: this.curId,
+							two_level: this.curId,
+						}
+						if (this.curId === 3) {
+							if (this.selectList.length < 5) {
+								data.index = this.selectList.length
+								this.selectList.push(data)
+							} else {
+								switch (this.selectList[0].first_level) {
+									case 3:
+										this.jobList[this.selectList[0].index].check = false
+										break
+									case 4:
+										this.quality[this.selectList[0].index].check = false
+										break
+								}
+								this.selectList.splice(0, 1)
+								data.index = 4
+								this.selectList.push(data)	
+							}
+						} else {
+							if (this.selectList.length < 10) {
+								data.index = this.selectList.length
+								this.selectList.push(data)
+							} else {
+								switch (this.selectList[5].two_level) {
+									case 35:
+										this.character[this.selectList[5].index].check = false
+										break
+									case 36:
+										this.likeList[this.selectList[5].index].check = false
+										break
+								}
+								this.selectList.splice(5, 1)
+								data.index = 9
+								this.selectList.push(data)	
+							}
+						}
+					}).catch(e => {
+						wx.showToast({
+						  title: e.msg,
+						  icon: 'none',
+						  duration: 2000
+						})
+					})
+				}
+			},
 			close () {
 				this.showLablePop = false
 			},
-			addLabel () {
+			remove (item, index) {
+				if (item.id === '') {
+					this.selectList.splice(index, 1)
+				} else {
+					switch (item.first_level) {
+						case 2:
+								this.list[1].son.forEach(e => {
+									if (e.id=== item.two_level) {
+										e.son[item.index].check = false
+									}
+								})
+								this.pageTwoNum --
+								break
+						case 3:
+							this.list[2].son.forEach(e => {
+								if (e.id=== item.two_level) {
+									e.son[item.index].check = false
+								}
+							})
+							this.pageOneNum --
+							break
+						case 4:
+							this.list[3].son[item.index].check = false
+							this.pageOneNum --
+							break
+					}
+					this.selectList.splice(index, 1)
+				}
+			},
+			addLabel (e) {
+				this.curId = e
 				this.showLablePop = true
 			},
-			skillFun (e) {
-				this.skill = e.mp.detail.value
-				this.allNum = this.skill.length + this.quality.length
-				console.log(this.skill)
-			},
-			qualityFun (e) {
-				this.quality = e.mp.detail.value
-				this.allNum = this.skill.length + this.quality.length
-				console.log(this.quality)
+			select (list, index, firstId, secondId, id) {
+				if (list[index].check) {
+					if (firstId !== 2) {
+						this.pageOneNum --
+					} else {
+						this.pageTwoNum --
+					}
+					list[index].check = false
+					const item = list[index]
+					list.splice(index, 1, item)
+					this.selectList.forEach((e, removeIndex) => {
+						if (id === e.id) {
+							this.selectList.splice(removeIndex, 1)
+						}
+					})
+				} else {
+					if (firstId !== 2) {
+						this.pageOneNum ++
+					} else {
+						this.pageTwoNum ++
+					}
+					
+					list[index].check = true
+					const item = list[index]
+					list.splice(index, 1, item)
+					const data = {
+						id: list[index].id,
+						name: list[index].name,
+						first_level: firstId,
+						two_level: secondId,
+						index: index
+					}
+					this.selectList.push(data)
+					let allNum
+					if (firstId !== 2) {
+						allNum = 5
+					} else {
+						allNum = 10
+					}
+					// 超过五个删除
+					if (firstId !== 2) {
+
+						if (this.pageOneNum > 5) {
+							// 不是自定义标签
+							if (this.selectList[0].index !== 998) {
+								console.log(1111, this.selectList[0].first_level)
+								switch (this.selectList[0].first_level) {
+									case 3:
+										this.jobList[this.selectList[0].index].check = false
+										break
+									case 4:
+										this.quality[this.selectList[0].index].check = false
+										break
+								}
+							}
+							this.pageOneNum -= 1
+							this.selectList.splice(0, 1)
+							console.log(this.selectList.length, 111111111111)
+						} 
+					} else {
+						if (this.pageTwoNum > 5) {
+							// 不是自定义标签
+							if (this.selectList[0].index !== 998) {
+								switch (this.selectList[5].two_level) {
+									case 35:
+										this.character[this.selectList[5].index].check = false
+										break
+									case 36:
+										this.likeList[this.selectList[5].index].check = false
+										break
+								}
+							}
+							this.pageOneNum -= 1
+							this.selectList.splice(5, 1)
+						}
+					}
+				}
+				console.log('选择的标签,', this.selectList)
 			}
 		}
 			
@@ -96,18 +444,41 @@
 		padding: 0 40rpx;
 		.title {
 			margin-bottom: 30rpx;
+			border-bottom:1px solid rgba(53,57,67,0.1);
 			.titlecon {
-				border-bottom:1px solid rgba(53,57,67,0.1);
-				height:42rpx;
 				font-size:30rpx;
 				color:#353943;
 				line-height:42rpx;
-				padding: 30rpx 0 47rpx 0;
+				height: 42rpx;
+				padding: 30rpx 0 8rpx 0;
 				text {
 					font-size: 28rpx;
 					color: #B2B6C2;
 					&.num {
 						color: #FFBC47;
+					}
+				}
+			}
+			.label-con {
+				padding-bottom: 40rpx;
+				.labelBox {
+					overflow: hidden;
+					.label {	
+						font-size: 28rpx;
+						line-height: 54rpx;
+						color: #DCE3EE;
+						border-radius:35px;
+						padding: 0 30rpx;
+						border: 1rpx solid rgba(178,182,194,0.4);
+						display:inline-block;
+						box-sizing: border-box;
+						margin-right: 20rpx;
+						margin-top: 20rpx;
+						&.check {
+							border-color: rgba(0,208,147,1);
+							background: rgba(0,208,147,0.1);
+							color: #00D093;
+						}
 					}
 				}
 			}
@@ -135,11 +506,7 @@
 				border-bottom:1px solid rgba(220,227,238,1);
 				.labelBox {
 					overflow: hidden;
-					checkbox {
-						display: none;
-					}
 					.label {	
-						
 						font-size: 28rpx;
 						line-height: 54rpx;
 						color: #DCE3EE;
@@ -150,11 +517,11 @@
 						box-sizing: border-box;
 						margin-right: 20rpx;
 						margin-bottom: 20rpx;
-					}
-					checkbox[checked] + .label {
-						border-color: rgba(0,208,147,1);
-						background: rgba(0,208,147,0.1);
-						color: #00D093;
+						&.check {
+							border-color: rgba(0,208,147,1);
+							background: rgba(0,208,147,0.1);
+							color: #00D093;
+						}
 					}
 				}
 			}

@@ -1,8 +1,6 @@
 <template>
   <view class="upload">
-    <cut-img :isShow="isShow"
-             :filePath="filePath"
-    ></cut-img>
+    <cut-img></cut-img>
   </view>
 </template>
 <script>
@@ -10,16 +8,18 @@
   export default {
     components: {
       cutImg
-    },
-    data () {
-      return {
-        isShow: true,
-        filePath: 'https://cdnstatic-test.card.ziwork.com/dev/avatar/2018-06-29/8ff089c17e93cc97ae1b2b64a1bfe53e.png?x-oss-process=image/resize,p_50'
-      }
     }
   }
 
 </script>
 <style lang="less" type="text/less" scoped>
-
+.upload {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
 </style>

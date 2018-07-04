@@ -35,6 +35,7 @@
 				},
 				files: [],
 				filesId: [],
+				count: 20,
 				disable: true
 			}
 		},
@@ -49,6 +50,7 @@
 			this.disableFun()
 			if (this.userInfo && this.userInfo.other_info.more_info) {
 				this.info = this.userInfo.other_info.more_info
+				this.count = this.userInfo.other_info.more_info.img_info.length
 			}
 		},
 		onShow () {
@@ -65,6 +67,7 @@
 			chooseImage(e) {
 	      const _this = this;
 	      wx.chooseImage({
+	      	count: 20 - this.count, // 默认9
 	        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
 	        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
 	        success: function (res) {

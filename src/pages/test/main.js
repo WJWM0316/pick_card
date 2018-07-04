@@ -9,5 +9,6 @@ export default {
 	config: {
 	    navigationBarTitleText: '头像编辑',
 	    enablePullDownRefresh: false,
+	    disableScroll: true
 	  },
 }

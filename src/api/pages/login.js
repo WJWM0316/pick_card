@@ -44,6 +44,38 @@ export const postGetLabelByIds = (data) => {
     isLoading: false
   })
 }
+
+// 获取用户标签接口
+export const postUserLabel = (data) => {
+  return request({
+    method: 'post',
+    url: '/label/showSimpleLabel',
+    data,
+    isLoading: false
+  })
+}
+
+// 检查自定义标签接口
+export const checkLable = (data) => {
+  return request({
+    method: 'post',
+    url: '/label/checkCustomizeLabel',
+    data,
+    isLoading: false
+  })
+}
+
+// 保存标签接口
+export const saveLable = (data) => {
+  return request({
+    method: 'post',
+    url: '/label/saveEditLabel',
+    data,
+    isLoading: false
+  })
+}
+
+
 // 获取创建第三步人设标签与生活标签
 export const postGetCreatedThreeLable = (data) => {
   return request({

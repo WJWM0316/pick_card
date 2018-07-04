@@ -86,12 +86,14 @@
 	import {getEducationsInfoApi, postEducationsInfoApi, putEducationsInfoApi, deleteEducationsInfoApi, getWorkInfoApi, postWorkInfoApi, putWorkInfoApi, deleteWorkInfoApi} from '@/api/pages/user'
 	import {mapState} from 'vuex'
 	export default {
+		
 		components: {
 	  },
 		data () {
 			return {
 				option: {},
 				type: '',
+				title: '',
 				info: {
 					name: '',
 					position: '',
@@ -107,9 +109,9 @@
 		},
 		onLoad (option) {
 			this.option = option
-			
 		},
 		onShow () {
+
 			if (this.option.id !== 'undefined') {
 				this.getInfo()
 			} else {

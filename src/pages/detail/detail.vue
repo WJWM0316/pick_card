@@ -47,14 +47,10 @@
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
 					<text class="msg">我的人设</text>
+					<image class="share more" v-if="isSelf" @tap="toEdit('label')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
 				<view class="labelBox">
-					<text class="label">移动互联网</text>
-					<text class="label">前端开发</text>
-					<text class="label">爬蟲</text>
-					<text class="label">移动互联网</text>
-					<text class="label">前端开发</text>
-					<text class="label">爬蟲</text>
+					<text class="label" v-for="(item, index) in labelInfo" :key="index">{{item.name}}</text>
 				</view>
 			</view>
 		</view>
@@ -113,11 +109,9 @@
 	</view>
 </template>
 <script>
-	import MpRadio from 'mp-weui/packages/radio'
 	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike} from '@/api/pages/user'
 	export default {
 		components: {
-	   	'mp-radio': MpRadio
 	  },
 		data () {
 			return {
@@ -221,6 +215,11 @@
 			        url: `/pages/more/main`
 			      })
 			      break
+			    case 'label': 
+						wx.navigateTo({
+			        url: `/pages/characters/main`
+			      })
+			      break  
 				}
 			},
 			getUserUnfo () {
@@ -230,6 +229,7 @@
 					this.workInfo = res.data.other_info.career_info
 					this.labelInfo = res.data.other_info.label_info
 					this.moreInfo = res.data.other_info.more_info
+					this.$store.dispatch('userInfo', this.userInfo)
 				})
 			},                                                                                                                             
 			getOtherUserInfo () {

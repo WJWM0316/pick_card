@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test js 调 android</title>
+	<script>
+  	function setupWebViewJavascriptBridge(callback) {
+      if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+      if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+      window.WVJBCallbacks = [callback];
+      var WVJBIframe = document.createElement('iframe');
+      WVJBIframe.style.display = 'none';
+      WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+      document.documentElement.appendChild(WVJBIframe);
+      setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+  }
+
+
+	setupWebViewJavascriptBridge(function(bridge) {
+		 bridge.registerHandler('testJSFunction', function(data, responseCallback) {
+		   // alert('JS方法被调用:'+data);
+			//responseCallback('js执行过了');
+		 })
+	})
+	
+  function AppSend(){
+    var ua = navigator.userAgent.toLowerCase();
+   if (/iphone|ipad|ipod/.test(ua)) {
+     var str = {"action_type": "banner","banner": {"type": 1,"url":"http:\/\/www.ziwork.com"}};
+     // send(str);
+     console.log(1111111111)
+   } else if (/android/.test(ua)) {
+    console.log(2222222222)
+      // var str = {action_type: "banner",banner: {type: 1,url:"http:\/\/www.ziwork.com"}};
+      // window.WebViewJavascriptBridge.send(JSON.stringify(str));
+      // window.WebViewJavascriptBridge.send('123', function(e) {
+      //   console.log(e)
+      // });
+   }
+   // 
+  }
+  function send(str) {
+    WebViewJavascriptBridge.callHandler('send',str,function(response) {
+      alert(response);
+      document.getElementById("returnValue").value = response;
+    });
+  }
+	
+</script>
+</head>
+<body>
+  <div>
+    <a href="javascript:;" onclick="window.WebViewJavascriptBridge.
+    send(JSON.stringify({type: 1,url:'http://www.ziwork.com'}));">CLICK_ANDROID_</a>
+
+    <br><br><br><br>
+    <a href="javascript:;" onclick="window.WebViewJavascriptBridge.
+    send(JSON.stringify({type: 1,agent:navigator.userAgent.toLowerCase(),extraParams:{circleId:'123456'}}));">CLICK_ANDROID_2</a>
+
+    <br><br><br><br>
+    <a href="javascript:;" onclick="window.WebViewJavascriptBridge.send('1234567890');">CLICK_ANDROID_333</a><br><br><br><br>
+
+    <a href="javascript:;" onClick="AppSend();">Hello-Android_llllllllllll</a><br><br><br><br>
+
+    <a href="javascript:;" onClick="AppSend();">Hello-iOS</a><br><br><br><br>
+  </div>
+  <script>
+ 
+  
+	
+  </script>
+</body>
+<script>
+window.onLoad = function () {
+  document.getElementById('div').onClick = function () {
+    window.alert(111111111111111111)
+  }
+}
+</script>
+</html>
