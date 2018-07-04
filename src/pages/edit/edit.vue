@@ -213,7 +213,6 @@
 		        console.log(e, 2)
 		      })
 				}
-				
 			},
 			getJobList () {
 				const data = {

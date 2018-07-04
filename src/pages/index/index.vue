@@ -161,9 +161,7 @@
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
-
 export default {
-  
   components: {
     mptoast,
     authorizePop
@@ -201,8 +199,6 @@ export default {
       isEnd: false,
     }
   },
-
-
   methods: {
     //是否第一次进入 展示引导图
     isFirst(){
@@ -399,7 +395,6 @@ export default {
       return t;
     },
   },
-
   onShareAppMessage: function (res) {
     wx.showShareMenu({
       withShareTicket: true
@@ -412,29 +407,37 @@ export default {
       path: '/pages/index/main?type=share'
     }
   },
-  
-
   onLoad(res) {
     let that = this
+    console.log(authorizePop)
+    authorizePop.methods.checkLogin().then(res => {
+      getIndexUsers(this.getPage).then((res)=>{
+        that.usersList = res.data
+      })
+    })
+    // App.methods.checkLogin().then((res)=>{
+      
+    //   getIndexUsers(this.getPage).then((res)=>{
+    //     that.usersList = res.data
+    //   })
+    //   that.userInfo =that.$store.getters.userInfo
+    //   console.log('用户信息', that.userInfo)
+    //   setTimeout(()=>{
+    //     var value = wx.getStorageSync('pickCardFirst')
+    //     if(this.$store.getters.userInfo.step<4 && value){
+    //       this.isPop = true
+    //       this.toMeCreate=true
+    //     }
+    //   },1000)
+    // },(res)=>{
+    //   console.log('登陆失败',res)
+    // })
+
     //筛选
     if(res.from && res.from == 'filtrate'){
       this.getPage.occupation_label_id = res.occupation_label_id
       this.getPage.realm_label_id = res.realm_label_id
     }
-
-    App.methods.checkLogin().then((res)=>{
-      getIndexUsers(this.getPage).then((res)=>{
-        that.usersList = res.data
-      })
-
-      getUserInfoApi().then((res)=>{
-        that.userInfo = res.data
-        console.log('=============当前用户信息',res)
-      })
-    },(res)=>{
-      console.log('登陆失败',res)
-    })
-
     that.isFirst()
   },
   onShow (res) {

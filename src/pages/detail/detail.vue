@@ -21,28 +21,39 @@
 				<view class="signature">{{userInfo.sign}}</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_location@3x.png"></image>
-					<text class="msg">{{userInfo.user_location}}</text>
-				</view>
-				<view class="itemMsg">
-					<image class="icon" src="/static/images/details_icon_territory@3x.png"></image>
 					<text class="msg">{{userInfo.company_location}}</text>
 				</view>
 				<view class="itemMsg">
+					<image class="icon" src="/static/images/details_icon_territory@3x.png"></image>
+					<text class="msg">
+						<block  v-for="(item, index) in checkedTextList" :key="index">
+							<text class="field">{{item}}</text>
+							<text v-if="index !== checkedTextList.length - 1"> | </text>
+						</block>
+					</text>
+				</view>
+				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_phone@3x.png"></image>
-					<text class="msg isShow">{{userInfo.mobile}}</text>
+					<text class="msg" :class="{'isShow' : !isSelf && userInfo.handle_status !== 4 && userInfo.privacy_mobile === 1}">
+						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_mobile === 1 ? userInfo.privacy_mobile_desc : userInfo.mobile}}
+					</text>
 				</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_email@3x.png"></image>
-					<text class="msg isShow">{{userInfo.email}}</text>
+					<text class="msg" :class="{'isShow' : !isSelf && userInfo.handle_status !== 4 && userInfo.privacy_email === 1 }">
+						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_email === 1 ?  userInfo.privacy_email_desc : userInfo.email}}
+					</text>
 				</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_wechat@3x.png"></image>
-					<text class="msg isShow">{{userInfo.wechat}}</text>
+					<text class="msg" :class="{'isShow' :!isSelf &&  userInfo.handle_status !== 4 && userInfo.privacy_wechat === 1 }">
+						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_wechat === 1 ? userInfo.privacy_wechat_desc : userInfo.wechat}}
+					</text>
 				</view>
 			</view>
 		</view>
 		<!-- 我的人設 -->
-		<view class="other card">
+		<view class="other card" v-if="labelInfo.length > 0 || isSelf">
 			<view class="content">
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
@@ -124,7 +135,8 @@
 				labelInfo: [],
 				moreInfo: {},
 				showWorkNum: 2,
-				showEducationNum: 2
+				showEducationNum: 2,
+				checkedTextList: []
 			}
 		},
 		onLoad (option) {
@@ -230,6 +242,9 @@
 					this.labelInfo = res.data.other_info.label_info
 					this.moreInfo = res.data.other_info.more_info
 					this.$store.dispatch('userInfo', this.userInfo)
+					this.userInfo.other_info.realm_info.forEach(e => {
+						this.checkedTextList.push(e.name)
+					})
 				})
 			},                                                                                                                             
 			getOtherUserInfo () {
