@@ -1,52 +1,58 @@
 <template>
 	<view class="center">
-		<view class="main">
-			<view @tap.stop="toDetail">
-				<view class="head">
-					<view class="msg">
-						<view class="name">{{info.nickname}}</view>
-						<view class="job">{{info.occupation}}</view>
-					</view>
-					<image class="headImg" :src="info.avatar_info.middleImgUrl"></image>
-				</view>
-				<view class="con">
-					<view class="product"><image class="icon" src="/static/images/me_icon_company@2x.png"></image>{{info.company}}</view>
-					<view class="position">
-						<image class="icon" src="/static/images/me_icon_territory@2x.png"></image>
-						<block  v-for="(item, index) in checkedTextList" :key="index">
-							<text class="field">{{item}}</text>
-							<text v-if="index !== checkedTextList.length - 1"> | </text>
-						</block>
-						<image class="san" src="/static/images/me_icon_edit_chevron@2x.png"></image></view>
-				</view>
-			</view>
-			<button open-type="share" class="share">发名片</button>
-			<button class="save">保存我的名片</button>
+		<view class="head">
+			完善资料信息，提高吸引力
+			<text class="toEdit">完善信息</text>
 		</view>
-		<viwe class="setting">
-			<view class="inner">
-				<view class="item" @tap.stop="toJump()">
-					<view class="itemCon">
-						<view class="left">隐私设置</view>
-						<view class="right">
-							<image class="jumpIcon" src="/static/images/icon_chevron@2x.png"></image>
+		<view class="content">
+			<view class="main">
+				<view @tap.stop="toDetail">
+					<view class="head">
+						<view class="msg">
+							<view class="name">{{info.nickname}}</view>
+							<view class="job">{{info.occupation}}</view>
 						</view>
+						<image class="headImg" :src="info.avatar_info.middleImgUrl"></image>
+					</view>
+					<view class="con">
+						<view class="product"><image class="icon" src="/static/images/me_icon_company@2x.png"></image>{{info.company}}</view>
+						<view class="position">
+							<image class="icon" src="/static/images/me_icon_territory@2x.png"></image>
+							<block  v-for="(item, index) in checkedTextList" :key="index">
+								<text class="field">{{item}}</text>
+								<text v-if="index !== checkedTextList.length - 1"> | </text>
+							</block>
+							<image class="san" src="/static/images/me_icon_edit_chevron@2x.png"></image></view>
 					</view>
 				</view>
-				<navigator target="miniProgram" app-id="wxdf4966c8f6916d05" version="trial" url="pages/home/index">
-				<view class="item">
-					<view class="itemCon">
-						<view class="left">职场学习社区</view>
-						<view class="right">
-							<text>百万职场人都在学</text>
-							<image class="hot" src="/static/images/icon_hot@2x.png"></image>
-							<!-- <image src="/static/images/"></image> -->
-						</view>
-					</view>
-				</view>
-				</navigator>
+				<button open-type="share" class="share">发名片</button>
+				<button class="save">保存我的名片</button>
 			</view>
-		</viwe>
+			<viwe class="setting">
+				<view class="inner">
+					<view class="item" @tap.stop="toJump()">
+						<view class="itemCon">
+							<view class="left">隐私设置</view>
+							<view class="right">
+								<image class="jumpIcon" src="/static/images/icon_chevron@2x.png"></image>
+							</view>
+						</view>
+					</view>
+					<navigator target="miniProgram" app-id="wxdf4966c8f6916d05" version="trial" url="pages/home/index">
+					<view class="item">
+						<view class="itemCon">
+							<view class="left">职场学习社区</view>
+							<view class="right">
+								<text>百万职场人都在学</text>
+								<image class="hot" src="/static/images/icon_hot@2x.png"></image>
+								<!-- <image src="/static/images/"></image> -->
+							</view>
+						</view>
+					</view>
+					</navigator>
+				</view>
+			</viwe>
+		</view>
 	</view>
 </template>
 <script>
@@ -87,7 +93,6 @@
 		      imageUrl: this.info.avatar_info.middleImgUrl
 		    }
 	    }
-	    
 	  },
 		methods: {
 			toJump () {
@@ -106,10 +111,29 @@
 <style lang="less" type="text/less" scoped>
 @import url('~@/assets/css/mixins.less');
 .center {
-	padding: 28rpx 40rpx;
+	padding: 0 0 28rpx;
 	min-height: 100%;
 	box-sizing: border-box;
 	background: #F5F7FA;
+	.head {
+		width: 100%;
+		height: 80rpx;
+		line-height: 80rpx;
+		padding: 0 40rpx;
+		margin-bottom: 28rpx;
+		box-sizing: border-box;
+		font-size: 28rpx;
+		font-weight: light;
+		background:rgba(255,252,240,1);
+		color: #FF7A7D83;
+		.toEdit {
+			float: right;
+			color: rgba(255,162,0,1);
+		}
+	}
+	.content {
+		padding: 0 40rpx 28rpx;
+	}
 	.main {
 		background: #fff;
 		padding: 40rpx 35rpx 44rpx;
