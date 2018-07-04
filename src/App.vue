@@ -14,17 +14,7 @@ export default {
   },
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch (res) {
-    console.log('test===>', res)
-
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-    console.log(res)
-    if(res&&res.shareTicket){
-      this.test = res.shareTicket
-    }
     // this.checkLogin()
-
   },
 
    // 捕获 app error
@@ -38,6 +28,50 @@ export default {
         console.log('已将个人信息存入store', this.$store.getters.userInfo)
       }).catch(e => {
         console.log(e)
+      })
+    },
+    checkLogin () {
+      let that = this
+      return new Promise((resolve, reject) => {
+        // 调用微信登录获取本地session_key
+        wx.login({
+          success: function (res) {
+            // console.log('rquire login', res)
+            // 请求接口获取服务器session_key
+            const getSessionKeyParams = {
+              code: res.code          
+            }
+            getSessionKeyApi(getSessionKeyParams).then(res => {
+              console.log('require:获取sessionkey成功', res)
+              if (res.data.token) {
+                wx.setStorageSync('token', res.data.token)
+              }
+              // 为了获取用户信息
+              if (res.data.key) {
+                if(that.test){that.testShare(res.data.key)}
+              }
+              if (res.data.vkey) {
+                wx.setStorageSync('vkey', res.data.vkey)
+              }
+              if (res.code === 0) {
+                console.log('用户在其他平台已完成授权，不需要再次授权')
+                // 获取用户信息存于store
+                getUserInfoApi().then(res => {
+                  Vue.prototype.$store.dispatch('userInfo', res.data)
+                  console.log('已将个人信息存入store', Vue.prototype.$store.getters.userInfo)
+                }).catch(e => {
+                  console.log(e)
+                })
+              }
+              if (res.code === 201) {
+                _this.$store.dispatch('needAuthorize', true) // 需要授权框
+              }
+              resolve(res)
+            }).catch(e => {
+              reject(e)
+            })
+          }
+        })
       })
     },
     /**
@@ -80,6 +114,9 @@ export default {
     console.log('test===>onShow', res)
     if(res&&res.shareTicket){
       this.test = res.shareTicket
+
+      this.checkLogin()
+
     } 
   }
 }

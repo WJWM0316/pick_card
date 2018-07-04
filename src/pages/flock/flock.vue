@@ -168,7 +168,8 @@
     .quit {
       width:222rpx;
       color:rgba(0,0,0,1);
-      background:rgba(255,255,255,1); 
+      font-size:32rpx;
+      background:#B2B6C2; 
     }
     .joinShare {
       flex: 1;
@@ -176,6 +177,7 @@
       font-family:PingFangHK-Regular;
       color:rgba(255,255,255,1);
       height: 96rpx;
+      font-size:32rpx;
       line-height: 96rpx;
     }
   }
