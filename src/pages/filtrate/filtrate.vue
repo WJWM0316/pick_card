@@ -120,25 +120,14 @@
       let data = {
         labelType: '1,3'
       }
-
-      let def = {
-        id  : 0,
-        name  : '不限',
-        isCur :   false,
-      }
       postGetLabelByIds(data).then((res)=>{
-        console.log(res)
-
         res.data.forEach((value,index,array)=>{
           value.son.forEach((item,idx,ary)=>{
             item['isCur'] = false
       　   });
       　 });
-
-        console.log(res.data)
-
-        that.jobData = [def,...res.data[0].son]
-        that.liveData = [def,...res.data[1].son]
+        that.jobData = [{id:0,name:'不限',isCur:false},...res.data[0].son]
+        that.liveData = [{id:0,name:'不限',isCur:false},...res.data[1].son]
       },(res)=>{
         
       })

@@ -172,7 +172,7 @@ export default {
       usersList: [],
       userInfo: [],
       toCreate: {
-        isToCreate: false,
+        isToCreate: true,
         num: 0
       },
       touchDot: 0,
@@ -188,7 +188,6 @@ export default {
         step: 1
       },  //
       getPage: {
-        page: 1,
         count: 20,
         occupation_label_id: '',
         realm_label_id: '',
@@ -238,10 +237,6 @@ export default {
       this.isPop = false
       this.isShare=false
     },
-    cloCrea(){
-      this.isPop = false
-      this.toMeCreate=false
-    },
     isShare2 () {
       this.isPop = true
       this.isShare = true
@@ -272,10 +267,7 @@ export default {
       })
     },
     toCre () {
-      this.cloCrea()
-      wx.navigateTo({
-        url: `/pages/createCard/main`
-      })
+      
     },
     tStart (e) {
       let that = this
@@ -313,10 +305,14 @@ export default {
       this.time = 0;  
     },
     isCreate (){
-      var value = wx.getStorageSync('pickCardFirst')
-      if(this.userInfo.step<4 && value){
-        this.isPop = true
+      if(this.userInfo.step<9){
+        this.isPop = false
         this.toMeCreate=true
+        wx.navigateTo({
+          url: `/pages/createCard/main`
+        })
+      }else if(this.userInfo.step == 9){
+        this.toCreate.isToCreate = true
       }
     },
     likeOp (status){
@@ -332,10 +328,7 @@ export default {
           this.nowIndex ++
           if(!this.toCreate.isToCreate){
             that.isCreate()
-            this.toCreate.isToCreate = true
           }
-          
-
           this.moveData={
             isMove: false,
             style: 'right', 
@@ -352,20 +345,20 @@ export default {
           }
           this.nowIndex ++
           this.toCreate.num++
-          if(this.toCreate.num == 3 && !this.toCreate.isToCreate){
+
+          if(this.toCreate.num > 2 && !this.toCreate.isToCreate){
             that.isCreate()
-            this.toCreate.isToCreate = true
           }
         },(res)=>{
           console.log(res)
           this.$mptoast(res.msg)
         })
       } 
-      if(this.usersList.length-this.nowIndex == 4){
+      if(this.usersList.length-this.nowIndex == 1){
         console.log('next============todo=====')
-        this.getPage.page++
         getIndexUsers(this.getPage).then((res)=>{
-          this.usersList = [...this.usersList,...res.data]
+          this.usersList = res.data
+          this.nowIndex = 0
           if(this.usersList.length==this.nowIndex){
             this.$mptoast('没有更多名片')
           }
@@ -414,6 +407,17 @@ export default {
       getIndexUsers(this.getPage).then((res)=>{
         that.usersList = res.data
       })
+
+      getUserInfoApi().then(res => {
+        //res.data.step=3
+        if(res.data.step!=9){
+          that.toCreate.isToCreate = false
+        }
+        that.userInfo = res.data
+
+      }).catch(e => {
+        console.log(e)
+      })
     })
     // App.methods.checkLogin().then((res)=>{
       
@@ -432,6 +436,8 @@ export default {
     // },(res)=>{
     //   console.log('登陆失败',res)
     // })
+
+
 
     //筛选
     if(res.from && res.from == 'filtrate'){
@@ -681,7 +687,7 @@ export default {
         width:60rpx;
         height:30rpx;
         background:rgba(255,81,80,1);
-        box-shadow:0px 2rpx 4rpx 0rpx rgba(0,0,0,0.1);
+        box-shadow:0rpx 2rpx 4rpx 0rpx rgba(0,0,0,0.1);
         border-radius:87rpx;
         border:2rpx solid rgba(255,255,255,1);
         margin-left: 8rpx;

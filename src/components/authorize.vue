@@ -86,29 +86,29 @@ open-type="getUserInfo" type="primary">授权</button>
 	      })
 	    },
 			onGetUserinfo (e) {
-	      console.log('用户手动同意微信授权', e.mp.detail)
-	      // 这里不取微信返回的用户信息，而是将加密后的用户信息请求后端，后端将用户信息入库，再返回的整理后的给前端。
-	      // console.log('微信userInfo换自己服务的userInfo,', res)
-	      const data = {
-	        encryptedData: e.mp.detail.encryptedData,
-	        iv: e.mp.detail.iv,
-	        key: wx.getStorageSync('key')
-	      }
-	      grantInformationApi(data).then(res => {
-	        console.log('获取用户授权成功并交换userinfo成功', res)
-	        wx.setStorageSync('token', res.data.token) // 更新token状态
-            wx.setStorageSync('key', res.data.key)
-	        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
-	        this.$store.dispatch('userInfo', res.data.data)
-	        this.$store.dispatch('needAuthorize', false)
-	      }).catch(e => {
-	        console.log('捕获 grantInformationApi', e)
-	      })
-	    },
-	    close () {
-	    	this.$store.dispatch('needAuthorize', false)
-	    },
-	    preventEvevt (e) {
+		      console.log('用户手动同意微信授权', e.mp.detail)
+		      // 这里不取微信返回的用户信息，而是将加密后的用户信息请求后端，后端将用户信息入库，再返回的整理后的给前端。
+		      // console.log('微信userInfo换自己服务的userInfo,', res)
+		      const data = {
+		        encryptedData: e.mp.detail.encryptedData,
+		        iv: e.mp.detail.iv,
+		        key: wx.getStorageSync('key')
+		      }
+		      grantInformationApi(data).then(res => {
+		        console.log('获取用户授权成功并交换userinfo成功', res)
+		        wx.setStorageSync('token', res.data.token) // 更新token状态
+	            wx.setStorageSync('key', res.data.key)
+		        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
+		        this.$store.dispatch('userInfo', res.data.data)
+		        this.$store.dispatch('needAuthorize', false)
+		      }).catch(e => {
+		        console.log('捕获 grantInformationApi', e)
+		      })
+		    },
+		    close () {
+		    	this.$store.dispatch('needAuthorize', false)
+		    },
+		    preventEvevt (e) {
 				e.preventDefault()
 				e.stopPropagation()
 			}

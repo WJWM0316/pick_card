@@ -221,10 +221,15 @@
         thirdSignApi(this.thirdData).then((res)=>{
           if(res.http_status==200){
             this.$mptoast('创建成功')
-            this.nowNum = 0
-            wx.redirectTo({
-              url: `/pages/index/main`
-            })
+
+            setTimeout(()=>{
+              this.nowNum = 0
+              wx.redirectTo({
+                url: `/pages/index/main`
+              })
+            },1000)
+          }else {
+            this.$mptoast(res.msg)
           }
           //that.nowNum = 3;
         })
@@ -309,30 +314,36 @@
         if(that.nowNum == 0){
           data = that.firstData
           firstSignApi(data).then((res)=>{
-            that.nowNum = 1;
+            if(res.http_status == 200){
+              that.nowNum = 1;
+            }else {
+              this.$mptoast(res.msg)
+            }
           })
         }else if(that.nowNum == 1){
-
           data = that.secondData
           data.realm_label_id = '10'
           data.occupation_label_id = '96'
           secondSignApi(data).then((res)=>{
-            that.nowNum = 2;
-          },(res)=>{
-            this.$mptoast(res.msg)
-          })
-
-          postGetCreatedThreeLable({
-            id : data.occupation_label_id 
-          }).then((res)=>{
-            that.nowNum = 2;
-            res.data.forEach((value,index)=>{
-              value.forEach((item,idx)=>{
-                item['isCur'] = false
-          　   });
-          　 });
-            that.thirdRule.jobData = res.data[0]
-            that.thirdRule.liveData = res.data[1]
+            if(res.http_status == 200){
+              that.nowNum = 2;
+              postGetCreatedThreeLable({
+                id : data.occupation_label_id 
+              }).then((res)=>{
+                that.nowNum = 2;
+                res.data.forEach((value,index)=>{
+                  value.forEach((item,idx)=>{
+                    item['isCur'] = false
+              　   });
+              　 });
+                that.thirdRule.jobData = res.data[0]
+                that.thirdRule.liveData = res.data[1]
+              },(res)=>{
+                this.$mptoast(res.msg)
+              })
+            }else {
+              this.$mptoast(res.msg)
+            }
           },(res)=>{
             this.$mptoast(res.msg)
           })
@@ -552,7 +563,7 @@
     justify-content: center;
     align-items: center;
     .next {
-      margin: 40rpx auto;
+      margin: auto  40rpx;
       //width: 670rpx;
       flex: 1;
       height: 98rpx;
