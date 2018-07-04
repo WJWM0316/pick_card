@@ -1,4 +1,4 @@
-<template>
+this.files<template>
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
 		<view class="main card">

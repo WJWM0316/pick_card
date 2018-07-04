@@ -9,7 +9,7 @@
 			<view class="item" v-for="(i, index) in files" :key="index">
 				<image :src="i.path" mode=aspectFill @tap.stop="previewImage(index)"></image>
 				<view class="bg" :style="{'height': i.progress}" v-if="i.progress !== '0%'"></view>
-				<image @tap.stop="remove(index)" class="remove" v-if="i.progress === '0%'" src="/static/images/edit_btn_deletephoto@2x.png"></image>
+				<image @tap.stop="remove(i, index)" class="remove" v-if="i.progress === '0%'" src="/static/images/edit_btn_deletephoto@2x.png"></image>
 			</view>
 			<view class="item">
 				<image mode=aspectFill @tap="chooseImage" v-if="files.length < 20" src="/static/images/edit_btn_addphoto@2x.png"></image>
@@ -25,8 +25,6 @@
 	import {uploadImages} from '@/mixins/uploader'
 	import {putMoreApi} from '@/api/pages/user'
 	export default {
-		components: {
-	  },
 		data () {
 			return {
 				info: {
@@ -43,26 +41,29 @@
 		computed: {
 			...mapState({
 				userInfo: state => state.global.userInfo
-			}),
-			
+			})
 		},
 		onLoad (option) {
+			this.files = []
 			this.vkey = option.vkey
-			
-		},
-		onShow () {
 			if (this.userInfo && this.userInfo.other_info.more_info) {
 				this.info = this.userInfo.other_info.more_info
 				this.info.img_info.forEach(e => {
 					let data = {
-						progress: 0,
-						path: e.smallImgUrl
+						progress: '0%',
+						path: e.smallImgUrl,
+						oldImg: true
 					}
 					this.files.push(data)
 				})
+				console.log(this.files, 111111111111111111111111111)
 				this.count = this.userInfo.other_info.more_info.img_info.length
 			}
 			this.disableFun()
+		},
+		onShow () {
+			
+			
 		},
 		methods: {
 			disableFun () {
@@ -71,7 +72,6 @@
 				} else {
 					this.disable = true
 				}
-				console.log(this.info.content, this.files.length, this.disable)
 			},
 			chooseImage(e) {
 	      const _this = this;
@@ -81,9 +81,9 @@
 	        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
 	        success: function (res) {
 	          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-	          console.log(res)
 	          const curIndex = _this.files.length
 	          _this.files = _this.files.concat(res.tempFiles || [])
+	          console.log(_this.files, 11111, res.tempFiles)
 	          _this.disableFun()
 	          uploadImages(res.tempFiles, {
 			        onItemSuccess: (resp, file, index) => {
@@ -93,7 +93,8 @@
 			        }
 			      }).then(res => {
 			      	_this.filesId = _this.filesId.concat(res || [])
-			        console.log('全部上传成功', res)
+
+			        console.log('全部上传成功',_this.filesId, res)
 			      }).catch((e, index) => {
 			        console.log(`第${index}张上传失败`, e)
 			      })
@@ -119,6 +120,7 @@
 	    	this.filesId.forEach(item => {
 	    		array.push(item.file.fileId)
 	    	})
+	    	console.log(this.info.img_id, 1111, array.join(','), 2222222)
 	    	this.info.img_id = this.info.img_id + ',' + array.join(',')
 	    	const data = {
 	    		content: this.info.content,
@@ -130,9 +132,15 @@
 					})
 	    	})
 	    },
-	    remove (index) {
+	    remove (item, index) {
 	    	this.files.splice(index, 1)
-	    	this.filesId.splice(index, 1)
+	    	console.log(this.info.img_id)
+	    	if (item.oldImg) {
+	    		var a = this.info.img_id.split(',').splice(index, 1).join(',')
+	    		console.log(a)
+	    	} else {
+	    		this.filesId.splice(index, 1)
+	    	}
 	    	this.disableFun()
 	    }
 	  }
