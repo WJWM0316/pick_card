@@ -6,7 +6,7 @@
 			<text class="num">{{info.content.length}}/250</text>
 		</view>
 		<view class="imgBox">
-			<view class="item" v-for="(i, index) in files" :key="index">
+			<view class="item" v-for="(i, index) in files" :key="index" v-if="index < 20">
 				<image :src="i.path" mode=aspectFill @tap.stop="previewImage(index)"></image>
 				<view class="bg" :style="{'height': i.progress}" v-if="i.progress !== '0%'"></view>
 				<image @tap.stop="remove(i, index)" class="remove" v-if="i.progress === '0%'" src="/static/images/edit_btn_deletephoto@2x.png"></image>
@@ -35,6 +35,8 @@
 				files: [],	// 图片数组
 				filesId: [], // 上传成功返回的id
 				count: 20,
+				oldNum: 0,
+				loading: false,
 				disable: true
 			}
 		},
@@ -45,6 +47,7 @@
 		},
 		onLoad (option) {
 			this.files = []
+			this.filesId = []
 			this.vkey = option.vkey
 			if (this.userInfo && this.userInfo.other_info.more_info) {
 				this.info = this.userInfo.other_info.more_info
@@ -58,12 +61,11 @@
 				})
 				console.log(this.files, 111111111111111111111111111)
 				this.count = this.userInfo.other_info.more_info.img_info.length
+				this.oldNum = this.count
 			}
 			this.disableFun()
 		},
 		onShow () {
-			
-			
 		},
 		methods: {
 			disableFun () {
@@ -83,8 +85,9 @@
 	          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
 	          const curIndex = _this.files.length
 	          _this.files = _this.files.concat(res.tempFiles || [])
-	          console.log(_this.files, 11111, res.tempFiles)
 	          _this.disableFun()
+	          _this.loading = true
+	          _this.count =+ res.tempFiles.length
 	          uploadImages(res.tempFiles, {
 			        onItemSuccess: (resp, file, index) => {
 			        },
@@ -93,8 +96,9 @@
 			        }
 			      }).then(res => {
 			      	_this.filesId = _this.filesId.concat(res || [])
-
-			        console.log('全部上传成功',_this.filesId, res)
+			      	 _this.loading = false
+			      	 console.log(_this.loading, 11111)
+			         console.log('全部上传成功',_this.filesId, res)
 			      }).catch((e, index) => {
 			        console.log(`第${index}张上传失败`, e)
 			      })
@@ -116,11 +120,20 @@
 				})
 	    },
 	    save () {
+	    	if (this.loading) {
+	    		wx.showToast({
+					  title: '图片正在上传，请稍等',
+					  icon: 'none',
+					  duration: 2000
+					})
+					return
+	    	}
 	    	let array = []
-	    	this.filesId.forEach(item => {
-	    		array.push(item.file.fileId)
+	    	this.filesId.forEach((item,index) => {
+	    		if (20 - this.oldNum > index) {
+	    			array.push(item.file.fileId)
+	    		}
 	    	})
-	    	console.log(this.info.img_id, 1111, array.join(','), 2222222)
 	    	this.info.img_id = this.info.img_id + ',' + array.join(',')
 	    	const data = {
 	    		content: this.info.content,
@@ -134,12 +147,14 @@
 	    },
 	    remove (item, index) {
 	    	this.files.splice(index, 1)
-	    	console.log(this.info.img_id)
+	    	this.count --
 	    	if (item.oldImg) {
-	    		var a = this.info.img_id.split(',').splice(index, 1).join(',')
-	    		console.log(a)
+	    		var array = this.info.img_id.split(',')
+	    		array.splice(index, 1)
+	    		var string = array.join(',')
+	    		this.info.img_id = string
 	    	} else {
-	    		this.filesId.splice(index, 1)
+	    		this.filesId.splice(index-this.oldNum, 1)
 	    	}
 	    	this.disableFun()
 	    }
