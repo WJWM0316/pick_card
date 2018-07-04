@@ -8,7 +8,6 @@ export const getFriends = (data) => {
   	method: 'get',
     url: '/cur/friends',
     data,
-    isLoading: false
   })
 }
 
@@ -19,7 +18,6 @@ export const deleteFriends = (data) => {
   	method: 'delete',
     url: '/cur/firends',
     data,
-    isLoading: false
   })
 }
 
@@ -32,17 +30,14 @@ export const getUserGroupList = (data) => {
   	method: 'get',
     url: '/group/getUserGroupList',
     data,
-    isLoading: false
   })
 }
 
 // 获取群名片详情
 export const getUserGroupInfo = (data) => {
-  console.log(data)
   return request({
   	method: 'get',
     url: `/group/${data}`,
-    isLoading: false
   })
 }
 
@@ -53,7 +48,6 @@ export const joinUserGroup = (data) => {
   	method: 'post',
     url: '/group/joinUserGroup',
     data,
-    isLoading: false
   })
 }
 // 创建群名片
@@ -63,7 +57,6 @@ export const setUserGroup = (data) => {
   	method: 'post',
     url: '/group/setUserGroup',
     data,
-    isLoading: false
   })
 }
 
@@ -74,7 +67,6 @@ export const editGroupInfo = (data) => {
   	method: 'put',
     url: `/group/${data.id}`,
     data,
-    isLoading: false
   })
 }
 
@@ -85,7 +77,6 @@ export const quitGroup = (data) => {
   	method: 'delete',
     url: `/group/${data.id}`,
     data,
-    isLoading: false
   })
 }
 

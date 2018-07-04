@@ -307,7 +307,7 @@
         <swiper-item class="">
           <view class="friendList" v-if="friendList.length>0">
             <view class="card_block" v-for="(item, index) in friendList" :key="key">
-              <view class="blo_msg" >
+              <view class="blo_msg" @tap="toDetail(item)">
                 <image class="blo_img" :src="item.friend_user_info.avatar_info" v-if="item.friend_user_info.avatar_info.length>0"></image>
                 <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
 
@@ -391,6 +391,12 @@ export default {
   },
 
   methods: {
+    toDetail (item) {
+      console.log(item)
+      wx.navigateTo({
+        url: `/pages/detail/main?vkey=${item.vkey}`
+      })
+    },
     toIndex () {
       wx.navigateTo({
         url: `/pages/index/main`
