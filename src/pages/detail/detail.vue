@@ -300,15 +300,16 @@ this.files<template>
 					position: absolute;
 					right: 0;
 					top: 60rpx;
-					width:230rpx;
+					width:220rpx;
 					height:88rpx;
 					background: #fff;
 					font-size: 28rpx;
 					line-height: 28rpx;
 					display: flex;
 					align-items: center;
+					justify-content: center;
 					border-radius: 0 0 18rpx 18rpx;
-					padding: 24rpx 16rpx 18rpx 32rpx;
+					padding: 24rpx 0 18rpx 0;
 					box-sizing: border-box;
 					box-shadow: 0rpx 18rpx 28rpx 0rpx rgba(220,227,238,0.2),0rpx -2rpx 8rpx 0rpx rgba(220,227,238,0.18);
 					border-radius: 44rpx 0rpx 0rpx 44rpx;

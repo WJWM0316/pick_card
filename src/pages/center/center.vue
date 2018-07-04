@@ -1,8 +1,8 @@
 <template>
 	<view class="center">
-		<view class="head">
+		<view class="header" @tap="toDetail">
 			完善资料信息，提高吸引力
-			<text class="toEdit">完善信息</text>
+			<text class="toEdit">立即完善</text>
 		</view>
 		<view class="content">
 			<view class="main">
@@ -115,7 +115,7 @@
 	min-height: 100%;
 	box-sizing: border-box;
 	background: #F5F7FA;
-	.head {
+	.header {
 		width: 100%;
 		height: 80rpx;
 		line-height: 80rpx;
@@ -125,7 +125,7 @@
 		font-size: 28rpx;
 		font-weight: light;
 		background:rgba(255,252,240,1);
-		color: #FF7A7D83;
+		color: RGBA(122, 125, 131, 1);
 		.toEdit {
 			float: right;
 			color: rgba(255,162,0,1);
@@ -181,7 +181,7 @@
 				width: 30rpx;
 				height: 30rpx;
 				vertical-align:sub;
-				magrin-right: 11rpx;
+				padding-right: 11rpx;
 			}
 			.san {
 				width: 14rpx;
