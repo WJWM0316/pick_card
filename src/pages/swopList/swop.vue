@@ -1,12 +1,14 @@
 
 <template>
   <view class="container" >
-    <view class="hint">记录只保留14天，抓紧时间处理哦~</view>
+    <view class="hint" v-if="listData.length>0">记录只保留14天，抓紧时间处理哦~</view>
     <view class="swopList" v-if="listData.length>0">
       <view class="swop_blo" v-for="(item, index) in listData" :key="key">
 
         <view class="blo_top">
-          <image class="avatar" src="/static/images/img.jpg"></image>
+          <image class="avatar" :src="item.avatar_info" v-if="item.avatar_info"></image>
+          <image  class="avatar" src="/static/images/img.jpg" v-else></image>
+
           <view class="msg_detail ellipsis">
             <view class="msg_name ellipsis">{{item.apply_user_info.realname}} {{item.apply_user_info.occupation}}</view>
             <view class="msg_form ellipsis">{{item.apply_user_info.company}}</view>
@@ -17,13 +19,13 @@
 
         <view class="blo_bot ">
           <image class="txt_img" src="/static/images/applylist_icon_like@3x.png"></image>
-          <view class="txt ellipsis">{{item.apply_user_info.sign}}</view>
+          <view class="txt ellipsis">{{item.remarks}}</view>
         </view>
       </view>
     </view>
     <view class="none_cont" v-else>
         <view class="none_txt_1">暂时没有新的申请</view>
-        <view class="none_txt_2">推荐一下自己给你的朋友同事吧</view>
+        <view class="none_txt_2" @tap="toShare">推荐一下自己给你的朋友同事吧</view>
     </view>
 
     <!-- 分享弹窗 -->
@@ -36,15 +38,11 @@
 
         <view class="btns">
           <button class="btn friend" @click="likeOp('left')">
-            <view class="img_warp">
-              <image src="/static/images/details_icon_wechat@3x.png"></image>
-            </view>
+            <image class="img_warp" src="/static/images/popup_btn_godetails@3x.png"></image>
             <view class="bt_txt">看看TA的资料</view>
           </button>
           <button class="btn friends" @tap="likeOp('right')">
-            <view class="img_warp">
-              <image src="/static/images/float_btn_share@3x.png"></image>
-            </view>
+            <image class="img_warp" src="/static/images/popup_btn_sharenew@3x.png"></image>
             <view class="bt_txt">炫耀一下新朋友</view>
           </button>
         </view>
@@ -119,30 +117,17 @@
       align-items: center;
       .btn {
         width:140rpx;
-        height:104rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
         &.friend {
           margin-right: 100rpx;
-          image {
-            width:50rpx;
-            height:42rpx;
-          }
-        }
-        &.friends {
-          image {
-            width:50rpx;
-            height:49rpx;
-          }
         }
         .bt_txt {
           font-size:28rpx;
           font-family:PingFangHK-Regular;
           color:rgba(178,182,194,1);
           line-height:26rpx;
-        }
-        image {
         }
         .img_warp {
           width:104rpx;
@@ -178,7 +163,7 @@
   }
   
   .hint {
-    display: none;
+    //display: none;
     font-size:28rpx;
     font-family:PingFangSC-Light;
     color:rgba(154,161,171,1);
@@ -298,6 +283,9 @@
       }
     },
     methods: {
+      toShare(res){
+        console.log('to share me')
+      },
       cloPop (res) {
         console.log(res)
         this.pop = {

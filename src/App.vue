@@ -1,19 +1,21 @@
 <script>
 import {getSessionKeyApi, saveBaseUserInfo} from '@/api/pages/login'
 import {setUserGroup} from '@/api/pages/cardcase'
-import {getUserInfoApi} from '@/api/pages/user'
+import {getUserInfoApi,isJoinUserGroup} from '@/api/pages/user'
 export default {
   globalData : {
     userInfo: null
   },
   data () {
     return {
-      test: false,
+      test: false,   //获取群信息
       testData: {}
     }
   },
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch (res) {
+    console.log('test===>', res)
+
     wx.showShareMenu({
       withShareTicket: true
     })
@@ -37,23 +39,25 @@ export default {
       wx.showShareMenu({
         withShareTicket: true
       })
-      console.log('=-=-=-=-=-==key',key)
        wx.getShareInfo({
         shareTicket: this.test,
         success: (res) => {
-          console.log('已成功获取到加密信息',res)
+          console.log('========已成功获取到加密信息',res)
           let data = {
             key: key,
             iv: res.iv,
             encryptedData: res.encryptedData
           }
           setUserGroup(data).then((res)=>{
-            console.log('============',res)
+            console.log('============成功，跳转群详情',res)
+
+            wx.navigateTo({
+              url: `/pages/flock/main?id=${res.data.openGId}&vkey=${res.data.userGroupId}`
+            })
           },(res)=>{
             console.log('============',res)
           }).catch(function(err) {
-            // 最后的catch()方法可以捕获在这一条Promise链上的异常
-            console.log('出错：' + err); // 出错：reject
+            console.log('出错：' + err); 
           });
         },fail: (res)=> {
           console.log('shibai',res)
@@ -107,6 +111,18 @@ export default {
         })
       })
     }
+  },
+  onShow (res){
+    wx.showShareMenu({
+      withShareTicket: true
+    })
+    console.log('test===>onShow', res)
+    if(res&&res.shareTicket){
+      this.test = res.shareTicket
+      this.checkLogin()
+    }
+
+    
   }
 }
 </script>

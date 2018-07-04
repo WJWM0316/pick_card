@@ -6,7 +6,7 @@ app.$mount();
 
 export default {
   config: {
-    navigationBarTitleText: 'TodoList',
+    navigationBarTitleText: 'Pick',
     enablePullDownRefresh: false,
   },
 };

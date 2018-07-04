@@ -112,14 +112,16 @@
         <button class="next" v-else >下一步</button>
       </block>
       <block v-if="nowNum === 1">
-        <button class="next toNext" @click="toNext(nowNum)" v-if="secondData.company.length>0&& secondData.occupation.length>0&&secondRule.rli.length>0 && secondRule.oli.length>0 ">下一步</button>
+        <button class="before" @click="before(0)">上一步</button>
+        <button class="next toNext type_2" @click="toNext(nowNum)" v-if="secondData.company.length>0&& secondData.occupation.length>0&&secondRule.rli.length>0 && secondRule.oli.length>0 ">下一步</button>
         
-        <button class="next" v-else >下一步</button>
+        <button class="next type_2" v-else >下一步</button>
       </block>
       
       <block v-if="nowNum === 2">
-        <button class="next toNext"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">下一步</button>
-        <button class="next" v-else >下一步</button>
+        <button class="before" @click="before(1)">上一步</button>
+        <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">下一步</button>
+        <button class="next type_2" v-else >下一步</button>
       </block>
     </view>
     <mptoast />
@@ -190,6 +192,11 @@
     computed: {
     },
     methods: {
+      before(type){
+        let that = this
+
+        that.nowNum = type
+      },
       getPhone(e){
         //bindgetphonenumber 从1.2.0 开始支持，但是在1.5.3以下版本中无法使用wx.canIUse进行检测，建议使用基础库版本进行判断。
         if(!e.mp.detail.iv){
@@ -363,11 +370,7 @@
             this.$mptoast(res.msg)
           })
         }
-        else if(that.nowNum == 2){
-          for(let i = 0;that.secondRule.rli.length>0;i++){
-            
-          }
-        }
+        else if(that.nowNum == 2){}
       }, 
       //  
       iphoneOp(){
@@ -394,6 +397,7 @@
       console.log('==============',this.$store.getters.userInfo)
 
       if(this.$store.getters.userInfo){
+
         let userInfo = this.$store.getters.userInfo
         this.firstData = {
           gender: userInfo.gender,
@@ -550,21 +554,39 @@
     height: 130rpx;
     background: #ffffff;
     width: 100%;
+    line-height: 98rpx;
     z-index: 1;
+    text-align: center;
+    font-size: 32rpx;
+    color:rgba(255,255,255,1);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     .next {
-      margin: 0 auto;
-      width: 670rpx;
+      margin: 40rpx auto;
+      //width: 670rpx;
+      flex: 1;
       height: 98rpx;
       background:rgba(0,208,147,0.3);
       border-radius: 49rpx;
-      text-align: center;
-      font-size: 32rpx;
-      font-family:PingFangSC-Regular;
       color:rgba(255,255,255,1);
-      line-height: 98rpx;
+      font-family:PingFangSC-Regular;
       &.toNext {
         background:rgba(0,208,147,1);
       }
+      &.type_2 {
+        margin-left: 0rpx;
+      }
+    }
+    .before {
+      width:196rpx;
+      height:98rpx;
+      background:rgba(220,227,238,1);
+      color:rgba(255,255,255,1);
+      border-radius:50rpx;
+      margin-right: 24rpx;
+      margin-left: 40rpx;
     }
   }
   .op_one {
