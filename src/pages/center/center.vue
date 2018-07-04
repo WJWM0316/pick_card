@@ -1,18 +1,26 @@
 <template>
 	<view class="center">
-		<view class="main" @tap.stop="toDetail">
-			<view class="head">
-				<view class="msg">
-					<view class="name">{{info.nickname}}</view>
-					<view class="job">{{info.occupation}}</view>
+		<view class="main">
+			<view @tap.stop="toDetail">
+				<view class="head">
+					<view class="msg">
+						<view class="name">{{info.nickname}}</view>
+						<view class="job">{{info.occupation}}</view>
+					</view>
+					<image class="headImg" :src="info.avatar_info.middleImgUrl"></image>
 				</view>
-				<image class="headImg" :src="info.avatar_info.middleImgUrl"></image>
+				<view class="con">
+					<view class="product"><image class="icon" src="/static/images/me_icon_company@2x.png"></image>{{info.company}}</view>
+					<view class="position">
+						<image class="icon" src="/static/images/me_icon_territory@2x.png"></image>
+						<block  v-for="(item, index) in checkedTextList" :key="index">
+							<text class="field">{{item}}</text>
+							<text v-if="index !== checkedTextList.length - 1"> | </text>
+						</block>
+						<image class="san" src="/static/images/me_icon_edit_chevron@2x.png"></image></view>
+				</view>
 			</view>
-			<view class="con">
-				<view class="product"><image class="icon" src="/static/images/me_icon_company@2x.png"></image>{{info.company}}</view>
-				<view class="position"><image class="icon" src="/static/images/me_icon_territory@2x.png"></image>实打实大所<image class="san" src="/static/images/me_icon_edit_chevron@2x.png"></image></view>
-			</view>
-			<button class="share">发名片</button>
+			<button open-type="share" class="share">发名片</button>
 			<button class="save">保存我的名片</button>
 		</view>
 		<viwe class="setting">
@@ -49,7 +57,8 @@
 	  },
 		data () {
 			return {
-				info: {}
+				info: {},
+				checkedTextList: []
 			}
 		},
 		computed: {
@@ -61,10 +70,25 @@
 			this.vkey = option.vkey
 			if (this.userInfo) {
 				this.info = this.userInfo
+				this.userInfo.other_info.realm_info.forEach(e => {
+					this.checkedTextList.push(e.name)
+				})
 			}
 		},
 		onShow () {
 		},
+		onShareAppMessage: function (res) {
+	    if (res.from === 'button') {
+	      // 来自页面内转发按钮
+	      console.log(res.target)
+	      return {
+		      title: '没错就系偶',
+		      path: `/page/detail?vkey=${this.info.vkey}`,
+		      imageUrl: this.info.avatar_info.middleImgUrl
+		    }
+	    }
+	    
+	  },
 		methods: {
 			toJump () {
 				wx.navigateTo({

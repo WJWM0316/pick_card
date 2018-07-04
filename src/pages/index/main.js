@@ -8,5 +8,6 @@ export default {
   config: {
     navigationBarTitleText: 'Pick',
     enablePullDownRefresh: false,
+    disableScroll: true
   },
 };

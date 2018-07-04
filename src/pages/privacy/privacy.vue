@@ -47,8 +47,7 @@
 	</view>
 </template>
 <script>
-	import {mapState} from 'vuex'
-	import {putPrivacyApi, getUserInfoApi} from '@/api/pages/user'
+	import {putPrivacyApi} from '@/api/pages/user'
 	export default {
 		components: {
 	  },
@@ -66,18 +65,13 @@
 			this.vkey = option.vkey
 		},
 		onShow () {
-			this.getUserInfo()
+			this.userInfo = this.$store.getters.userInfo
+			this.mobile = this.userInfo.privacy_mobile - 1
+			this.weChat = this.userInfo.privacy_wechat - 1
+			this.email = this.userInfo.privacy_email - 1
+			this.card = this.userInfo.can_change_card
 		},
 		methods: {
-			getUserInfo () {
-				getUserInfoApi().then(res => {
-					this.userInfo = res.data
-					this.mobile = this.userInfo.privacy_mobile - 1
-					this.weChat = this.userInfo.privacy_wechat - 1
-					this.email = this.userInfo.privacy_email - 1
-					this.card = this.userInfo.can_change_card
-				})
-			},
 			mobileChange (e) {
 				this.mobile = e.mp.detail.value
 				this.submit()

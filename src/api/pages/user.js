@@ -107,7 +107,8 @@ export const putPrivacyApi = (data) => {
   return request({
     method: 'put',
     url: `/cur/user_info_privacy`,
-    data
+    data,
+    isLoading: false
   })
 }
 

@@ -91,7 +91,6 @@ export default {
         })
         return
       }
-      console.log(this.size, this.size === 0, 22222222222)
       wecropper.getCropperImage()
         .then((src) => {
           // wx.previewImage({

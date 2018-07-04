@@ -15,8 +15,8 @@
 				<image mode=aspectFill @tap="chooseImage" v-if="files.length < 20" src="/static/images/edit_btn_addphoto@2x.png"></image>
 			</view>
 		</view>
-		<view class="btnBox" :class="{'disable': disable}">
-			<button @tap="save" :disabled='disable'>保存</button>
+		<view class="btnBox">
+			<button :class="{'disable': disable}" @tap="save" :disabled='disable'>保存</button>
 		</view>
 	</view>
 </template>
@@ -32,9 +32,10 @@
 				info: {
 					content: '',
 					img_id: '',
+					img_info: []
 				},
-				files: [],
-				filesId: [],
+				files: [],	// 图片数组
+				filesId: [], // 上传成功返回的id
 				count: 20,
 				disable: true
 			}
@@ -47,13 +48,21 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
-			this.disableFun()
-			if (this.userInfo && this.userInfo.other_info.more_info) {
-				this.info = this.userInfo.other_info.more_info
-				this.count = this.userInfo.other_info.more_info.img_info.length
-			}
+			
 		},
 		onShow () {
+			if (this.userInfo && this.userInfo.other_info.more_info) {
+				this.info = this.userInfo.other_info.more_info
+				this.info.img_info.forEach(e => {
+					let data = {
+						progress: 0,
+						path: e.smallImgUrl
+					}
+					this.files.push(data)
+				})
+				this.count = this.userInfo.other_info.more_info.img_info.length
+			}
+			this.disableFun()
 		},
 		methods: {
 			disableFun () {
@@ -110,7 +119,7 @@
 	    	this.filesId.forEach(item => {
 	    		array.push(item.file.fileId)
 	    	})
-	    	this.info.img_id = array.join(',')
+	    	this.info.img_id = this.info.img_id + ',' + array.join(',')
 	    	const data = {
 	    		content: this.info.content,
 	    		img_id: this.info.img_id
@@ -192,9 +201,8 @@
 			position: fixed;
 			bottom: 0;
 			left: 0;
-			&.disable {
-				opacity: 0.5;
-			}
+			z-index: 2;
+			
 			button {
 				background: #00D093;
 				height: 98rpx;
@@ -202,6 +210,9 @@
 				line-height: 98rpx;
 				color: #fff;
 				font-size: 32rpx;
+				&.disable {
+					opacity: 0.5;
+				}
 			}
 		}
 	}
