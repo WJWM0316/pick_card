@@ -162,14 +162,13 @@
     flex-direction: row;
     align-items: center;
     text-align: center;
-    font-size:32rpx;
     font-family:PingFangHK-Regular;
     line-height: 96rpx;
     .quit {
       width:222rpx;
-      color:rgba(0,0,0,1);
+      color:#B2B6C2;
       font-size:32rpx;
-      background:#B2B6C2; 
+      background:#ffffff; 
     }
     .joinShare {
       flex: 1;
@@ -191,7 +190,7 @@
         <view class="txt">此群名片仅本群成员可见</view>
       </view>
       <view class="right">
-        <view class="r_wrap cur">
+        <view class="r_wrap cur" @tap="toIndex">
           <image class="r_icon" src="/static/images/float_btn_returnhome@3x.png"></image>
         </view>
         <button class="r_wrap" open-type="share" data-type="flock">
@@ -201,14 +200,14 @@
     </view>
     <view class="content">
       <view class="peoList">
-        <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList">
-          <view class="blo_msg">
+        <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
+          <view class="blo_msg" @tap="toDetail(item)">
             <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
             <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
             <view class="msg_name">{{item.nickname}}</view>
             <view class="msg_tit">{{item.occupation}}</view>
             <view class="msg_company">{{item.company}}</view>
-            <view class="flock_style" @tap="swopSlock(item.id)" v-if="item.id!=userInfo.id && item.status == 1">交换名片</view>
+            <view class="flock_style" @tap.stop="swopSlock(item.id)" v-if="item.id!=userInfo.id && item.status == 1">交换名片</view>
             <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.status == 2 ||item.status == 3)">已申请</view>
             <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.status == 4">已交换</view>
           </view>
@@ -249,12 +248,21 @@ export default {
   },
 
   methods: {
-
+    toIndex () {
+      wx.reLaunch({
+        url: `/pages/index/main`
+      })
+    },
+    toDetail (item) {
+      wx.navigateTo({
+        url: `/pages/detail/main?vkey=${item.vkey}`
+      })
+    },
     join () {
       let that = this
       console.log('jiaru=========')
       joinUserGroup({userGroupId:this.msg.vkey}).then((res)=>{
-        if(res.code == 0){
+        if(res.http_status == 200){
           this.$mptoast('成功加入')
           that.isJoin = true
           that.updateData()
@@ -275,10 +283,12 @@ export default {
           if (res.confirm) {
             quitGroup({id:that.msg.vkey}).then((res)=>{
               console.log(res)
-              if(res.code == 0){
+              if(res.http_status == 200){
                 this.$mptoast('成功推出')
                 that.isJoin = false
                 that.updateData()
+              }else {
+                this.$mptoast(res.msg)
               }
             })
             console.log('用户点击确定')
@@ -301,7 +311,7 @@ export default {
             indexLike(msg).then((res)=>{
               console.log(res)
               if(res.http_status == 200){
-
+                this.$mptoast('成功')
               }else{
                 this.$mptoast(res.msg)
               }

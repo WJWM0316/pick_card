@@ -14,7 +14,7 @@
             'outLeft animated test': nowIndex-1==index&&moveData.style=='left',  
             'outRight animated test': nowIndex-1==index&&moveData.style=='right'
           }" 
-          @tap="toDeatil(item)" 
+          @tap="toDetail(item)" 
           @touchstart="tStart" 
           @touchend="tEnd" 
           @touchmove="tMove" >
@@ -125,7 +125,7 @@
           </button>
         </view>
       </view>
-      <view class="guidance_pop" v-if="gdData.isGd" @click="firstGDClick">
+      <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
         <image class="gd_cont" v-if="gdData.step == 1" src="/static/images/dafult_pic01@3x.png"></image>
         <image class="gd_cont" v-else src="/static/images/dafult_pic02@3x.png"></image>
         <block v-if="gdData.step==1">
@@ -241,7 +241,7 @@ export default {
       this.isPop = true
       this.isShare = true
     },
-    toDeatil (item) {
+    toDetail (item) {
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
       })
@@ -333,6 +333,9 @@ export default {
             isMove: false,
             style: 'right', 
           }
+          setTimeout(()=>{
+            this.moveData.style = ''
+          },500)
         },(res)=>{
           console.log(res)
           this.$mptoast(res.msg)
@@ -345,7 +348,9 @@ export default {
           }
           this.nowIndex ++
           this.toCreate.num++
-
+          setTimeout(()=>{
+            this.moveData.style = ''
+          },500)
           if(this.toCreate.num > 2 && !this.toCreate.isToCreate){
             that.isCreate()
           }
