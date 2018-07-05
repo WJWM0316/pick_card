@@ -224,7 +224,7 @@ export default {
 
 
         if(this.usersList.length<1){
-          that.isCreate()
+          this.isCreate()
         }
 
         try {
