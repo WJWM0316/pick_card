@@ -78,19 +78,20 @@ export default {
           const src = res.tempFilePaths[0]
           //  获取裁剪图片资源后，给data添加src属性及其值
           this.size = res.tempFiles[0].size
+          console.log(this.size, res, 1111111111)
           wecropper.pushOrigin(src)
         }
       })
     },
     getCropperImage () {
-      if (this.size === 0) {
-        wx.showToast({
-          title: '请先上传图片',
-          icon: 'none',
-          duration: 2000
-        })
-        return
-      }
+      // if (this.size === 0) {
+      //   wx.showToast({
+      //     title: '请先上传图片',
+      //     icon: 'none',
+      //     duration: 2000
+      //   })
+      //   return
+      // }
       wecropper.getCropperImage()
         .then((src) => {
           // wx.previewImage({

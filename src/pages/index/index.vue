@@ -445,7 +445,7 @@ export default {
     let that = this
     console.log(App)
     authorizePop.methods.checkLogin().then(res => {
-      getIndexUsers(this.getPage).then((res)=>{
+      getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
         getUserInfoApi().then(data => {
           that.userInfo = data.data
@@ -462,26 +462,7 @@ export default {
           console.log(e)
         })
       })
-
-
     })
-    // App.methods.checkLogin().then((res)=>{
-      
-    //   getIndexUsers(this.getPage).then((res)=>{
-    //     that.usersList = res.data
-    //   })
-    //   that.userInfo =that.$store.getters.userInfo
-    //   console.log('用户信息', that.userInfo)
-    //   setTimeout(()=>{
-    //     var value = wx.getStorageSync('pickCardFirst')
-    //     if(this.$store.getters.userInfo.step<4 && value){
-    //       this.isPop = true
-    //       this.toMeCreate=true
-    //     }
-    //   },1000)
-    // },(res)=>{
-    //   console.log('登陆失败',res)
-    // })
 
 
 
