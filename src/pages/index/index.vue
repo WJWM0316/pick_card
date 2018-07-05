@@ -221,6 +221,12 @@ export default {
           step: 1
         }
         this.isPop = false
+
+
+        if(this.usersList.length<1){
+          that.isCreate()
+        }
+
         try {
             wx.setStorageSync('pickCardFirst', '1')
             //this.isPop = true
@@ -289,7 +295,11 @@ export default {
       this.time = 0;  
     },
     isCreate (){
+              console.log(3)
+
       if(this.userInfo.step<9){
+              console.log(4)
+
         this.isPop = false
         this.toMeCreate=true
         wx.navigateTo({
@@ -362,6 +372,14 @@ export default {
       if(this.usersList.length-this.nowIndex == 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
+          if(res.http_status == 200){ 
+            if(res.data.length>1){
+              that.isEnd = true
+            }
+          }else {
+            this.$mptoast(res.msg)
+          }
+
           this.usersList = res.data
           this.nowIndex = 0
           if(this.usersList.length==this.nowIndex){
@@ -369,6 +387,24 @@ export default {
           }
         })
       }
+    },
+
+    getIndexList(){
+      getIndexUsers(this.getPage).then((res)=>{
+        if(res.http_status == 200){ 
+          if(res.data.length>1){
+            that.isEnd = true
+          }
+        }else {
+          this.$mptoast(res.msg)
+        }
+
+        this.usersList = res.data
+        this.nowIndex = 0
+        if(this.usersList.length==this.nowIndex){
+          this.$mptoast('没有更多名片')
+        }
+      })
     },
     //转换时分秒
     transformTime(s){
@@ -411,18 +447,23 @@ export default {
     authorizePop.methods.checkLogin().then(res => {
       getIndexUsers(this.getPage).then((res)=>{
         that.usersList = res.data
+        getUserInfoApi().then(data => {
+          that.userInfo = data.data
+
+          console.log('========',data)
+          if(data.data.step!=9){
+            that.toCreate.isToCreate = false
+              let value = wx.getStorageSync('pickCardFirst')
+            if(res.data.length<1 && value){
+              that.isCreate()
+            }
+          }
+        }).catch(e => {
+          console.log(e)
+        })
       })
 
-      getUserInfoApi().then(res => {
-        //res.data.step=3
-        if(res.data.step!=9){
-          that.toCreate.isToCreate = false
-        }
-        that.userInfo = res.data
 
-      }).catch(e => {
-        console.log(e)
-      })
     })
     // App.methods.checkLogin().then((res)=>{
       

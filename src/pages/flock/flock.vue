@@ -334,6 +334,12 @@ export default {
       let that = this
       getUserGroupInfo(that.msg.vkey).then((res)=>{
         that.flockInfo = res.data
+
+        if(res.http_status == 200){ 
+          
+        }else {
+          this.$mptoast(res.msg)
+        }
       })
     },
   },
