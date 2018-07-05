@@ -2,6 +2,7 @@
 import {getSessionKeyApi, saveBaseUserInfo} from '@/api/pages/login'
 import {setUserGroup} from '@/api/pages/cardcase'
 import {getUserInfoApi,isJoinUserGroup} from '@/api/pages/user'
+import {sendFromIdApi} from '@/api/common'
 import Vue from 'vue'
 export default {
   globalData : {
@@ -13,22 +14,7 @@ export default {
       testData: {},
     }
   },
-  // 只有 app 才会有 onLaunch 的生命周期
-  onLaunch (res) {
-    // this.checkLogin()
-    let that = this
-    /*wx.getSystemInfo({
-      success: function(res) {
-        that.globalData.systemInfo = res
-        console.log(res)
-      }
-    })*/
-  },
-
-   // 捕获 app error
-  onError (err) {
-    console.log(err)
-  },
+  
   methods:{
     getUserInfo () {
       getUserInfoApi().then(res => {
@@ -114,6 +100,31 @@ export default {
         }
       })
     },
+
+    sendFormId ({fromId,fromAddress}) {
+      let fromIdArr = wx.getStorageSync('fromIdArr')
+      if(fromIdArr.length>0){
+        fromIdArr = fromIdArr.split('-')
+      }else {
+        fromIdArr = []
+      }
+
+      console.log(`发送formId: ${fromId} 来源: ${fromAddress}->个数:${fromIdArr.length}`)
+      if(fromIdArr.length>0 && fromIdArr[fromIdArr.length-1] == fromId ){
+        console.log('fromid 重复')
+        return
+      }
+      
+      fromIdArr.push(fromId)
+      if (fromIdArr.length >= 3) {
+        sendFromIdApi({'formId': fromIdArr})
+        console.log('fromid 发送',fromIdArr)
+        fromIdArr = []
+      }
+
+      fromIdArr = fromIdArr.join('-')
+      wx.setStorageSync('fromIdArr', fromIdArr)
+    }
   },
   onShow (res){
     wx.showShareMenu({
@@ -126,12 +137,26 @@ export default {
       this.checkLogin()
 
     } 
-  }
+  },
+  // 只有 app 才会有 onLaunch 的生命周期
+  onLaunch (res) {
+    // this.checkLogin()
+    let that = this
+    /*wx.getSystemInfo({
+      success: function(res) {
+        that.globalData.systemInfo = res
+        console.log(res)
+      }
+    })*/
+  },
+
+   // 捕获 app error
+  onError (err) {
+    console.log(err)
+  },
 }
 </script>
-
-<style>
-/*@import url("~@/styles/app.less");*/
+<style lang="less" type="text/less">
 page {
   font-size: 28rpx;
   color: #353943;
@@ -165,5 +190,22 @@ button:after {
   -webkit-transition: width 2s;
   -o-transition: width 2s;
 }
-
+.from-box {
+  width: 0;
+  height: 0;
+  font-size: 0;
+  line-height: 0;
+  .from-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    -webkit-appearance: none; /* 针对ios中会出现的阴影 */
+    &:after {
+      border: none;
+    }
+  }
+}
 </style>

@@ -1,24 +1,6 @@
 // 通用接口api
 import { request, upload } from './require'
 
-// 获取个人详情
-export const personalDetailsApi = (data) => {
-  return request({
-    url: '/wx/my/personalDetails',
-    data,
-    isLoading: true
-  })
-}
-
-/**
- * 获取通用列表（行业列表，融资列表，工作年限列表等等）
- * @param {*} data { type } tpye: 列表类型（1行业，2融资，3自客工作年限，4内容分类，5全职工作年限，6年薪范围，7学历范围，8职位亮点，9公司规模）
- */
-export const getGeneralListApi = data => request({
-  url: '/wx/currency/getGeneralList',
-  data
-})
-
 /**
  * 获取上传配置信息
  * @param {*} data { file_type } file_type：image:图片,audio:音频,video:视频,file:文件
@@ -55,7 +37,8 @@ export const uploadFileToOSS = (filePath, data, setting) => {
 // send fromId
 export const sendFromIdApi = (data) => {
   return request({
-    url: '/wx/currency/addFormId',
+    method: 'post',
+    url: '/commom/saveFormId',
     data,
     isLoading: false
   })
