@@ -6,68 +6,6 @@
     position: relative;
     background: rgba(250,251,253,1)
   }
-  .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    z-index: 1000;
-    width:750rpx;
-    height:96rpx;
-    background:rgba(255,255,255,1);
-    box-shadow:0rpx -10rpx 20rpx 0rpx rgba(153,193,214,0.08);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    .left{
-      flex: 1;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-      align-items: center;
-      font-size:32rpx;
-      font-family:PingFangHK-Light;
-      color:rgba(117,121,128,1);
-      .name {
-        &.cur {
-          font-size:36rpx;
-          font-family:SFUIDisplay-Semibold;
-          color:rgba(53,64,72,1);
-          position: relative;
-          &:after {
-            content: '';
-            width:20rpx;
-            height:8rpx;
-            background:rgba(0,208,147,1);
-            border-radius:4rpx;
-            position: absolute;
-            bottom: -8rpx;
-            left: 50%;
-            margin-left: -10rpx;
-          }
-        }
-      }
-      
-    }
-    .right {
-      width: 136rpx;
-      margin: 40rpx;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .r_blo {
-        width: 48rpx;
-        height: 48rpx;
-        border-radius: 50%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        image { 
-          width: 48rpx;
-          height: 48rpx;
-        }
-      }
-    }
-  }
   .tit {
     width: 100%;
     height: 88rpx;
@@ -354,37 +292,22 @@
           </block>
         </swiper-item>
       </swiper>
-      
-    </view>
-    <view class="footer">
-      <view class="left">
-        <view class="name" @tap="toIndex">Pick</view>
-        <view class="name cur">名片夹</view>
-        <view class="name" @tap="toCenter">我的名片</view>
-      </view>
-      <view class="right">
-        <view class="r_blo">
-          <image class="detail" src="/static/images/home_tab_btn_share_nor@3x.png"></image>
-        </view>
-        <view class="r_blo">
-          <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
-        </view>
-        
-      </view>
     </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    
+    <footerTab :type=2></footerTab>
   </view>
 </template>
 <script>
   import mptoast from 'mptoast'
+  import footerTab from '@/components/footerTab'
   import App from '@/App'
   import { getFriends, deleteFriends, getUserGroupList, getUserGroupInfo, joinUserGroup, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
 export default {
   interval: '',
   components: {
     mptoast,
+    footerTab
   },
   data () {
     return { 
@@ -434,10 +357,6 @@ export default {
       }
     },
   },
-
-  created () {
-  },
-
   onLoad() {
     let that = this
 

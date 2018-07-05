@@ -93,8 +93,7 @@
         <view class="name" @tap="toCardHolder">名片夹</view>
         <view class="name"  @tap="toCenter">我的名片</view>
       </view>
-      <view class="right">
-        
+      <view class="right"> 
         <view class="r_blo" @click="isShare2">
           <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
         </view>
@@ -108,26 +107,9 @@
     </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    
+    <footerTab :type=1></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
-      <view class="share_pop" v-if="isShare"> 
-        <image @click="cloSahre" class="share_clo" src="/static/images/popup_btn_close_nor@3x.png"></image>
-        <image class="share_cont" src="/static/images/popup_pic_share@3x.png"></image>
-        <view class="tit" @tap="toCardHolder">分享你的趣名片</view>
-        <view class="txt">召唤你的朋友们一起来玩吧！</view>
-
-        <view class="btns">
-          <button class="btn friend" open-type="share">
-            <image class="img_warp" src="/static/images/popup_btn_sharewechat@3x.png"></image>
-            <view class="bt_txt">分享到微信</view>
-          </button>
-          <button class="btn friends" @tap="toPic">
-            <image class="img_warp" src="/static/images/popup_btn_sharediscover@3x.png"></image>
-            <view class="bt_txt">分享朋友圈</view>
-          </button>
-        </view>
-      </view>
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
         <image class="gd_cont" v-if="gdData.step == 1" src="/static/images/dafult_pic01@3x.png"></image>
         <image class="gd_cont" v-else src="/static/images/dafult_pic02@3x.png"></image>
@@ -160,6 +142,7 @@
 </template>
 <script>
   import mptoast from 'mptoast'
+  import footerTab from '@/components/footerTab'
   import App from '@/App'
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
@@ -167,6 +150,7 @@
 export default {
   components: {
     mptoast,
+    footerTab,
     authorizePop
   },
   data () {
@@ -258,16 +242,6 @@ export default {
         url: `/pages/detail/main?vkey=${item.vkey}`
       })
     },
-    toCardHolder () {
-      wx.navigateTo({
-        url: `/pages/cardHolder/main`
-      })
-    },
-    toCenter () {
-      wx.navigateTo({
-        url: `/pages/center/main`
-      })
-    },
     toFiltrate () {
       wx.navigateTo({
         url: `/pages/filtrate/main`
@@ -278,9 +252,7 @@ export default {
         url: `/pages/swopList/main`
       })
     },
-    toCre () {
-      
-    },
+    
     tStart (e) {
       let that = this
       that.touchDot = e.touches[0].pageX
@@ -626,78 +598,6 @@ export default {
         }
       }
       
-    }
-    .share_pop {
-      width:670rpx;
-      height:800rpx;
-      background:rgba(255,255,255,1);
-      border-radius:18rpx;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%,-50%);
-      text-align: center;
-      box-sizing: border-box;
-      padding-top: 54rpx;
-      .share_clo {
-        width:28rpx;
-        height:28rpx;
-        position: absolute;
-        right: 40rpx;
-        top: 40rpx;
-      }
-      .share_cont {
-        width:375rpx;
-        height:349rpx;
-        margin: 0 auto;
-      }
-      .tit {
-        height:32rpx;
-        font-size:34rpx;
-        font-family:PingFangSC-Semibold;
-        color:rgba(53,57,67,1);
-        line-height:32rpx;
-        margin-top: 22rpx;
-
-      }
-      .txt {
-        height:28rpx;
-        font-size:28rpx;
-        font-family:PingFangSC-Regular;
-        color:rgba(154,161,171,1);
-        line-height:28rpx;
-        margin-top: 17rpx;
-        margin-bottom: 82rpx;
-      }
-      .btns {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        .btn {
-          width:140rpx;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          &.friend {
-            margin-right: 100rpx;
-
-          }
-          .bt_txt {
-            font-size:28rpx;
-            font-family:PingFangHK-Regular;
-            color:rgba(178,182,194,1);
-            line-height:26rpx;
-          }
-          .img_warp {
-            width:104rpx;
-            height:104rpx;
-            background:rgba(0,208,147,1);
-            margin-bottom: 15rpx;
-            border-radius: 50%;
-          }
-        }
-      }
     }
   }
   .op_top {

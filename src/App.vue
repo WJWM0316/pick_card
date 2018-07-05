@@ -3,6 +3,7 @@ import {getSessionKeyApi, saveBaseUserInfo} from '@/api/pages/login'
 import {setUserGroup} from '@/api/pages/cardcase'
 import {getUserInfoApi,isJoinUserGroup} from '@/api/pages/user'
 import {sendFromIdApi} from '@/api/common'
+import Vue from 'vue'
 export default {
   globalData : {
     userInfo: null,

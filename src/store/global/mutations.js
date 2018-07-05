@@ -6,5 +6,8 @@ export default {
   },
   [types.userInfo] (state, updata) {
     state.userInfo = updata
+  },
+  [types.shareInfo] (state, updata) {
+    state.shareInfo = updata
   }
 }

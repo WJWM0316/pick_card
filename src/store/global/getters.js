@@ -4,5 +4,8 @@ export default {
   },
   userInfo: function (state) {
     return state.userInfo
-  }
+  },
+  shareInfo: function (state) {
+    return state.shareInfo
+  },
 }

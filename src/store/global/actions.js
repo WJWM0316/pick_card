@@ -12,5 +12,11 @@ export default {
       commit(types.userInfo, updata)
       resolve()
     })
-  }
+  },
+  shareInfo: ({commit}, updata) => {
+    return new Promise((resolve, reject) => {
+      commit(types.shareInfo, updata)
+      resolve()
+    })
+  },
 }

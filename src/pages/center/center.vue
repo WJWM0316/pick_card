@@ -38,7 +38,7 @@
 							</view>
 						</view>
 					</view>
-					<navigator target="miniProgram" app-id="wxdf4966c8f6916d05" version="trial" url="pages/home/index">
+					<navigator target="miniProgram" app-id="wxdf4966c8f6916d05" version="develop" url="pages/home/index">
 					<view class="item">
 						<view class="itemCon">
 							<view class="left">职场学习社区</view>
@@ -53,13 +53,16 @@
 				</view>
 			</viwe>
 		</view>
+		<footerTab :type=3></footerTab>
 	</view>
 </template>
 <script>
 	import {mapState} from 'vuex'
+	import footerTab from '@/components/footerTab'
 	import {putPrivacyApi, getUserInfoApi} from '@/api/pages/user'
 	export default {
 		components: {
+			footerTab
 	  },
 		data () {
 			return {
@@ -89,8 +92,8 @@
 	      console.log(res.target)
 	      return {
 		      title: '没错就系偶',
-		      path: `/page/detail?vkey=${this.info.vkey}`,
-		      imageUrl: this.info.avatar_info.middleImgUrl
+		      path: `/pages/detail?vkey=${this.info.vkey}`,
+		      imageUrl: 'https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/test.jpg'
 		    }
 	    }
 	  },

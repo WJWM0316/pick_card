@@ -11,8 +11,8 @@ open-type="getUserInfo" type="primary">授权</button>
 	</view>
 </template>
 <script>
-	import {grantInformationApi,getSessionKeyApi} from '@/api/pages/login'
-	import {getUserInfoApi} from '@/api/pages/user'
+	import {grantInformationApi,getSessionKeyApi,getShareConfig} from '@/api/pages/login'
+	import {getUserInfoApi,getIndexUsers} from '@/api/pages/user'
 	import { mapState } from 'vuex'
 	import Vue from 'vue'
 	export default {
@@ -72,14 +72,23 @@ open-type="getUserInfo" type="primary">授权</button>
 	                }).catch(e => {
 	                  console.log(e)
 	                })
+
+	                getShareConfig().then(res => {
+	                	Vue.prototype.$store.dispatch('shareInfo', res.data)
+	                  console.log('已将分享信息存入store', Vue.prototype.$store.getters.shareInfo)
+	                })
 	              }
 	              if (res.code === 201) {
-	                _this.$store.dispatch('needAuthorize', true) // 需要授权框
+	                Vue.prototype.$store.dispatch('needAuthorize', true) // 需要授权框
 	              }
 	              resolve(res)
 	            }).catch(e => {
+	            	console.log(e, 1111111111)
 	              reject(e)
 	            })
+	          },
+	          fail: function (e) {
+	          	console.log('登录失败', e)
 	          }
 	        })
 	      })
@@ -93,12 +102,17 @@ open-type="getUserInfo" type="primary">授权</button>
 		        iv: e.mp.detail.iv,
 		        key: wx.getStorageSync('key')
 		      }
+		      getShareConfig().then(res => {
+          	this.$store.dispatch('shareInfo', res.data)
+            console.log('已将分享信息存入store', this.$store.getters.shareInfo)
+          })
 		      grantInformationApi(data).then(res => {
 		        console.log('获取用户授权成功并交换userinfo成功', res)
 		        wx.setStorageSync('token', res.data.token) // 更新token状态
-	            wx.setStorageSync('key', res.data.key)
+	          wx.setStorageSync('key', res.data.key)
 		        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
 		        this.$store.dispatch('userInfo', res.data.data)
+		        console.log('已将个人信息存入store', Vue.prototype.$store.getters.userInfo)
 		        this.$store.dispatch('needAuthorize', false)
 		      }).catch(e => {
 		        console.log('捕获 grantInformationApi', e)
