@@ -38,11 +38,11 @@
     <view class="op_blo op_two " v-if="nowNum === 1 && listData.length>0">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
-        <input class="one_ipt" v-model="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技"  />
+        <input class="one_ipt" v-model="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技" maxlength="50" />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt"  v-model="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  />
+        <input class="one_ipt"  v-model="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  maxlength="20" />
       </view>
 
       <view class="table_blo row_style_two">
@@ -84,7 +84,6 @@
         <text class="astrict">{{thirdData.sign.length}}/25</text>
       </view>
     </view>
-
 
     <view class="pop_warp" v-if="bindPhone.isPh">
       <view class="sign_iphone" >
