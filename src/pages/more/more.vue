@@ -59,7 +59,6 @@
 					}
 					this.files.push(data)
 				})
-				console.log(this.files, 111111111111111111111111111)
 				this.count = this.userInfo.other_info.more_info.img_info.length
 				this.oldNum = this.count
 			}
