@@ -26,8 +26,8 @@
                 广州市
               </view>
               <view class="text">
-                <view class="name">{{item.nickname}}</view>
-                <view class="title">{{index}}{{item.occupation}}</view>
+                <view class="name ellipsis">{{item.nickname}}</view>
+                <view class="title ellipsis">{{index}}{{item.occupation}}</view>
                 <image class="detail" src="/static/images/hone_btn_more_nor@3x.png"></image>
               </view>
             </view>
@@ -98,7 +98,10 @@
         <view class="r_blo" @click="isShare2">
           <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
         </view>
-        <view class="r_blo">
+        <view class="r_blo" >
+          <form report-submit="true" class="from-box" @submit="fromClick">
+            <button formType="submit" class="from-mask"></button>
+          </form>
           <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
       </view>
@@ -175,32 +178,39 @@ export default {
         isToCreate: true,
         num: 0
       },
+
       touchDot: 0,
       time: 0,
-      nowIndex: 0,
-      moveData: {
+
+      nowIndex: 0,    // 当地卡片位置
+      moveData: {     // 滑动
         isMove: false,
-        style: '',  //left or right
+        style: '',       //left or right
       },
-      isShare: false,
-      gdData : {
+      gdData : {        //第一次引导图
         isGd: false,
         step: 1
       },  //
-      getPage: {
+      getPage: {       // 首页列表信息参数
         count: 20,
         occupation_label_id: '',
         realm_label_id: '',
-      },// 首页列表信息参数
-      isPop: false,
-      isCooling: false,
-      coolTime: 123123123,
-      isEnd: false,
-
-      isNext: true,
+      },                
+      isPop: false,     //遮罩
+      isCooling: false, //冷却
+      isShare: false,    //分享弹窗
+      coolTime: 123123123,//冷却倒计时
+      isEnd: false,   //翻完
+      isNext: true,  //翻页
     }
   },
   methods: {
+    fromClick (e) {
+      App.methods.sendFormId({
+        fromId: e.mp.detail.formId,
+        fromAddress: '/pages/index'
+      })
+    },
     //是否第一次进入 展示引导图
     isFirst(){
       let that = this
@@ -330,7 +340,6 @@ export default {
       if(status && status == 'right') {
         indexLike(msg).then((res)=>{
           console.log(res)
-
           that.nowIndex ++
           if(!that.toCreate.isToCreate){
             that.isCreate()
@@ -346,6 +355,10 @@ export default {
           },800)
 
         },(res)=>{
+          if(res.http_status == 400 && res.code == 99){
+            that.isCooling = true
+          }
+
           console.log(res)
           that.$mptoast(res.msg)
           that.isNext = true
@@ -422,7 +435,7 @@ export default {
   },
   onLoad(res) {
     let that = this
-    console.log(authorizePop)
+    console.log(App)
     authorizePop.methods.checkLogin().then(res => {
       getIndexUsers(this.getPage).then((res)=>{
         that.usersList = res.data

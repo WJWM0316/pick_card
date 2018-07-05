@@ -66,8 +66,6 @@
           height: 32rpx;
           
         }
-        
-
       }
     }
     .content {
