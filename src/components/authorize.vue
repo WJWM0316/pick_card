@@ -17,6 +17,10 @@ open-type="getUserInfo" type="primary">授权</button>
 	import Vue from 'vue'
 	export default {
 		props: {
+			routeInfo: {
+				type: String,
+				default: `/pages/index/main`
+			},
 			isIndex: {
 				type: Boolean,
 				default: false
@@ -40,6 +44,10 @@ open-type="getUserInfo" type="primary">授权</button>
 			console.log(option, 11)
 		},
 		mounted () {
+			wx.reLaunch({
+			  url: this.routeInfo
+			})
+			console.log(1111111111)
 		},
 		methods: {
 			checkLogin () {
