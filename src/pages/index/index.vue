@@ -180,6 +180,8 @@ export default {
       isCooling: false,
       coolTime: 123123123,
       isEnd: false,
+
+      isNext: true,
     }
   },
   methods: {
@@ -260,11 +262,11 @@ export default {
       /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot)); */
       // 向左滑动    
 
-      if (touchMove - touchDot <= -40 && this.time < 10) {  
+      if (touchMove - touchDot <= -80 && this.time < 10) {  
         status = 'left'
       }  
       // 向右滑动  
-      else if (touchMove - touchDot >= 40 && this.time < 10) {  
+      else if (touchMove - touchDot >= 80 && this.time < 10) {  
         status = 'right'
       }  
 
@@ -289,6 +291,10 @@ export default {
     },
     likeOp (status){
       let that = this
+      console.log(status)
+      if(!that.isNext){return}
+      that.isNext = false
+      console.log(this.nowIndex,this.usersList.length)
       let data = this.usersList[this.nowIndex]
       let msg = {
         to_uid: data.id, //data.unionid
@@ -297,40 +303,49 @@ export default {
         indexLike(msg).then((res)=>{
           console.log(res)
 
-          this.nowIndex ++
-          if(!this.toCreate.isToCreate){
+          that.nowIndex ++
+          if(!that.toCreate.isToCreate){
             that.isCreate()
           }
-          this.moveData={
+          that.moveData={
             isMove: false,
             style: 'right', 
           }
+
           setTimeout(()=>{
-            this.moveData.style = ''
-          },500)
+            that.moveData.style = ''
+            that.isNext = true
+          },800)
+
         },(res)=>{
           console.log(res)
-          this.$mptoast(res.msg)
+          that.$mptoast(res.msg)
+          that.isNext = true
         })
       }else if(status && status == 'left'){
         indexUnlike(msg).then((res)=>{
-          this.moveData = {
+          that.moveData = {
             isMove: false,
             style: 'left', 
           }
-          this.nowIndex ++
-          this.toCreate.num++
+          that.nowIndex ++
+          that.toCreate.num++
+
           setTimeout(()=>{
-            this.moveData.style = ''
-          },500)
-          if(this.toCreate.num > 2 && !this.toCreate.isToCreate){
+            that.moveData.style = ''
+            that.isNext = true
+          },800)
+
+          if(that.toCreate.num > 2 && !that.toCreate.isToCreate){
             that.isCreate()
           }
         },(res)=>{
           console.log(res)
-          this.$mptoast(res.msg)
+          that.$mptoast(res.msg)
+          that.isNext = true
         })
       } 
+
       if(this.usersList.length-this.nowIndex == 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{

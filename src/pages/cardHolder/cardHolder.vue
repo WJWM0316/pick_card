@@ -1,9 +1,10 @@
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
   .container {
-    height: 930rpx;
+    height: 100vh;
+    //height: 930rpx;
     position: relative;
-    padding-bottom: 250rpx;
+    background: rgba(250,251,253,1)
   }
   .tit {
     width: 100%;
@@ -93,12 +94,14 @@
       }
     }
     .swip {
-      height: 90vh;
+      //height: 90vh;
     }
-    .friendList {
-      display: flex;
-      flex-direction: column;
-
+    .friendList,.flockList {
+      //display: flex;
+      //flex-direction: column;
+      height: 100%;
+      text-align: center;
+      overflow-y: scroll;
     }
     .card_block {
       position: relative;
@@ -106,7 +109,7 @@
       display: flex;
       justify-content: flex-end;
       margin-bottom: 40rpx;
-
+      overflow-y: scroll;
       .blo_img {
         width:130rpx;
         height:130rpx;
@@ -241,19 +244,20 @@
           <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
         </button>
       </view>
-      <swiper class="swip" duration="500" :current="nowIndex"  circular="true" @change="swiperChange" @animationfinish="animationfinish">
+      <swiper :style="{ height: spHeight+'rpx' }" class="swip" duration="500" :current="nowIndex"  circular="true" @change="swiperChange" @animationfinish="animationfinish">
         <swiper-item class="">
+         
           <view class="friendList" v-if="friendList.length>0">
-            <view class="card_block" v-for="(item, index) in friendList" :key="key">
-              <view class="blo_msg" @tap="toDetail(item)">
-                <image class="blo_img" :src="item.friend_user_info.avatar_info" v-if="item.friend_user_info.avatar_info.length>0"></image>
-                <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
+              <view class="card_block" v-for="(item, index) in friendList" :key="key">
+                <view class="blo_msg" @tap="toDetail(item)">
+                  <image class="blo_img" :src="item.friend_user_info.avatar_info" v-if="item.friend_user_info.avatar_info.length>0"></image>
+                  <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
 
-                <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
-                <view class="msg_tit ellipsis">{{item.friend_user_info.occupation}}</view>
-                <view class="msg_company ellipsis">{{item.friend_user_info.company}}</view>
+                  <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
+                  <view class="msg_tit ellipsis">{{item.friend_user_info.occupation}}</view>
+                  <view class="msg_company ellipsis">{{item.friend_user_info.company}}</view>
+                </view>
               </view>
-            </view>
 
             <view class="to_share">
               <button open-type="share">分享我的名片</button>，获取更多职场人脉
@@ -297,6 +301,7 @@
 <script>
   import mptoast from 'mptoast'
   import footerTab from '@/components/footerTab'
+  import App from '@/App'
   import { getFriends, deleteFriends, getUserGroupList, getUserGroupInfo, joinUserGroup, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
 export default {
   interval: '',
@@ -310,6 +315,8 @@ export default {
       nowIndex: 0,
       friendList: [],
       florkList: [],
+      systemInfo: {},
+      spHeight: '80vh'
     }
   },
 
@@ -317,7 +324,7 @@ export default {
     toDetail (item) {
       console.log(item)
       wx.navigateTo({
-        url: `/pages/detail/main?vkey=${item.vkey}`
+        url: `/pages/detail/main?vkey=${item.friend_user_info.vkey}`
       })
     },
     toIndex () {
@@ -350,10 +357,6 @@ export default {
       }
     },
   },
-
-  created () {
-  },
-
   onLoad() {
     let that = this
 
@@ -371,6 +374,15 @@ export default {
       that.florkList = res.data
     },(res)=>{
 
+    })
+
+    wx.getSystemInfo({
+      success: function(res) {
+        that.systemInfo = res
+        console.log(res)
+
+        that.spHeight = (res.windowHeight-44-60-40-75)*2
+      }
     })
   },
   onShareAppMessage: function (res) {

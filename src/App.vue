@@ -5,17 +5,24 @@ import {getUserInfoApi,isJoinUserGroup} from '@/api/pages/user'
 import Vue from 'vue'
 export default {
   globalData : {
-    userInfo: null
+    userInfo: null,
   },
   data () {
     return {
       test: false,   //获取群信息
-      testData: {}
+      testData: {},
     }
   },
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch (res) {
     // this.checkLogin()
+    let that = this
+    /*wx.getSystemInfo({
+      success: function(res) {
+        that.globalData.systemInfo = res
+        console.log(res)
+      }
+    })*/
   },
 
    // 捕获 app error
