@@ -78,7 +78,7 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
-			this.checkedTextList = {}
+			this.checkedTextList = []
 			if (this.userInfo) {
 				this.info = this.userInfo
 				this.userInfo.other_info.realm_info.forEach(e => {
