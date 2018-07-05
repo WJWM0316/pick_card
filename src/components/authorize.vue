@@ -15,7 +15,6 @@ open-type="getUserInfo" type="primary">授权</button>
 	import {getUserInfoApi} from '@/api/pages/user'
 	import { mapState } from 'vuex'
 	import Vue from 'vue'
-	import App from './App'
 	export default {
 		props: {
 			isIndex: {

@@ -255,7 +255,7 @@ export default {
     },
     toDetail (item) {
       wx.navigateTo({
-        url: `/pages/detail/main?vkey=${item.vkey}`
+        url: `/pages/detail/main?vkey=${item.friend_user_info.vkey}`
       })
     },
     join () {

@@ -101,9 +101,9 @@
           <button class="ip_btn" @click="toCode">完成绑定</button>
           <view class="hint_2">点击快速绑定手机号码 > ></view>
         </view>
-        
       </view>
     </view>
+    
     <view class="footer">
       <block v-if="nowNum === 0">
         <button class="next toNext" @click="toNext(nowNum)" v-if="firstData.gender!==0 && firstData.avatar_id&&firstData.nickname.length>0">

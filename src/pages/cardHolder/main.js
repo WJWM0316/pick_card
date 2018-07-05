@@ -6,7 +6,7 @@ app.$mount();
 
 export default {
   config: {
-    navigationBarTitleText: 'TodoList',
-    enablePullDownRefresh: true,
+    navigationBarTitleText: '名片夹',
+    enablePullDownRefresh: false,
   },
 };
