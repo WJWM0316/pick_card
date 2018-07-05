@@ -72,7 +72,7 @@ export default {
                 })
               }
               if (res.code === 201) {
-                _this.$store.dispatch('needAuthorize', true) // 需要授权框
+                Vue.prototype.$store.dispatch('needAuthorize', true) // 需要授权框
               }
               resolve(res)
             }).catch(e => {
@@ -131,7 +131,7 @@ export default {
 </script>
 
 <style>
-@import url("~@/styles/app.less");
+/*@import url("~@/styles/app.less");*/
 page {
   font-size: 28rpx;
   color: #353943;

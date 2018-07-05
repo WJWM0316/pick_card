@@ -37,6 +37,7 @@ open-type="getUserInfo" type="primary">授权</button>
 			},
 		},
 		onLoad (option) {
+			console.log(option, 11)
 		},
 		mounted () {
 		},
