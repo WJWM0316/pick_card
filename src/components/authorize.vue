@@ -28,7 +28,6 @@ open-type="getUserInfo" type="primary">授权</button>
 		},
 		data () {
 			return {
-				ceshi: 111
 			}
 		},
 		computed: {
@@ -41,13 +40,9 @@ open-type="getUserInfo" type="primary">授权</button>
 			},
 		},
 		onLoad (option) {
-			console.log(option, 11)
 		},
 		mounted () {
-			wx.reLaunch({
-			  url: this.routeInfo
-			})
-			console.log(1111111111)
+			
 		},
 		methods: {
 			checkLogin () {
@@ -115,6 +110,7 @@ open-type="getUserInfo" type="primary">授权</button>
           	this.$store.dispatch('shareInfo', res.data)
             console.log('已将分享信息存入store', this.$store.getters.shareInfo)
           })
+          
 		      grantInformationApi(data).then(res => {
 		        console.log('获取用户授权成功并交换userinfo成功', res)
 		        wx.setStorageSync('token', res.data.token) // 更新token状态
@@ -123,6 +119,9 @@ open-type="getUserInfo" type="primary">授权</button>
 		        this.$store.dispatch('userInfo', res.data.data)
 		        console.log('已将个人信息存入store', Vue.prototype.$store.getters.userInfo)
 		        this.$store.dispatch('needAuthorize', false)
+		        wx.reLaunch({
+						  url: this.routeInfo
+						})
 		      }).catch(e => {
 		        console.log('捕获 grantInformationApi', e)
 		      })

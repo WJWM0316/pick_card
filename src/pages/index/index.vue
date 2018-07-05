@@ -409,10 +409,10 @@ export default {
     let that = this
     console.log(App)
     authorizePop.methods.checkLogin().then(res => {
-      getIndexUsers(this.getPage).then((res)=>{
+      getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
       })
-
+      console.log(that.$store.getters, that.$store.getters.userInfo, 11111111111111)
       getUserInfoApi().then(res => {
         //res.data.step=3
         if(res.data.step!=9){

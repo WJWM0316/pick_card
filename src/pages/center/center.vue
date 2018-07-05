@@ -72,11 +72,13 @@
 		},
 		computed: {
 			...mapState({
-				userInfo: state => state.global.userInfo
+				userInfo: state => state.global.userInfo,
+				shareInfo: state => state.global.shareInfo,
 			}),
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
+			this.checkedTextList = {}
 			if (this.userInfo) {
 				this.info = this.userInfo
 				this.userInfo.other_info.realm_info.forEach(e => {
@@ -91,7 +93,7 @@
 	      // 来自页面内转发按钮
 	      console.log(res.target)
 	      return {
-		      title: '没错就系偶',
+		      title: this.shareInfo.mycard.content,
 		      path: `/pages/detail?vkey=${this.info.vkey}`,
 		      imageUrl: 'https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/test.jpg'
 		    }
