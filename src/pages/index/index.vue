@@ -87,7 +87,7 @@
         　
       </view>
     </view>
-    <view class="footer">
+    <!-- <view class="footer">
       <view class="left">
         <view class="name cur" @tap="isCreate">Pick</view>
         <view class="name" @tap="toCardHolder">名片夹</view>
@@ -104,10 +104,10 @@
           <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
       </view>
-    </view>
+    </view> -->
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <!-- <footerTab :type=1 ></footerTab> -->
+     <footerTab :type=1 ></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
