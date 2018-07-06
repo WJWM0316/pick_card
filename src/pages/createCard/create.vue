@@ -87,7 +87,7 @@
 
     <view class="pop_warp" v-if="bindPhone.isPh">
       <view class="sign_iphone" >
-        <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" ></image></view>
+        <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap="clo"></image></view>
         <view class="ip_cont">
           <view class="ipt_blo">
             <text class="getcode" @tap="sms">获取验证码</text>
@@ -103,24 +103,30 @@
       </view>
     </view>
     
-    <view class="footer">
+    <view class="footer" :class="{'type2':nowNum>0}">
       <block v-if="nowNum === 0">
-        <button class="next toNext" @click="toNext(nowNum)" v-if="firstData.gender!==0 && firstData.avatar_id&&firstData.nickname.length>0">
+        <button class="next toNext" @click.stop="toNext(nowNum)" v-if="firstData.gender!==0 && firstData.avatar_id&&firstData.nickname.length>2&&firstData.nickname.length<11">
         下一步
         </button>
         <button class="next" v-else >下一步</button>
       </block>
+
       <block v-if="nowNum === 1">
         <button class="before" @click="before(0)">上一步</button>
-        <button class="next toNext type_2" @click="toNext(nowNum)" v-if="secondData.company.length>0&& secondData.occupation.length>0&&secondRule.rli.length>0 && secondRule.oli.length>0 ">下一步</button>
-        
+        <button class="next toNext type_2" @click.stop="toNext(nowNum)" v-if="secondData.company.length>3&& secondData.occupation.length>3&&secondRule.rli.length>0 && secondRule.oli.length>0 ">下一步</button>
         <button class="next type_2" v-else >下一步</button>
       </block>
-      
+
       <block v-if="nowNum === 2">
         <button class="before" @click="before(1)">上一步</button>
-        <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">下一步</button>
-        <button class="next type_2" v-else >下一步</button>
+        <block v-if="userInfo.mobile.length>1">
+          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " @click="toNext(nowNum)">下一步</button>
+          <button class="next type_2" v-else >下一步</button>
+        </block>
+        <block v-else>
+          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">下一步</button>
+          <button class="next type_2" v-else >下一步</button>
+        </block>
       </block>
     </view>
     <mptoast />
@@ -179,11 +185,15 @@
         isIp: false,
         filePath: '/static/images/new_pic_defaulhead.jpg',
         isShow: false,
+        userInfo: {}
       }
     },
     computed: {
     },
     methods: {
+      clo(){
+        this.bindPhone.isPh = false
+      },
       before(type){
         let that = this
 
@@ -202,33 +212,39 @@
       },
       thirdPost(type){
         let job = [],
-              live = []
-        this.thirdRule.job.forEach((value,index)=>{
+            live = [],
+            that = this
+        that.thirdRule.job.forEach((value,index)=>{
           console.log(value)
-          this.thirdData['build_label_id'].push(this.thirdRule.jobData[value])
+          that.thirdData['build_label_id'].push(that.thirdRule.jobData[value])
       　 });
-        this.thirdRule.live.forEach((value,index)=>{
+        that.thirdRule.live.forEach((value,index)=>{
           console.log(value)
-          this.thirdData['build_label_id'].push(this.thirdRule.liveData[value])
+          that.thirdData['build_label_id'].push(that.thirdRule.liveData[value])
       　 });
-        //this.thirdData['build_label_id'] = [job,live]
+        //that.thirdData['build_label_id'] = [job,live]
         if(type==1){
         }else {
-          this.thirdData['mobile'] = this.bindPhone.number
-          this.thirdData['smsCode'] = this.bindPhone.code
+          that.thirdData['mobile'] = that.bindPhone.number
+          that.thirdData['smsCode'] = that.bindPhone.code
         }
-        thirdSignApi(this.thirdData).then((res)=>{
+        thirdSignApi(that.thirdData).then((res)=>{
           if(res.http_status==200){
-            this.$mptoast('创建成功')
+            that.$mptoast('创建成功')
 
             setTimeout(()=>{
-              this.nowNum = 0
+              that.nowNum = 0
               wx.redirectTo({
                 url: `/pages/index/main`
               })
             },1000)
           }else {
-            this.$mptoast(res.msg)
+
+            that.$mptoast(res.msg)
+
+            if(res.code == 210){
+              that.bindPhone.isPh = true
+            }
           }
           //that.nowNum = 3;
         })
@@ -308,6 +324,7 @@
         }
       },
       toNext (num) {
+        console.log('toNext',num)
         let that = this;
         let data = {}
         if(that.nowNum == 0){
@@ -324,12 +341,16 @@
           data.realm_label_id = '10'
           data.occupation_label_id = '96'
           secondSignApi(data).then((res)=>{
+            console.log('secondSignApi',res)
             if(res.http_status == 200){
               that.nowNum = 2;
+              console.log(1,data)
               postGetCreatedThreeLable({
                 id : data.occupation_label_id 
               }).then((res)=>{
+                console.log('postGetCreatedThreeLable',res)
                 that.nowNum = 2;
+
                 res.data.forEach((value,index)=>{
                   value.forEach((item,idx)=>{
                     item['isCur'] = false
@@ -338,6 +359,7 @@
                 that.thirdRule.jobData = res.data[0]
                 that.thirdRule.liveData = res.data[1]
               },(res)=>{
+
                 this.$mptoast(res.msg)
               })
             }else {
@@ -347,7 +369,18 @@
             this.$mptoast(res.msg)
           })
         }
-        else if(that.nowNum == 2){}
+        else if(that.nowNum == 2){
+          if(that.userInfo.mobile.length>1){
+            that.bindPhone.number = that.userInfo.mobile
+            that.thirdPost(2)
+
+            this.bindPhone = {
+              isPh: false,
+              number: '',
+              code: ''
+            }
+          }
+        }
       }, 
       //  
       iphoneOp(){
@@ -421,6 +454,8 @@
           number: userInfo.mobile,
           code: ''
         }
+
+        that.userInfo = userInfo
       }
       postGetLabelByIds(data).then((res)=>{
         res.data.forEach((value,index,array) => {
@@ -440,8 +475,17 @@
 </script>
 
 <style lang="less" type="text/less" scoped>
+.test {
+  text-align: center;
+  font-size: 32rpx;
+  color: #333333;
+  z-index: -1;
+  position: fixed;
+  bottom: 250rpx;
+  width: 500rpx;
+}
   .container {
-    padding-bottom: 160rpx;
+    //padding-bottom: 160rpx;
   }
   .pop_warp {
     position: fixed;
@@ -586,6 +630,10 @@
       margin-right: 24rpx;
       margin-left: 40rpx;
     }
+    &.type2 {
+      position: relative;
+    }
+
   }
   .op_one {
     .one_txt {
