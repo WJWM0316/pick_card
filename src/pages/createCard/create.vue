@@ -38,11 +38,11 @@
     <view class="op_blo op_two " v-if="nowNum === 1 && listData.length>0">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
-        <input class="one_ipt" v-model="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技" maxlength="50" />
+        <input class="one_ipt" v-model="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技" maxlength="100" />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt"  v-model="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  maxlength="20" />
+        <input class="one_ipt"  v-model="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  maxlength="40" />
       </view>
 
       <view class="table_blo row_style_two">
@@ -91,7 +91,7 @@
         <view class="ip_cont">
           <view class="ipt_blo">
             <text class="getcode" @tap="sms">获取验证码</text>
-            <input placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  />
+            <input placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  maxlength="11" />
           </view>
           <view class="ipt_blo">
             <input placeholder="请输入验证码" maxlength="6" v-model="bindPhone.code" type="" name="" />
@@ -105,7 +105,7 @@
     
     <view class="footer" :class="{'type2':nowNum>0}">
       <block v-if="nowNum === 0">
-        <button class="next toNext" @click.stop="toNext(nowNum)" v-if="firstData.gender!==0 && firstData.avatar_id&&firstData.nickname.length>2&&firstData.nickname.length<11">
+        <button class="next toNext" @click.stop="toNext(nowNum)" v-if="firstData.gender!==0 && firstData.avatar_id&&firstData.nickname.length>1&&firstData.nickname.length<11">
         下一步
         </button>
         <button class="next" v-else >下一步</button>
@@ -113,7 +113,7 @@
 
       <block v-if="nowNum === 1">
         <button class="before" @click="before(0)">上一步</button>
-        <button class="next toNext type_2" @click.stop="toNext(nowNum)" v-if="secondData.company.length>3&& secondData.occupation.length>3&&secondRule.rli.length>0 && secondRule.oli.length>0 ">下一步</button>
+        <button class="next toNext type_2" @click.stop="toNext(nowNum)" v-if="secondData.company.length>1&&secondData.company.length<51&& secondData.occupation.length>1&&secondData.occupation.length<21&&secondRule.rli.length>0 && secondRule.oli.length>0 ">下一步</button>
         <button class="next type_2" v-else >下一步</button>
       </block>
 
@@ -124,7 +124,7 @@
           <button class="next type_2" v-else >下一步</button>
         </block>
         <block v-else>
-          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">下一步</button>
+          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>0&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">下一步</button>
           <button class="next type_2" v-else >下一步</button>
         </block>
       </block>
@@ -356,8 +356,13 @@
                     item['isCur'] = false
               　   });
               　 });
-                that.thirdRule.jobData = res.data[0]
-                that.thirdRule.liveData = res.data[1]
+
+                that.thirdRule = {
+                  jobData: res.data[0],
+                  liveData: res.data[1],
+                  job:[],
+                  live: [],
+                }
               },(res)=>{
 
                 this.$mptoast(res.msg)
