@@ -87,9 +87,9 @@
         　
       </view>
     </view>
-    <view class="footer">
+    <!-- <view class="footer">
       <view class="left">
-        <view class="name cur" @tap="toCre">Pick</view>
+        <view class="name cur" @tap="isCreate">Pick</view>
         <view class="name" @tap="toCardHolder">名片夹</view>
         <view class="name"  @tap="toCenter">我的名片</view>
       </view>
@@ -104,7 +104,7 @@
           <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
       </view>
-    </view>
+    </view> -->
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
     <footerTab :type=1></footerTab>
@@ -135,7 +135,7 @@
         <image class="head" src="/static/images/img.jpg"></image>
         <view class="title">Opps！你还没创建自己的名片</view>
         <view class="msg">要和这几位大咖交换名片的话， 点击下方按钮，创建自己的名片吧!</view>
-        <button class="btn" @tap="toCre" type="primary">创建自己的名片</button>
+        <button class="btn" @tap="isCreate" type="primary">创建自己的名片</button>
       </view>
     </view>
   </view>
@@ -189,6 +189,11 @@ export default {
     }
   },
   methods: {
+    testCreate(){
+      wx.navigateTo({
+        url: `/pages/createCard/main`
+      })
+    },
     fromClick (e) {
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
@@ -258,7 +263,6 @@ export default {
         url: `/pages/swopList/main`
       })
     },
-    
     tStart (e) {
       let that = this
       that.touchDot = e.touches[0].pageX
@@ -277,14 +281,13 @@ export default {
       let status = false
       /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot)); */
       // 向左滑动    
-
       if (touchMove - touchDot <= -80 && this.time < 10) {  
         status = 'left'
       }  
       // 向右滑动  
       else if (touchMove - touchDot >= 80 && this.time < 10) {  
         status = 'right'
-      }  
+      }
 
       if(this.moveData.isMove && status){
         this.likeOp(status)
@@ -295,11 +298,8 @@ export default {
       this.time = 0;  
     },
     isCreate (){
-              console.log(3)
-
-      if(this.userInfo.step<9){
-              console.log(4)
-
+      console.log(111)
+      if(this.userInfo.step!=9){
         this.isPop = false
         this.toMeCreate=true
         wx.navigateTo({
@@ -311,7 +311,7 @@ export default {
     },
     likeOp (status){
       let that = this
-      console.log(status)
+      console.log(status,that.isNext)
       if(!that.isNext){return}
       that.isNext = false
       console.log(this.nowIndex,this.usersList.length)
@@ -335,7 +335,6 @@ export default {
             that.moveData.style = ''
             that.isNext = true
           },800)
-
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
             that.isCooling = true
@@ -373,7 +372,7 @@ export default {
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
           if(res.http_status == 200){ 
-            if(res.data.length>1){
+            if(res.data.length<1){
               that.isEnd = true
             }
           }else {
@@ -388,11 +387,10 @@ export default {
         })
       }
     },
-
     getIndexList(){
       getIndexUsers(this.getPage).then((res)=>{
         if(res.http_status == 200){ 
-          if(res.data.length>1){
+          if(res.data.length<1){
             that.isEnd = true
           }
         }else {
@@ -443,7 +441,6 @@ export default {
   },
   onLoad(res) {
     let that = this
-    console.log(App)
     authorizePop.methods.checkLogin().then(res => {
       getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
@@ -941,6 +938,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: relative;
         image { 
           width: 48rpx;
           height: 48rpx;
