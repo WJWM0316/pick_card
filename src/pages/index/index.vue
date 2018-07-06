@@ -501,8 +501,6 @@ export default {
         that.usersList = res.data
         getUserInfoApi().then(data => {
           that.userInfo = data.data
-          that.userInfo.step = 3
-
           console.log('========',data)
           if(data.data.step!=9){
             that.toCreate.isToCreate = false
