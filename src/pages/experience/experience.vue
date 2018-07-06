@@ -126,7 +126,6 @@
 		onShow () {
 			this.isNow = false
 			this.nowTime = formatTime(new Date(), 'YYYY-MM')
-
 			if (this.option.id !== 'undefined') {
 				this.getInfo()
 			} else {
@@ -149,6 +148,109 @@
 				this.isNow = !this.isNow
 			},
 			save () {
+				let title = ''
+				let isForbid = false
+				if (this.option.type == 'education') {
+					if (this.info.name === '') {
+						title = '请填写学校名称'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					} else if (this.info.name.length < 2) {
+						title = '学校名称需为2-100个字'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					} else if (this.info.name.length > 100) {
+						title = '学校名称最多输入100个字'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.info.start_time_desc === '') {
+						title = '请选择起始时间'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.info.end_time_desc === '' && !this.isNow) {
+						title = '请选择结束时间'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+				}
+				if (this.option.type == 'work') {
+					if (this.info.name === '') {
+						title = '请填写公司名称'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					} else if (this.info.name.length < 2) {
+						title = '公司名称需为2-50个字'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					} else if (this.info.name.length > 50) {
+						title = '公司名称最多输入50个字'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.info.position === '') {
+						title = '请选择职业'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.info.start_time_desc === '') {
+						title = '请选择起始时间'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.info.end_time_desc === '' && !this.isNow) {
+						title = '请选择结束时间'
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+				}
+				
+				
 				function saveFun () {
 					wx.showToast({
 						title: '保存成功',

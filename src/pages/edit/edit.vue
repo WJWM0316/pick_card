@@ -18,12 +18,12 @@
 				<view class="itemCon">
 					<view class="left requst">性别</view>
 					<view class="right">
-						<radio-group class="radio-group" @change="radioChange">
+						<radio-group class="radio-group" @change="sexChange">
 						  <label class="radio">
-						    <radio value="1" color="#00D093" :checked="userInfo.gender === 1"/><text>男</text>
+						    <radio value=1 color="#00D093" :checked="userInfo.gender == 1"/><text>男</text>
 						  </label>
 						  <label class="radio">
-						    <radio value="2" color="#00D093" :checked="userInfo.gender === 2"/><text>女</text>
+						    <radio value=2 color="#00D093" :checked="userInfo.gender == 2"/><text>女</text>
 						  </label>
 						</radio-group>
 					</view>
@@ -35,7 +35,7 @@
 					<view class="right">
 						<picker mode='region' @change="regionChange" :value="region">
 							<view class="picker">
-					      <text class="placeholder" v-show="region[0] === ''">请选择所在地</text>{{region[0]}}{{region[1]}}
+					      <text class="placeholder" v-show="region[1] === ''">请选择所在地</text>{{region[1]}}
 					    </view>
 						</picker>
 					</view>
@@ -174,7 +174,7 @@
 		onLoad (option) {
 			this.vkey = option.vkey
 			this.userInfo = this.$store.getters.userInfo
-			this.region = [this.userInfo.company_location]
+			this.region = [this.userInfo.province, this.userInfo.city]
 			this.checkedTextList = []
 			if(this.userInfo && this.userInfo.avatar_info && this.userInfo.avatar_info.middleImgUrl){
 				this.filePath = this.userInfo.avatar_info.smallImgUrl
@@ -242,9 +242,9 @@
 					})
 					return
 				}
-				if (this.userInfo.nickname === '') {
+				if (this.userInfo.nickname === '' || this.userInfo.nickname.length < 2) {
 					wx.showToast({
-					  title: '请编辑姓名',
+					  title: '姓名需为2-10个字',
 					  icon: 'none',
 					  duration: 1000
 					})
@@ -274,55 +274,47 @@
 					})
 					return
 				}
-				if (this.userInfo.occupation === '') {
+				if (this.userInfo.occupation === '' || this.userInfo.occupation.length < 2) {
 					wx.showToast({
-					  title: '请编辑职业',
+					  title: '职位需为2-20个字',
 					  icon: 'none',
 					  duration: 1000
 					})
 					return
 				}
-				if (this.userInfo.company === '') {
+				if (this.userInfo.company === '' || this.userInfo.company.length < 2 || this.userInfo.company.length > 20) {
 					wx.showToast({
-					  title: '请编辑最近入职公司',
+					  title: '公司需为2-20个字',
 					  icon: 'none',
 					  duration: 1000
 					})
 					return
 				}
-				if (this.userInfo.wechat !== '') {
-					let reg = /^[a-zA-Z][a-zA-Z0-9_-]{5,19}$/
-					if (!reg.test(this.userInfo.wechat)) {                                                                                      
-						wx.showToast({
-						  title: '微信号格式不正确',
-						  icon: 'none',
-						  duration: 1000
-						})
-						return
-					}
+
+				let reg1 = /^[a-z0-9]+$/i
+				console.log(!reg1.test(this.userInfo.wechat))
+				if (this.userInfo.wechat !== '' && (this.userInfo.wechat.length < 4 || this.userInfo.wechat.length > 24 || !reg1.test(this.userInfo.wechat))) {
+					wx.showToast({
+					  title: '微信号需为4-24个字母或数字',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
 				}
-				if (this.userInfo.email !== '') {
-					let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
-					if (!reg.test(this.userInfo.email)) {                                                                                      
-						wx.showToast({
-						  title: '邮箱地址格式不正确',
-						  icon: 'none',
-						  duration: 1000
-						})
-						return
-					}
-				}
-				let user_location
-				if (this.region[1]) {
-					user_location = this.region[0] + this.region[1]
-				} else {
-					user_location = this.region[0]
+				let reg2 = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+				if (this.userInfo.email !== '' && !reg2.test(this.userInfo.email)) {                                                                                    
+					wx.showToast({
+					  title: '邮箱地址格式不正确',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
 				}
 				let data = {
 					avatar_id: this.userInfo.avatar_id,
 					nickname: this.userInfo.nickname.trim(),
 					gender: this.userInfo.gender,
-					user_location: user_location,
+					user_location: this.region[1],
 					occupation: this.userInfo.occupation.trim(),
 					company: this.userInfo.company.trim(),
 					company_location: this.userInfo.company_location.trim(),
@@ -332,6 +324,9 @@
 					sign: this.userInfo.sign.trim(),
 					occupation_label_id: this.careerId.toString() || '',
 					realm_label_id: this.checkedIdList,
+					city: this.region[1],
+					province: this.region[0],
+					country: '中国'
 				}
 				upDataUserInfoApi(data).then(res => {
 					console.log('成功了', res)
@@ -365,6 +360,7 @@
 			},
 			sexChange(e) {
 				this.userInfo.gender = e.mp.detail.value
+				console.log(this.userInfo.gender, this.userInfo.gender == 1, 22222222)
 			},
 			careerChange (e) {		
 				this.career = e.mp.detail.value
@@ -465,6 +461,7 @@
 							color: #353943;
 							height: 120rpx;
 							line-height: 120rpx;
+							min-width: 30rpx;
 							.placeholder {
 								color: #C3C9D4;
 							}

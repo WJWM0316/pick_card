@@ -1,4 +1,4 @@
-this.files<template>
+<template>
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
 		<view class="main card">
@@ -16,12 +16,12 @@ this.files<template>
 					</view>
 					<image class="share" v-if="isSelf" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')"></image>
 				</view>
-				<view class="job">{{userInfo.company}}</view>
+				<view class="job">{{userInfo.occupation}}</view>
 				<view class="company">{{userInfo.company}}</view>
 				<view class="signature">{{userInfo.sign}}</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_location@3x.png"></image>
-					<text class="msg">{{userInfo.company_location}}</text>
+					<text class="msg">{{userInfo.user_location}}</text>
 				</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_territory@3x.png"></image>
@@ -249,6 +249,7 @@ this.files<template>
 						this.checkedTextList.push(e.name)
 					})
 					this.nowTime = formatTime(new Date(), 'YYYY-MM')
+					this.$store.dispatch('userInfo', res.data)
 				})
 			},                                                                                                                             
 			getOtherUserInfo () {
