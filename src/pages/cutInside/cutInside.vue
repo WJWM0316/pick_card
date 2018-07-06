@@ -49,7 +49,7 @@ export default {
       }
     }
   },
-  onShow () {
+  onLoad () {
     this.size = 0
   },
   components: {
@@ -84,14 +84,14 @@ export default {
       })
     },
     getCropperImage () {
-      // if (this.size === 0) {
-      //   wx.showToast({
-      //     title: '请先上传图片',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      //   return
-      // }
+      if (this.size === 0) {
+        wx.showToast({
+          title: '请先上传图片',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
       wecropper.getCropperImage()
         .then((src) => {
           // wx.previewImage({

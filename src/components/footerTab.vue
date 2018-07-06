@@ -2,9 +2,9 @@
   <view class="wrap">
     <view class="footer">
       <view class="left">
-        <view class="name" :class="{'cur' : type === 1}" @tap="toCre">Pick</view>
-        <view class="name" :class="{'cur' : type === 2}" @tap="toCardHolder">名片夹</view>
-        <view class="name" :class="{'cur' : type === 3}" @tap="toCenter">我的名片</view>
+        <view class="name" :class="{'cur' : type === 1}" @tap="toTab(1)">Pick</view>
+        <view class="name" :class="{'cur' : type === 2}" @tap="toTab(2)">名片夹</view>
+        <view class="name" :class="{'cur' : type === 3}" @tap="toTab(3)">我的名片</view>
       </view>
       <view class="right"> 
         <view class="r_blo" @click="isShare">
@@ -44,24 +44,35 @@
     },
     data () {
       return {
-        isPop: false
+        isPop: false,
+        index: 0,
       }
     },
+    mounted () {
+      this.index = this.type
+    },
     methods: {
-      toCre () {
-        wx.redirectTo({
-          url: '/pages/index/main'
-        })
-      },
-      toCardHolder () {
-        wx.redirectTo({
-          url: `/pages/cardHolder/main`
-        })
-      },
-      toCenter () {
-        wx.redirectTo({
-          url: `/pages/center/main`
-        })
+      toTab (type) {
+        if (this.type === type) {
+          return
+        }
+        switch (type) {
+          case 1:
+            wx.redirectTo({
+              url: '/pages/index/main'
+            })
+            break
+          case 2:
+            wx.redirectTo({
+              url: `/pages/cardHolder/main`
+            })
+            break
+          case 3:
+            wx.redirectTo({
+              url: `/pages/center/main`
+            })
+            break
+        }
       },
       isShare () {
         this.isPop = true
@@ -92,12 +103,13 @@
       justify-content: space-around;
       align-items: center;
       font-size:32rpx;
+      hieght: 96rpx;
+      line-height: 96rpx;
       font-family:PingFangHK-Light;
       color:rgba(117,121,128,1);
       .name {
         &.cur {
           font-size:36rpx;
-          font-family:SFUIDisplay-Semibold;
           color:rgba(53,64,72,1);
           position: relative;
           &:after {
@@ -107,7 +119,7 @@
             background:rgba(0,208,147,1);
             border-radius:4rpx;
             position: absolute;
-            bottom: -8rpx;
+            bottom: 14rpx;
             left: 50%;
             margin-left: -10rpx;
           }

@@ -143,7 +143,7 @@
 		},
 		methods: {
 			next () {
-				if (this.pageOneNum === 0 === 0) {
+				if (this.pageOneNum === 0) {
 					wx.showToast({
 					  title: '请至少选择一个标签',
 					  icon: 'none',
@@ -326,6 +326,17 @@
 			remove (item, index) {
 				if (item.id === '') {
 					this.selectList.splice(index, 1)
+					switch (item.first_level) {
+						case 2:
+							this.pageTwoNum --
+							break
+						case 3:
+							this.pageOneNum --
+							break
+						case 4:
+							this.pageOneNum --
+							break
+					}
 				} else {
 					switch (item.first_level) {
 						case 2:
@@ -388,20 +399,14 @@
 						two_level: secondId,
 						index: index
 					}
-					this.selectList.push(data)
-					let allNum
-					if (firstId !== 2) {
-						allNum = 5
-					} else {
-						allNum = 10
-					}
+					
+					console.log(firstId, this.pageOneNum, this.selectList)
 					// 超过五个删除
 					if (firstId !== 2) {
-
 						if (this.pageOneNum > 5) {
 							// 不是自定义标签
 							if (this.selectList[0].index !== 998) {
-								console.log(1111, this.selectList[0].first_level)
+								console.log(1111, this.selectList, this.selectList[0])
 								switch (this.selectList[0].first_level) {
 									case 3:
 										this.jobList[this.selectList[0].index].check = false
@@ -413,8 +418,8 @@
 							}
 							this.pageOneNum -= 1
 							this.selectList.splice(0, 1)
-							console.log(this.selectList.length, 111111111111)
-						} 
+						}
+						this.selectList.splice(this.pageOneNum-1, 0, data)
 					} else {
 						if (this.pageTwoNum > 5) {
 							// 不是自定义标签
@@ -428,9 +433,10 @@
 										break
 								}
 							}
-							this.pageOneNum -= 1
+							this.pageTwoNum -= 1
 							this.selectList.splice(5, 1)
 						}
+						this.selectList.push(data)
 					}
 				}
 				console.log('选择的标签,', this.selectList)

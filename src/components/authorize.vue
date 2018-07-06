@@ -39,10 +39,8 @@ open-type="getUserInfo" type="primary">授权</button>
 			needAuthorize (val) {
 			},
 		},
-		onLoad (option) {
-		},
 		mounted () {
-			
+
 		},
 		methods: {
 			checkLogin () {
@@ -53,10 +51,14 @@ open-type="getUserInfo" type="primary">授权</button>
 	            // console.log('rquire login', res)
 	            // 请求接口获取服务器session_key
 	            const getSessionKeyParams = {
-	              code: res.code          
+	              code: res.code,
+	              shareUid: wx.getStorageSync('routeInfo').query.shareUid || '',
+	              shareType: wx.getStorageSync('routeInfo').query.shareType || ''
 	            }
+	            
 	            getSessionKeyApi(getSessionKeyParams).then(res => {
 	              console.log('require:获取sessionkey成功', res)
+
 	              if (res.data.token) {
 	                wx.setStorageSync('token', res.data.token)
 	              }
@@ -98,38 +100,46 @@ open-type="getUserInfo" type="primary">授权</button>
 	      })
 	    },
 			onGetUserinfo (e) {
-		      console.log('用户手动同意微信授权', e.mp.detail)
-		      // 这里不取微信返回的用户信息，而是将加密后的用户信息请求后端，后端将用户信息入库，再返回的整理后的给前端。
-		      // console.log('微信userInfo换自己服务的userInfo,', res)
-		      const data = {
-		        encryptedData: e.mp.detail.encryptedData,
-		        iv: e.mp.detail.iv,
-		        key: wx.getStorageSync('key')
-		      }
-		      getShareConfig().then(res => {
-          	this.$store.dispatch('shareInfo', res.data)
-            console.log('已将分享信息存入store', this.$store.getters.shareInfo)
-          })
-          
-		      grantInformationApi(data).then(res => {
-		        console.log('获取用户授权成功并交换userinfo成功', res)
-		        wx.setStorageSync('token', res.data.token) // 更新token状态
-	          wx.setStorageSync('key', res.data.key)
-		        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
-		        this.$store.dispatch('userInfo', res.data.data)
-		        console.log('已将个人信息存入store', Vue.prototype.$store.getters.userInfo)
-		        this.$store.dispatch('needAuthorize', false)
-		        wx.reLaunch({
-						  url: this.routeInfo
-						})
-		      }).catch(e => {
-		        console.log('捕获 grantInformationApi', e)
-		      })
-		    },
-		    close () {
-		    	this.$store.dispatch('needAuthorize', false)
-		    },
-		    preventEvevt (e) {
+	      console.log('用户手动同意微信授权', e.mp.detail)
+	      // 这里不取微信返回的用户信息，而是将加密后的用户信息请求后端，后端将用户信息入库，再返回的整理后的给前端。
+	      // console.log('微信userInfo换自己服务的userInfo,', res)
+	      const data = {
+	        encryptedData: e.mp.detail.encryptedData,
+	        iv: e.mp.detail.iv,
+	        key: wx.getStorageSync('key'),
+	        shareUid: wx.getStorageSync('routeInfo').query.shareUid || '',
+	        shareType: wx.getStorageSync('routeInfo').query.type || ''
+	      }
+	      getShareConfig().then(res => {
+        	this.$store.dispatch('shareInfo', res.data)
+          console.log('已将分享信息存入store', this.$store.getters.shareInfo)
+        })
+
+	      grantInformationApi(data).then(res => {
+	        console.log('获取用户授权成功并交换userinfo成功', res)
+	        wx.setStorageSync('token', res.data.token) // 更新token状态
+          wx.setStorageSync('key', res.data.key)
+	        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
+	        this.$store.dispatch('userInfo', res.data.data)
+	        console.log('已将个人信息存入store', Vue.prototype.$store.getters.userInfo)
+	        this.$store.dispatch('needAuthorize', false)
+	        
+	        let params = ''
+	        for (var i in wx.getStorageSync('routeInfo').query) {
+	        	params += `${i}=${wx.getStorageSync('routeInfo').query[i]}&`
+	        }
+	        let url = `${wx.getStorageSync('routeInfo').path}?${params}`
+	        wx.reLaunch({
+					  url: url
+					})
+	      }).catch(e => {
+	        console.log('捕获 grantInformationApi', e)
+	      })
+	    },
+	    close () {
+	    	this.$store.dispatch('needAuthorize', false)
+	    },
+	    preventEvevt (e) {
 				e.preventDefault()
 				e.stopPropagation()
 			}

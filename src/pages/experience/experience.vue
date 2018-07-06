@@ -5,7 +5,7 @@
 				<view class="itemCon">
 					<view class="left requst">公司</view>
 					<view class="right">
-						<input type="text" v-model="info.name" placeholder="请输入公司名字" placeholder-style="color:#B2B6C2">
+						<input type="text" v-model="info.name" placeholder="请输入公司名字" placeholder-style="color:#B2B6C2" maxlength="50">
 					</view>
 				</view>
 			</view>
@@ -13,7 +13,7 @@
 				<view class="itemCon">
 					<view class="left requst">职位</view>
 					<view class="right">
-						<input type="text" v-model="info.position" placeholder="请输入您的职位" placeholder-style="color:#B2B6C2">
+						<input type="text" v-model="info.position" placeholder="请输入您的职位" placeholder-style="color:#B2B6C2" maxlength="20">
 					</view>
 				</view>
 			</view>
@@ -32,9 +32,14 @@
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">结束时间</view>
-					<view class="right">
-						<picker mode='date' @change="endDateChange" :value="info.end_time_desc" fields=month>
-							<view class="picker">
+					<view class="right endTime">
+						<view class="choseNow">
+							<image class="icon" v-if="isNow" @tap="choseNow('isNowWork')" src="/static/images/edittime_btn_select_sel@3x.png"></image>
+							<image class="icon" v-if="!isNow" @tap="choseNow('isNowWork')" src="/static/images/edittime_btn_select_nor@3x.png"></image>
+							至今
+						</view>
+						<picker mode='date' @change="endDateChange" :value="info.end_time_desc" fields=month :disabled="isNow">
+							<view class="picker" :class="{'disabled' : isNow}">
 					      <text class="placeholder" v-show="info.end_time_desc === ''">结束时间</text>{{info.end_time_desc}}
 					    </view>
 						</picker>
@@ -47,7 +52,7 @@
 				<view class="itemCon">
 					<view class="left requst">学校</view>
 					<view class="right">
-						<input type="text" v-model="info.name" placeholder="请输入学校名称" placeholder-style="color:#B2B6C2">
+						<input type="text" v-model="info.name" placeholder="请输入学校名称" placeholder-style="color:#B2B6C2" maxlength="20">
 					</view>
 				</view>
 			</view>
@@ -66,9 +71,14 @@
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">结束时间</view>
-					<view class="right">
-						<picker mode='date' @change="endDateChange" :value="info.end_time_desc" fields=month>
-							<view class="picker">
+					<view class="right endTime">
+						<view class="choseNow">
+							<image class="icon" v-if="isNow" @tap="choseNow('isNowStudy')" src="/static/images/edittime_btn_select_sel@3x.png"></image>
+							<image class="icon" v-if="!isNow" @tap="choseNow('isNowStudy')" src="/static/images/edittime_btn_select_nor@3x.png"></image>
+							至今
+						</view>
+						<picker mode='date' @change="endDateChange" :value="info.end_time_desc" fields=month :disabled="isNow">
+							<view class="picker" :class="{'disabled' : isNow}">
 					      <text class="placeholder" v-show="info.end_time_desc === ''">结束时间</text>{{info.end_time_desc}}
 					    </view>
 						</picker>
@@ -85,6 +95,7 @@
 <script>
 	import {getEducationsInfoApi, postEducationsInfoApi, putEducationsInfoApi, deleteEducationsInfoApi, getWorkInfoApi, postWorkInfoApi, putWorkInfoApi, deleteWorkInfoApi} from '@/api/pages/user'
 	import {mapState} from 'vuex'
+	import {formatTime} from '@/utils/index'
 	export default {
 		
 		components: {
@@ -99,7 +110,9 @@
 					position: '',
 					start_time_desc: '',
 					end_time_desc: ''
-				}
+				},
+				nowTime: '',
+				isNow: false,
 			}
 		},
 		computed: {
@@ -111,6 +124,8 @@
 			this.option = option
 		},
 		onShow () {
+			this.isNow = false
+			this.nowTime = formatTime(new Date(), 'YYYY-MM')
 
 			if (this.option.id !== 'undefined') {
 				this.getInfo()
@@ -122,10 +137,17 @@
 					end_time_desc: ''
 				}
 			}
+			console.log(this.nowTime, this.info.end_time_desc, this.nowTime === this.info.end_time_desc, 11111111111)
+			if (this.nowTime === this.info.end_time_desc) {
+				this.isNow = true
+			}
 		},
 		onReady () {
 		},
 		methods: {
+			choseNow () {
+				this.isNow = !this.isNow
+			},
 			save () {
 				function saveFun () {
 					wx.showToast({
@@ -147,6 +169,10 @@
 						start_time : new Date(this.info.start_time_desc).getTime().toString().slice(0, 10),
 						end_time: new Date(this.info.end_time_desc).getTime().toString().slice(0, 10)
 					}
+					if (this.isNow) {
+						console.log(this.nowTime, 222222)
+						data.end_time = new Date(this.nowTime).getTime().toString().slice(0, 10)
+					}
 					if (id !== 'undefined') {
 						data.id = id
 						putEducationsInfoApi(data).then(res => {
@@ -163,6 +189,10 @@
 						position: this.info.position,
 						start_time : new Date(this.info.start_time_desc).getTime().toString().slice(0, 10),
 						end_time: new Date(this.info.end_time_desc).getTime().toString().slice(0, 10)
+					}
+					if (this.isNow) {
+						console.log(this.nowTime, 222222)
+						data.end_time = new Date(this.nowTime).getTime().toString().slice(0, 10)
 					}
 					if (id !== 'undefined') {
 						data.id = id
@@ -200,8 +230,7 @@
 					deleteWorkInfoApi({id}).then(res => {
 						removeFun()
 					})
-				}
-				
+				}	
 			},
 			getInfo () {
 				console.log(this.userInfo.other_info)
@@ -212,34 +241,34 @@
 				} else {
 					list = this.userInfo.other_info.education_info
 				}
-				console.log(list, 22222)
 				list.filter(item => {
 					if (item.id == id) {
 						this.info = item
 					}
 				})
-				
+			},
+			check () {
 			},
 			startDateChange (e) {
 				this.info.start_time_desc = e.mp.detail.value
+				console.log(this.info.start_time_desc, this.info.end_time_desc, this.info.start_time_desc > this.info.end_time_desc)
+				if (this.info.start_time_desc > this.info.end_time_desc && this.info.end_time_desc) {
+					wx.showToast({
+						title: '开始时间不能大于于结束时间',
+						icon: 'none'
+					})
+					this.info.start_time_desc = ''
+				}
 			},
 			endDateChange (e) {
 				this.info.end_time_desc = e.mp.detail.value
-				if (this.info.start_time_desc === this.info.end_time_desc) {
-					wx.showToast({
-						title: '结束时间不能等于开始时间',
-						icon: 'none'
-					})
-					this.info.end_time_desc = ''
-				}
-				if (this.info.start_time_desc > this.info.end_time_desc) {
+				if (this.info.start_time_desc > this.info.end_time_desc && this.info.start_time_desc) {
 					wx.showToast({
 						title: '结束时间不能小于开始时间',
 						icon: 'none'
 					})
 					this.info.end_time_desc = ''
 				}
-
 			}
 		}
 			
@@ -298,6 +327,22 @@
 			  	.right {
 						text-align: right;
 						overflow: hidden;
+						&.endTime {
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+							.choseNow {
+								font-size: 28rpx;
+								color: #9AA1AB;
+								margin-right: 47rpx;
+								.icon {
+									width: 40rpx;
+									height: 40rpx;
+									margin-right: 10rpx;
+									vertical-align:-10rpx;
+								}
+							}
+						}
 						input {
 							width: 450rpx;
 							height: 120rpx;
@@ -323,6 +368,9 @@
 							font-size: 28rpx;
 							color: #353943;
 							.placeholder {
+								color: #C3C9D4;
+							}
+							&.disabled {
 								color: #C3C9D4;
 							}
 						}

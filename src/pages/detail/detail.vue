@@ -2,7 +2,7 @@ this.files<template>
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
 		<view class="main card">
-			<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.bigImgUrl"></image>
+			<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
 			<view class="content">
 				<view class="mycard" v-if="!isSelf" @tap.stop="jumpMy">
 					<image class="icon" src="/static/images/float_icon_add@3x.png"></image>
@@ -60,7 +60,7 @@ this.files<template>
 					<text class="msg">我的人设</text>
 					<image class="share more" v-if="isSelf" @tap="toEdit('label')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
-				<view class="labelBox">
+				<view class="labelBox" v-if="labelInfo.length > 0">
 					<text class="label" v-for="(item, index) in labelInfo" :key="index">{{item.name}}</text>
 				</view>
 			</view>
@@ -73,7 +73,7 @@ this.files<template>
 					<text class="msg">工作经历</text>
 				</view>
 				<view class="litm" v-for="(item, index) in workInfo" v-if="index < showWorkNum || isSelf" :key="index">
-					<view class="date">{{item.start_time_desc}} - {{item.end_time_desc}}<image class="share" v-if="isSelf" @tap.stop="toEdit('work', item.id)" src="/static/images/deta_btn_edit@3x.png"></image></view>
+					<view class="date">{{item.start_time_desc}} - {{nowTime !== item.end_time_desc ? item.end_time_desc : '至今'}}<image class="share" v-if="isSelf" @tap.stop="toEdit('work', item.id)" src="/static/images/deta_btn_edit@3x.png"></image></view>
 					<view class="job">{{item.position}}</view>
 					<view class="company">{{item.name}}</view>
 				</view>
@@ -89,7 +89,7 @@ this.files<template>
 					<text class="msg">教育经历</text>
 				</view>
 				<view class="litm" v-for="(item, index) in educationsInfo" v-if="index < showEducationNum || isSelf" :key="index">
-					<view class="date">{{item.start_time_desc}} - {{item.end_time_desc}}<image class="share" v-if="isSelf"  @tap.stop="toEdit('education', item.id)"src="/static/images/deta_btn_edit@3x.png"></image></view>
+					<view class="date">{{item.start_time_desc}} - {{nowTime !== item.end_time_desc ? item.end_time_desc : '至今'}}<image class="share" v-if="isSelf"  @tap.stop="toEdit('education', item.id)"src="/static/images/deta_btn_edit@3x.png"></image></view>
 					<view class="school">{{item.name}}</view>
 				</view>
 				<button class="open" v-if="!isSelf" v-show="educationsInfo.length > 2" @tap="open(2)"><text v-show="showEducationNum === 2">展开查看更多</text><text v-show="showEducationNum > 2">收起</text></button>
@@ -121,6 +121,7 @@ this.files<template>
 </template>
 <script>
 	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike} from '@/api/pages/user'
+	import {formatTime} from '@/utils/index'
 	export default {
 		components: {
 	  },
@@ -136,7 +137,8 @@ this.files<template>
 				moreInfo: {},
 				showWorkNum: 2,
 				showEducationNum: 2,
-				checkedTextList: []
+				checkedTextList: [],
+				nowTime: ''
 			}
 		},
 		onLoad (option) {
@@ -235,6 +237,7 @@ this.files<template>
 				}
 			},
 			getUserUnfo () {
+				this.checkedTextList = []
 				return getUserInfoApi().then(res => {
 					this.userInfo = res.data
 					this.educationsInfo = res.data.other_info.education_info
@@ -245,15 +248,21 @@ this.files<template>
 					this.userInfo.other_info.realm_info.forEach(e => {
 						this.checkedTextList.push(e.name)
 					})
+					this.nowTime = formatTime(new Date(), 'YYYY-MM')
 				})
 			},                                                                                                                             
 			getOtherUserInfo () {
+				this.checkedTextList = []
 				return getUserInfo2Api(this.vkey).then(res => {
 					this.userInfo = res.data
 					this.educationsInfo = res.data.other_info.education_info,
 					this.workInfo = res.data.other_info.career_info
 					this.labelInfo = res.data.other_info.label_info
 					this.moreInfo = res.data.other_info.more_info
+					this.userInfo.other_info.realm_info.forEach(e => {
+						this.checkedTextList.push(e.name)
+					})
+					this.nowTime = formatTime(new Date(), 'YYYY-MM')
 				})
 			},
 			previewImg (index) {

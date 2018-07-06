@@ -12,7 +12,7 @@
 							<view class="name">{{info.nickname}}</view>
 							<view class="job">{{info.occupation}}</view>
 						</view>
-						<image class="headImg" :src="info.avatar_info.middleImgUrl"></image>
+						<image class="headImg" :src="info.avatar_info.smallImgUrl || '/static/images/new_pic_defaulhead.jpg'"></image>
 					</view>
 					<view class="con">
 						<view class="product"><image class="icon" src="/static/images/me_icon_company@2x.png"></image>{{info.company}}</view>
