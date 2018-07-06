@@ -5,7 +5,7 @@
 			<view class="head item">
 				<view class="itemCon">
 					<view class="left requst">头像</view>
-					<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath"></image></view>
+					<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath || '/static/images/new_pic_defaulhead.jpg'"></image></view>
 				</view>
 			</view>
 			<view class="item">
@@ -35,7 +35,7 @@
 					<view class="right">
 						<picker mode='region' @change="regionChange" :value="region">
 							<view class="picker">
-					      <text class="placeholder" v-show='region.length === 0'>请选择所在地</text>{{region[0]}}{{region[1]}}
+					      <text class="placeholder" v-show="region[0] === ''">请选择所在地</text>{{region[0]}}{{region[1]}}
 					    </view>
 						</picker>
 					</view>
@@ -123,7 +123,7 @@
 			<view class="title">个人签名</view>
 			<view class="item sign">
 				<view class="itemCon">
-					<textarea name="" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#B2B6C2" v-model="userInfo.sign"></textarea>
+					<textarea auto-height=true cursor-spacing="50" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#B2B6C2" v-model="userInfo.sign"></textarea>
 					<text class="number">{{userInfo.sign ? userInfo.sign.length : 0}}/25</text>
 				</view>
 			</view>
@@ -131,6 +131,7 @@
 		<section class="btn">
 			<button @tap.stop="saveUserInfo" class="light">保存资料</button>
 		</section>
+		<labelPop :isShow="showLablePop" :type="labelBox" @getLabel="getLabel" @close="closePop"></labelPop>
 	</view>
 </template>
 <script>
@@ -167,14 +168,16 @@
 				checkedIdList: '',
 				checkedTextList: [],
 				filePath: '',
+				careerId: ''
 			}
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
 			this.userInfo = this.$store.getters.userInfo
-			this.region = [this.userInfo.user_location]
+			this.region = [this.userInfo.company_location]
+			this.checkedTextList = []
 			if(this.userInfo && this.userInfo.avatar_info && this.userInfo.avatar_info.middleImgUrl){
-				this.filePath = this.userInfo.avatar_info.middleImgUrl
+				this.filePath = this.userInfo.avatar_info.smallImgUrl
 				let realm_info = this.userInfo.other_info.realm_info
 				let array = []
 				realm_info.forEach(e => {
@@ -231,6 +234,84 @@
 				})
 			},
 			saveUserInfo () {
+				if (this.userInfo.avatar_id === '') {
+					wx.showToast({
+					  title: '请选择头像',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
+				}
+				if (this.userInfo.nickname === '') {
+					wx.showToast({
+					  title: '请编辑姓名',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
+				}
+				if (this.userInfo.gender === '') {
+					wx.showToast({
+					  title: '请选择性别',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
+				}
+				if (this.careerId === '') {
+					wx.showToast({
+					  title: '请选择职业方向',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
+				}
+				if (this.checkedIdList === '') {
+					wx.showToast({
+					  title: '请选择擅长领域',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
+				}
+				if (this.userInfo.occupation === '') {
+					wx.showToast({
+					  title: '请编辑职业',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
+				}
+				if (this.userInfo.company === '') {
+					wx.showToast({
+					  title: '请编辑最近入职公司',
+					  icon: 'none',
+					  duration: 1000
+					})
+					return
+				}
+				if (this.userInfo.wechat !== '') {
+					let reg = /^[a-zA-Z][a-zA-Z0-9_-]{5,19}$/
+					if (!reg.test(this.userInfo.wechat)) {                                                                                      
+						wx.showToast({
+						  title: '微信号格式不正确',
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+				}
+				if (this.userInfo.email !== '') {
+					let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+					if (!reg.test(this.userInfo.email)) {                                                                                      
+						wx.showToast({
+						  title: '邮箱地址格式不正确',
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+				}
 				let user_location
 				if (this.region[1]) {
 					user_location = this.region[0] + this.region[1]
@@ -239,29 +320,39 @@
 				}
 				let data = {
 					avatar_id: this.userInfo.avatar_id,
-					nickname: this.userInfo.nickname,
+					nickname: this.userInfo.nickname.trim(),
 					gender: this.userInfo.gender,
 					user_location: user_location,
-					occupation: this.userInfo.occupation,
-					company: this.userInfo.company,
-					company_location: this.userInfo.company_location,
+					occupation: this.userInfo.occupation.trim(),
+					company: this.userInfo.company.trim(),
+					company_location: this.userInfo.company_location.trim(),
 					// mobile: this.userInfo.mobile,
-					wechat: this.userInfo.wechat,
-					email: this.userInfo.email,
-					sign: this.userInfo.sign,
-					occupation_label_id: this.careerId.toString(),
+					wechat: this.userInfo.wechat.trim(),
+					email: this.userInfo.email.trim(),
+					sign: this.userInfo.sign.trim(),
+					occupation_label_id: this.careerId.toString() || '',
 					realm_label_id: this.checkedIdList,
 				}
 				upDataUserInfoApi(data).then(res => {
+					console.log('成功了', res)
+
 					wx.navigateBack({
 						delta: 1
 					})
+				}).catch(e => {
+					wx.showToast({
+					  title: e.msg,
+					  icon: 'none',
+					  duration: 1000
+					})
+					console.log('错误了', e)
 				})
 			},
 			closePop () {
 				this.showLablePop = false
 			},
 			getLabel (a, b) {
+				console.log('xuanz le ', a, b)
 				this.checkedIdList = a
 				this.checkedTextList = b
 				this.showLablePop = false
@@ -401,7 +492,7 @@
 				}
 				&.sign {
 					height: 180rpx;
-					padding: 30rpx 50rpx;
+					padding: 20rpx 50rpx;
 					box-sizing: border-box;
 					.itemCon {
 						display: block;
@@ -410,8 +501,8 @@
 						width: 100%;
 						height: 74rpx;
 						font-size: 28rpx;
-						line-height: 1.4;
 						overflow:hidden;
+						min-height:74rpx;
 					}
 					.number {
 						float: right;

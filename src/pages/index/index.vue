@@ -147,230 +147,250 @@
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
-export default {
-  components: {
-    mptoast,
-    footerTab,
-    authorizePop
-  },
-  data () {
-    return { 
-      interval: null,
-      usersList: [],
-      userInfo: [],
-      toCreate: {
-        isToCreate: true,
-        num: 0
-      },
-
-      touchDot: 0,
-      time: 0,
-
-      nowIndex: 0,    // 当地卡片位置
-      moveData: {     // 滑动
-        isMove: false,
-        style: '',       //left or right
-      },
-      gdData : {        //第一次引导图
-        isGd: false,
-        step: 1
-      },  //
-      getPage: {       // 首页列表信息参数
-        count: 20,
-        occupation_label_id: '',
-        realm_label_id: '',
-      },                
-      isPop: false,     //遮罩
-      isCooling: false, //冷却
-      isShare: false,    //分享弹窗
-      coolTime: 123123123,//冷却倒计时
-      isEnd: false,   //翻完
-      isNext: true,  //翻页
-    }
-  },
-  methods: {
-    fromClick (e) {
-      App.methods.sendFormId({
-        fromId: e.mp.detail.formId,
-        fromAddress: '/pages/index'
-      })
+  export default {
+    components: {
+      mptoast,
+      footerTab,
+      authorizePop
     },
-    //是否第一次进入 展示引导图
-    isFirst(){
-      let that = this
-      try {
-        let value = wx.getStorageSync('pickCardFirst')
-        if (!value) {
-          that.gdData = {
-            isGd: true,
-            step: 1
-          }
-          that.isPop = true
-            // Do something with return value
-        }
-      } catch (e) {
-        // Do something when catch error
-      }
-    },
-    firstGDClick(){
-      if(this.gdData.step == 1){
-        this.gdData.step = 2
-      }else if(this.gdData.step == 2){
-        this.gdData = {
+    data () {
+      return { 
+        interval: null,
+        usersList: [],
+        userInfo: [],
+        toCreate: {
+          isToCreate: true,
+          num: 0
+        },
+
+        touchDot: 0,
+        time: 0,
+
+        nowIndex: 0,    // 当地卡片位置
+        moveData: {     // 滑动
+          isMove: false,
+          style: '',       //left or right
+        },
+        gdData : {        //第一次引导图
           isGd: false,
           step: 1
-        }
-        this.isPop = false
-
-
-        if(this.usersList.length<1){
-          this.isCreate()
-        }
-
+        },  //
+        getPage: {       // 首页列表信息参数
+          count: 20,
+          occupation_label_id: '',
+          realm_label_id: '',
+        },                
+        isPop: false,     //遮罩
+        isCooling: false, //冷却
+        isShare: false,    //分享弹窗
+        coolTime: 123123123,//冷却倒计时
+        isEnd: false,   //翻完
+        isNext: true,  //翻页
+        routeInfo: null
+      }
+    },
+    methods: {
+      fromClick (e) {
+        App.methods.sendFormId({
+          fromId: e.mp.detail.formId,
+          fromAddress: '/pages/index'
+        })
+      },
+      //是否第一次进入 展示引导图
+      isFirst(){
+        let that = this
         try {
-            wx.setStorageSync('pickCardFirst', '1')
-            //this.isPop = true
-            //this.toMeCreate=true
-        } catch (e) {    
+          let value = wx.getStorageSync('pickCardFirst')
+          if (!value) {
+            that.gdData = {
+              isGd: true,
+              step: 1
+            }
+            that.isPop = true
+              // Do something with return value
+          }
+        } catch (e) {
+          // Do something when catch error
         }
-      }
-    },
-    cloSahre(){
-      this.isPop = false
-      this.isShare=false
-    },
-    isShare2 () {
-      this.isPop = true
-      this.isShare = true
-    },
-    toDetail (item) {
-      wx.navigateTo({
-        url: `/pages/detail/main?vkey=${item.vkey}`
-      })
-    },
-    toFiltrate () {
-      wx.navigateTo({
-        url: `/pages/filtrate/main`
-      })
-    },
-    toSwop () {
-      wx.navigateTo({
-        url: `/pages/swopList/main`
-      })
-    },
-    
-    tStart (e) {
-      let that = this
-      that.touchDot = e.touches[0].pageX
-      that.interval =  setInterval(function () {  
-         that.time++;  
-      }, 100);  
+      },
+      firstGDClick(){
+        if(this.gdData.step == 1){
+          this.gdData.step = 2
+        }else if(this.gdData.step == 2){
+          this.gdData = {
+            isGd: false,
+            step: 1
+          }
+          this.isPop = false
 
-      that.moveData={
-        isMove: true,
-        style: '', 
-      }
-    },
-    tMove (e) {
-      let touchMove = e.touches[0].pageX
-      let touchDot = this.touchDot
-      let status = false
-      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot)); */
-      // 向左滑动    
 
-      if (touchMove - touchDot <= -80 && this.time < 10) {  
-        status = 'left'
-      }  
-      // 向右滑动  
-      else if (touchMove - touchDot >= 80 && this.time < 10) {  
-        status = 'right'
-      }  
+          if(this.usersList.length<1){
+            this.isCreate()
+          }
 
-      if(this.moveData.isMove && status){
-        this.likeOp(status)
-      }
-    },
-    tEnd (e) {
-      clearInterval(this.interval); // 清除setInterval  
-      this.time = 0;  
-    },
-    isCreate (){
-              console.log(3)
-
-      if(this.userInfo.step<9){
-              console.log(4)
-
+          try {
+              wx.setStorageSync('pickCardFirst', '1')
+              //this.isPop = true
+              //this.toMeCreate=true
+          } catch (e) {    
+          }
+        }
+      },
+      cloSahre(){
         this.isPop = false
-        this.toMeCreate=true
+        this.isShare=false
+      },
+      isShare2 () {
+        this.isPop = true
+        this.isShare = true
+      },
+      toDetail (item) {
         wx.navigateTo({
-          url: `/pages/createCard/main`
+          url: `/pages/detail/main?vkey=${item.vkey}`
         })
-      }else if(this.userInfo.step == 9){
-        this.toCreate.isToCreate = true
-      }
-    },
-    likeOp (status){
-      let that = this
-      console.log(status)
-      if(!that.isNext){return}
-      that.isNext = false
-      console.log(this.nowIndex,this.usersList.length)
-      let data = this.usersList[this.nowIndex]
-      let msg = {
-        to_uid: data.id, //data.unionid
-      }
-      if(status && status == 'right') {
-        indexLike(msg).then((res)=>{
-          console.log(res)
-          that.nowIndex ++
-          if(!that.toCreate.isToCreate){
-            that.isCreate()
-          }
-          that.moveData={
-            isMove: false,
-            style: 'right', 
-          }
+      },
+      toFiltrate () {
+        wx.navigateTo({
+          url: `/pages/filtrate/main`
+        })
+      },
+      toSwop () {
+        wx.navigateTo({
+          url: `/pages/swopList/main`
+        })
+      },
+      
+      tStart (e) {
+        let that = this
+        that.touchDot = e.touches[0].pageX
+        that.interval =  setInterval(function () {  
+           that.time++;  
+        }, 100);  
 
-          setTimeout(()=>{
-            that.moveData.style = ''
+        that.moveData={
+          isMove: true,
+          style: '', 
+        }
+      },
+      tMove (e) {
+        let touchMove = e.touches[0].pageX
+        let touchDot = this.touchDot
+        let status = false
+        /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot)); */
+        // 向左滑动    
+
+        if (touchMove - touchDot <= -80 && this.time < 10) {  
+          status = 'left'
+        }  
+        // 向右滑动  
+        else if (touchMove - touchDot >= 80 && this.time < 10) {  
+          status = 'right'
+        }  
+
+        if(this.moveData.isMove && status){
+          this.likeOp(status)
+        }
+      },
+      tEnd (e) {
+        clearInterval(this.interval); // 清除setInterval  
+        this.time = 0;  
+      },
+      isCreate (){
+                console.log(3)
+
+        if(this.userInfo.step<9){
+                console.log(4)
+
+          this.isPop = false
+          this.toMeCreate=true
+          wx.navigateTo({
+            url: `/pages/createCard/main`
+          })
+        }else if(this.userInfo.step == 9){
+          this.toCreate.isToCreate = true
+        }
+      },
+      likeOp (status){
+        let that = this
+        console.log(status)
+        if(!that.isNext){return}
+        that.isNext = false
+        console.log(this.nowIndex,this.usersList.length)
+        let data = this.usersList[this.nowIndex]
+        let msg = {
+          to_uid: data.id, //data.unionid
+        }
+        if(status && status == 'right') {
+          indexLike(msg).then((res)=>{
+            console.log(res)
+            that.nowIndex ++
+            if(!that.toCreate.isToCreate){
+              that.isCreate()
+            }
+            that.moveData={
+              isMove: false,
+              style: 'right', 
+            }
+
+            setTimeout(()=>{
+              that.moveData.style = ''
+              that.isNext = true
+            },800)
+
+          },(res)=>{
+            if(res.http_status == 400 && res.code == 99){
+              that.isCooling = true
+            }
+
+            console.log(res)
+            that.$mptoast(res.msg)
             that.isNext = true
-          },800)
+          })
+        }else if(status && status == 'left'){
+          indexUnlike(msg).then((res)=>{
+            that.moveData = {
+              isMove: false,
+              style: 'left', 
+            }
+            that.nowIndex ++
+            that.toCreate.num++
 
-        },(res)=>{
-          if(res.http_status == 400 && res.code == 99){
-            that.isCooling = true
-          }
+            setTimeout(()=>{
+              that.moveData.style = ''
+              that.isNext = true
+            },800)
 
-          console.log(res)
-          that.$mptoast(res.msg)
-          that.isNext = true
-        })
-      }else if(status && status == 'left'){
-        indexUnlike(msg).then((res)=>{
-          that.moveData = {
-            isMove: false,
-            style: 'left', 
-          }
-          that.nowIndex ++
-          that.toCreate.num++
-
-          setTimeout(()=>{
-            that.moveData.style = ''
+            if(that.toCreate.num > 2 && !that.toCreate.isToCreate){
+              that.isCreate()
+            }
+          },(res)=>{
+            console.log(res)
+            that.$mptoast(res.msg)
             that.isNext = true
-          },800)
+          })
+        } 
 
-          if(that.toCreate.num > 2 && !that.toCreate.isToCreate){
-            that.isCreate()
-          }
-        },(res)=>{
-          console.log(res)
-          that.$mptoast(res.msg)
-          that.isNext = true
-        })
-      } 
+        if(this.usersList.length-this.nowIndex == 1){
+          console.log('next============todo=====')
+          getIndexUsers(this.getPage).then((res)=>{
+            if(res.http_status == 200){ 
+              if(res.data.length>1){
+                that.isEnd = true
+              }
+            }else {
+              this.$mptoast(res.msg)
+            }
 
-      if(this.usersList.length-this.nowIndex == 1){
-        console.log('next============todo=====')
+            this.usersList = res.data
+            this.nowIndex = 0
+            if(this.usersList.length==this.nowIndex){
+              this.$mptoast('没有更多名片')
+            }
+          })
+        }
+      },
+
+      getIndexList(){
         getIndexUsers(this.getPage).then((res)=>{
           if(res.http_status == 200){ 
             if(res.data.length>1){
@@ -386,96 +406,71 @@ export default {
             this.$mptoast('没有更多名片')
           }
         })
-      }
-    },
+      },
+      //转换时分秒
+      transformTime(s){
+        if(!s){return 0}
 
-    getIndexList(){
-      getIndexUsers(this.getPage).then((res)=>{
-        if(res.http_status == 200){ 
-          if(res.data.length>1){
-            that.isEnd = true
-          }
-        }else {
-          this.$mptoast(res.msg)
-        }
-
-        this.usersList = res.data
-        this.nowIndex = 0
-        if(this.usersList.length==this.nowIndex){
-          this.$mptoast('没有更多名片')
-        }
-      })
-    },
-    //转换时分秒
-    transformTime(s){
-      if(!s){return 0}
-
-      let t;
-      if(s > -1){
-          let hour = Math.floor(s/3600);
-          let min = Math.floor(s/60) % 60;
-          let sec = s % 60;
-          if(hour < 10) {
-              t = '0'+ hour + ":";
-          } else {
-              t = hour + ":";
-          }
-
-          if(min < 10){t += "0";}
-          t += min + ":";
-          if(sec < 10){t += "0";}
-          t += sec.toFixed(2);
-      }
-      return t;
-    },
-  },
-  onShareAppMessage: function (res) {
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-    if (res.from === 'button') {
-      // 来自页面内转发按钮
-    }
-    return {
-      title: '自定义转发标题',
-      path: '/pages/index/main?type=share'
-    }
-  },
-  onLoad(res) {
-    let that = this
-    console.log(App)
-    authorizePop.methods.checkLogin().then(res => {
-      getIndexUsers(that.getPage).then((res)=>{
-        that.usersList = res.data
-        getUserInfoApi().then(data => {
-          that.userInfo = data.data
-
-          console.log('========',data)
-          if(data.data.step!=9){
-            that.toCreate.isToCreate = false
-              let value = wx.getStorageSync('pickCardFirst')
-            if(res.data.length<1 && value){
-              that.isCreate()
+        let t;
+        if(s > -1){
+            let hour = Math.floor(s/3600);
+            let min = Math.floor(s/60) % 60;
+            let sec = s % 60;
+            if(hour < 10) {
+                t = '0'+ hour + ":";
+            } else {
+                t = hour + ":";
             }
-          }
-        }).catch(e => {
-          console.log(e)
+
+            if(min < 10){t += "0";}
+            t += min + ":";
+            if(sec < 10){t += "0";}
+            t += sec.toFixed(2);
+        }
+        return t;
+      },
+    },
+   
+    onLoad (option) {
+      let that = this
+      authorizePop.methods.checkLogin().then(res => {
+        getIndexUsers(that.getPage).then((res)=>{
+          that.usersList = res.data
+          getUserInfoApi().then(data => {
+            that.userInfo = data.data
+            console.log('========',data)
+            if(data.data.step!=9){
+              that.toCreate.isToCreate = false
+                let value = wx.getStorageSync('pickCardFirst')
+              if(res.data.length<1 && value){
+                that.isCreate()
+              }
+            }
+          }).catch(e => {
+            console.log(e)
+          })
         })
       })
-    })
-
-
-
-    //筛选
-    if(res.from && res.from == 'filtrate'){
-      this.getPage.occupation_label_id = res.occupation_label_id
-      this.getPage.realm_label_id = res.realm_label_id
-    }
-    that.isFirst()
-  },
-  onShow (res) {
+      //筛选
+      if(option.from && option.from == 'filtrate'){
+        this.getPage.occupation_label_id = option.occupation_label_id
+        this.getPage.realm_label_id = option.realm_label_id
+      }
+      that.isFirst()
+    },
+    onShareAppMessage: function (res) {
+      wx.showShareMenu({
+        withShareTicket: true
+      })
+      if (res.from === 'button') {
+        // 来自页面内转发按钮
+      }
+      return {
+        title: '自定义转发标题',
+        path: '/pages/index/main?type=share'
+      }
+    },
   }
-}
 </script>
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");

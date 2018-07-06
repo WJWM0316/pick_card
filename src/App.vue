@@ -126,18 +126,7 @@ export default {
       wx.setStorageSync('fromIdArr', fromIdArr)
     }
   },
-  onShow (res){
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-    console.log('test===>onShow', res)
-    if(res&&res.shareTicket){
-      this.test = res.shareTicket
 
-      this.checkLogin()
-
-    } 
-  },
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch (res) {
     // this.checkLogin()
@@ -149,7 +138,18 @@ export default {
       }
     })*/
   },
-
+  onShow (option) {
+    console.log('test===>onShow', option)
+    wx.setStorageSync('routeInfo', option)
+    wx.showShareMenu({
+      withShareTicket: true
+    })
+    
+    if(option && option.shareTicket){
+      this.test = option.shareTicket
+      this.checkLogin()
+    } 
+  },
    // 捕获 app error
   onError (err) {
     console.log(err)
