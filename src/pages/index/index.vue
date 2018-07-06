@@ -87,7 +87,7 @@
         　
       </view>
     </view>
-    <!-- <view class="footer">
+    <view class="footer">
       <view class="left">
         <view class="name cur" @tap="isCreate">Pick</view>
         <view class="name" @tap="toCardHolder">名片夹</view>
@@ -104,10 +104,10 @@
           <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
       </view>
-    </view> -->
+    </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <footerTab :type=1></footerTab>
+    <!-- <footerTab :type=1 ></footerTab> -->
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -148,6 +148,7 @@
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
 export default {
+
   components: {
     mptoast,
     footerTab,
@@ -176,7 +177,7 @@ export default {
         step: 1
       },  //
       getPage: {       // 首页列表信息参数
-        count: 20,
+        count: 10,
         occupation_label_id: '',
         realm_label_id: '',
       },                
@@ -186,9 +187,13 @@ export default {
       coolTime: 123123123,//冷却倒计时
       isEnd: false,   //翻完
       isNext: true,  //翻页
+
+      systemInfo: {}, //
+      beforeCreateStep: 0,
     }
   },
   methods: {
+    //测试去创建
     testCreate(){
       wx.navigateTo({
         url: `/pages/createCard/main`
@@ -226,12 +231,9 @@ export default {
           step: 1
         }
         this.isPop = false
-
-
         if(this.usersList.length<1){
           this.isCreate()
         }
-
         try {
             wx.setStorageSync('pickCardFirst', '1')
             //this.isPop = true
@@ -248,6 +250,8 @@ export default {
       this.isPop = true
       this.isShare = true
     },
+
+    //跳转====
     toDetail (item) {
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
@@ -263,6 +267,20 @@ export default {
         url: `/pages/swopList/main`
       })
     },
+
+    isCreate (){
+      if(this.userInfo.step!=9){
+        this.isPop = false
+        this.toMeCreate=true
+        wx.navigateTo({
+          url: `/pages/createCard/main`
+        })
+      }else if(this.userInfo.step == 9){
+        this.toCreate.isToCreate = true
+      }
+    },
+    //跳转====
+
     tStart (e) {
       let that = this
       that.touchDot = e.touches[0].pageX
@@ -297,113 +315,134 @@ export default {
       clearInterval(this.interval); // 清除setInterval  
       this.time = 0;  
     },
-    isCreate (){
-      console.log(111)
-      if(this.userInfo.step!=9){
-        this.isPop = false
-        this.toMeCreate=true
-        wx.navigateTo({
-          url: `/pages/createCard/main`
-        })
-      }else if(this.userInfo.step == 9){
-        this.toCreate.isToCreate = true
-      }
-    },
+    
+    //左右划操作
     likeOp (status){
-      let that = this
-      console.log(status,that.isNext)
-      if(!that.isNext){return}
-      that.isNext = false
-      console.log(this.nowIndex,this.usersList.length)
-      let data = this.usersList[this.nowIndex]
-      let msg = {
-        to_uid: data.id, //data.unionid
-      }
+      console.log(this.nowIndex,this.usersList.length,status,this.isNext)
+      if(!this.isNext){return}
+      this.isNext = false
+      let that = this,
+          data = this.usersList[this.nowIndex],
+          beforeCreateStep = this.beforeCreateStep,
+          step = this.userInfo.step,
+          msg = {
+            to_uid: data.id, //data.unionid
+          };
       if(status && status == 'right') {
-        indexLike(msg).then((res)=>{
-          console.log(res)
-          that.nowIndex ++
-          if(!that.toCreate.isToCreate){
-            that.isCreate()
-          }
-          that.moveData={
-            isMove: false,
-            style: 'right', 
-          }
-
-          setTimeout(()=>{
-            that.moveData.style = ''
-            that.isNext = true
-          },800)
-        },(res)=>{
-          if(res.http_status == 400 && res.code == 99){
-            that.isCooling = true
-          }
-
-          console.log(res)
-          that.$mptoast(res.msg)
-          that.isNext = true
-        })
+        if(beforeCreateStep<3&&step<9){
+          that.firstOp(status);
+        }else {
+          that.like(msg);
+        }
       }else if(status && status == 'left'){
-        indexUnlike(msg).then((res)=>{
-          that.moveData = {
-            isMove: false,
-            style: 'left', 
-          }
-          that.nowIndex ++
-          that.toCreate.num++
-
-          setTimeout(()=>{
-            that.moveData.style = ''
-            that.isNext = true
-          },800)
-
-          if(that.toCreate.num > 2 && !that.toCreate.isToCreate){
-            that.isCreate()
-          }
-        },(res)=>{
-          console.log(res)
-          that.$mptoast(res.msg)
-          that.isNext = true
-        })
+        if(beforeCreateStep<3&&step<9){
+          that.firstOp(status);
+        }else {
+          that.unlike(msg);
+        }
       } 
-
       if(this.usersList.length-this.nowIndex == 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
-          if(res.http_status == 200){ 
-            if(res.data.length<1){
-              that.isEnd = true
-            }
-          }else {
-            this.$mptoast(res.msg)
+          if(res.data.length<1){
+            that.isEnd = true;
           }
-
-          this.usersList = res.data
-          this.nowIndex = 0
-          if(this.usersList.length==this.nowIndex){
-            this.$mptoast('没有更多名片')
+          this.usersList = res.data;
+          this.nowIndex = 0;
+        },(res)=>{
+          if(res.http_status == 400 && res.code == 99){
+            that.isCooling = true;
+            that.interval = setInterval(()=>{
+              that.transformTime(res.data.rest_time);
+              res.data.rest_time--;
+            },1000);
           }
+          this.$mptoast(res.msg);
         })
       }
     },
-    getIndexList(){
-      getIndexUsers(this.getPage).then((res)=>{
-        if(res.http_status == 200){ 
-          if(res.data.length<1){
-            that.isEnd = true
-          }
-        }else {
-          this.$mptoast(res.msg)
-        }
+    firstOp(type){
+      let that = this,
+          beforeCreateStep = this.beforeCreateStep;
 
-        this.usersList = res.data
-        this.nowIndex = 0
-        if(this.usersList.length==this.nowIndex){
-          this.$mptoast('没有更多名片')
+      beforeCreateStep++;
+      if(beforeCreateStep == 3){
+        wx.setStorageSync('beforeCreateStep', beforeCreateStep);
+        that.isNext = true;
+        that.isCreate()
+
+        return
+      }
+      if(type=='left'){
+        that.moveData={
+          isMove: false,
+          style: 'left', 
         }
+      }else {
+        that.moveData={
+          isMove: false,
+          style: 'right', 
+        }
+      }
+      that.nowIndex ++;
+      this.beforeCreateStep = beforeCreateStep;
+
+      setTimeout(()=>{
+        that.moveData.style = '';
+        that.isNext = true;
+      },800)
+    },
+    like(msg){
+      let that = this;
+      indexLike(msg).then((res)=>{
+        console.log(res)
+        that.nowIndex ++
+        if(!that.toCreate.isToCreate){
+          that.isCreate()
+        }
+        that.moveData={
+          isMove: false,
+          style: 'right', 
+        }
+        setTimeout(()=>{
+          that.moveData.style = ''
+          that.isNext = true
+        },800)
+      },(res)=>{
+        if(res.http_status == 400 && res.code == 99){
+          that.isCooling = true
+          that.transformTime(res.data.rest_time)
+        }
+        that.$mptoast(res.msg)
+        that.isNext = true
       })
     },
+
+    unlike(msg){
+      let that = this
+      indexUnlike(msg).then((res)=>{
+        that.moveData = {
+          isMove: false,
+          style: 'left', 
+        }
+        that.nowIndex ++
+        that.toCreate.num++
+
+        setTimeout(()=>{
+          that.moveData.style = ''
+          that.isNext = true
+        },800)
+
+        if(that.toCreate.num > 2 && !that.toCreate.isToCreate){
+          that.isCreate()
+        }
+      },(res)=>{
+        console.log(res)
+        that.$mptoast(res.msg)
+        that.isNext = true
+      })
+    },
+
     //转换时分秒
     transformTime(s){
       if(!s){return 0}
@@ -422,10 +461,15 @@ export default {
           if(min < 10){t += "0";}
           t += min + ":";
           if(sec < 10){t += "0";}
-          t += sec.toFixed(2);
+          t += sec;
       }
-      return t;
+
+      this.coolTime = t
+
+
+      //return t;
     },
+
   },
   onShareAppMessage: function (res) {
     wx.showShareMenu({
@@ -440,17 +484,28 @@ export default {
     }
   },
   onLoad(res) {
-    let that = this
+    let that = this,
+        value = wx.getStorageSync('pickCardFirst'),
+        beforeCreateStep =wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
+
+    that.beforeCreateStep = beforeCreateStep;
+
+    wx.getSystemInfo({
+      success: function(res) {
+        that.systemInfo = res
+        console.log(res)
+      }
+    })
     authorizePop.methods.checkLogin().then(res => {
       getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
         getUserInfoApi().then(data => {
           that.userInfo = data.data
+          that.userInfo.step = 3
 
           console.log('========',data)
           if(data.data.step!=9){
             that.toCreate.isToCreate = false
-              let value = wx.getStorageSync('pickCardFirst')
             if(res.data.length<1 && value){
               that.isCreate()
             }
@@ -458,10 +513,17 @@ export default {
         }).catch(e => {
           console.log(e)
         })
+      },(res)=>{
+        if(res.http_status == 400 && res.code == 99){
+          that.isCooling = true
+          that.interval = setInterval(()=>{
+            that.transformTime(res.data.rest_time)
+            res.data.rest_time --
+          },1000);
+        }
+        this.$mptoast(res.msg)
       })
     })
-
-
 
     //筛选
     if(res.from && res.from == 'filtrate'){
@@ -480,6 +542,14 @@ export default {
   .container {
     height: 100vh;
     background:rgba(250,251,252,1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    &.ten {
+      .content {
+        top: -20rpx;
+      }
+    }
   }
   .createMe {
     width:670rpx;
@@ -630,6 +700,11 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
     .right {
       display: flex;
       flex-direction: row;
