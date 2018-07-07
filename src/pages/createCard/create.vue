@@ -31,6 +31,8 @@
           <image class="" src="/static/images/new_btn_female_sel@3x.png" v-if="firstData.gender == 2"></image>
           <image class="" src="/static/images/new_btn_female_nor@3x.png" v-else></image>
         </view>
+
+        gender->{{firstData.gender}}
       </view>
     </view>
 
@@ -90,7 +92,8 @@
         <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap="clo"></image></view>
         <view class="ip_cont">
           <view class="ipt_blo">
-            <text class="getcode" @tap="sms">获取验证码</text>
+            <text class="getcode" @tap="sms" v:if="smsCli">获取验证码</text>
+            <text class="getcode" v:else >重新获取{{bindPhone.time}}s</text>
             <input placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  maxlength="11" />
           </view>
           <view class="ipt_blo">
@@ -98,7 +101,7 @@
           </view>
           <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
           <button class="ip_btn" @click="toCode">完成绑定</button>
-          <view class="hint_2">点击快速绑定手机号码 > ></view>
+          <!-- <view class="hint_2">点击快速绑定手机号码 > ></view> -->
         </view>
       </view>
     </view>
@@ -144,6 +147,7 @@
     },
     data () {
       return {
+        interval: null,
         listData: [],  //第二步
         focus: false,
         firstData: {
@@ -177,9 +181,11 @@
           live: [],
         },
         bindPhone: {
-          isPh: false,
+          isPh: true,
           number: '',
-          code: ''
+          code: '',
+          smsCli: true,
+          time: 60,
         },
         nowNum : 0,
         isIp: false,
@@ -191,6 +197,15 @@
     computed: {
     },
     methods: {
+      isPoneAvailable(str) {
+        let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!myreg.test(str)) {
+            return false;
+        } else {
+            return true;
+        }
+      },
+
       clo(){
         this.bindPhone.isPh = false
       },
@@ -315,14 +330,7 @@
           that.firstData.gender = res
         }
       },
-      toCode () {
-        this.thirdPost(2)
-        this.bindPhone = {
-          isPh: false,
-          number: '',
-          code: ''
-        }
-      },
+
       toNext (num) {
         console.log('toNext',num)
         let that = this,
@@ -395,20 +403,65 @@
           }
         }
       }, 
+      toCode () {
+        let that = this,
+            next = that.isPoneAvailable(data.mobile);
+
+        if(!next){
+          that.$mptoast('手机格式不对')
+          return
+        }
+
+        if(that.bindPhone.code.length<1){
+          that.$mptoast('验证码不能为空')
+          return
+        }
+
+
+        this.thirdPost(2)
+        this.bindPhone = {
+          isPh: false,
+          number: '',
+          code: '',
+          smsCli: true,
+          time: 60,
+        }
+      },
       //  
       iphoneOp(){
         this.isIp = true
       },
+      phoneCountDown(){
+        let that = this;
+
+        that.interval(()=>{
+          if(that.bindPhone.time==0){
+            clearInterval(that.interval)
+            that.bindPhone.smsCli = true
+          }
+          that.bindPhone.time -= 1 
+        },1000)
+      },
       sms() {
         console.log('获取验证码')
-        let data = {
-          mobile : this.bindPhone.number
+        let that = this,
+            data = {
+              mobile : that.bindPhone.number
+            },
+            next = that.isPoneAvailable(data.mobile);
+
+        if(next){
+          smsApi(data).then((res)=>{
+            that.bindPhone.smsCli = false
+            that.phoneCountDown();
+            console.log(res)
+          })
+        }else {
+          that.$mptoast('手机格式不对')
         }
-        smsApi(data).then((res)=>{
-          console.log(res)
-        })
-        let that = this
+        
       },
+
       upLoad () {
         const info = wx.getStorageSync('cutImgInfo')
         if (info.path) {

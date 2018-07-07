@@ -105,9 +105,9 @@
         </view>
       </view>
     </view> -->
-    <authorize-pop :isIndex='true' @isFirst="isFirst"></authorize-pop>
+    <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <footerTab :type=1 ></footerTab>
+     <footerTab :type=1 ></footerTab> 
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -126,7 +126,7 @@
 
         <view class="bot_cont">
           <image class="bot_img bot_right_icon1" src="/static/images/dafult_icom_like@3x.png"  v-if="gdData.step==1"></image>
-
+          
           <image class="bot_img bot_left_icon1" src="/static/images/dafult_icom_unlike@3x.png" v-else></image>
         </view>
       </view>
