@@ -16,7 +16,7 @@
           <view class="up_wrap">
             <image class="up_img" src="/static/images/as.png"></image>
           </view>
-          <image class="pic" :src="filePath"></image>
+          <image class="pic" :src="filePath  || '/static/images/new_pic_defaulhead.jpg'"></image>
         </view>
       </view>
       <!-- //focus="{{focus}}" -->
@@ -31,8 +31,6 @@
           <image class="" src="/static/images/new_btn_female_sel@3x.png" v-if="firstData.gender == 2"></image>
           <image class="" src="/static/images/new_btn_female_nor@3x.png" v-else></image>
         </view>
-
-        gender->{{firstData.gender}}
       </view>
     </view>
 
