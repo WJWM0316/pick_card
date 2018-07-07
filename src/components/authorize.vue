@@ -5,8 +5,7 @@
 			<image class="head" src="/static/images/img.jpg"></image>
 			<view class="title">欢迎来到 Pick！趣名片<br>使用名片功能需要获取你的授权</view>
 			<view class="msg">Pick！趣名片向你保证不会将你的信息泄 露给第三方，仅用于读取名片夹的信息和 名片信息的展示。</view>
-			<button class="btn" @getuserinfo="onGetUserinfo" 
-open-type="getUserInfo" type="primary">授权</button>
+			<button class="btn" @getuserinfo="onGetUserinfo" open-type="getUserInfo" type="primary">授权</button>
 		</view>
 	</view>
 </template>
@@ -15,6 +14,7 @@ open-type="getUserInfo" type="primary">授权</button>
 	import {getUserInfoApi,getIndexUsers} from '@/api/pages/user'
 	import { mapState } from 'vuex'
 	import Vue from 'vue'
+	import index from '@/pages/index'
 	export default {
 		props: {
 			routeInfo: {
@@ -40,7 +40,7 @@ open-type="getUserInfo" type="primary">授权</button>
 			},
 		},
 		mounted () {
-
+			console.log(index, 2222222222)
 		},
 		methods: {
 			checkLogin () {

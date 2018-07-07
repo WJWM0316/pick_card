@@ -12,7 +12,7 @@
 					<view>
 						<text class="name">{{userInfo.nickname}}</text>
 						<image class="sex" src="/static/images/details_icon_female@3x.png" v-if="userInfo.gender === 2"></image>
-						<image class="sex" src="/static/images/details_icon_man@3x.png"></image>
+						<image class="sex" src="/static/images/details_icon_man@3x.png" v-if="userInfo.gender === 1"></image>
 					</view>
 					<image class="share" v-if="isSelf" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')"></image>
 				</view>
@@ -98,14 +98,14 @@
 			</view>
 		</view>	
 		<!-- 更多介紹 -->
-		<view class="other card more" v-if="moreInfo.content !== '' || moreInfo.img_info.length > 0">
+		<view class="other card more" v-if="moreInfo.content !== '' || moreInfo.img_info.length > 0 || isSelf">
 			<view class="content">
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_more@3x.png"></image>
 					<text class="msg">更多介紹</text>
 					<image class="share more" v-if="isSelf" @tap="toEdit('more')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
-				<view class="article">{{moreInfo.content}}</view>
+				<view class="article" v-if="moreInfo.content">{{moreInfo.content}}</view>
 				<view class="imgBox" v-if="moreInfo.img_info && moreInfo.img_info.length > 0">
 					<image  v-for="(i, index) in moreInfo.img_info" :key="index" class="img" :src="i.smallImgUrl" @tap.stop="previewImg(index)"></image>
 				</view>

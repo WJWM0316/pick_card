@@ -77,7 +77,7 @@
 			</view>
 			<view class="item">
 				<view class="itemCon">
-					<view class="left requst">最近入职公司</view>
+					<view class="left requst">最近入任职公司</view>
 					<view class="right">
 						<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2"  v-model="userInfo.company">
 					</view>
@@ -234,6 +234,7 @@
 				})
 			},
 			saveUserInfo () {
+				let title = ''
 				if (this.userInfo.avatar_id === '') {
 					wx.showToast({
 					  title: '请选择头像',
@@ -243,8 +244,13 @@
 					return
 				}
 				if (this.userInfo.nickname === '' || this.userInfo.nickname.length < 2) {
+					if (this.userInfo.nickname === '') {
+						title = '请填写姓名'
+					} else if (this.userInfo.nickname.length < 2 || this.userInfo.nickname.length > 10) {
+						title = '姓名需为2-10个字'
+					}
 					wx.showToast({
-					  title: '姓名需为2-10个字',
+					  title: title,
 					  icon: 'none',
 					  duration: 1000
 					})
@@ -274,17 +280,27 @@
 					})
 					return
 				}
-				if (this.userInfo.occupation === '' || this.userInfo.occupation.length < 2) {
+				if (this.userInfo.occupation === '' || this.userInfo.occupation.length < 2 || this.userInfo.occupation.length > 20) {
+					if (this.userInfo.occupation === '') {
+						title = '请填写职位'
+					} else if (this.userInfo.occupation.length < 2 || this.userInfo.occupation.length > 20) {
+						title = '职位需为2-20个字'
+					}
 					wx.showToast({
-					  title: '职位需为2-20个字',
+					  title: title,
 					  icon: 'none',
 					  duration: 1000
 					})
 					return
 				}
-				if (this.userInfo.company === '' || this.userInfo.company.length < 2 || this.userInfo.company.length > 20) {
+				if (this.userInfo.company === '' || this.userInfo.company.length < 2 || this.userInfo.company.length > 50) {
+					if (this.userInfo.company === '') {
+						title = '请填写最近任职公司'
+					} else if (this.userInfo.company.length < 2 || this.userInfo.company.length > 50) {
+						title = '公司需为2-50个字'
+					}
 					wx.showToast({
-					  title: '公司需为2-20个字',
+					  title: title,
 					  icon: 'none',
 					  duration: 1000
 					})
@@ -330,7 +346,6 @@
 				}
 				upDataUserInfoApi(data).then(res => {
 					console.log('成功了', res)
-
 					wx.navigateBack({
 						delta: 1
 					})
@@ -438,7 +453,7 @@
 						text-align: right;
 						overflow: hidden;
 						input {
-							width: 450rpx;
+							width: 400rpx;
 							height: 120rpx;
 							line-height: 120rpx;
 						}

@@ -151,24 +151,14 @@
 				let title = ''
 				let isForbid = false
 				if (this.option.type == 'education') {
-					if (this.info.name === '') {
-						title = '请填写学校名称'
-						wx.showToast({
-						  title: title,
-						  icon: 'none',
-						  duration: 1000
-						})
-						return
-					} else if (this.info.name.length < 2) {
-						title = '学校名称需为2-100个字'
-						wx.showToast({
-						  title: title,
-						  icon: 'none',
-						  duration: 1000
-						})
-						return
-					} else if (this.info.name.length > 100) {
-						title = '学校名称最多输入100个字'
+					if (this.info.name === '' || this.info.name.length < 2 || this.info.name.length > 100) {
+						if (this.info.name === '') {
+							title = '请填写学校名称'
+						} else if (this.info.name.length < 2) {
+							title = '学校名称需为2-100个字'
+						} else if (this.info.name.length > 100) {
+							title = '学校名称最多输入100个字'
+						}
 						wx.showToast({
 						  title: title,
 						  icon: 'none',
@@ -196,24 +186,14 @@
 					}
 				}
 				if (this.option.type == 'work') {
-					if (this.info.name === '') {
-						title = '请填写公司名称'
-						wx.showToast({
-						  title: title,
-						  icon: 'none',
-						  duration: 1000
-						})
-						return
-					} else if (this.info.name.length < 2) {
-						title = '公司名称需为2-50个字'
-						wx.showToast({
-						  title: title,
-						  icon: 'none',
-						  duration: 1000
-						})
-						return
-					} else if (this.info.name.length > 50) {
-						title = '公司名称最多输入50个字'
+					if (this.info.name === '' || this.info.name.length < 2 || this.info.name.length > 50) {
+						if (this.info.name === '') {
+							title = '请填写公司名称'
+						} else if (this.info.name.length < 2) {
+							title = '公司名称需为2-50个字'
+						} else if (this.info.name.length > 50) {
+							title = '公司名称最多输入50个字'
+						}
 						wx.showToast({
 						  title: title,
 						  icon: 'none',
@@ -221,8 +201,14 @@
 						})
 						return
 					}
-					if (this.info.position === '') {
-						title = '请选择职业'
+					if (this.info.position === '' || this.info.position.length < 2 || this.info.position.length > 20) {
+						if (this.info.position === '') {
+							title = '请填写职位'
+						} else if (this.info.position.length < 2) {
+							title = '职位名称需为2-20个字'
+						} else if (this.info.position.length > 20) {
+							title = '职位名称最多输入20个字'
+						}
 						wx.showToast({
 						  title: title,
 						  icon: 'none',
@@ -249,8 +235,22 @@
 						return
 					}
 				}
-				
-				
+				if ((this.info.start_time_desc > this.info.end_time_desc && this.info.end_time_desc) || (this.isNow && this.info.start_time_desc > this.nowTime)) {
+					wx.showToast({
+						title: '开始时间不能大于于结束时间',
+						icon: 'none'
+					})
+					this.info.start_time_desc = ''
+					return
+				}
+				if (this.info.start_time_desc > this.info.end_time_desc && this.info.start_time_desc) {
+					wx.showToast({
+						title: '结束时间不能小于开始时间',
+						icon: 'none'
+					})
+					this.info.end_time_desc = ''
+					this.nowTime = false
+				}
 				function saveFun () {
 					wx.showToast({
 						title: '保存成功',
@@ -310,29 +310,40 @@
 				}
 			},
 			remove () {
-				function removeFun () {
-					wx.showToast({
-						title: '删除成功',
-						icon: 'success',
-						success: function () {
-							setTimeout(function () {
-								wx.navigateBack({
-									delta: 1
+				let _this = this
+				wx.showModal({
+					title: '提示',
+					content: '是否确定删除',
+					success: function (res) {
+						if (res.confirm) {
+				      function removeFun () {
+								wx.showToast({
+									title: '删除成功',
+									icon: 'success',
+									success: function () {
+										setTimeout(function () {
+											wx.navigateBack({
+												delta: 1
+											})
+										}, 1000)
+									}
 								})
-							}, 1000)
-						}
-					})
-				}
-				const {type, id} = this.option
-				if (type === 'education') {
-					deleteEducationsInfoApi({id}).then(res => {
-						removeFun()
-					})
-				} else if (type === 'work') {
-					deleteWorkInfoApi({id}).then(res => {
-						removeFun()
-					})
-				}	
+							}
+							const {type, id} = _this.option
+							if (type === 'education') {
+								deleteEducationsInfoApi({id}).then(res => {
+									removeFun()
+								})
+							} else if (type === 'work') {
+								deleteWorkInfoApi({id}).then(res => {
+									removeFun()
+								})
+							}
+				    } else if (res.cancel) {
+				      console.log('用户点击取消')
+				    }
+					}
+				})
 			},
 			getInfo () {
 				console.log(this.userInfo.other_info)
@@ -349,28 +360,13 @@
 					}
 				})
 			},
-			check () {
-			},
 			startDateChange (e) {
 				this.info.start_time_desc = e.mp.detail.value
 				console.log(this.info.start_time_desc, this.info.end_time_desc, this.info.start_time_desc > this.info.end_time_desc)
-				if (this.info.start_time_desc > this.info.end_time_desc && this.info.end_time_desc) {
-					wx.showToast({
-						title: '开始时间不能大于于结束时间',
-						icon: 'none'
-					})
-					this.info.start_time_desc = ''
-				}
+				
 			},
 			endDateChange (e) {
 				this.info.end_time_desc = e.mp.detail.value
-				if (this.info.start_time_desc > this.info.end_time_desc && this.info.start_time_desc) {
-					wx.showToast({
-						title: '结束时间不能小于开始时间',
-						icon: 'none'
-					})
-					this.info.end_time_desc = ''
-				}
 			}
 		}
 			

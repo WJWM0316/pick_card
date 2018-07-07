@@ -1,6 +1,6 @@
 <template>
 	<view class="characters" v-if="list.length>0">
-		<view class='occupation' v-show="pageIndex === 0">
+		<view class='occupation' v-if="pageIndex === 0">
 			<view class="title">
 				<view class="titlecon">
 					已选择标签
@@ -51,7 +51,7 @@
 				<button class="addLabel" @tap="addLabel(list[2].id)"><text class="add">+</text>添加自定义职业标签</button>
 			</view>
 		</view>
-		<view class='occupation' v-show="pageIndex === 1">
+		<view class='occupation' v-if="pageIndex === 1">
 			<view class="title">
 				<view class="titlecon">
 					已选择标签
@@ -133,11 +133,8 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
-			console.log(1111111111111111111111111)
-			this.pageIndex = 0	
 		},
 		onShow () {
-			console.log(222222222222222222222)
 			this.pageIndex = 0
 			this.pageOneNum = 0
 			this.pageTwoNum = 0
@@ -206,15 +203,17 @@
 					this.list = res.data
 					this.careerList = this.list[2].son
 					let array = []
-					this.careerList.forEach(item => {
+					this.careerList.forEach((item,index) => {
 						array.push(item.name)
+						if (this.$store.getters.userInfo !== {} && item.id === this.$store.getters.userInfo.other_info.occupation_info.id) {
+							this.career = index
+						}
 					})
 					this.careerList = array
 					this.jobList = this.list[2].son[this.career].son
 					this.quality = this.list[3].son
 					this.character = this.list[1].son[0].son
 					this.likeList = this.list[1].son[1].son
-
 
 					const mydata = {
 						uid: this.$store.getters.userInfo.id || 3,
