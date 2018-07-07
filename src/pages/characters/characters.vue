@@ -110,12 +110,10 @@
 <script>
 	import labelPop from '@/components/labelPop'
 	import {postGetLabelByIds, checkLable, saveLable, postUserLabel} from '@/api/pages/login'
-
 	export default {
 		components: {
 			labelPop
 	  },
-
 		data () {
 			return {
 				list: [],
@@ -135,8 +133,15 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
+			console.log(1111111111111111111111111)
+			this.pageIndex = 0	
 		},
 		onShow () {
+			console.log(222222222222222222222)
+			this.pageIndex = 0
+			this.pageOneNum = 0
+			this.pageTwoNum = 0
+			this.selectList = []
 			this.getList()
 		},
 		watch: {
