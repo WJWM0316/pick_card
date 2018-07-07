@@ -1,6 +1,6 @@
 <template>
 	<view class="center">
-		<view class="header" @tap="toDetail">
+		<view class="header" @tap="toDetail" v-if="info.data_complete_score < 80">
 			完善资料信息，提高吸引力
 			<text class="toEdit">立即完善</text>
 		</view>

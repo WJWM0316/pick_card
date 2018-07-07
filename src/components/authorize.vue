@@ -128,6 +128,7 @@
 	        for (var i in wx.getStorageSync('routeInfo').query) {
 	        	params += `${i}=${wx.getStorageSync('routeInfo').query[i]}&`
 	        }
+	        // 授权完毕 重新调回原页面刷新当前数据
 	        let url = `${wx.getStorageSync('routeInfo').path}?${params}`
 	        wx.reLaunch({
 					  url: url
