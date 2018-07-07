@@ -79,9 +79,9 @@
         </view>
       </view>
       <view class="table_blo row_style_three">
-        <view class="tit">个人签名</view>
+        <view class="tit">个性签名</view>
         <textarea maxlength="25" class="area" v-model="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" />
-        <text class="astrict">{{thirdData.sign.length}}/25</text>
+        <text class="astrict"><view :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</view>/25</text>
       </view>
     </view>
 
@@ -120,12 +120,12 @@
       <block v-if="nowNum === 2">
         <button class="before" @click="before(1)">上一步</button>
         <block v-if="userInfo.mobile.length>1">
-          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " @click="toNext(nowNum)">下一步</button>
-          <button class="next type_2" v-else >下一步</button>
+          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>1&&thirdRule.job.length>0 && thirdRule.live.length>0 " @click="toNext(nowNum)">完成创建</button>
+          <button class="next type_2" v-else >完成创建</button>
         </block>
         <block v-else>
-          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>0&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">下一步</button>
-          <button class="next type_2" v-else >下一步</button>
+          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>0&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">完成创建</button>
+          <button class="next type_2" v-else >完成创建</button>
         </block>
       </block>
     </view>
@@ -325,8 +325,10 @@
       },
       toNext (num) {
         console.log('toNext',num)
-        let that = this;
-        let data = {}
+        let that = this,
+            listData = that.listData,
+            data = {};
+
         if(that.nowNum == 0){
           data = that.firstData
           firstSignApi(data).then((res)=>{
@@ -337,11 +339,19 @@
             }
           })
         }else if(that.nowNum == 1){
+          let rli = this.secondRule.rli,
+              oliData = listData[2].son,
+              rliData = listData[0].son,
+              msg = [];
+
           data = that.secondData
-          data.realm_label_id = '10'
-          data.occupation_label_id = '96'
+          rli.forEach((value,index)=>{
+            msg.push(rliData[value].id)
+        　 });
+
+          data.realm_label_id = msg.join(",")
+          data.occupation_label_id = oliData[this.secondRule.oli[0]].id.toString()
           secondSignApi(data).then((res)=>{
-            console.log('secondSignApi',res)
             if(res.http_status == 200){
               that.nowNum = 2;
               console.log(1,data)
@@ -350,7 +360,6 @@
               }).then((res)=>{
                 console.log('postGetCreatedThreeLable',res)
                 that.nowNum = 2;
-
                 res.data.forEach((value,index)=>{
                   value.forEach((item,idx)=>{
                     item['isCur'] = false
@@ -364,7 +373,6 @@
                   live: [],
                 }
               },(res)=>{
-
                 this.$mptoast(res.msg)
               })
             }else {
@@ -598,7 +606,7 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    height: 130rpx;
+    //height: 130rpx;
     background: #ffffff;
     width: 100%;
     line-height: 98rpx;
@@ -612,12 +620,15 @@
     align-items: center;
     .next {
       margin: auto  40rpx;
+      margin-bottom: 30rpx;
       //width: 670rpx;
       flex: 1;
+      line-height: 98rpx;
       height: 98rpx;
       background:rgba(0,208,147,0.3);
       border-radius: 49rpx;
       color:rgba(255,255,255,1);
+      font-size: 32rpx;
       font-family:PingFangSC-Regular;
       &.toNext {
         background:rgba(0,208,147,1);
@@ -634,6 +645,9 @@
       border-radius:50rpx;
       margin-right: 24rpx;
       margin-left: 40rpx;
+      line-height: 98rpx;
+      font-size: 32rpx;
+      margin-bottom: 30rpx;
     }
     &.type2 {
       position: relative;
@@ -665,7 +679,8 @@
       .img_wrap {
         width: 360rpx;
         height: 360rpx;
-        border: 1rpx dashed #cccccc;
+        //border: 1rpx dashed #cccccc;
+        border-radius:18rpx;
         position: relative;
         margin: 0 auto;
         .pic {
@@ -785,6 +800,7 @@
       }
       .one_ipt {
         border-bottom:1rpx solid #cccccc;
+        padding-bottom: 10rpx;
       }
       .list_selct {
         display: flex;
@@ -825,6 +841,14 @@
         position: absolute;
         right: 0rpx;
         bottom: 0rpx;
+        color: #B2B6C2;
+        font-size:28rpx;
+        font-family:SFUIDisplay-Light;
+        display: flex;
+        flex-direction: row;
+        &.ts {
+          color: #FFBC47;
+        }
       }
     }
     
@@ -835,6 +859,7 @@
     color:rgba(195,201,212,1);
     line-height:60rpx;
     text-align: center;
+
   }
   .hidden {
     display: none;
