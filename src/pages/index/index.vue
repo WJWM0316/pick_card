@@ -105,7 +105,7 @@
         </view>
       </view>
     </view> -->
-    <authorize-pop :isIndex='true'></authorize-pop>
+    <authorize-pop :isIndex='true' @isFirst="isFirst"></authorize-pop>
     <mptoast />
     <footerTab :type=1 ></footerTab>
     <!-- 分享弹窗 -->
@@ -529,6 +529,7 @@ export default {
         }
         this.$mptoast(res.msg)
       })
+      that.isFirst()
     })
 
     //筛选
@@ -536,7 +537,7 @@ export default {
       this.getPage.occupation_label_id = res.occupation_label_id
       this.getPage.realm_label_id = res.realm_label_id
     }
-    that.isFirst()
+    
   },
   onShow (res) {
   }
@@ -681,7 +682,7 @@ export default {
         margin: 0 auto;
         margin-top: 47rpx;
         .bot_img {
-          width: 350rpx;
+          width: 317rpx;
           height: 226rpx;
           position: absolute;
         }
