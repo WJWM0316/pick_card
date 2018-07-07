@@ -10,7 +10,7 @@
         <view class="r_blo" @click="isShare">
           <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
         </view>
-        <view class="r_blo">
+        <view class="r_blo" @click="toSharePeo">
           <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
       </view>
@@ -76,6 +76,11 @@
       },
       isShare () {
         this.isPop = true
+      },
+      toSharePeo () {
+        wx.redirectTo({
+          url: '/pages/sharePick/main'
+        })
       },
       cloSahre () {
         this.isPop = false

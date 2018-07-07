@@ -87,7 +87,7 @@
         　
       </view>
     </view>
-    <!-- <view class="footer">
+    <view class="footer">
       <view class="left">
         <view class="name cur" @tap="isCreate">Pick</view>
         <view class="name" @tap="toCardHolder">名片夹</view>
@@ -104,28 +104,30 @@
           <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
         </view>
       </view>
-    </view> -->
+    </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-     <footerTab :type=1 ></footerTab>
+     <!-- <footerTab :type=1 ></footerTab> -->
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
-        <image class="gd_cont" v-if="gdData.step == 1" src="/static/images/dafult_pic01@3x.png"></image>
-        <image class="gd_cont" v-else src="/static/images/dafult_pic02@3x.png"></image>
-        <block v-if="gdData.step==1">
-          <view class="txt">不感兴趣，没关系，看看下一个人吧 </view>
-          <view class="txt">把卡片往左滑，或者点这个按钮也可以哦～</view>
-        </block>
+        <image class="gd_cont" src="/static/images/dafult_pic02@3x.png" v-if="gdData.step == 1"></image>
+        <image class="gd_cont" v-else  src="/static/images/dafult_pic01@3x.png"></image>
 
-        <block v-else>
+        <block v-if="gdData.step==1">
           <view class="txt">想和TA交朋友？快向TA发起交换名片申请吧！ </view>
           <view class="txt">把卡片往右滑，或者点这个按钮也可以哦～</view>
         </block>
 
+        <block v-else>
+          <view class="txt">不感兴趣，没关系，看看下一个人吧 </view>
+          <view class="txt">把卡片往左滑，或者点这个按钮也可以哦～</view>
+        </block>
+
         <view class="bot_cont">
-          <image class="bot_img bot_left_icon1" src="/static/images/dafult_icom_unlike@3x.png" v-if="gdData.step==1"></image>
-          <image class="bot_img bot_right_icon1" src="/static/images/dafult_icom_like@3x.png" v-else></image>
+          <image class="bot_img bot_right_icon1" src="/static/images/dafult_icom_like@3x.png"  v-if="gdData.step==1"></image>
+          
+          <image class="bot_img bot_left_icon1" src="/static/images/dafult_icom_unlike@3x.png" v-else></image>
         </view>
       </view>
 
@@ -267,8 +269,14 @@ export default {
         url: `/pages/swopList/main`
       })
     },
+    toCardHolder () {
+      wx.navigateTo({
+        url: `/pages/cardHolder/main`
+      })
+    },
 
     isCreate (){
+      this.userInfo.step = 3
       if(this.userInfo.step!=9){
         this.isPop = false
         this.toMeCreate=true

@@ -7,7 +7,7 @@
 
         <view class="blo_top">
           <image class="avatar" :src="item.avatar_info" v-if="item.avatar_info"></image>
-          <image  class="avatar" src="/static/images/img.jpg" v-else></image>
+          <image  class="avatar" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
 
           <view class="msg_detail ellipsis">
             <view class="msg_name ellipsis">{{item.apply_user_info.realname}} {{item.apply_user_info.occupation}}</view>
@@ -175,7 +175,7 @@
   .swopList {
     background: #ffffff;
     .swop_blo {
-      border-bottom:1px solid rgba(53,57,67,0.1);
+      border-bottom:2rpx solid #eaebec;
       padding: 40rpx;
 
       .blo_top {
@@ -222,6 +222,8 @@
           line-height:60rpx;
         }
         .top_status {
+          width:140rpx;
+          text-align: center;
           font-size:28rpx;
           font-family:PingFangSC-Regular;
           color:rgba(195,201,212,1);
@@ -317,6 +319,8 @@
             that.listData[index].status = 1
             that.openPop()
           }
+        },(res)=>{
+          that.$mptoast('已发送','error',2000)
         })
       }
 
