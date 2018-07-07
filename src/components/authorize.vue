@@ -2,7 +2,7 @@
 	<view class="authorize" v-if="needAuthorize" @touchmove.stop="preventEvevt">
 		<view class="pop">
 			<image class="close" v-if="!isIndex" @tap="close" src="/static/images/popup_btn_close_nor@3x.png"></image>
-			<image class="head" src="/static/images/img.jpg"></image>
+			<image class="head" src="/static/images/sou.png"></image>
 			<view class="title">欢迎来到 Pick！趣名片<br>使用名片功能需要获取你的授权</view>
 			<view class="msg">Pick！趣名片向你保证不会将你的信息泄 露给第三方，仅用于读取名片夹的信息和 名片信息的展示。</view>
 			<button class="btn" @getuserinfo="onGetUserinfo" open-type="getUserInfo" type="primary">授权</button>
@@ -40,7 +40,7 @@
 			},
 		},
 		mounted () {
-			console.log(index, 2222222222)
+			 
 		},
 		methods: {
 			checkLogin () {
@@ -123,13 +123,17 @@
 	        this.$store.dispatch('userInfo', res.data.data)
 	        console.log('已将个人信息存入store', Vue.prototype.$store.getters.userInfo)
 	        this.$store.dispatch('needAuthorize', false)
-	        
-	        let params = ''
+	        // 授权完毕 重新调回原页面刷新当前数据
+				  let params = ''
+	        let url = ''
 	        for (var i in wx.getStorageSync('routeInfo').query) {
 	        	params += `${i}=${wx.getStorageSync('routeInfo').query[i]}&`
 	        }
-	        // 授权完毕 重新调回原页面刷新当前数据
-	        let url = `${wx.getStorageSync('routeInfo').path}?${params}`
+	        if (params != '') {
+	        	url = `/${wx.getStorageSync('routeInfo').path}?${params}`
+	        } else {
+	        	url = `/${wx.getStorageSync('routeInfo').path}`
+	        }
 	        wx.reLaunch({
 					  url: url
 					})

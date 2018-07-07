@@ -53,6 +53,10 @@
     },
     methods: {
       toTab (type) {
+        if (this.$store.getters.step !== 9) {
+          this.toCreateCard()
+          return
+        }
         if (this.type === type) {
           return
         }
@@ -75,6 +79,10 @@
         }
       },
       isShare () {
+        if (this.$store.getters.step !== 9) {
+          this.toCreateCard()
+          return
+        }
         this.isPop = true
       },
       toSharePeo () {
@@ -84,6 +92,11 @@
       },
       cloSahre () {
         this.isPop = false
+      },
+      toCreateCard () {
+        wx.navigateTo({
+          url: '/pages/createCard/main'
+        })
       }
     }
   }
