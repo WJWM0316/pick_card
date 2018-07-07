@@ -107,7 +107,7 @@
     </view> -->
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-     <footerTab :type=1 ></footerTab> 
+    <footerTab :type=1 ></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
