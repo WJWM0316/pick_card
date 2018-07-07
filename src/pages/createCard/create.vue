@@ -1,9 +1,9 @@
 
 <template>
   <div class="container" >
-    <view class="hintJoined hidden">
-     <!--  <image class="hint_img" src=""></image> -->
-      <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有</view>
+    <view class="hintJoined " v-if="relevance">
+     <image class="hint_img" src="/static/images/new_pic_alert@3x.png"></image>
+      <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有 对应账号，已自动加载相关信息</view>
     </view>
     <view class="op_one " v-if="nowNum === 0">
       <view class="one_txt">
@@ -80,7 +80,8 @@
       </view>
       <view class="table_blo row_style_three">
         <view class="tit">个性签名</view>
-        <textarea maxlength="25" class="area" v-model="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" />
+        <textarea maxlength="25" class="area" v-model="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
+        v-if="!bindPhone.isPh" />
         <text class="astrict"><view :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</view>/25</text>
       </view>
     </view>
@@ -90,8 +91,8 @@
         <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap="clo"></image></view>
         <view class="ip_cont">
           <view class="ipt_blo">
-            <text class="getcode" @tap="sms" v:if="smsCli">获取验证码</text>
-            <text class="getcode" v:else >重新获取{{bindPhone.time}}s</text>
+            <text class="getcode" @tap="sms" v-if="bindPhone.smsCli">获取验证码</text>
+            <text class="getcode type2" v-else >重新获取{{bindPhone.time}}s</text>
             <input placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  maxlength="11" />
           </view>
           <view class="ipt_blo">
@@ -179,7 +180,7 @@
           live: [],
         },
         bindPhone: {
-          isPh: true,
+          isPh: false,
           number: '',
           code: '',
           smsCli: true,
@@ -189,13 +190,15 @@
         isIp: false,
         filePath: '/static/images/new_pic_defaulhead.jpg',
         isShow: false,
-        userInfo: {}
+        userInfo: {},
+        relevance: false,  //是否有关联
       }
     },
     computed: {
     },
     methods: {
       isPoneAvailable(str) {
+        console.log(str)
         let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
         if (!myreg.test(str)) {
             return false;
@@ -226,7 +229,14 @@
       thirdPost(type){
         let job = [],
             live = [],
-            that = this
+            that = this;
+
+        if(that.isNull(that.thirdData.sign)){
+          that.$mptoast('个性签名不能含有空格，请重新输入')
+          return 
+        }
+
+
         that.thirdRule.job.forEach((value,index)=>{
           console.log(value)
           that.thirdData['build_label_id'].push(that.thirdRule.jobData[value])
@@ -396,26 +406,25 @@
             this.bindPhone = {
               isPh: false,
               number: '',
-              code: ''
+              code: '',
+              smsCli: true,
+              time: 60,
             }
           }
         }
       }, 
       toCode () {
         let that = this,
-            next = that.isPoneAvailable(data.mobile);
-
+            next = that.isPoneAvailable(that.bindPhone.number);
+          console.log(that.bindPhone.number)
         if(!next){
           that.$mptoast('手机格式不对')
           return
         }
-
         if(that.bindPhone.code.length<1){
           that.$mptoast('验证码不能为空')
           return
         }
-
-
         this.thirdPost(2)
         this.bindPhone = {
           isPh: false,
@@ -432,7 +441,7 @@
       phoneCountDown(){
         let that = this;
 
-        that.interval(()=>{
+        that.interval = setInterval(()=>{
           if(that.bindPhone.time==0){
             clearInterval(that.interval)
             that.bindPhone.smsCli = true
@@ -453,11 +462,20 @@
             that.bindPhone.smsCli = false
             that.phoneCountDown();
             console.log(res)
+          },(res)=>{
+            that.$mptoast(res.msg)
           })
         }else {
           that.$mptoast('手机格式不对')
         }
         
+      },
+      isNull( str ){
+        if (str.indexOf(" ") == -1) {
+            return false
+        } else {
+            return true
+        }
       },
 
       upLoad () {
@@ -496,6 +514,10 @@
       if(this.$store.getters.userInfo){
 
         let userInfo = this.$store.getters.userInfo
+        console.log(userInfo.length,userInfo)
+        if(userInfo.nickname||userInfo.avatar_id){
+          this.relevance = true
+        }
         this.firstData = {
           gender: userInfo.gender,
           nickname: userInfo.nickname,
@@ -513,12 +535,7 @@
           sign: userInfo.sign, //个性签名
         }
 
-        this.bindPhone= {
-          isPh: false,
-          number: userInfo.mobile,
-          code: ''
-        }
-
+        this.bindPhone.number =userInfo.mobile
         that.userInfo = userInfo
       }
       postGetLabelByIds(data).then((res)=>{
@@ -563,7 +580,7 @@
 
   .sign_iphone {
     width:670rpx;
-    height:670rpx;
+    //height:670rpx;
     background:rgba(255,255,255,1);
     border-radius:18rpx;
     position: absolute;
@@ -649,6 +666,9 @@
           top: 30rpx;
           right: 40rpx;
           z-index: 10;
+          &.type2 {
+            color: #B2F0DE;
+          }
         }
       }
     }
@@ -805,13 +825,15 @@
       background:rgba(255,233,143,1);
       border-radius:37rpx;
       opacity:0.2;
+      margin-right: 28rpx;
     }
     .hint_txt {
       font-size:26rpx;
       font-family:PingFangSC-Light;
       color:rgba(154,161,171,1);
-      line-height:26rpx;
+      line-height:30rpx;
       margin-left: 28rpx;
+      flex: 1;
     }
   }
   .op_blo {
