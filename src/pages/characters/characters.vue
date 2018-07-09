@@ -128,7 +128,8 @@
 				career: 0,
 				pageIndex: 0,
 				pageOneNum: 0,
-				pageTwoNum: 0
+				pageTwoNum: 0,
+				curId: ''
 			}
 		},
 		onLoad (option) {
@@ -280,11 +281,11 @@
 							name: e,
 							first_level: this.curId,
 							two_level: this.curId,
+							index: 998
 						}
-						if (this.curId === 3) {
-							if (this.selectList.length < 5) {
-								data.index = 998
-								this.selectList.push(data)
+						if (this.pageIndex === 0) {
+							if (this.pageOneNum < 5) {
+								this.selectList.splice(this.pageOneNum, 0, data)
 							} else {
 								switch (this.selectList[0].first_level) {
 									case 3:
@@ -295,13 +296,11 @@
 										break
 								}
 								this.selectList.splice(0, 1)
-								data.index = 4
-								this.selectList.push(data)	
+								this.selectList.splice(this.pageOneNum, 0, data)
 							}
 						} else {
 							if (this.selectList.length < 10) {
-								data.index = 998
-								this.selectList.push(data)
+								this.selectList.splice(this.pageTwoNum, 0, data)
 							} else {
 								switch (this.selectList[5].two_level) {
 									case 35:
@@ -312,8 +311,7 @@
 										break
 								}
 								this.selectList.splice(5, 1)
-								data.index = 9
-								this.selectList.push(data)	
+								this.selectList.splice(this.pageTwoNum, 0, data)
 							}
 						}
 					}).catch(e => {
