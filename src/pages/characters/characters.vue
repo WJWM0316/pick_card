@@ -9,7 +9,7 @@
 				</view>
 				<view class="label-con">
 					<labelBox class="labelBox check">
-						<label  v-for="(item, index) in selectList" :key="item.id" v-if="item.first_level !== 2">
+						<label  v-for="(item, index) in selectList" :key="item.id || index" v-if="item.first_level !== 2">
 							<text class="label check" @tap="remove(item, index)">{{item.name}}</text>
 						</label>
 					</labelBox>
@@ -60,7 +60,7 @@
 				</view>
 				<view class="label-con">
 					<labelBox class="labelBox">
-						<label  v-for="(item, index) in selectList" :key="item.id" v-if="item.first_level === 2">
+						<label  v-for="(item, index) in selectList" :key="item.id || index" v-if="item.first_level === 2">
 							<text class="label check" @tap="remove(item, index)">{{item.name}}</text>
 						</label>
 					</labelBox>
@@ -443,7 +443,7 @@
 								}
 							}
 							this.pageTwoNum -= 1
-							this.selectList.splice(5, 1)
+							this.selectList.splice(this.pageOneNum, 1)
 						}
 						this.selectList.push(data)
 					}

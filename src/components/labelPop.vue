@@ -4,7 +4,7 @@
 			<view class="title">请选择1~3个领域<image @tap="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
 			<view class="con">
 				<labelBox class="labelBox">
-					<label  v-for="(item, index) in labelList" :key="index">
+					<label  v-for="(item, index) in labelList" :key="item.id">
 						<text class="label" :class="{'check' : item.check}" @tap="select(item, index)">{{item.name}}</text>
 					</label>
 				</labelBox>
@@ -73,8 +73,16 @@
 				this.$emit('close')
 			},
 			addFun () {
-				this.$emit('addLable', this.customText)
-				this.$emit('close')
+				if (this.customText !== '') {
+					this.$emit('addLable', this.customText)
+					this.$emit('close')
+				} else {
+					wx.showToast({
+					  title: '请自定义标签',
+					  icon: 'none',
+					  duration: 2000
+					})
+				}
 			},
 			save () {
 				if (this.num === 0) {
