@@ -33,6 +33,10 @@
 			type: {
 				type: String,
 				default: 'labelBox'
+			},
+			choseList: {
+				type: String,
+				default: ''
 			}
 		},
 		data () {
@@ -47,23 +51,45 @@
 			isShow (val) {
 				if (val) {
 					this.customText = ''
+					if (this.type !== 'custom') {
+						this.getLabelList()
+					}
 				}
 			},
 			type () {},
-			customText (val) {}
+			customText (val) {},
+			choseList () {}
 		},
 		onLoad () {
-			if (this.type !== 'custom') {
-				this.getLabelList()
-			}
+			
 		},
 		methods: {
 			getLabelList () {
 				const data = {
 					labelType: '1'
 				}
+				let array = this.choseList.split(',')
+
 				postGetLabelByIds(data).then(res => {
 					this.labelList = res.data[0].son
+					this.labelList.forEach((e, index) => {
+						if (array[0] && array[0] == e.id) {
+							this.checkedList.push(e)
+							this.labelList[index].check = true
+							this.num ++
+						}
+						if (array[1] && array[1] == e.id) {
+							this.checkedList.push(e)
+							this.labelList[index].check = true
+							this.num ++
+						}
+						if (array[2] && array[2] == e.id) {
+							this.checkedList.push(e)
+							this.labelList[index].check = true
+							this.num ++
+						}
+					})
+					
 				})
 			},
 			getLabel (index) {
@@ -103,8 +129,8 @@
 					labelText.push(item.name)
 				})
 				let showList = []
+				labelId.concat(this.choseList || [])
 				labelId = labelId.join(',')
-				console.log('xuanz le ')
 				this.$emit('getLabel', labelId, labelText)
 			},
 			select (item, index) {
@@ -138,8 +164,8 @@
 				console.log('已选择', this.checkedList)
 			},
 			preventEvevt (e) {
-				e.preventDefault()
-				e.stopPropagation()
+				// e.preventDefault()
+				// e.stopPropagation()
 			}
 		}
 	}

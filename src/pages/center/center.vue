@@ -5,6 +5,7 @@
 			<text class="toEdit">立即完善</text>
 		</view>
 		<view class="content">
+			<view style="height: 28rpx;"></view>
 			<view class="main">
 				<view @tap.stop="toDetail">
 					<view class="head">
@@ -80,6 +81,8 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
+		},
+		onShow () {
 			this.checkedTextList = []
 			if (this.userInfo) {
 				this.info = this.userInfo
@@ -103,15 +106,8 @@
 	      data.label = data.label.slice(0, data.label.length-3)
 	      getShareImg(data).then(res => {
 	      	this.isShareImg = res.data
-	      	return {
-			      title: this.shareInfo.mycard.content,
-			      path: `/pages/detail?vkey=${this.info.vkey}`,
-			      imageUrl: this.isShareImg
-			    }
 	      })
       }
-		},
-		onShow () {
 		},
 		onShareAppMessage: function (res) {
 	    if (res.from === 'button') {
@@ -150,7 +146,6 @@
 		height: 80rpx;
 		line-height: 80rpx;
 		padding: 0 40rpx;
-		margin-bottom: 28rpx;
 		box-sizing: border-box;
 		font-size: 28rpx;
 		font-weight: light;

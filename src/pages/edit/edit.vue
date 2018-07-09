@@ -131,7 +131,7 @@
 		<section class="btn">
 			<button @tap.stop="saveUserInfo" class="light">保存资料</button>
 		</section>
-		<labelPop :isShow="showLablePop" :type="labelBox" @getLabel="getLabel" @close="closePop"></labelPop>
+		<labelPop :isShow="showLablePop" :type="labelBox" :choseList="checkedIdList" @getLabel="getLabel" @close="closePop"></labelPop>
 	</view>
 </template>
 <script>
