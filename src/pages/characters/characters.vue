@@ -286,36 +286,17 @@
 						if (this.pageIndex === 0) {
 							if (this.pageOneNum < 5) {
 								this.pageOneNum ++
-								this.selectList.splice(this.pageOneNum-1, 0, data)
 							} else {
-								switch (this.selectList[0].first_level) {
-									case 3:
-										this.jobList[this.selectList[0].index].check = false
-										break
-									case 4:
-										this.quality[this.selectList[0].index].check = false
-										break
-								}
 								this.selectList.splice(0, 1)
-								this.selectList.splice(this.pageOneNum-1, 0, data)
 							}
+							this.selectList.splice(this.pageOneNum-1, 0, data)
 						} else if (this.pageIndex === 1) {
 							if (this.pageTwoNum < 5) {
 								this.pageTwoNum ++
-								this.selectList.splice(this.pageTwoNum-1, 0, data)
 							} else {
-								console.log(this.selectList[this.pageOneNum], 111111)
-								switch (this.selectList[this.pageOneNum].two_level) {
-									case 35:
-										this.character[this.selectList[this.pageOneNum].index].check = false
-										break
-									case 36:
-										this.likeList[this.selectList[this.pageOneNum].index].check = false
-										break
-								}
 								this.selectList.splice(this.pageOneNum, 1)
-								this.selectList.push(data)
 							}
+							this.selectList.push(data)
 						}
 						console.log(this.selectList)
 					}).catch(e => {

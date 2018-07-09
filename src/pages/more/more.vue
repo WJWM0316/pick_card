@@ -1,18 +1,18 @@
 <template>
 	<view class="more">
 		<view class="txt">
-			<textarea placeholder="在这里，可以通过文字介绍你自己你也可以上 传一些作品，更好的介绍你自己。" placeholder-style="color:#B2B6C2;font-size:32rpx;line-height:1.4;"
+			<textarea placeholder="留下些文字或作品吧，让别人更加了解你～" placeholder-style="color:#B2B6C2;font-size:32rpx;line-height:1.4;"
 			maxlength=250 v-model="info.content" @input="disableFun"></textarea>
-			<text class="num">{{info.content.length}}/250</text>
+			<text class="num"><text :class="{'numText' : info.content.length > 0">{{info.content.length}}</text>/250</text>
 		</view>
 		<view class="imgBox">
+			<view class="item">
+				<image mode=aspectFill @tap="chooseImage" v-if="files.length < 20" src="/static/images/edit_btn_addphoto@2x.png"></image>
+			</view>
 			<view class="item" v-for="(i, index) in files" :key="index" v-if="index < 20">
 				<image :src="i.path" mode=aspectFill @tap.stop="previewImage(index)"></image>
 				<view class="bg" :style="{'height': i.progress}" v-if="i.progress !== '0%'"></view>
-				<image @tap.stop="remove(i, index)" class="remove" v-if="i.progress === '0%'" src="/static/images/edit_btn_deletephoto@2x.png"></image>
-			</view>
-			<view class="item">
-				<image mode=aspectFill @tap="chooseImage" v-if="files.length < 20" src="/static/images/edit_btn_addphoto@2x.png"></image>
+				<image @tap.stop="remove(i, index)" class="remove" src="/static/images/edit_btn_deletephoto@2x.png"></image>
 			</view>
 		</view>
 		<view class="btnBox">
@@ -99,6 +99,11 @@
 			      	 console.log(_this.loading, 11111)
 			         console.log('全部上传成功',_this.filesId, res)
 			      }).catch((e, index) => {
+			      	wx.showToast({
+							  title: '图片上传失败，请重新上传',
+							  icon: 'none',
+							  duration: 1000
+							})
 			        console.log(`第${index}张上传失败`, e)
 			      })
 	        },
@@ -123,7 +128,7 @@
 	    		wx.showToast({
 					  title: '图片正在上传，请稍等',
 					  icon: 'none',
-					  duration: 2000
+					  duration: 1000
 					})
 					return
 	    	}
@@ -133,7 +138,12 @@
 	    			array.push(item.file.fileId)
 	    		}
 	    	})
+
 	    	this.info.img_id = this.info.img_id + ',' + array.join(',')
+	    	
+	    	if (this.info.img_id === ',') {
+	    		this.info.img_id = ''
+	    	}
 	    	const data = {
 	    		content: this.info.content,
 	    		img_id: this.info.img_id
@@ -175,8 +185,11 @@
 			margin-top: 20rpx;
 			float: right;
 			color: #C3C9D4;
-			font-size: 28rpx;
-			line-height: 40rpx;
+			font-size: 32rpx;
+			line-height: 1.4;
+			.numText {
+				color: #FFBC47;
+			}
 		}
 		.imgBox {
 			padding: 24rpx 40rpx;

@@ -11,7 +11,7 @@
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">姓名</view>
-					<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model="userInfo.nickname"></view>
+					<view class="right"><input type="text"  placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model="userInfo.nickname"></view>
 				</view>
 			</view>
 			<view class="item">
