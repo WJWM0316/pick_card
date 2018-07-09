@@ -285,7 +285,8 @@
 						}
 						if (this.pageIndex === 0) {
 							if (this.pageOneNum < 5) {
-								this.selectList.splice(this.pageOneNum, 0, data)
+								this.pageOneNum ++
+								this.selectList.splice(this.pageOneNum-1, 0, data)
 							} else {
 								switch (this.selectList[0].first_level) {
 									case 3:
@@ -296,24 +297,27 @@
 										break
 								}
 								this.selectList.splice(0, 1)
-								this.selectList.splice(this.pageOneNum, 0, data)
+								this.selectList.splice(this.pageOneNum-1, 0, data)
 							}
-						} else {
-							if (this.selectList.length < 10) {
-								this.selectList.splice(this.pageTwoNum, 0, data)
+						} else if (this.pageIndex === 1) {
+							if (this.pageTwoNum < 5) {
+								this.pageTwoNum ++
+								this.selectList.splice(this.pageTwoNum-1, 0, data)
 							} else {
-								switch (this.selectList[5].two_level) {
+								console.log(this.selectList[this.pageOneNum], 111111)
+								switch (this.selectList[this.pageOneNum].two_level) {
 									case 35:
-										this.character[this.selectList[5].index].check = false
+										this.character[this.selectList[this.pageOneNum].index].check = false
 										break
 									case 36:
-										this.likeList[this.selectList[5].index].check = false
+										this.likeList[this.selectList[this.pageOneNum].index].check = false
 										break
 								}
-								this.selectList.splice(5, 1)
-								this.selectList.splice(this.pageTwoNum, 0, data)
+								this.selectList.splice(this.pageOneNum, 1)
+								this.selectList.push(data)
 							}
 						}
+						console.log(this.selectList)
 					}).catch(e => {
 						wx.showToast({
 						  title: e.msg,
@@ -422,18 +426,19 @@
 							this.pageOneNum -= 1
 							this.selectList.splice(0, 1)
 						}
-						console.log(this.pageOneNum, 111111111)
+						console.log(this.pageOneNum,this.selectList, 111111111)
 						this.selectList.splice(this.pageOneNum-1, 0, data)
 					} else {
 						if (this.pageTwoNum > 5) {
 							// 不是自定义标签
-							if (this.selectList[0].index !== 998) {
-								switch (this.selectList[5].two_level) {
+							if (this.selectList[this.pageOneNum].index !== 998) {
+								console.log(1111, this.selectList, this.selectList[this.pageOneNum])
+								switch (this.selectList[this.pageOneNum].two_level) {
 									case 35:
-										this.character[this.selectList[5].index].check = false
+										this.character[this.selectList[this.pageOneNum].index].check = false
 										break
 									case 36:
-										this.likeList[this.selectList[5].index].check = false
+										this.likeList[this.selectList[this.pageOneNum].index].check = false
 										break
 								}
 							}
