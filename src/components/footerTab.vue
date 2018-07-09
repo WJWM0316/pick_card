@@ -53,7 +53,7 @@
     },
     methods: {
       toTab (type) {
-        if (this.$store.getters.step !== 9) {
+        if (this.$store.getters.userInfo.step !== 9) {
           this.toCreateCard()
           return
         }
@@ -79,7 +79,7 @@
         }
       },
       isShare () {
-        if (this.$store.getters.step !== 9) {
+        if (this.$store.getters.userInfo.step !== 9) {
           this.toCreateCard()
           return
         }

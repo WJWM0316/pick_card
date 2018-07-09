@@ -69,15 +69,15 @@
 			</view>
 			<view class="item">
 				<view class="itemCon">
-					<view class="left requst">职业</view>
+					<view class="left requst">职位</view>
 					<view class="right">
-						<input type="text" maxlength="20" placeholder="请输入职业" placeholder-style="color:#B2B6C2" v-model="userInfo.occupation">
+						<input type="text" maxlength="20" placeholder="请输入职位" placeholder-style="color:#B2B6C2" v-model="userInfo.occupation">
 					</view>
 				</view>
 			</view>
 			<view class="item">
 				<view class="itemCon">
-					<view class="left requst">最近入任职公司</view>
+					<view class="left requst">最近任职公司</view>
 					<view class="right">
 						<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2"  v-model="userInfo.company">
 					</view>

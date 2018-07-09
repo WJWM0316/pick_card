@@ -159,7 +159,7 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		z-index: 1000;
+		z-index: 99999999;
 		padding: 190rpx 40rpx 0;
 		box-sizing: border-box;
 		background: rgba(0, 0, 0, 0.7);

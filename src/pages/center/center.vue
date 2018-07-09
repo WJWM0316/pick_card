@@ -60,6 +60,7 @@
 	import {mapState} from 'vuex'
 	import footerTab from '@/components/footerTab'
 	import {putPrivacyApi, getUserInfoApi} from '@/api/pages/user'
+	import {getShareImg} from '@/api/pages/login'
 	export default {
 		components: {
 			footerTab
@@ -67,7 +68,8 @@
 		data () {
 			return {
 				info: {},
-				checkedTextList: []
+				checkedTextList: [],
+				isShareImg: ''
 			}
 		},
 		computed: {
@@ -81,10 +83,33 @@
 			this.checkedTextList = []
 			if (this.userInfo) {
 				this.info = this.userInfo
-				this.userInfo.other_info.realm_info.forEach(e => {
+				this.info.other_info.realm_info.forEach(e => {
 					this.checkedTextList.push(e.name)
 				})
 			}
+			if (!this.isShareImg) {
+	      let data = {
+	      	uid: this.info.id,
+	      	name: this.info.name,
+	      	img: this.info.avatar_info.smallImgUrl,
+	      	occupation: this.info.occupation,
+	      	company: this.info.company,
+	      	label: [],
+	      }
+	      this.info.other_info.realm_info.forEach(item => {
+	      	data.label.push(`${item.name} | `)
+	      })
+	      data.label = data.label.join('')
+	      data.label = data.label.slice(0, data.label.length-3)
+	      getShareImg(data).then(res => {
+	      	this.isShareImg = res.data
+	      	return {
+			      title: this.shareInfo.mycard.content,
+			      path: `/pages/detail?vkey=${this.info.vkey}`,
+			      imageUrl: this.isShareImg
+			    }
+	      })
+      }
 		},
 		onShow () {
 		},
@@ -92,10 +117,10 @@
 	    if (res.from === 'button') {
 	      // 来自页面内转发按钮
 	      console.log(res.target)
-	      return {
+      	return {
 		      title: this.shareInfo.mycard.content,
 		      path: `/pages/detail?vkey=${this.info.vkey}`,
-		      imageUrl: 'https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/test.jpg'
+		      imageUrl: this.isShareImg
 		    }
 	    }
 	  },
