@@ -147,10 +147,9 @@ export default {
 
     wx.getSystemInfo({
       success: function(res) {
-        that.systemInfo = res
+        that.systemInfo = res;
         console.log(res)
-
-        that.spHeight = (res.windowHeight-44-60-40-75)*2
+        that.spHeight = (res.windowHeight-44-60-40-50)*2;
       }
     })
   },
@@ -315,7 +314,7 @@ export default {
         border-radius: 50%;
         left: -50rpx;
         top: 50rpx;
-        box-shadow:0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
+        //box-shadow:0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
         border:4rpx solid rgba(255,255,255,1);
         box-sizing: border-box;
       }
@@ -323,7 +322,7 @@ export default {
         width:600rpx;
         height:230rpx;
         background:rgba(255,255,255,1);
-        box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 40rpx rgba(153,193,214,0.08);
+        //box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 40rpx rgba(153,193,214,0.08);
         border-radius:18rpx;
         padding: 56rpx 30rpx 56rpx 120rpx;
         box-sizing: border-box;
@@ -392,13 +391,16 @@ export default {
     font-size:26rpx;
     font-family:PingFangHK-Regular;
     line-height:26rpx;
-    display: inline-block;
-    margin-top: 38rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 78rpx;
+    margin-bottom: 78rpx;
     text-align: center;
     color: #9AA1AB;
     button {
       color: #00D093;
-      display: inline-block;
       font-size: 26rpx;
       color:rgba(0,208,147,1);
     }

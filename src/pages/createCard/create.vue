@@ -86,9 +86,9 @@
       </view>
     </view>
 
-    <view class="pop_warp" v-if="bindPhone.isPh">
+    <view class="pop_warp"  :class="{'hidden':!bindPhone.isPh}">
       <view class="sign_iphone" >
-        <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap="clo"></image></view>
+        <view class="ip_top" @tap="clo">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap="clo"></image></view>
         <view class="ip_cont">
           <view class="ipt_blo">
             <text class="getcode" @tap="sms" v-if="bindPhone.smsCli">获取验证码</text>
@@ -198,7 +198,6 @@
     },
     methods: {
       isPoneAvailable(str) {
-        console.log(str)
         let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
         if (!myreg.test(str)) {
             return false;
@@ -206,7 +205,6 @@
             return true;
         }
       },
-
       clo(){
         this.bindPhone.isPh = false
       },
@@ -236,7 +234,7 @@
           return 
         }
 
-
+        that.thirdData['build_label_id'] = []
         that.thirdRule.job.forEach((value,index)=>{
           console.log(value)
           that.thirdData['build_label_id'].push(that.thirdRule.jobData[value])
@@ -245,7 +243,6 @@
           console.log(value)
           that.thirdData['build_label_id'].push(that.thirdRule.liveData[value])
       　 });
-        //that.thirdData['build_label_id'] = [job,live]
         if(type==1){
         }else {
           that.thirdData['mobile'] = that.bindPhone.number
