@@ -1,7 +1,7 @@
 
 <template>
   <view class="container" >
-    <view class="hint">会根据你选择的条件，来发现你的职场新朋友</view>
+    <view class="hint">会根据你选择的条件，来发现你的职场新朋友，可多选噢～</view>
     <view class="op_two ">
 
       <view class="table_blo row_style_two">
@@ -126,8 +126,8 @@
             item['isCur'] = false
       　   });
       　 });
-        that.jobData = [{id:0,name:'不限',isCur:false},...res.data[0].son]
-        that.liveData = [{id:0,name:'不限',isCur:false},...res.data[1].son]
+        that.jobData = [{id:0,name:'不限',isCur:true},...res.data[0].son]
+        that.liveData = [{id:0,name:'不限',isCur:true},...res.data[1].son]
       },(res)=>{
         
       })
@@ -151,7 +151,7 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    height: 130rpx;
+    height: 128rpx;
     background: #ffffff;
     width: 100%;
     .next {
@@ -319,9 +319,10 @@
           color:rgba(154,161,171,1);
           line-height:60rpx;
           text-align: center;
+          box-sizing: border-box;
           &.cur {
             background:rgba(0,208,147,0.05);
-            border:1px solid rgba(0,208,147,1);
+            border:2rpx solid rgba(0,208,147,1);
             font-family:SFUIDisplay-Regular;
             color:rgba(0,208,147,1);
           }
