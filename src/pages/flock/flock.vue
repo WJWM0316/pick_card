@@ -206,9 +206,9 @@
             <view class="msg_name ellipsis">{{item.nickname}}</view>
             <view class="msg_tit ellipsis">{{item.occupation}}</view>
             <view class="msg_company ellipsis">{{item.company}}</view>
-            <view class="flock_style" @tap.stop="swopSlock(item.id)" v-if="item.id!=userInfo.id && item.status == 1">交换名片</view>
-            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.status == 2 ||item.status == 3)">已申请</view>
-            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.status == 4">已交换</view>
+            <view class="flock_style" @tap.stop="swopSlock(item.id)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
+            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
           </view>
         </view>
       </view>
