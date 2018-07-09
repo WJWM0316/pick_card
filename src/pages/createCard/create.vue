@@ -1,7 +1,7 @@
 
 <template>
   <div class="container" >
-    <view class="hintJoined " v-if="relevance">
+    <view class="hintJoined " v-if="relevance && nowNum == 0">
      <image class="hint_img" src="/static/images/new_pic_alert@3x.png"></image>
       <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有 对应账号，已自动加载相关信息</view>
     </view>
@@ -102,7 +102,7 @@
           </view>
           <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
           <button class="ip_btn" @click="toCode">完成绑定</button>
-          <!-- <view class="hint_2">点击快速绑定手机号码 > ></view> -->
+          <view class="hint_2 hidden">点击快速绑定手机号码 > ></view>
         </view>
       </view>
     </view>
@@ -355,6 +355,8 @@
             }else {
               this.$mptoast(res.msg)
             }
+          },(res)=>{
+            this.$mptoast(res.msg)
           })
         }else if(that.nowNum == 1){
           let rli = this.secondRule.rli,
@@ -437,9 +439,6 @@
         }
       },
       //  
-      iphoneOp(){
-        this.isIp = true
-      },
       phoneCountDown(){
         let that = this;
 
@@ -587,8 +586,8 @@
     border-radius:18rpx;
     position: absolute;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    top: 204rpx;
+    transform: translate(-50%, 0);
     .ip_top {
       width:670rpx;
       height:92rpx;
@@ -610,7 +609,7 @@
       }
     }
     .ip_cont {
-        padding: 80rpx 60rpx 60rpx;
+        padding: 80rpx 60rpx 45rpx;
 
       .hint_1 {
         height:24rpx;
@@ -629,6 +628,8 @@
         color:rgba(0,208,147,1);
         line-height:28rpx;
         text-align: center;
+        margin-top: 45rpx;
+
       }
       .ip_btn {
         width:570rpx;
@@ -639,7 +640,7 @@
         font-family:PingFangSC-Regular;
         color:rgba(255,255,255,1);
         line-height:98rpx;
-        margin-bottom: 37rpx;
+        margin-top: 60rpx;
       }
       .ipt_blo {
         width:550rpx;
@@ -785,6 +786,7 @@
       border-radius: 45rpx;
       margin: 30rpx auto 60rpx auto;
       text-align: center;
+      font-size: 32rpx;
     }
     .one_gender {
       display: flex;

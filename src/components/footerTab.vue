@@ -127,9 +127,11 @@
       color:rgba(117,121,128,1);
       .name {
         &.cur {
-          font-size:36rpx;
+          //font-size:36rpx;
           color:rgba(53,64,72,1);
           position: relative;
+          //font-weight: bold;
+          font-family:SFUIDisplay-Semibold;
           &:after {
             content: '';
             width:20rpx;

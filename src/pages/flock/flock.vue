@@ -102,6 +102,7 @@
             font-family:PingFangHK-Medium;
             color:rgba(70,71,72,1);
             line-height:34rpx;
+            width: 180rpx;
           }
           .msg_tit {
             font-size:28rpx;
@@ -202,9 +203,9 @@
           <view class="blo_msg" @tap="toDetail(item)">
             <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
             <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
-            <view class="msg_name">{{item.nickname}}</view>
-            <view class="msg_tit">{{item.occupation}}</view>
-            <view class="msg_company">{{item.company}}</view>
+            <view class="msg_name ellipsis">{{item.nickname}}</view>
+            <view class="msg_tit ellipsis">{{item.occupation}}</view>
+            <view class="msg_company ellipsis">{{item.company}}</view>
             <view class="flock_style" @tap.stop="swopSlock(item.id)" v-if="item.id!=userInfo.id && item.status == 1">交换名片</view>
             <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.status == 2 ||item.status == 3)">已申请</view>
             <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.status == 4">已交换</view>
@@ -228,10 +229,14 @@
   </view>
 </template>
 <script>
+  import mptoast from 'mptoast'
   import { joinUserGroup, isJoinUserGroup,getUserGroupInfo, getFriends, deleteFriends, getUserGroupList, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
   import {  indexLike  } from '@/api/pages/user'
 
 export default {
+  components: {
+    mptoast
+  },
   data () {
     return { 
       userInfo: [],
@@ -261,13 +266,13 @@ export default {
       console.log('jiaru=========')
       joinUserGroup({userGroupId:this.msg.vkey}).then((res)=>{
         if(res.http_status == 200){
-          this.$mptoast('成功加入')
+          that.$mptoast('成功加入')
           that.isJoin = true
           that.updateData()
         }
         console.log(1111,res)
       },(res)=>{
-        this.$mptoast(res.msg)
+        that.$mptoast(res.msg)
         console.log('error1111',res)
       })
     },
@@ -282,13 +287,17 @@ export default {
             quitGroup({id:that.msg.vkey}).then((res)=>{
               console.log(res)
               if(res.http_status == 200){
-                this.$mptoast('成功推出')
+                that.$mptoast('成功退出')
                 that.isJoin = false
                 that.updateData()
               }else {
-                this.$mptoast(res.msg)
+                that.$mptoast(res.msg)
               }
-            })
+            },(res)=>{
+              that.$mptoast(res.msg)
+            }).catch(function(error) {
+              that.$mptoast(res.msg)
+            });
             console.log('用户点击确定')
           } else if (res.cancel) {
             console.log('用户点击取消')
@@ -298,6 +307,7 @@ export default {
     },
 
     swopSlock (id) {
+      let that = this
       wx.showModal({
         title: '提示',
         content: '是否申请与该用户交换名片',
@@ -309,9 +319,9 @@ export default {
             indexLike(msg).then((res)=>{
               console.log(res)
               if(res.http_status == 200){
-                this.$mptoast('成功')
+                that.$mptoast('成功')
               }else{
-                this.$mptoast(res.msg)
+                that.$mptoast(res.msg)
               }
             })
             console.log('用户点击确定')
@@ -333,12 +343,13 @@ export default {
     updateData(){
       let that = this
       getUserGroupInfo(that.msg.vkey).then((res)=>{
+        console.log('更新',res)
         that.flockInfo = res.data
 
         if(res.http_status == 200){ 
-          
+
         }else {
-          this.$mptoast(res.msg)
+          that.$mptoast(res.msg)
         }
       })
     },
@@ -372,7 +383,7 @@ export default {
       })
       that.updateData()
     }else {
-      this.$mptoast('缺少信息')
+      that.$mptoast('缺少信息')
     }
 
   },

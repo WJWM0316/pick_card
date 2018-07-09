@@ -32,16 +32,16 @@
     <view class="pop_warp" v-if="pop.isPop" @tap="cloPop">
       <view class="share_pop" v-if="pop.isShare"> 
         <image  class="share_clo" src="/static/images/popup_btn_close_nor@3x.png" ></image>
-        <image class="share_cont" src="/static/images/popup_pic_share@3x.png"></image>
+        <image class="share_cont" src="/static/images/popup_pic_newmatch@3x.png"></image>
         <view class="tit" >恭喜你!</view>
         <view class="txt txt_2">你已经和TA成功互换名片了! 现在你可以</view>
 
         <view class="btns">
-          <button class="btn friend" @click="likeOp('left')">
+          <button class="btn friend" @click="toDetail">
             <image class="img_warp" src="/static/images/popup_btn_godetails@3x.png"></image>
             <view class="bt_txt">看看TA的资料</view>
           </button>
-          <button class="btn friends" @tap="likeOp('right')">
+          <button class="btn friends" @tap="toShare">
             <image class="img_warp" src="/static/images/popup_btn_sharenew@3x.png"></image>
             <view class="bt_txt">炫耀一下新朋友</view>
           </button>
@@ -93,11 +93,10 @@
       font-family:PingFangSC-Semibold;
       color:rgba(53,57,67,1);
       line-height:32rpx;
-      margin-top: 22rpx;
+      margin-top: 48rpx;
 
     }
     .txt {
-      height:28rpx;
       font-size:28rpx;
       font-family:PingFangSC-Regular;
       color:rgba(154,161,171,1);
@@ -116,7 +115,7 @@
       justify-content: center;
       align-items: center;
       .btn {
-        width:140rpx;
+        //width:140rpx;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -281,26 +280,38 @@
         pop: {
           isPop: false,
           isShare: false,
-        }
+        },
+        nowItem: {}
       }
     },
     methods: {
       //跳转====
       toDetail (item) {
         console.log(item)
+        let data = {}
+        if(item){
+          data = item
+        }else {
+          data = this.nowItem
+        }
+
         wx.navigateTo({
-          url: `/pages/detail/main?vkey=${item.apply_user_info.vkey}`
+          url: `/pages/detail/main?vkey=${data.apply_user_info.vkey}`
         })
       },
       toShare(res){
         console.log('to share me')
+        wx.navigateTo({
+          url: `/pages/sharePick/main`
+        })
       },
       cloPop (res) {
         console.log(res)
+        this.nowItem = {};
         this.pop = {
           isPop: false,
           isShare: false,
-        }
+        };
         console.log(res)
 
       },
@@ -324,6 +335,7 @@
           if(res.http_status == 200){
             that.$mptoast('已发送')
             that.listData[index].status = 1
+            that.nowItem = that.listData[index]
             that.openPop()
           }
         },(res)=>{
@@ -339,7 +351,6 @@
       getLikeList().then((res)=>{
         console.log('=====',res)
         that.listData = res.data
-
       })
     },
 
