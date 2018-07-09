@@ -1,29 +1,27 @@
 
 <template>
   <view class="container" >
-
-        <view class="state_1" v-if="test">
-          <image  class="one_bg" src="/static/images/share_match_pic_share@3x.png" ></image>
-          <view class="cont_tit">哇，一张名片就勾搭到一位大咖！ 你也来试</view>
-          <view class="cont_txt">Pick！趣名片，职场新人脉勾搭平台 有趣社交，从这里开始</view>
+    <view class="state_1" v-if="test">
+      <image  class="one_bg" src="/static/images/share_match_pic_share@3x.png" ></image>
+      <view class="cont_tit">哇，一张名片就勾搭到一位大咖！ 你也来试</view>
+      <view class="cont_txt">Pick！趣名片，职场新人脉勾搭平台 有趣社交，从这里开始</view>
+    </view>
+    <view class="state_2" v-else>
+      <view class="head_msg">
+        <view class="msg_left">
+          <view class="cont_tit">{{info.nickname}}</view>
+          <view class="cont_txt">{{info.occupation}}</view>
+          <view class="cont_txt">{{info.company}}</view>
         </view>
-
-        <view class="state_2" v-else>
-          <view class="head_msg">
-            <view class="msg_left">
-              <view class="cont_tit">邓陶邓陶邓陶</view>
-              <view class="cont_txt">产品经理</view>
-              <view class="cont_txt">广州老虎科技信息有限公司</view>
-            </view>
-            <image class="msg_right" src="/static/images/popup_btn_close_nor@3x.png" ></image>
-          </view>
-          <image  class="two_bottom" src="/static/images/popup_btn_close_nor@3x.png" ></image>
-          <view class="peaple">
-            <view class="ple_num">10</view>个人
-          </view>
-          <view class="title">都想得到我的名片</view>
-          <image  class="two_pic" src="/static/images/popup_btn_close_nor@3x.png" ></image>
-        </view>
+        <image class="msg_right" :src="info.avatar.middleImgUrl" ></image>
+      </view>
+      <image  class="two_bottom" src="/static/images/popup_btn_close_nor@3x.png" ></image>
+      <view class="peaple">
+        <view class="ple_num">{{info.userApplyNum}}</view>个人
+      </view>
+      <view class="title">都想得到我的名片</view>
+      <image  class="two_pic" src="/static/images/popup_btn_close_nor@3x.png" ></image>
+    </view>
     <view class="footer">
       <button class="btn " >
         去看看TA的趣名片
@@ -33,9 +31,38 @@
       </button>
     </view>
     <mptoast />
-
   </view>
 </template>
+<script>
+  import {getSharePickApi} from '@/api/pages/login'
+  export default {
+    data () {
+      return {
+        vkey: '',
+        info: {
+          nickname: '',
+          occupation: '',
+          company: '',
+          avatar: '',
+          userApplyNum: 0
+        }
+      }
+    },
+    onLoad (option) {
+      this.vkey = option.vkey
+    },
+    methods: {
+      getShare () {
+        const data = {
+          vkey: this.vkey
+        }
+        getSharePickApi(data).then(res => {
+          this.info = res.data
+        })
+      }
+    }
+  }
+</script>
 <style lang="less" type="text/less" scoped>
   .container {
     height: 100vh;

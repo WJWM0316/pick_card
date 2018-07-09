@@ -14,7 +14,7 @@
 		<view class="inner custom" v-show="type === 'custom'">
 			<view class="title">添加自定义标签<image @tap="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
 			<view class="con">
-				<input class="labelInput" :focus="type === 'custom'" type="text" v-model="customText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" />
+				<input class="labelInput" :focus="type === 'custom'" type="text" :value="customText" @input="inputText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" />
 				<text class="textNum" v-show="customText.length > 0">{{10 - customText.length}}</text>
 				<text class="textNum" v-else">10</text>
 				<button @tap="addFun" class="btn">添加标签</button>
@@ -71,6 +71,9 @@
 			},
 			close () {
 				this.$emit('close')
+			},
+			inputText (e) {
+				this.customText = e.target.value
 			},
 			addFun () {
 				if (this.customText !== '') {

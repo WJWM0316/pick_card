@@ -5,7 +5,7 @@
 				<view class="itemCon">
 					<view class="left requst">公司</view>
 					<view class="right">
-						<input type="text" v-model="info.name" placeholder="请输入公司名字" placeholder-style="color:#B2B6C2" maxlength="50">
+						<input type="text" v-model.lazy="info.name" placeholder="请输入公司名字" placeholder-style="color:#B2B6C2" maxlength="50">
 					</view>
 				</view>
 			</view>
@@ -13,7 +13,7 @@
 				<view class="itemCon">
 					<view class="left requst">职位</view>
 					<view class="right">
-						<input type="text" v-model="info.position" placeholder="请输入您的职位" placeholder-style="color:#B2B6C2" maxlength="20">
+						<input type="text" v-model.lazy="info.position" placeholder="请输入您的职位" placeholder-style="color:#B2B6C2" maxlength="20">
 					</view>
 				</view>
 			</view>
@@ -52,7 +52,7 @@
 				<view class="itemCon">
 					<view class="left requst">学校</view>
 					<view class="right">
-						<input type="text" v-model="info.name" placeholder="请输入学校名称" placeholder-style="color:#B2B6C2" maxlength="20">
+						<input type="text" v-model.lazy="info.name" placeholder="请输入学校名称" placeholder-style="color:#B2B6C2" maxlength="20">
 					</view>
 				</view>
 			</view>

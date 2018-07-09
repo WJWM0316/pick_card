@@ -154,3 +154,11 @@ export const getShareImg = (data) => {
   })
 }
 
+// 获取炫耀信息接口
+export const getSharePickApi = (data) => {
+  return request({
+    url: '/share/getShareInfo',
+    data
+  })
+}
+

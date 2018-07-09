@@ -11,7 +11,7 @@
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">姓名</view>
-					<view class="right"><input type="text"  placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model="userInfo.nickname"></view>
+					<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model.lazy="userInfo.nickname"></view>
 				</view>
 			</view>
 			<view class="item">
@@ -71,7 +71,7 @@
 				<view class="itemCon">
 					<view class="left requst">职位</view>
 					<view class="right">
-						<input type="text" maxlength="20" placeholder="请输入职位" placeholder-style="color:#B2B6C2" v-model="userInfo.occupation">
+						<input type="text" maxlength="20" placeholder="请输入职位" placeholder-style="color:#B2B6C2" v-model.lazy="userInfo.occupation">
 					</view>
 				</view>
 			</view>
@@ -79,7 +79,7 @@
 				<view class="itemCon">
 					<view class="left requst">最近任职公司</view>
 					<view class="right">
-						<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2"  v-model="userInfo.company">
+						<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2"  v-model.lazy="userInfo.company">
 					</view>
 				</view>
 			</view>
@@ -87,7 +87,7 @@
 				<view class="itemCon">
 					<view class="left">公司地址</view>
 					<view class="right">
-						<input type="text" maxlength="20" placeholder="请输入公司地址" placeholder-style="color:#B2B6C2" v-model="userInfo.company_location">
+						<input type="text" maxlength="20" placeholder="请输入公司地址" placeholder-style="color:#B2B6C2" v-model.lazy="userInfo.company_location">
 					</view>
 				</view>
 			</view>
@@ -98,7 +98,7 @@
 				<view class="itemCon">
 					<view class="left requst">手机号码</view>
 					<view class="right">
-						<input type="number" disabled placeholder="请输入手机号码" placeholder-style="color:#B2B6C2"  v-model="userInfo.mobile">
+						<input type="number" disabled placeholder="请输入手机号码" placeholder-style="color:#B2B6C2"  v-model.lazy="userInfo.mobile">
 					</view>
 				</view>
 			</view>
@@ -106,7 +106,7 @@
 				<view class="itemCon">
 					<view class="left">微信号</view>
 					<view class="right">
-						<input type="text" placeholder="请输入微信号" placeholder-style="color:#B2B6C2"  v-model="userInfo.wechat">
+						<input type="text" placeholder="请输入微信号" placeholder-style="color:#B2B6C2"  v-model.lazy="userInfo.wechat">
 					</view>
 				</view>
 			</view>
@@ -114,7 +114,7 @@
 				<view class="itemCon">
 					<view class="left">邮箱地址</view>
 					<view class="right">
-						<input type="text" placeholder="请输入邮箱地址" placeholder-style="color:#B2B6C2"  v-model="userInfo.email">
+						<input type="text" placeholder="请输入邮箱地址" placeholder-style="color:#B2B6C2"  v-model.lazy="userInfo.email">
 					</view>
 				</view>
 			</view>
@@ -123,7 +123,7 @@
 			<view class="title">个人签名</view>
 			<view class="item sign">
 				<view class="itemCon">
-					<textarea auto-height=true cursor-spacing="50" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#B2B6C2" v-model="userInfo.sign"></textarea>
+					<textarea auto-height=true cursor-spacing="50" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#B2B6C2" :value="userInfo.sign" @input="signText"></textarea>
 					<text class="number">{{userInfo.sign ? userInfo.sign.length : 0}}/25</text>
 				</view>
 			</view>
@@ -216,6 +216,9 @@
 		        console.log(e, 2)
 		      })
 				}
+			},
+			signText (e) {
+				this.userInfo.sign = e.target.value
 			},
 			getJobList () {
 				const data = {

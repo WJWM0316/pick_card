@@ -140,6 +140,7 @@
 			this.pageOneNum = 0
 			this.pageTwoNum = 0
 			this.selectList = []
+			this.jobList = []
 			this.getList()
 		},
 		watch: {
@@ -257,7 +258,6 @@
 				})
 			},
 			getCustom (e) {
-				console.log(2222222222)
 				let testing = false
 				this.selectList.forEach(item => {
 					if (item.name === e) {
@@ -356,6 +356,7 @@
 				this.showLablePop = true
 			},
 			select (list, index, firstId, secondId, id) {
+				console.log(list[index], 11111)
 				if (list[index].check) {
 					if (firstId !== 2) {
 						this.pageOneNum --
@@ -363,6 +364,7 @@
 						this.pageTwoNum --
 					}
 					list[index].check = false
+					console.log(list[index], 333)
 					const item = list[index]
 					list.splice(index, 1, item)
 					this.selectList.forEach((e, removeIndex) => {
@@ -376,7 +378,6 @@
 					} else {
 						this.pageTwoNum ++
 					}
-					
 					list[index].check = true
 					const item = list[index]
 					list.splice(index, 1, item)
@@ -397,7 +398,13 @@
 								console.log(1111, this.selectList, this.selectList[0])
 								switch (this.selectList[0].first_level) {
 									case 3:
-										this.jobList[this.selectList[0].index].check = false
+										this.list[2].son.forEach((e,index) => {
+											if (e.id === this.selectList[0].two_level) {
+												console.log(e, 2222222222)
+												e.son[this.selectList[0].index].check = false
+												this.list.splice(2, 1, this.list[2])
+											}
+										})
 										break
 									case 4:
 										this.quality[this.selectList[0].index].check = false
