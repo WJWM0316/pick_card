@@ -82,7 +82,7 @@
         <view class="tit">个性签名</view>
         <textarea maxlength="25" class="area" v-model="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
         v-if="!bindPhone.isPh" />
-        <text class="astrict"><view :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</view>/25</text>
+        <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
     </view>
 
@@ -921,9 +921,13 @@
         font-family:SFUIDisplay-Light;
         display: flex;
         flex-direction: row;
-        &.ts {
-          color: #FFBC47;
+        .ast {
+          color: #B2B6C2;
+          &.ts {
+            color: #FFBC47;
+          }
         }
+        
       }
     }
     
