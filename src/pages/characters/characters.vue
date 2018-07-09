@@ -8,8 +8,8 @@
 					<text>/5</text>
 				</view>
 				<view class="label-con">
-					<labelBox class="labelBox">
-						<label  v-for="(item, index) in selectList" :key="index" v-if="item.first_level !== 2">
+					<labelBox class="labelBox check">
+						<label  v-for="(item, index) in selectList" :key="item.id" v-if="item.first_level !== 2">
 							<text class="label check" @tap="remove(item, index)">{{item.name}}</text>
 						</label>
 					</labelBox>
@@ -28,7 +28,7 @@
 				</view>
 				<view class="label-con">
 					<view class="labelBox">
-						<label  v-for="(item, index) in jobList" :key="index">
+						<label  v-for="(item, index) in jobList" :key="item.id">
 							<text class="label" :class="{'check' : item.check}" @tap="select(jobList, index, list[2].id, list[2].son[career].id, item.id)">{{item.name}}</text>
 						</label>
 					</view>
@@ -40,7 +40,7 @@
 				</view>
 				<view class="label-con">
 					<labelBox class="labelBox">
-						<label  v-for="(item, index) in quality" :key="index">
+						<label  v-for="(item, index) in quality" :key="item.id">
 							<text class="label" :class="{'check' : item.check}" @tap="select(quality, index, list[3].id, list[3].id, item.id)">{{item.name}}</text>
 						</label>
 					</labelBox>
@@ -60,7 +60,7 @@
 				</view>
 				<view class="label-con">
 					<labelBox class="labelBox">
-						<label  v-for="(item, index) in selectList" :key="index" v-if="item.first_level === 2">
+						<label  v-for="(item, index) in selectList" :key="item.id" v-if="item.first_level === 2">
 							<text class="label check" @tap="remove(item, index)">{{item.name}}</text>
 						</label>
 					</labelBox>
@@ -72,7 +72,7 @@
 				</view>
 				<view class="label-con">
 					<view class="labelBox">
-						<label  v-for="(item, index) in character" :key="index">
+						<label  v-for="(item, index) in character" :key="item.id">
 							<text class="label" :class="{'check' : item.check}" @tap="select(character, index, list[1].id, list[1].son[0].id, item.id)">{{item.name}}</text>
 						</label>
 					</view>
@@ -84,7 +84,7 @@
 				</view>
 				<view class="label-con">
 					<labelBox class="labelBox">
-						<label  v-for="(item, index) in likeList" :key="index">
+						<label  v-for="(item, index) in likeList" :key="item.id">
 							<text class="label" :class="{'check' : item.check}" @tap="select(likeList, index, list[1].id, list[1].son[1].id, item.id)">{{item.name}}</text>
 						</label>
 					</labelBox>
@@ -256,6 +256,7 @@
 				})
 			},
 			getCustom (e) {
+				console.log(2222222222)
 				let testing = false
 				this.selectList.forEach(item => {
 					if (item.name === e) {
@@ -282,7 +283,7 @@
 						}
 						if (this.curId === 3) {
 							if (this.selectList.length < 5) {
-								data.index = this.selectList.length
+								data.index = 998
 								this.selectList.push(data)
 							} else {
 								switch (this.selectList[0].first_level) {
@@ -299,7 +300,7 @@
 							}
 						} else {
 							if (this.selectList.length < 10) {
-								data.index = this.selectList.length
+								data.index = 998
 								this.selectList.push(data)
 							} else {
 								switch (this.selectList[5].two_level) {
@@ -423,6 +424,7 @@
 							this.pageOneNum -= 1
 							this.selectList.splice(0, 1)
 						}
+						console.log(this.pageOneNum, 111111111)
 						this.selectList.splice(this.pageOneNum-1, 0, data)
 					} else {
 						if (this.pageTwoNum > 5) {
@@ -451,7 +453,7 @@
 </script>
 <style lang="less" type="text/less" scoped>
 	.characters {
-		padding: 0 40rpx;
+		padding: 0 40rpx 158rpx;
 		.title {
 			margin-bottom: 30rpx;
 			border-bottom:1px solid rgba(53,57,67,0.1);
@@ -486,7 +488,6 @@
 						margin-top: 20rpx;
 						&.check {
 							border-color: rgba(0,208,147,1);
-							background: rgba(0,208,147,0.1);
 							color: #00D093;
 						}
 					}
@@ -558,7 +559,12 @@
 		.btn {
 			background: #fff;
 			margin-top: 80rpx;
-			padding: 30rpx 0;
+			padding: 30rpx;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			box-sizing: border-box;
 			.next {
 				height:98rpx;
 				background:#00D093;

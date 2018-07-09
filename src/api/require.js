@@ -27,26 +27,12 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       message: '网络不可用，请检查网络设置。'
     }
     util.loading(isLoading)
-    // if (wx.getStorageSync('token')) {
-    //   if (method === 'get') {
-    //     url = url + '?token=' + wx.getStorageSync('token') || ''
-    //   } else {
-    //     data.token = wx.getStorageSync('token') || ''
-    //   } 
-    // }
     const addHttpHead = {
       token: wx.getStorageSync('token') || ''
     }
     wx.request({
       url: config.baseHost+url,
       header: addHttpHead,
-      // data: {
-      //   user_id: wx.getStorageSync('user_id'),
-      //   sign: that.utilMd5.hexMD5(
-      //     `${url}?token=${wx.getStorageSync('token')}`
-      //   ),
-      //   ...data,
-      // },
       data: data,
       method: method,
       success(res) {

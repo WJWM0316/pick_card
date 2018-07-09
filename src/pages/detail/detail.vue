@@ -61,7 +61,7 @@
 					<image class="share more" v-if="isSelf" @tap="toEdit('label')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
 				<view class="labelBox" v-if="labelInfo.length > 0">
-					<text class="label" v-for="(item, index) in labelInfo" :key="index">{{item.name}}</text>
+					<text class="label" v-for="(item, index) in labelInfo" :key="item.id">{{item.name}}</text>
 				</view>
 			</view>
 		</view>

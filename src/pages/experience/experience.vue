@@ -243,14 +243,6 @@
 					this.info.start_time_desc = ''
 					return
 				}
-				if (this.info.start_time_desc > this.info.end_time_desc && this.info.start_time_desc) {
-					wx.showToast({
-						title: '结束时间不能小于开始时间',
-						icon: 'none'
-					})
-					this.info.end_time_desc = ''
-					this.nowTime = false
-				}
 				function saveFun () {
 					wx.showToast({
 						title: '保存成功',
@@ -272,7 +264,6 @@
 						end_time: new Date(this.info.end_time_desc).getTime().toString().slice(0, 10)
 					}
 					if (this.isNow) {
-						console.log(this.nowTime, 222222)
 						data.end_time = new Date(this.nowTime).getTime().toString().slice(0, 10)
 					}
 					if (id !== 'undefined') {
@@ -292,9 +283,10 @@
 						start_time : new Date(this.info.start_time_desc).getTime().toString().slice(0, 10),
 						end_time: new Date(this.info.end_time_desc).getTime().toString().slice(0, 10)
 					}
+					console.log(this.isNow, this.nowTime,data.end_time, 222222)
 					if (this.isNow) {
-						console.log(this.nowTime, 222222)
 						data.end_time = new Date(this.nowTime).getTime().toString().slice(0, 10)
+						console.log(this.nowTime, data.end_time, 222222)
 					}
 					if (id !== 'undefined') {
 						data.id = id

@@ -146,3 +146,11 @@ export const getShareConfig = (data) => {
   })
 }
 
+// 获取分享信息
+export const getShareImg = (data) => {
+  return request({
+    url: '/share/getShareImages',
+    data
+  })
+}
+
