@@ -268,6 +268,7 @@
 <script>
   import mptoast from 'mptoast'
   import { getLikeList, putLike } from '@/api/pages/user'
+  import { deleteRedDot } from '@/api/pages/red'
 
   export default {
     
@@ -313,16 +314,13 @@
           isShare: false,
         };
         console.log(res)
-
       },
-
       openPop () {
         this.pop = {
           isPop: true,
           isShare: true,
         }
       },
-
       putApply (id,index) {
         if(!id){return}
         let data = {
@@ -342,15 +340,19 @@
           that.$mptoast('已发送','error',2000)
         })
       }
-
     },
 
     onLoad () {
       let that = this;
-      console.log(this.listData )
       getLikeList().then((res)=>{
         console.log('=====',res)
         that.listData = res.data
+
+        if(res.http_status==200){
+          deleteRedDot()
+        }
+      },(res)=>{
+        that.$mptoast(res.msg)
       })
     },
 

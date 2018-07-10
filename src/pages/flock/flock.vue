@@ -211,6 +211,79 @@
             <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
           </view>
         </view>
+        <view class="card_block" >
+          <view class="blo_msg" >
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
+            <view class="msg_name ellipsis">撒打算的</view>
+            <view class="msg_tit ellipsis">撒打算打算的</view>
+            <view class="msg_company ellipsis">撒打算的</view>
+            <view class="flock_style" >交换名片</view>
+          </view>
+        </view>
+        <view class="card_block" >
+          <view class="blo_msg" >
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
+            <view class="msg_name ellipsis">撒打算的</view>
+            <view class="msg_tit ellipsis">撒打算打算的</view>
+            <view class="msg_company ellipsis">撒打算的</view>
+            <view class="flock_style" >交换名片</view>
+          </view>
+        </view>
+        <view class="card_block" >
+          <view class="blo_msg" >
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
+            <view class="msg_name ellipsis">撒打算的</view>
+            <view class="msg_tit ellipsis">撒打算打算的</view>
+            <view class="msg_company ellipsis">撒打算的</view>
+            <view class="flock_style" >交换名片</view>
+          </view>
+        </view>
+        <view class="card_block" >
+          <view class="blo_msg" >
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
+            <view class="msg_name ellipsis">撒打算的</view>
+            <view class="msg_tit ellipsis">撒打算打算的</view>
+            <view class="msg_company ellipsis">撒打算的</view>
+            <view class="flock_style" >交换名片</view>
+          </view>
+        </view>
+        <view class="card_block" >
+          <view class="blo_msg" >
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
+            <view class="msg_name ellipsis">撒打算的</view>
+            <view class="msg_tit ellipsis">撒打算打算的</view>
+            <view class="msg_company ellipsis">撒打算的</view>
+            <view class="flock_style" >交换名片</view>
+          </view>
+        </view>
+        <view class="card_block" >
+          <view class="blo_msg" >
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
+            <view class="msg_name ellipsis">撒打算的</view>
+            <view class="msg_tit ellipsis">撒打算打算的</view>
+            <view class="msg_company ellipsis">撒打算的</view>
+            <view class="flock_style" >交换名片</view>
+          </view>
+        </view>
+        <view class="card_block" >
+          <view class="blo_msg" >
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
+            <view class="msg_name ellipsis">撒打算的</view>
+            <view class="msg_tit ellipsis">撒打算打算的</view>
+            <view class="msg_company ellipsis">撒打算的</view>
+            <view class="flock_style" >交换名片</view>
+          </view>
+        </view>
+
+        <view class="card_block" >
+          <view class="blo_msg" >
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
+            <view class="msg_name ellipsis">撒打算的</view>
+            <view class="msg_tit ellipsis">撒打算打算的</view>
+            <view class="msg_company ellipsis">撒打算的</view>
+            <view class="flock_style" >交换名片</view>
+          </view>
+        </view>
       </view>
 
       <view class="hintJoin" v-if="!isJoin && isFirst">—— 加入后即可查看所有群成员的名片 ——</view>
