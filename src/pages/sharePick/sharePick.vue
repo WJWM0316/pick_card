@@ -9,15 +9,15 @@
     <view class="state_2" v-else>
       <view class="head_msg">
         <view class="msg_left">
-          <view class="cont_tit">{{info.nickname}}</view>
-          <view class="cont_txt">{{info.occupation}}</view>
-          <view class="cont_txt">{{info.company}}</view>
+          <view class="cont_tit">111</view>
+          <view class="cont_txt">22</view>
+          <view class="cont_txt">333</view>
         </view>
-        <image class="msg_right" :src="info.avatar.middleImgUrl" ></image>
+        <image class="msg_right" ></image>
       </view>
       <image  class="two_bottom" src="/static/images/popup_btn_close_nor@3x.png" ></image>
       <view class="peaple">
-        <view class="ple_num">{{info.userApplyNum}}</view>个人
+        <view class="ple_num"></view>个人
       </view>
       <view class="title">都想得到我的名片</view>
       <image  class="two_pic" src="/static/images/popup_btn_close_nor@3x.png" ></image>
@@ -39,26 +39,32 @@
     data () {
       return {
         vkey: '',
-        info: {
-          nickname: '',
-          occupation: '',
-          company: '',
-          avatar: '',
-          userApplyNum: 0
-        }
+        test: false
+        // info: {
+        //   nickname: '11',
+        //   occupation: '22',
+        //   company: '33',
+        //   avatar: '44',
+        //   userApplyNum: 0
+        // }
       }
     },
     onLoad (option) {
       this.vkey = option.vkey
+      console.log(this.vkey, 1111111111)
+      this.getShare()
+    },
+    onShow () {
+      console.log(this.vkey, 1111111111)
     },
     methods: {
       getShare () {
         const data = {
           vkey: this.vkey
         }
-        getSharePickApi(data).then(res => {
-          this.info = res.data
-        })
+        // getSharePickApi(data).then(res => {
+        //   //this.info = res.data
+        // })
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-	<view class="labelPop" v-if="isShow" @touchmove.stop="preventEvevt">
+	<view class="labelPop" v-if="isShow">  <!-- @touchmove.stop="preventEvevt" -->
 		<view class="inner" v-if="type === 'labelBox'">
 			<view class="title">请选择1~3个领域<image @tap="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
 			<view class="con">
@@ -8,7 +8,7 @@
 						<text class="label" :class="{'check' : item.check}" @tap="select(item, index)">{{item.name}}</text>
 					</label>
 				</labelBox>
-				<button @tap="save" class="btn">保存</button>
+				<button @tap.stop="save" class="btn">保存</button>
 			</view>
 		</view>
 		<view class="inner custom" v-if="type === 'custom'">
@@ -17,7 +17,7 @@
 				<input class="labelInput"  type="text" :value="customText" @input="inputText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" />
 				<text class="textNum" v-show="customText.length > 0">{{10 - customText.length}}</text>
 				<text class="textNum" v-else">10</text>
-				<button @tap="addFun" class="btn">添加标签</button>
+				<button @tap.stop="addFun" class="btn">添加标签</button>
 			</view>
 		</view>
 	</view>
@@ -52,6 +52,7 @@
 				if (val) {
 					this.customText = ''
 					if (this.type !== 'custom') {
+						this.checkedList = []
 						this.getLabelList()
 					}
 				}
@@ -204,7 +205,7 @@
 				padding: 60rpx 30rpx 40rpx;
 				font-size: 0;
 				.labelBox {
-					height: 500rpx;
+					max-height: 500rpx;
 					overflow-y: auto;
 					display: block;
 				}
