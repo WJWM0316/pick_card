@@ -17,10 +17,10 @@
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
           <block v-if="nowIndex == 0">
             <view class="friendList" v-if="friendList.length>0">
-                <view class="card_block" v-for="(item, index) in friendList" :key="key">
-                  <view class="blo_msg " @tap="toDetail(item)">
-                    <image class="blo_img" :class="{'cur': item.has_red_dot == 1}" :src="item.friend_user_info.avatar_info" v-if="item.friend_user_info.avatar_info.length>0"></image>
-                    <image class="blo_img" :class="{'cur': item.has_red_dot == 1}" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
+                <view class="card_block"  v-for="(item, index) in friendList" :key="key">
+                  <view class="blo_msg " :class="{'one': item.has_red_dot == 1}" @tap="toDetail(item)">
+                    <image class="blo_img"  :src="item.friend_user_info.avatar_info" v-if="item.friend_user_info.avatar_info.length>0"></image>
+                    <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
 
                     <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
                     <view class="msg_tit  ellipsis">{{item.friend_user_info.occupation}}</view>
@@ -40,15 +40,16 @@
           </block>
 
           <block v-else>
-            <view class="flockList" v-if="florkList.length>0">
-              <view class="card_block" v-for="(item, index) in florkList" :key="key" @tap="toFlock(item)">
-                <view class="blo_msg flock_blo">
-                  <image class="blo_img" :class="{'cur': item.newJoinMemberCount == 1}" :src="item.listImg" v-if="item.listImg"></image>
-                  <image class="blo_img" :class="{'cur': item.newJoinMemberCount == 1}" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
+            <view class="flockList" v-if="florkList.list.length>0">
+
+              <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item)">
+                <view class="blo_msg flock_blo" >
+                  <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
+                  <image class="blo_img"  src="/static/images/new_pic_defaulhead.jpg" v-else></image>
                   <open-data class="msg_name" type="groupName" :open-gid="item.openGid"></open-data>
                   <view class="msg_tit">已有{{item.memberCount}}张群成员名片</view>
 
-                  <view class="new_msg">0</view>
+                  <view class="new_msg">{{item.newJoinMemberCount}}</view>
                 </view>
               </view>
             </view>
@@ -302,6 +303,7 @@ export default {
       justify-content: flex-end;
       margin-bottom: 40rpx;
       overflow-y: scroll;
+      
       .blo_img {
         width:130rpx;
         height:130rpx;
@@ -312,19 +314,7 @@ export default {
         //box-shadow:0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
         border:4rpx solid rgba(255,255,255,1);
         box-sizing: border-box;
-        &.cur {
-          &:after {
-            content: '';
-            width:20rpx;
-            height:8rpx;
-            background:rgba(0,208,147,1);
-            border-radius:4rpx;
-            position: absolute;
-            bottom: 0rpx;
-            left: 50%;
-            margin-left: -10rpx;
-          }
-        }
+        
       }
       .blo_msg {
         width:600rpx;
@@ -339,6 +329,19 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        &.one {
+          &:after {
+            content: '';
+            width:20rpx;
+            height:20rpx;
+            border-radius: 50%;
+            background:rgba(255,102,102,1);
+            position: absolute;
+            top: 62rpx;
+            left: 50rpx;
+            //margin-left: -10rpx;
+          }
+        }
         &.flock_blo {
           height: 180rpx;
           .new_msg {

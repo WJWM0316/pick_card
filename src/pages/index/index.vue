@@ -3,7 +3,7 @@
   <view class="container" :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
     <view class="op_top">
       <view class="left" @click="toFiltrate">筛选<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
-      <view class="right" @click="toSwop">交换申请<view class="new">NEW</view></view>
+      <view class="right" @click="toSwop">交换申请<view class="new" v-if="swopRed==1">NEW</view></view>
     </view>
     <view class="content">
       <view class="peopList">
@@ -156,6 +156,7 @@
   import {loginApi} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
+  import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
 export default {
 
   components: {
@@ -200,6 +201,7 @@ export default {
 
       systemInfo: {}, //
       beforeCreateStep: 0,
+      swopRed: 0,   //交换红点
     }
   },
   methods: {
@@ -260,7 +262,6 @@ export default {
       this.isPop = true
       this.isShare = true
     },
-
     //跳转====
     toDetail (item) {
       wx.navigateTo({
@@ -413,7 +414,7 @@ export default {
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
-        if(!that.toCreate.isToCreate){
+        if(!that.toCreate.isToCreate && that.userInfo.step!=9){
           that.isCreate()
         }
         that.moveData={
@@ -433,7 +434,6 @@ export default {
         that.isNext = true
       })
     },
-
     unlike(msg){
       let that = this
       indexUnlike(msg).then((res)=>{
@@ -449,7 +449,7 @@ export default {
           that.isNext = true
         },800)
 
-        if(that.toCreate.num > 2 && !that.toCreate.isToCreate){
+        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
           that.isCreate()
         }
       },(res)=>{
@@ -520,6 +520,7 @@ export default {
         console.log(res)
       }
     })
+
     authorizePop.methods.checkLogin().then(res => {
       getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
@@ -553,6 +554,16 @@ export default {
       this.getPage.occupation_label_id = res.occupation_label_id
       this.getPage.realm_label_id = res.realm_label_id
     }
+
+    redDotApplys().then(res=>{
+      if(res.http_status==200){
+        that.swopRed = res.data.user_apply_show_red_dot
+      }
+    })
+
+    redDot().then(res=>{
+      console.log('00000-----',res)
+    })
     
   },
   onShow (res) {
