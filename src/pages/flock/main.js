@@ -6,7 +6,7 @@ app.$mount();
 
 export default {
   config: {
-    navigationBarTitleText: '名片详情',
+    navigationBarTitleText: '群组',
     enablePullDownRefresh: false,
   },
 };

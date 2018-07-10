@@ -41,7 +41,7 @@
 
           <block v-else>
             <view class="flockList" v-if="florkList.length>0">
-              <view class="card_block" v-for="(item, index) in florkList" :key="key" @tap="toFlock(item)"> 
+              <view class="card_block" v-for="(item, index) in florkList" :key="key" @tap="toFlock(item)">
                 <view class="blo_msg flock_blo">
                   <image class="blo_img" :src="item.listImg" v-if="item.listImg"></image>
                   <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
@@ -59,12 +59,11 @@
               </view>
             </block>
           </block>
-
       </view>
     </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <footerTab :type=2></footerTab>
+    <footerTab :type=2 :adaptive=adaptive></footerTab>
   </view>
 </template>
 <script>
@@ -85,7 +84,8 @@ export default {
       friendList: [],
       florkList: [],
       systemInfo: {},
-      spHeight: '80vh'
+      spHeight: '80vh',
+      adaptive: null,
     }
   },
 
@@ -127,23 +127,18 @@ export default {
     },
   },
   onLoad() {
-    let that = this
+    let that = this;
 
+    that.adaptive = wx.getStorageSync('adaptive')
     getFriends().then((res)=>{
-
       console.log(res)
       that.friendList = res.data
-    },(res)=>{
-
-    })
+    },(res)=>{})
 
     getUserGroupList().then((res)=>{
-
       console.log(res)
       that.florkList = res.data
-    },(res)=>{
-
-    })
+    },(res)=>{})
 
     wx.getSystemInfo({
       success: function(res) {

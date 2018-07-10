@@ -20,7 +20,7 @@
         </view>
       </view>
       <!-- //focus="{{focus}}" -->
-      <input class="one_name" @blur="inputText" v-model="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangHK-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="10" />
+      <input class="one_name" @blur="inputText" v-model.lazy="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangHK-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="10" />
 
       <view class="one_gender">
         <view class="gender boy" @click.stop="gender(1)">
@@ -38,11 +38,11 @@
     <view class="op_blo op_two " v-if="nowNum === 1 && listData.length>0">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
-        <input class="one_ipt" v-model="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技" maxlength="100" />
+        <input class="one_ipt" v-model.lazy="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技" maxlength="100" />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt"  v-model="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  maxlength="40" />
+        <input class="one_ipt"  v-model.lazy="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  maxlength="40" />
       </view>
 
       <view class="table_blo row_style_two">
@@ -80,7 +80,7 @@
       </view>
       <view class="table_blo row_style_three">
         <view class="tit">个性签名</view>
-        <textarea maxlength="25" class="area" v-model="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
+        <textarea maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
         v-if="!bindPhone.isPh" />
         <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
@@ -93,10 +93,10 @@
           <view class="ipt_blo">
             <button class="getcode" @tap.stop="sms" v-if="bindPhone.smsCli">获取验证码</button>
             <button class="getcode type2" v-else >重新获取{{bindPhone.time}}s</button>
-            <input class="input_1" placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  maxlength="11" />
+            <input class="input_1" placeholder="请输入手机号" v-model.lazy="bindPhone.number"  type="number" name=""  maxlength="11" />
           </view>
           <view class="ipt_blo">
-            <input placeholder="请输入验证码" maxlength="6" v-model="bindPhone.code" type="" name="" />
+            <input placeholder="请输入验证码" maxlength="6" v-model.lazy="bindPhone.code" type="" name="" />
           </view>
           <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
           <button class="ip_btn" @click.stop="toCode">完成绑定</button>
