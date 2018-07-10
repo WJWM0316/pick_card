@@ -4,17 +4,17 @@
 			<view class="title">请选择1~3个领域<image @tap="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
 			<view class="con">
 				<labelBox class="labelBox">
-					<label  v-for="(item, index) in labelList" :key="index">
+					<label  v-for="(item, index) in labelList" :key="item.id">
 						<text class="label" :class="{'check' : item.check}" @tap="select(item, index)">{{item.name}}</text>
 					</label>
 				</labelBox>
 				<button @tap="save" class="btn">保存</button>
 			</view>
 		</view>
-		<view class="inner custom" v-show="type === 'custom'">
+		<view class="inner custom" v-if="type === 'custom'">
 			<view class="title">添加自定义标签<image @tap="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
 			<view class="con">
-				<input class="labelInput" :focus="type === 'custom'" type="text" v-model="customText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" />
+				<input class="labelInput"  type="text" :value="customText" @input="inputText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" />
 				<text class="textNum" v-show="customText.length > 0">{{10 - customText.length}}</text>
 				<text class="textNum" v-else">10</text>
 				<button @tap="addFun" class="btn">添加标签</button>
@@ -33,6 +33,10 @@
 			type: {
 				type: String,
 				default: 'labelBox'
+			},
+			choseList: {
+				type: String,
+				default: ''
 			}
 		},
 		data () {
@@ -47,23 +51,45 @@
 			isShow (val) {
 				if (val) {
 					this.customText = ''
+					if (this.type !== 'custom') {
+						this.getLabelList()
+					}
 				}
 			},
 			type () {},
-			customText (val) {}
+			customText (val) {},
+			choseList () {}
 		},
 		onLoad () {
-			if (this.type !== 'custom') {
-				this.getLabelList()
-			}
+			
 		},
 		methods: {
 			getLabelList () {
 				const data = {
 					labelType: '1'
 				}
+				let array = this.choseList.split(',')
+
 				postGetLabelByIds(data).then(res => {
 					this.labelList = res.data[0].son
+					this.labelList.forEach((e, index) => {
+						if (array[0] && array[0] == e.id) {
+							this.checkedList.push(e)
+							this.labelList[index].check = true
+							this.num ++
+						}
+						if (array[1] && array[1] == e.id) {
+							this.checkedList.push(e)
+							this.labelList[index].check = true
+							this.num ++
+						}
+						if (array[2] && array[2] == e.id) {
+							this.checkedList.push(e)
+							this.labelList[index].check = true
+							this.num ++
+						}
+					})
+					
 				})
 			},
 			getLabel (index) {
@@ -72,9 +98,20 @@
 			close () {
 				this.$emit('close')
 			},
+			inputText (e) {
+				this.customText = e.target.value
+			},
 			addFun () {
-				this.$emit('addLable', this.customText)
-				this.$emit('close')
+				if (this.customText !== '') {
+					this.$emit('addLable', this.customText)
+					this.$emit('close')
+				} else {
+					wx.showToast({
+					  title: '请自定义标签',
+					  icon: 'none',
+					  duration: 2000
+					})
+				}
 			},
 			save () {
 				if (this.num === 0) {
@@ -92,8 +129,8 @@
 					labelText.push(item.name)
 				})
 				let showList = []
+				labelId.concat(this.choseList || [])
 				labelId = labelId.join(',')
-				console.log('xuanz le ')
 				this.$emit('getLabel', labelId, labelText)
 			},
 			select (item, index) {
@@ -127,8 +164,8 @@
 				console.log('已选择', this.checkedList)
 			},
 			preventEvevt (e) {
-				e.preventDefault()
-				e.stopPropagation()
+				// e.preventDefault()
+				// e.stopPropagation()
 			}
 		}
 	}

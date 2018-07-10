@@ -1,9 +1,9 @@
 <template>
 	<view class="more">
 		<view class="txt">
-			<textarea placeholder="在这里，可以通过文字介绍你自己你也可以上 传一些作品，更好的介绍你自己。" placeholder-style="color:#B2B6C2;font-size:32rpx;line-height:1.4;"
-			maxlength=250 v-model="info.content" @input="disableFun"></textarea>
-			<text class="num">{{info.content.length}}/250</text>
+			<textarea placeholder="留下些文字或作品吧，让别人更加了解你～" placeholder-style="color:#B2B6C2;font-size:32rpx;line-height:1.4;"
+			maxlength=250 :value="info.content" @input="disableFun"></textarea>
+			<view class="num"><text :class="{'numText' : info.content && info.content.length > 0}">{{info.content.length}}</text>/250</view>
 		</view>
 		<view class="imgBox">
 			<view class="item" v-for="(i, index) in files" :key="index" v-if="index < 20">
@@ -16,7 +16,7 @@
 			</view>
 		</view>
 		<view class="btnBox">
-			<button :class="{'disable': disable}" @tap="save" :disabled='disable'>保存</button>
+			<button  @tap="save" >保存</button>
 		</view>
 	</view>
 </template>
@@ -37,7 +37,6 @@
 				count: 20,
 				oldNum: 0,
 				loading: false,
-				disable: true
 			}
 		},
 		computed: {
@@ -62,17 +61,13 @@
 				this.count = this.userInfo.other_info.more_info.img_info.length
 				this.oldNum = this.count
 			}
-			this.disableFun()
 		},
 		onShow () {
 		},
 		methods: {
-			disableFun () {
-				if (this.info.content !== '' || this.files.length !== 0) {
-					this.disable = false
-				} else {
-					this.disable = true
-				}
+			disableFun (e) {
+				console.log(e)
+				this.info.content = e.target.value
 			},
 			chooseImage(e) {
 	      const _this = this;
@@ -84,7 +79,6 @@
 	          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
 	          const curIndex = _this.files.length
 	          _this.files = _this.files.concat(res.tempFiles || [])
-	          _this.disableFun()
 	          _this.loading = true
 	          _this.count =+ res.tempFiles.length
 	          uploadImages(res.tempFiles, {
@@ -99,6 +93,11 @@
 			      	 console.log(_this.loading, 11111)
 			         console.log('全部上传成功',_this.filesId, res)
 			      }).catch((e, index) => {
+			      	wx.showToast({
+						  title: '图片上传失败，请重新上传',
+						  icon: 'none',
+						  duration: 1000
+						})
 			        console.log(`第${index}张上传失败`, e)
 			      })
 	        },
@@ -123,7 +122,7 @@
 	    		wx.showToast({
 					  title: '图片正在上传，请稍等',
 					  icon: 'none',
-					  duration: 2000
+					  duration: 1000
 					})
 					return
 	    	}
@@ -133,7 +132,12 @@
 	    			array.push(item.file.fileId)
 	    		}
 	    	})
+
 	    	this.info.img_id = this.info.img_id + ',' + array.join(',')
+	    	
+	    	if (this.info.img_id === ',') {
+	    		this.info.img_id = ''
+	    	}
 	    	const data = {
 	    		content: this.info.content,
 	    		img_id: this.info.img_id
@@ -155,7 +159,6 @@
 	    	} else {
 	    		this.filesId.splice(index-this.oldNum, 1)
 	    	}
-	    	this.disableFun()
 	    }
 	  }
 	}
@@ -168,15 +171,20 @@
 			textarea {
 				width: 100%;
 				height: auto;
+				font-size: 32rpx;
 				min-height: 178rpx;
+				font-weight: light;
 			}
 		}
 		.num {
 			margin-top: 20rpx;
 			float: right;
 			color: #C3C9D4;
-			font-size: 28rpx;
-			line-height: 40rpx;
+			font-size: 32rpx;
+			line-height: 1.4;
+			.numText {
+				color: #FFBC47;
+			}
 		}
 		.imgBox {
 			padding: 24rpx 40rpx;

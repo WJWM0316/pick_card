@@ -349,8 +349,10 @@
 						width: 32rpx;
 						height: 32rpx;
 						float: right;
+						display: block;
+						margin-top: 5rpx;
 					}
-					more {
+					.more {
 						margin-top: 4rpx;
 					}
 				}
@@ -410,6 +412,8 @@
 					width: 32rpx;
 					height: 32rpx;
 					float: right;
+					margin-top: 5rpx;
+					display: block;
 				}
 				.title {
 					height: 40rpx;

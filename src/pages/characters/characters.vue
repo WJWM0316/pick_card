@@ -9,7 +9,7 @@
 				</view>
 				<view class="label-con">
 					<labelBox class="labelBox check">
-						<label  v-for="(item, index) in selectList" :key="item.id" v-if="item.first_level !== 2">
+						<label  v-for="(item, index) in selectList" :key="item.id || index" v-if="item.first_level !== 2">
 							<text class="label check" @tap="remove(item, index)">{{item.name}}</text>
 						</label>
 					</labelBox>
@@ -60,7 +60,7 @@
 				</view>
 				<view class="label-con">
 					<labelBox class="labelBox">
-						<label  v-for="(item, index) in selectList" :key="item.id" v-if="item.first_level === 2">
+						<label  v-for="(item, index) in selectList" :key="item.id || index" v-if="item.first_level === 2">
 							<text class="label check" @tap="remove(item, index)">{{item.name}}</text>
 						</label>
 					</labelBox>
@@ -140,6 +140,7 @@
 			this.pageOneNum = 0
 			this.pageTwoNum = 0
 			this.selectList = []
+			this.jobList = []
 			this.getList()
 		},
 		watch: {
@@ -257,7 +258,6 @@
 				})
 			},
 			getCustom (e) {
-				console.log(2222222222)
 				let testing = false
 				this.selectList.forEach(item => {
 					if (item.name === e) {
@@ -286,36 +286,17 @@
 						if (this.pageIndex === 0) {
 							if (this.pageOneNum < 5) {
 								this.pageOneNum ++
-								this.selectList.splice(this.pageOneNum-1, 0, data)
 							} else {
-								switch (this.selectList[0].first_level) {
-									case 3:
-										this.jobList[this.selectList[0].index].check = false
-										break
-									case 4:
-										this.quality[this.selectList[0].index].check = false
-										break
-								}
 								this.selectList.splice(0, 1)
-								this.selectList.splice(this.pageOneNum-1, 0, data)
 							}
+							this.selectList.splice(this.pageOneNum-1, 0, data)
 						} else if (this.pageIndex === 1) {
 							if (this.pageTwoNum < 5) {
 								this.pageTwoNum ++
-								this.selectList.splice(this.pageTwoNum-1, 0, data)
 							} else {
-								console.log(this.selectList[this.pageOneNum], 111111)
-								switch (this.selectList[this.pageOneNum].two_level) {
-									case 35:
-										this.character[this.selectList[this.pageOneNum].index].check = false
-										break
-									case 36:
-										this.likeList[this.selectList[this.pageOneNum].index].check = false
-										break
-								}
 								this.selectList.splice(this.pageOneNum, 1)
-								this.selectList.push(data)
 							}
+							this.selectList.push(data)
 						}
 						console.log(this.selectList)
 					}).catch(e => {
@@ -375,6 +356,7 @@
 				this.showLablePop = true
 			},
 			select (list, index, firstId, secondId, id) {
+				console.log(list[index], 11111)
 				if (list[index].check) {
 					if (firstId !== 2) {
 						this.pageOneNum --
@@ -382,6 +364,7 @@
 						this.pageTwoNum --
 					}
 					list[index].check = false
+					console.log(list[index], 333)
 					const item = list[index]
 					list.splice(index, 1, item)
 					this.selectList.forEach((e, removeIndex) => {
@@ -395,7 +378,6 @@
 					} else {
 						this.pageTwoNum ++
 					}
-					
 					list[index].check = true
 					const item = list[index]
 					list.splice(index, 1, item)
@@ -416,7 +398,13 @@
 								console.log(1111, this.selectList, this.selectList[0])
 								switch (this.selectList[0].first_level) {
 									case 3:
-										this.jobList[this.selectList[0].index].check = false
+										this.list[2].son.forEach((e,index) => {
+											if (e.id === this.selectList[0].two_level) {
+												console.log(e, 2222222222)
+												e.son[this.selectList[0].index].check = false
+												this.list.splice(2, 1, this.list[2])
+											}
+										})
 										break
 									case 4:
 										this.quality[this.selectList[0].index].check = false
@@ -443,7 +431,7 @@
 								}
 							}
 							this.pageTwoNum -= 1
-							this.selectList.splice(5, 1)
+							this.selectList.splice(this.pageOneNum, 1)
 						}
 						this.selectList.push(data)
 					}
