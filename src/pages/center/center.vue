@@ -54,6 +54,7 @@
 				</view>
 			</viwe>
 		</view>
+		
 		<footerTab :type=3></footerTab>
 	</view>
 </template>
@@ -281,4 +282,5 @@
 		}
 	}
 }
+
 </style>

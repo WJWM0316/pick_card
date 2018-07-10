@@ -49,13 +49,16 @@
         // }
       }
     },
-    onLoad (option) {
-      this.vkey = option.vkey
-      console.log(this.vkey, 1111111111)
-      this.getShare()
-    },
+    // onLoad (option) {
+    //   this.vkey = option.vkey
+    //   console.log(this.vkey, 1111111111)
+    //   this.getShare()
+    // },
     onShow () {
       console.log(this.vkey, 1111111111)
+    },
+    mounted () {
+      console.log(1111111111111111111111111111111)
     },
     methods: {
       getShare () {

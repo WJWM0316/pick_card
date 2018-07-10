@@ -6,13 +6,13 @@
 			<view class="num"><text :class="{'numText' : info.content && info.content.length > 0}">{{info.content.length}}</text>/250</view>
 		</view>
 		<view class="imgBox">
+			<view class="item">
+				<image mode=aspectFill @tap="chooseImage" v-if="files.length < 20" src="/static/images/edit_btn_addphoto@2x.png"></image>
+			</view>
 			<view class="item" v-for="(i, index) in files" :key="index" v-if="index < 20">
 				<image :src="i.path" mode=aspectFill @tap.stop="previewImage(index)"></image>
 				<view class="bg" :style="{'height': i.progress}" v-if="i.progress !== '0%'"></view>
-				<image @tap.stop="remove(i, index)" class="remove" v-if="i.progress === '0%'" src="/static/images/edit_btn_deletephoto@2x.png"></image>
-			</view>
-			<view class="item">
-				<image mode=aspectFill @tap="chooseImage" v-if="files.length < 20" src="/static/images/edit_btn_addphoto@2x.png"></image>
+				<image @tap.stop="remove(i, index)" class="remove" src="/static/images/edit_btn_deletephoto@2x.png"></image>
 			</view>
 		</view>
 		<view class="btnBox">
