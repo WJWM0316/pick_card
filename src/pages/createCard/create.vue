@@ -88,18 +88,18 @@
 
     <view class="pop_warp"  :class="{'hidden':!bindPhone.isPh}">
       <view class="sign_iphone" >
-        <view class="ip_top" @tap="clo">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap="clo"></image></view>
+        <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap.stop="clo"></image></view>
         <view class="ip_cont">
           <view class="ipt_blo">
-            <text class="getcode" @tap="sms" v-if="bindPhone.smsCli">获取验证码</text>
-            <text class="getcode type2" v-else >重新获取{{bindPhone.time}}s</text>
-            <input placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  maxlength="11" />
+            <button class="getcode" @tap.stop="sms" v-if="bindPhone.smsCli">获取验证码</button>
+            <button class="getcode type2" v-else >重新获取{{bindPhone.time}}s</button>
+            <input class="input_1" placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  maxlength="11" />
           </view>
           <view class="ipt_blo">
             <input placeholder="请输入验证码" maxlength="6" v-model="bindPhone.code" type="" name="" />
           </view>
           <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
-          <button class="ip_btn" @click="toCode">完成绑定</button>
+          <button class="ip_btn" @click.stop="toCode">完成绑定</button>
           <view class="hint_2 hidden">点击快速绑定手机号码 > ></view>
         </view>
       </view>
@@ -137,6 +137,7 @@
 
 <script>
   import mptoast from 'mptoast'
+  import App from '@/App'
   import { firstSignApi, secondSignApi, thirdSignApi, smsApi,postGetLabelByIds,postGetCreatedThreeLable } from '@/api/pages/login'
   import { getUserInfoApi } from '@/api/pages/user'
   import { uploadImage } from '@/mixins/uploader'
@@ -205,7 +206,7 @@
             return true;
         }
       },
-      clo(){
+      clo (){
         this.bindPhone.isPh = false
       },
       before(type){
@@ -218,10 +219,18 @@
         if(!e.mp.detail.iv){
           this.bindPhone.isPh = true
         }else {
-          this.thirdData.key = wx.getStorageSync('key')
-          this.thirdData.iv = e.mp.detail.iv
-          this.thirdData.encryptedData = e.mp.detail.encryptedData
-          this.thirdPost(1)
+          App.methods.checkLogin().then((res)=>{
+            console.log('===checkLogin===',res)
+            if(res.http_status==200){
+              this.thirdData.key = res.data.key
+              this.thirdData.iv = e.mp.detail.iv
+              this.thirdData.encryptedData = e.mp.detail.encryptedData
+              this.thirdPost(1)
+            }
+          }).catch((e) => {
+            console.log(e)
+          })
+          
         }
       },
       thirdPost(type){
@@ -248,6 +257,8 @@
           that.thirdData['mobile'] = that.bindPhone.number
           that.thirdData['smsCode'] = that.bindPhone.code
         }
+
+        that.thirdData.sign.trim()
         thirdSignApi(that.thirdData).then((res)=>{
           if(res.http_status==200){
             that.$mptoast('创建成功')
@@ -267,6 +278,8 @@
             }
           }
           //that.nowNum = 3;
+        },(res)=>{
+          that.$mptoast(res.msg)
         })
       },
       secondOne (index) {
@@ -344,6 +357,7 @@
 
         if(that.nowNum == 0){
           data = that.firstData
+          data.nickname = data.nickname.trim()
           firstSignApi(data).then((res)=>{
             if(res.http_status == 200){
               that.nowNum = 1;
@@ -366,6 +380,8 @@
 
           data.realm_label_id = msg.join(",")
           data.occupation_label_id = oliData[this.secondRule.oli[0]].id.toString()
+          data.company = data.company.trim()
+          data.occupation = data.occupation.trim()
           secondSignApi(data).then((res)=>{
             if(res.http_status == 200){
               that.nowNum = 2;
@@ -456,6 +472,7 @@
         if(next){
           smsApi(data).then((res)=>{
             that.bindPhone.smsCli = false
+            that.bindPhone.time = 60
             that.phoneCountDown();
             console.log(res)
           },(res)=>{
@@ -511,7 +528,7 @@
 
         let userInfo = this.$store.getters.userInfo
         console.log(userInfo.length,userInfo)
-        if(userInfo.nickname||userInfo.avatar_id){
+        if(userInfo.is_zike){
           this.relevance = true
         }
         this.firstData = {
@@ -519,7 +536,10 @@
           nickname: userInfo.nickname,
           avatar_id: userInfo.avatar_id,
         }
-        this.filePath = userInfo.avatar_info.middleImgUrl
+
+        if(userInfo.avatar_info && userInfo.avatar_info.middleImgUrl){
+          this.filePath = userInfo.avatar_info.middleImgUrl
+        }
         this.secondData={
           company: userInfo.company, 
           occupation: userInfo.occupation, 
@@ -530,8 +550,8 @@
           build_label_id: [], //人设id，多个以英文逗号隔开
           sign: userInfo.sign, //个性签名
         }
-
-        this.bindPhone.number =userInfo.mobile
+        userInfo.mobile=''
+        this.bindPhone.number = userInfo.mobile
         that.userInfo = userInfo
       }
       postGetLabelByIds(data).then((res)=>{
@@ -544,6 +564,9 @@
         that.listData = res.data
       },(res)=>{
       })
+
+
+
     },
     onShow () {
       this.upLoad()
@@ -642,10 +665,11 @@
         height:90rpx;
         position: relative;
         margin-bottom: 20rpx;
+        background:rgba(250,251,252,1);
+        border-radius:44rpx;
         input {
           width:550rpx;
           height:90rpx;
-          background:rgba(250,251,252,1);
           border-radius:44rpx;
           font-size:32rpx;
           font-family:SFUIDisplay-Regular;
@@ -653,15 +677,19 @@
           line-height:90rpx;
           box-sizing: border-box;
           padding-left: 40rpx;
+          &.input_1 {
+            width:350rpx;
+          }
         }
         .getcode {
-          height: 28rpx;
+          height: 94rpx;
+          width: 160rpx;
           font-size:28rpx;
           font-family:PingFangSC-Regular;
           color:rgba(0,208,147,1);
-          line-height:28rpx;
+          line-height:94rpx;
           position: absolute;
-          top: 30rpx;
+          top: 2rpx;
           right: 40rpx;
           z-index: 10;
           &.type2 {
