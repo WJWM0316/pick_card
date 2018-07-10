@@ -10,7 +10,7 @@
           <image  class="avatar" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
 
           <view class="msg_detail ellipsis">
-            <view class="msg_name ellipsis">{{item.apply_user_info.realname}} {{item.apply_user_info.occupation}}</view>
+            <view class="msg_name ellipsis">{{item.apply_user_info.nickname}} {{item.apply_user_info.occupation}}</view>
             <view class="msg_form ellipsis">{{item.apply_user_info.company}}</view>
           </view>
           <button class="top_btn" @tap="putApply(item.id,index)" v-if="item.status==0">同意</button>

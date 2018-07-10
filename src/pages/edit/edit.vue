@@ -145,14 +145,14 @@
 	  },
 	  watch: {
 	  	userInfo (val) {
-	  		if (this.userInfo.avatar_id !== '' && this.userInfo.realname !== '' && this.userInfo.gender !== ''  && this.userInfo.occupation !== '' && this.userInfo.mobile !== '') {
+	  		if (this.userInfo.avatar_id !== '' && this.userInfo.nickname !== '' && this.userInfo.gender !== ''  && this.userInfo.occupation !== '' && this.userInfo.mobile !== '') {
 	  			this.isLight = true
 	  		}
 	  	},
 	  },
 		data () {
 			return {
-				realname: '',
+				nickname: '',
 				isLight: false,
 				isSelf: false,
 				vkey: '',

@@ -1,9 +1,8 @@
 
 <template>
   <view class="container" >
-    <view class="hint">会根据你选择的条件，来发现你的职场新朋友，可多选噢～</view>
+    <view class="hint">会根据你选择的条件,来发现你的职场新朋友,可多选噢～</view>
     <view class="op_two ">
-
       <view class="table_blo row_style_two">
         <view class="tit">职位</view>
         <view class="list_selct">
@@ -80,7 +79,7 @@
 
         let val = e.target.value
         if(val.length>0){
-          this.firstData.realname = val
+          this.firstData.nickname = val
         }
       },
 

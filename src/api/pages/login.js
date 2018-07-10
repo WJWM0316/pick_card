@@ -109,7 +109,7 @@ export const getSessionKeyApi = (data) => {
   return request({
     url: '/auth/getSessionKey',
     data,
-    isLoading: false
+    isLoading: true
   })
 }
 
