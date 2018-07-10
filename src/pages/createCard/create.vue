@@ -478,7 +478,7 @@
         if(next){
           smsApi(data).then((res)=>{
             that.bindPhone.smsCli = false
-            that.codeTime = 10
+            that.codeTime = 60
             that.phoneCountDown();
             console.log(res)
           },(res)=>{
