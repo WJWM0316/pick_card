@@ -20,7 +20,7 @@
         </view>
       </view>
       <!-- //focus="{{focus}}" -->
-      <input class="one_name" @blur="inputText" v-model="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangHK-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="10" />
+      <input class="one_name" @blur="inputText" v-model.lazy="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangHK-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="10" />
 
       <view class="one_gender">
         <view class="gender boy" @click.stop="gender(1)">
@@ -38,11 +38,11 @@
     <view class="op_blo op_two " v-if="nowNum === 1 && listData.length>0">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
-        <input class="one_ipt" v-model="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技" maxlength="100" />
+        <input class="one_ipt" v-model.lazy="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技" maxlength="100" />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt"  v-model="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  maxlength="40" />
+        <input class="one_ipt"  v-model.lazy="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  maxlength="40" />
       </view>
 
       <view class="table_blo row_style_two">
@@ -80,7 +80,7 @@
       </view>
       <view class="table_blo row_style_three">
         <view class="tit">个性签名</view>
-        <textarea maxlength="25" class="area" v-model="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
+        <textarea maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
         v-if="!bindPhone.isPh" />
         <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
@@ -92,11 +92,11 @@
         <view class="ip_cont">
           <view class="ipt_blo">
             <button class="getcode" @tap.stop="sms" v-if="bindPhone.smsCli">获取验证码</button>
-            <button class="getcode type2" v-else >重新获取{{bindPhone.time}}s</button>
-            <input class="input_1" placeholder="请输入手机号" v-model="bindPhone.number"  type="number" name=""  maxlength="11" />
+            <button class="getcode type2" v-else >重新获取{{codeTime}}s</button>
+            <input class="input_1" placeholder="请输入手机号"  @input="inputText2"  type="number" name=""  maxlength="11" />
           </view>
           <view class="ipt_blo">
-            <input placeholder="请输入验证码" maxlength="6" v-model="bindPhone.code" type="" name="" />
+            <input placeholder="请输入验证码" maxlength="6" @input="inputText"  type="number" name="" />
           </view>
           <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
           <button class="ip_btn" @click.stop="toCode">完成绑定</button>
@@ -147,6 +147,7 @@
     },
     data () {
       return {
+        customText:'',  
         interval: null,
         listData: [],  //第二步
         focus: false,
@@ -185,8 +186,8 @@
           number: '',
           code: '',
           smsCli: true,
-          time: 60,
         },
+        codeTime: 60,
         nowNum : 0,
         isIp: false,
         filePath: '/static/images/new_pic_defaulhead.jpg',
@@ -198,7 +199,14 @@
     computed: {
     },
     methods: {
+      inputText(e){
+        this.bindPhone.code = e.mp.detail.value
+      },
+      inputText2(e){
+        this.bindPhone.number = e.mp.detail.value
+      },
       isPoneAvailable(str) {
+        console.log(str)
         let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
         if (!myreg.test(str)) {
             return false;
@@ -262,7 +270,7 @@
         thirdSignApi(that.thirdData).then((res)=>{
           if(res.http_status==200){
             that.$mptoast('创建成功')
-
+            this.bindPhone.isPh = false
             setTimeout(()=>{
               that.nowNum = 0
               wx.redirectTo({
@@ -361,6 +369,8 @@
           firstSignApi(data).then((res)=>{
             if(res.http_status == 200){
               that.nowNum = 1;
+              //this.bindPhone.isPh = true
+
             }else {
               this.$mptoast(res.msg)
             }
@@ -423,15 +433,16 @@
               number: '',
               code: '',
               smsCli: true,
-              time: 60,
             }
+            this.codeTime = 60
           }
         }
       }, 
       toCode () {
         let that = this,
-            next = that.isPoneAvailable(that.bindPhone.number);
-          console.log(that.bindPhone.number)
+            next = '';
+
+        next = that.isPoneAvailable(this.bindPhone.number);
         if(!next){
           that.$mptoast('手机格式不对')
           return
@@ -441,24 +452,19 @@
           return
         }
         this.thirdPost(2)
-        this.bindPhone = {
-          isPh: false,
-          number: '',
-          code: '',
-          smsCli: true,
-          time: 60,
-        }
+
+        
       },
       //  
       phoneCountDown(){
         let that = this;
 
         that.interval = setInterval(()=>{
-          if(that.bindPhone.time==0){
+          if(that.codeTime==0){
             clearInterval(that.interval)
             that.bindPhone.smsCli = true
           }
-          that.bindPhone.time -= 1 
+          that.codeTime -= 1 
         },1000)
       },
       sms() {
@@ -472,7 +478,7 @@
         if(next){
           smsApi(data).then((res)=>{
             that.bindPhone.smsCli = false
-            that.bindPhone.time = 60
+            that.codeTime = 10
             that.phoneCountDown();
             console.log(res)
           },(res)=>{
@@ -550,7 +556,8 @@
           build_label_id: [], //人设id，多个以英文逗号隔开
           sign: userInfo.sign, //个性签名
         }
-        userInfo.mobile=''
+
+        //userInfo.mobile=''
         this.bindPhone.number = userInfo.mobile
         that.userInfo = userInfo
       }

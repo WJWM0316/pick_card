@@ -1,6 +1,6 @@
 <template>
   <view class="wrap">
-    <view class="footer " :class="{'ten': Adaptive == 'ten','small': Adaptive == 'small'}">
+    <view class="footer " :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
       <view class="ft_warp">
         <view class="left">
           <view class="name" :class="{'cur' : type === 1}" @tap="toTab(1)">Pick</view>
@@ -45,7 +45,7 @@
         type: Number,
         default: 1
       },
-      Adaptive:{
+      adaptive:{
         type: String,
         default: 1
       },

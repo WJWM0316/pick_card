@@ -54,8 +54,7 @@
 				</view>
 			</viwe>
 		</view>
-		
-		<footerTab :type=3></footerTab>
+		<footerTab :type=3 :adaptive=adaptive></footerTab>
 	</view>
 </template>
 <script>
@@ -71,7 +70,8 @@
 			return {
 				info: {},
 				checkedTextList: [],
-				isShareImg: ''
+				isShareImg: '',
+				adaptive: null
 			}
 		},
 		computed: {
@@ -82,6 +82,8 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
+
+			this.adaptive = wx.getStorageSync('adaptive')
 		},
 		onShow () {
 			this.checkedTextList = []

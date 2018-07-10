@@ -1,6 +1,6 @@
 
 <template>
-  <view class="container" >
+  <view class="container" :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
     <view class="op_top">
       <view class="left" @click="toFiltrate">筛选<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
       <view class="right" @click="toSwop">交换申请<view class="new">NEW</view></view>
@@ -36,9 +36,16 @@
               <view class="signature" v-else>这个人很懒，不想写个性签名~</view>
               <view class="labelList" >
                 <block v-for="(itm, idx) in item.other_info.label_info" :key="key">
-                  <view class="label_blo"  v-if="idx<6">
-                    {{itm.name}}
-                  </view>
+                  <block v-if="adaptive=='small'">
+                    <view class="label_blo"  v-if="idx<3">
+                      {{itm.name}}
+                    </view>
+                  </block>
+                  <block v-else>
+                    <view class="label_blo"  v-if="idx<6">
+                      {{itm.name}}
+                    </view>
+                  </block>
                 </block>
               </view>
             </view>
@@ -52,7 +59,6 @@
               <view class="blo_hint_txt">你已经看了很多新朋友了，休息一下吧~</view>
               <view class="blo_hint_txt">分享邀请3位新朋友，即可立刻刷新冷却时间</view>
             </view>
-            
         </view>
         <!-- 到底 -->
         <view class="peop_blo blo_type2 blo_end" v-if="isEnd">
@@ -84,30 +90,31 @@
           moveData.style=='right'
         }"  
         ></image>
-        　
       </view>
     </view>
     <!-- <view class="footer">
-      <view class="left">
-        <view class="name cur" @tap="isCreate">Pick</view>
-        <view class="name" @tap="toCardHolder">名片夹</view>
-        <view class="name"  @tap="toCenter">我的名片</view>
-      </view>
-      <view class="right"> 
-        <view class="r_blo" @click="isShare2">
-          <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
+      <view class="ft_warp">
+        <view class="left">
+          <view class="name cur" @tap="isCreate">Pick</view>
+          <view class="name" @tap="toCardHolder">名片夹</view>
+          <view class="name"  @tap="toCenter">我的名片</view>
         </view>
-        <view class="r_blo" >
-          <form report-submit="true" class="from-box" @submit="fromClick">
-            <button formType="submit" class="from-mask"></button>
-          </form>
-          <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
+        <view class="right"> 
+          <view class="r_blo" @click="isShare2">
+            <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
+          </view>
+          <view class="r_blo" >
+            <form report-submit="true" class="from-box" @submit="fromClick">
+              <button formType="submit" class="from-mask"></button>
+            </form>
+            <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
+          </view>
         </view>
       </view>
     </view> -->
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <footerTab :type=1 ></footerTab>
+     <footerTab :type=1 :adaptive=adaptive></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -158,6 +165,7 @@ export default {
   },
   data () {
     return { 
+      adaptive: '1',   //ten  small
       interval: null,
       usersList: [],
       userInfo: [],
@@ -492,6 +500,7 @@ export default {
     }
   },
   onLoad(res) {
+    console.log(res)
     let that = this,
         value = wx.getStorageSync('pickCardFirst'),
         beforeCreateStep =wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
@@ -501,6 +510,13 @@ export default {
     wx.getSystemInfo({
       success: function(res) {
         that.systemInfo = res
+        if(res.model == 'iPhone X'){
+           that.adaptive = 'ten'
+        }else if(res.screenHeight<650){
+           that.adaptive = 'small'
+        }
+
+        wx.setStorageSync('adaptive', that.adaptive)
         console.log(res)
       }
     })
@@ -552,9 +568,37 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    &.ten {
+    &.small{
+      //height: 1020rpx;
       .content {
-        top: -20rpx;
+        top: -66rpx;
+        height: 736rpx;
+        .peopList {
+          width: 530rpx;
+          height: 736rpx;
+          .peop_blo {
+            width: 530rpx;
+            height: 736rpx;
+            .top {
+              width: 530rpx;
+              height: 489rpx;
+            }
+            .bottom {
+              height: 247rpx;
+            }
+          }
+          .btns {
+
+          }
+        }
+      }
+    }
+    &.ten {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .content {
+        top: -66rpx;
       }
     }
   }
@@ -746,6 +790,8 @@ export default {
   .content {
     height: 930rpx;
     position: relative;
+    top: -45rpx;
+
     .peopList {
       width:640rpx;
       height:930rpx;
@@ -813,14 +859,14 @@ export default {
         display: block;
       }
       .top {
-        width:640rpx;
+        width:100%;
         height:590rpx;
         
         border-radius:18rpx 18rpx 0rpx 0rpx;
         position: relative;
         .bage {
-          width:640rpx;
-          height:590rpx;
+          width: 100%;
+          height: 100%;
           position: absolute;
           left: 0;
           top: 0;
@@ -882,7 +928,7 @@ export default {
         }
       }
       .bottom {
-        width:640rpx;
+        width:100%;
         height:340rpx;
         background: #ffffff;
         padding: 24rpx 34rpx;
@@ -972,11 +1018,22 @@ export default {
     z-index: 1000;
     width:750rpx;
     height:96rpx;
+    //height:150rpx;
     background:rgba(255,255,255,1);
     box-shadow:0rpx -10rpx 20rpx 0rpx rgba(153,193,214,0.08);
     display: flex;
     flex-direction: row;
-    align-items: center;
+    //align-items: center;
+    align-items: flex-start;
+    .ft_warp {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height:96rpx;
+
+    }
     .left{
       flex: 1;
       display: flex;
@@ -988,7 +1045,7 @@ export default {
       color:rgba(117,121,128,1);
       .name {
         &.cur {
-          font-size:36rpx;
+          font-size:32rpx;
           font-family:SFUIDisplay-Semibold;
           color:rgba(53,64,72,1);
           position: relative;
