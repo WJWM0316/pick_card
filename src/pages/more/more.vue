@@ -149,16 +149,26 @@
 	    	})
 	    },
 	    remove (item, index) {
-	    	this.files.splice(index, 1)
-	    	this.count --
-	    	if (item.oldImg) {
-	    		var array = this.info.img_id.split(',')
-	    		array.splice(index, 1)
-	    		var string = array.join(',')
-	    		this.info.img_id = string
-	    	} else {
-	    		this.filesId.splice(index-this.oldNum, 1)
-	    	}
+	    	let that = this
+	    	wx.showModal({
+				  content: '是否确定删除图片',
+				  success: function(res) {
+				    if (res.confirm) {
+				      that.files.splice(index, 1)
+					    	that.count --
+					    	if (item.oldImg) {
+					    		var array = that.info.img_id.split(',')
+					    		array.splice(index, 1)
+					    		var string = array.join(',')
+					    		that.info.img_id = string
+					    	} else {
+					    		that.filesId.splice(index-that.oldNum, 1)
+					    	}
+						} else if (res.cancel) {
+				    }
+				  }
+				})
+	    	
 	    }
 	  }
 	}
