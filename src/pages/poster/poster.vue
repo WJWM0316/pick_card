@@ -1,10 +1,12 @@
 <template>
 	<view class="poster">
-		<canvas canvas-id="shareCanvas" id="wrap">
-		</canvas>
-		<image src="https://cdnstatic-test.card.ziwork.com/dev/avatar/2018-07-10/b50b839743036634896831030d3d3fb6.png" style="width:0;height: 0"></image>
-		<button @tap.stop="save">按我</button>
-		<image :src="showImg"></image>
+		<view class="wrap">
+			<scroll-view>
+				<canvas canvas-id="shareCanvas" id="myCanvas">
+				</canvas>
+			</scroll-view>
+		</view>
+		<cover-view @tap.stop="save" class="save"><cover-image class="icon" src="/static/images/share_btn_savepic@3x.png"></cover-image>&emsp;&emsp;保存图片</cover-view>
 	</view>
 </template>
 <script>
@@ -15,23 +17,22 @@
 				imgW: 0,
 				showImg: '',
 				info: {
-					nickname: '你大爷',
-					job: '你大爷大叔大婶阿萨德',
-					sign: '这个人很懒，不想写个性签名~这个人很懒， 不想写个性签名~',
-					label: [
-						'你达特',
-						'你达特阿萨德',
-						'你达特阿萨德手动',
-						'你达特阿萨德手动',
-						'你达特',
-						'你达特阿萨德',
-						'你达特阿萨德手动'
-					]
+					nickname: '',
+					job: '',
+					sign: '',
+					label: []
 				},
-				imgUrl: 'https://cdnstatic-test.card.ziwork.com/dev/avatar/2018-07-10/b50b839743036634896831030d3d3fb6.png'
+				imgUrl: ''
 			}
 		},
-		onShow () {
+		onLoad () {
+			let userInfo = this.$store.getters.userInfo
+			this.info.nickname = userInfo.nickname
+			this.job = userInfo.occupation + ' | ' + userInfo.company
+			this.info.sign = userInfo.sign
+			this.info.label = userInfo.other_info.label_info
+			this.imgUrl = userInfo.avatar_info.middleImgUrl
+
 			this.create()
 		},
 		methods: {
@@ -44,8 +45,9 @@
 				    if (res.statusCode === 200) {
 				    	console.log(res, '下载成功')
 							const ctx = wx.createCanvasContext('shareCanvas')
-							roundRect (0,0,335,550,9)
 
+							// 画布圆角
+							roundRect (0,0,335,600,9)
 							function roundRect (x, y, w, h, r) {
 								ctx.beginPath();
 								ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5  )
@@ -66,6 +68,7 @@
 								ctx.closePath()
 								ctx.clip()
 							}
+
 							that.imgUrl = res.tempFilePath
 							// 画头像
 					    ctx.drawImage(that.imgUrl, 0, 0, 335, 335)
@@ -110,7 +113,7 @@
 					    		return
 					    	}
 					    	// 下个标签的宽度
-								let newLabelWidth = ctx.measureText(that.info.label[index+1]).width + 2*r
+								let newLabelWidth = ctx.measureText(that.info.label[index+1].name).width + 2*r
 								let metrics = 0 // 文本宽度
 					    	// 判断是否超过两行切需要打点
 					    	if (lineNun === 2 && newLabelWidth + position.x > (335-17)) {
@@ -118,7 +121,7 @@
 									ctx.fillText('....', position.x + r, position.y + r)
 									nextLabel = false
 					    	} else {
-					    		metrics = ctx.measureText(item).width
+					    		metrics = ctx.measureText(item.name).width
 									ctx.fillText(item, position.x + r, position.y + r + 4)
 					    	}
 
@@ -155,8 +158,8 @@
 					    ctx.setStrokeStyle('#DCE3EE')
 					    ctx.setLineDash([5, 10], 0)
 							ctx.beginPath()
-							ctx.moveTo(17 ,position.y + 22)
-							ctx.lineTo(316, position.y + 22)
+							ctx.moveTo(17 ,position.y + 18)
+							ctx.lineTo(316, position.y + 18)
 							ctx.stroke()
 
 							// 清除圆镂空部分
@@ -182,6 +185,15 @@
 							ctx.save() 
 							stepClear = 1
 							clearArc(335, position.y + 10, 10)
+
+							// 画指引文案
+							ctx.setTextAlign('left')
+					    ctx.setFillStyle('#B2B6C2')
+					    ctx.setFontSize(14)
+					    ctx.fillText('长按添加TA的趣名片', 30, position.y + 18 + 60)
+
+					    // 画二维码
+					    ctx.drawImage(that.imgUrl, 195, position.y + 18 + 10, 100, 100)
 					    ctx.draw()
 					  }
 					}
@@ -193,11 +205,22 @@
 				wx.canvasToTempFilePath({
 				  x: 0,
 				  y: 0,
-
 				  canvasId: 'shareCanvas',
 				  success: function(res) {
 				  	that.showImg = res.tempFilePath
-				    console.log(res.tempFilePath)
+				  	wx.saveImageToPhotosAlbum({
+              filePath: that.showImg,
+              success: function (e) {
+                console.log('保存成功', e)
+                wx.showToast({
+                  title: '已保存至您的相册',
+                  icon: 'success'
+                })
+              },
+              fail: function (e) {
+                console.log('保存失败', e)
+              }
+            })
 				  } 
 				})
 			}
@@ -207,25 +230,44 @@
 </script>
 <style lang="less" type="text/less" scoped>
 	.poster {
-		position: fixed;
 		width: 100%;
 		height: 100%;
 		background: #FAFBFC;
-		top: 0;
-		left: 0;
 		box-sizing: border-box;
-		overflow-y: auto;
-		padding: 20rpx 0;
+		padding: 20rpx 0 100rpx;
 		box-shadow:0px 17px 28px 0px rgba(52,62,59,0.03);
-	#wrap {
-		width: 335px;
-		height: 550px;
-		margin: 0 auto;
-	}
-	.label {
-		padding: 10rpx 20rpx;
-		border: 1px solid #000;
-		border-radius: 50rpx;
-	}
+		.wrap {
+			width: 335px;
+			height: 600px;
+			margin: 0 auto;
+			#myCanvas {
+				width: 335px;
+				height: 600px;
+			}
+		}
+		.save {
+			width: 100%;
+			height: 96rpx;
+			text-align: center;
+			line-height: 96rpx;
+			background: #00D093;
+			position: fixed;
+			bottom: 0; 
+			left: 0;
+			color: #fff;
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			.open {
+				width: 100%;
+				height: 96rpx;
+				line-height: 96rpx;
+			}
+		}
+		.icon {
+			width: 33rpx;
+			height: 28rpx;
+			vertical-align: -6rpx;
+		}
 }
 </style>

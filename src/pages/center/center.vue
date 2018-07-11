@@ -27,7 +27,8 @@
 					</view>
 				</view>
 				<button open-type="share" class="share">发名片</button>
-				<button class="save">保存我的名片</button>
+				<button class="save" open-type="openSetting" v-if="openSet">保存我的名片</button>
+				<button class="save" @tap="toSaveImg" v-else>保存我的名片</button>
 			</view>
 			<viwe class="setting">
 				<view class="inner">
@@ -71,6 +72,7 @@
 				info: {},
 				checkedTextList: [],
 				isShareImg: '',
+				openSet: false,
 				adaptive: null
 			}
 		},
@@ -82,11 +84,21 @@
 		},
 		onLoad (option) {
 			this.vkey = option.vkey
-
 			this.adaptive = wx.getStorageSync('adaptive')
+			
+			
 		},
 		onShow () {
 			this.checkedTextList = []
+			let that = this
+			wx.getSetting({
+        success(res) {
+          console.log(res, res.authSetting['scope.writePhotosAlbum'])
+          if (res.authSetting['scope.writePhotosAlbum']) {
+          	that.openSet = false
+        	}
+        }
+      })
 			if (this.userInfo) {
 				this.info = this.userInfo
 				this.info.other_info.realm_info.forEach(e => {
@@ -132,6 +144,37 @@
 			toDetail () {
 				wx.navigateTo({
 	        url: `/pages/detail/main?vkey=${this.userInfo.vkey}`
+	      })
+			},
+			toSaveImg () {
+				let that = this
+				wx.getSetting({
+	        success(res) {
+	          console.log(res, res.authSetting['scope.writePhotosAlbum'])
+	          if (!res.authSetting['scope.writePhotosAlbum']) {
+	            wx.authorize({
+	              scope: 'scope.writePhotosAlbum',
+	              success() {
+	                that.openSet = false
+	                wx.navigateTo({
+						        url: `/pages/poster/main`
+						      })
+	              },
+	              fail (res) {
+	                if (res.errMsg === 'authorize:fail auth deny') {
+	                  that.openSet = true
+	                } 
+	              }
+	            })
+	          } else {
+	          	wx.navigateTo({
+				        url: `/pages/poster/main`
+				      })
+	          }
+	        },
+	        fail(res) {
+	          console.log(res, 1)
+	        }
 	      })
 			}
 	  }
