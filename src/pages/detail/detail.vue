@@ -122,8 +122,10 @@
 <script>
 	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike} from '@/api/pages/user'
 	import {formatTime} from '@/utils/index'
+	import authorizePop from '@/components/authorize'
 	export default {
 		components: {
+			authorizePop
 	  },
 		data () {
 			return {
@@ -151,13 +153,18 @@
 			}
 		},
 		onShow () {
-			if (this.isSelf) {
-				console.log('是本人')
-				this.getUserUnfo()
-			} else {
-				console.log('非本人')
-				this.getOtherUserInfo()
-			}
+			let that = this
+			authorizePop.methods.checkLogin().then(res => {
+				if (that.isSelf) {
+					console.log('是本人', that.$store.getters.userInfo)
+					// this.getUserUnfo()
+				} else {
+					console.log('非本人')
+					that.getOtherUserInfo()
+				}
+			})
+			
+
 		},
 		methods: {
 			open (type) {
