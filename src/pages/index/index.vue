@@ -53,7 +53,7 @@
         </block>
         <!-- 冷却 -->
         <view class="peop_blo blo_type2 blo_cooling" v-if="isCooling">
-            <image class="cool_img" src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            <image class="cool_img" src="/static/images/home_dafulpage_pic_time@3x.png"></image>
             <view class="cool_time">{{coolTime}}</view>
             <view class="cool_cont">
               <view class="blo_hint_txt">你已经看了很多新朋友了，休息一下吧~</view>
@@ -62,7 +62,7 @@
         </view>
         <!-- 到底 -->
         <view class="peop_blo blo_type2 blo_end" v-if="isEnd">
-            <image class="end_img" src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            <image class="end_img" src="/static/images/home_dafulpage_pic_nomore@3x.png"></image>
             <view class="end_cont">
               <view class="blo_hint_txt">很遗憾...暂时没有新的朋友啦，建议你放宽 筛选范围。也可以分享给小伙伴们，大家 一起来玩趣名片哦！</view>
             </view>
@@ -358,14 +358,17 @@ export default {
           that.unlike(msg);
         }
       } 
+    },
+    isGetUers(){
+      let that = this
       if(this.usersList.length-this.nowIndex == 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
           if(res.data.length<1){
             that.isEnd = true;
           }
-          this.usersList = res.data;
-          this.nowIndex = 0;
+          this.usersList = [...this.usersList,...res.data];
+          //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
             that.isCooling = true;
@@ -377,6 +380,7 @@ export default {
           this.$mptoast(res.msg);
         })
       }
+      
     },
     firstOp(type){
       let that = this,
@@ -387,9 +391,9 @@ export default {
         wx.setStorageSync('beforeCreateStep', beforeCreateStep);
         that.isNext = true;
         that.isCreate()
-
         return
       }
+      console.log(beforeCreateStep)
       if(type=='left'){
         that.moveData={
           isMove: false,
@@ -407,20 +411,23 @@ export default {
       setTimeout(()=>{
         that.moveData.style = '';
         that.isNext = true;
+        that.isGetUers()
       },800)
+
     },
     like(msg){
       let that = this;
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
-        if(!that.toCreate.isToCreate && that.userInfo.step!=9){
+        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
           that.isCreate()
         }
         that.moveData={
           isMove: false,
           style: 'right', 
         }
+        that.isGetUers()
         setTimeout(()=>{
           that.moveData.style = ''
           that.isNext = true
@@ -434,9 +441,15 @@ export default {
         that.isNext = true
       })
     },
+
     unlike(msg){
       let that = this
       indexUnlike(msg).then((res)=>{
+
+        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
+          that.isCreate()
+        }
+
         that.moveData = {
           isMove: false,
           style: 'left', 
@@ -444,14 +457,14 @@ export default {
         that.nowIndex ++
         that.toCreate.num++
 
+        that.isGetUers()
+
         setTimeout(()=>{
           that.moveData.style = ''
           that.isNext = true
         },800)
 
-        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
-          that.isCreate()
-        }
+        
       },(res)=>{
         console.log(res)
         that.$mptoast(res.msg)
@@ -479,10 +492,7 @@ export default {
           if(sec < 10){t += "0";}
           t += sec;
       }
-
       this.coolTime = t
-
-
       //return t;
     },
 
@@ -536,6 +546,10 @@ export default {
         }).catch(e => {
           console.log(e)
         })
+
+        if(res.data.length<1){
+          that.isEnd = true
+        }
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
           that.isCooling = true
