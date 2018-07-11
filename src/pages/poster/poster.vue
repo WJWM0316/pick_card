@@ -32,7 +32,10 @@
 			this.info.sign = userInfo.sign
 			this.info.label = userInfo.other_info.label_info
 			this.imgUrl = userInfo.avatar_info.middleImgUrl
-
+			wx.showLoading({
+        title: '正在生成图片',
+        mask: true
+      })
 			this.create()
 		},
 		methods: {
@@ -103,7 +106,7 @@
 					    let lineNun = 1
 					    let nextLabel = true
 					    that.info.label.forEach((item, index) => {
-					    	addLabel(item, index)
+					    	addLabel(item.name, index)
 					    })
 
 
@@ -113,7 +116,7 @@
 					    		return
 					    	}
 					    	// 下个标签的宽度
-								let newLabelWidth = ctx.measureText(that.info.label[index+1].name).width + 2*r
+								let newLabelWidth = ctx.measureText(that.info.label[index+1]).width + 2*r
 								let metrics = 0 // 文本宽度
 					    	// 判断是否超过两行切需要打点
 					    	if (lineNun === 2 && newLabelWidth + position.x > (335-17)) {
@@ -121,7 +124,7 @@
 									ctx.fillText('....', position.x + r, position.y + r)
 									nextLabel = false
 					    	} else {
-					    		metrics = ctx.measureText(item.name).width
+					    		metrics = ctx.measureText(item).width
 									ctx.fillText(item, position.x + r, position.y + r + 4)
 					    	}
 
@@ -194,7 +197,10 @@
 
 					    // 画二维码
 					    ctx.drawImage(that.imgUrl, 195, position.y + 18 + 10, 100, 100)
-					    ctx.draw()
+
+					    ctx.draw(true, () => {
+					      wx.hideLoading()
+					    })
 					  }
 					}
 				})
