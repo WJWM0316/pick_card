@@ -37,13 +37,13 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       method: method,
       success(res) {
         util.unloading(isLoading)
-        //console.log('请求成功后 response', res)
+        console.log('请求成功后 response', res)
         if (typeof res.data === 'string') { // 转换返回json
           res.data = JSON.parse(res.data)
         }
         if (res) {
           let msg = res.data
-          //console.log('res.code', msg.http_status)
+          console.log('res.code', msg.http_status)
           //有字符串的情况下 转数字
           msg.http_status = parseInt(msg.http_status)
           switch (msg.http_status) {

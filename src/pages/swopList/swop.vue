@@ -25,7 +25,7 @@
     </view>
     <view class="none_cont" v-else>
         <view class="none_txt_1">暂时没有新的申请</view>
-        <view class="none_txt_2" @tap="toShare">推荐一下自己给你的朋友同事吧</view>
+        <button class="none_txt_2" data-type="me" open-type="share" @tap="toShare">推荐一下自己给你的朋友同事吧</button>
     </view>
 
     <!-- 分享弹窗 -->
@@ -269,7 +269,8 @@
   import mptoast from 'mptoast'
   import { getLikeList, putLike } from '@/api/pages/user'
   import { deleteRedDot } from '@/api/pages/red'
-
+  import { getUserInfoApi } from '@/api/pages/user'
+  import { getShareImg } from '@/api/pages/login'
   export default {
     
     components: {
@@ -277,6 +278,8 @@
     },
     data () {
       return {
+        usersInfo: {},
+        shareData: {},
         listData: [],
         pop: {
           isPop: false,
@@ -354,6 +357,57 @@
       },(res)=>{
         that.$mptoast(res.msg)
       })
+
+      getUserInfoApi().then( data => {
+        let usersInfo = data.data
+
+        let msg = {
+          uid: usersInfo.id,
+          name: usersInfo.name,
+          img: usersInfo.avatar_info.smallImgUrl,
+          occupation: usersInfo.occupation,
+          company: usersInfo.company,
+          label: [],
+        }
+
+        usersInfo.other_info.realm_info.forEach(item => {
+          msg.label.push(`${item.name} | `)
+        })
+
+        msg.label = msg.label.join('')
+        msg.label = msg.label.slice(0, msg.label.length-3)
+
+        getShareImg(msg).then(res => {
+          msg.shareImg = res.data
+          that.shareData = msg
+        })
+      })
+    },
+
+    onShareAppMessage: function (res) {
+      console.log(res)
+      let path = '/pages/index/main?',
+          imageUrl = '';
+
+      wx.showShareMenu({
+        withShareTicket: true
+      })
+
+      if (res.from === 'button' ) {
+        if(res.target.dataset.type=="flock"){
+          path+='form=swop&type=flock'
+        }
+        if(res.target.dataset.type=="me"){
+          imageUrl = shareData.shareImg
+          path = `/pages/detail?vkey=${this.usersInfo.vkey}`
+        }
+        // 来自页面内转发按钮
+      }
+      return {
+        title: '自定义转发标题',
+        path: path,
+        imageUrl: imageUrl
+      }
     },
 
     created () {
