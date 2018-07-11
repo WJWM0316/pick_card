@@ -358,14 +358,17 @@ export default {
           that.unlike(msg);
         }
       } 
+    },
+    isGetUers(){
+      let that = this
       if(this.usersList.length-this.nowIndex == 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
           if(res.data.length<1){
             that.isEnd = true;
           }
-          this.usersList = res.data;
-          this.nowIndex = 0;
+          this.usersList = [...this.usersList,...res.data];
+          //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
             that.isCooling = true;
@@ -377,6 +380,7 @@ export default {
           this.$mptoast(res.msg);
         })
       }
+      
     },
     firstOp(type){
       let that = this,
@@ -387,9 +391,9 @@ export default {
         wx.setStorageSync('beforeCreateStep', beforeCreateStep);
         that.isNext = true;
         that.isCreate()
-
         return
       }
+      console.log(beforeCreateStep)
       if(type=='left'){
         that.moveData={
           isMove: false,
@@ -407,20 +411,23 @@ export default {
       setTimeout(()=>{
         that.moveData.style = '';
         that.isNext = true;
+        that.isGetUers()
       },800)
+
     },
     like(msg){
       let that = this;
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
-        if(!that.toCreate.isToCreate && that.userInfo.step!=9){
+        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
           that.isCreate()
         }
         that.moveData={
           isMove: false,
           style: 'right', 
         }
+        that.isGetUers()
         setTimeout(()=>{
           that.moveData.style = ''
           that.isNext = true
@@ -434,9 +441,15 @@ export default {
         that.isNext = true
       })
     },
+
     unlike(msg){
       let that = this
       indexUnlike(msg).then((res)=>{
+
+        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
+          that.isCreate()
+        }
+
         that.moveData = {
           isMove: false,
           style: 'left', 
@@ -444,14 +457,14 @@ export default {
         that.nowIndex ++
         that.toCreate.num++
 
+        that.isGetUers()
+
         setTimeout(()=>{
           that.moveData.style = ''
           that.isNext = true
         },800)
 
-        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
-          that.isCreate()
-        }
+        
       },(res)=>{
         console.log(res)
         that.$mptoast(res.msg)
@@ -479,10 +492,7 @@ export default {
           if(sec < 10){t += "0";}
           t += sec;
       }
-
       this.coolTime = t
-
-
       //return t;
     },
 
