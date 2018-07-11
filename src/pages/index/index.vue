@@ -2,7 +2,7 @@
 <template>
   <view class="container" :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
     <view class="op_top">
-      <view class="left" @click="toFiltrate">筛选<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
+      <view class="left" @click="toFiltrate">筛选{{usersInfo.step}}<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
       <view class="right" @click="toSwop">交换申请<view class="new" v-if="swopRed==1">NEW</view></view>
     </view>
     <view class="content">
@@ -68,8 +68,8 @@
             </view>
         </view>
         <view class="btns" >
-          <button class="btn type2" open-type="share" v-if="isCooling || isEnd">
-            <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
+          <button class="btn type2" data-type="me" open-type="share" v-if="isCooling || isEnd">
+            <image src="/static/images/dafulpage_btn_share@3x.png"></image>
           </button>
           <block v-else>
             <button class="btn delate" @click="likeOp('left')">
@@ -153,7 +153,7 @@
   import mptoast from 'mptoast'
   import footerTab from '@/components/footerTab'
   import App from '@/App'
-  import {loginApi} from '@/api/pages/login'
+  import {loginApi,getShareImg} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
@@ -169,7 +169,7 @@ export default {
       adaptive: '1',   //ten  small
       interval: null,
       usersList: [],
-      userInfo: [],
+      usersInfo: [],
       toCreate: {
         isToCreate: true,
         num: 0
@@ -202,6 +202,7 @@ export default {
       systemInfo: {}, //
       beforeCreateStep: 0,
       swopRed: 0,   //交换红点
+      shareData: {}
     }
   },
   methods: {
@@ -285,14 +286,14 @@ export default {
     },
 
     isCreate (){
-      this.userInfo.step = 3
-      if(this.userInfo.step!=9){
+      this.usersInfo.step = 3
+      if(this.usersInfo.step!=9){
         this.isPop = false
         this.toMeCreate=true
         wx.navigateTo({
           url: `/pages/createCard/main`
         })
-      }else if(this.userInfo.step == 9){
+      }else if(this.usersInfo.step == 9){
         this.toCreate.isToCreate = true
       }
     },
@@ -341,7 +342,7 @@ export default {
       let that = this,
           data = this.usersList[this.nowIndex],
           beforeCreateStep = this.beforeCreateStep,
-          step = this.userInfo.step,
+          step = this.usersInfo.step,
           msg = {
             to_uid: data.id, //data.unionid
           };
@@ -420,7 +421,7 @@ export default {
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
-        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
+        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.usersInfo.step!=9){
           that.isCreate()
         }
         that.moveData={
@@ -446,7 +447,7 @@ export default {
       let that = this
       indexUnlike(msg).then((res)=>{
 
-        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.userInfo.step!=9){
+        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.usersInfo.step!=9){
           that.isCreate()
         }
 
@@ -496,17 +497,53 @@ export default {
       //return t;
     },
 
+    getShareImg(){
+      let that = this,
+          usersInfo = that.usersInfo,
+          msg = {
+            uid: usersInfo.id,
+            name: usersInfo.name,
+            img: usersInfo.avatar_info.smallImgUrl,
+            occupation: usersInfo.occupation,
+            company: usersInfo.company,
+            label: [],
+          }
+
+      usersInfo.other_info.realm_info.forEach(item => {
+        msg.label.push(`${item.name} | `)
+      })
+
+      msg.label = msg.label.join('')
+      msg.label = msg.label.slice(0, msg.label.length-3)
+
+      getShareImg(msg).then(res => {
+        msg.shareImg = res.data
+        that.shareData = msg
+      })
+    },
+
   },
   onShareAppMessage: function (res) {
+    console.log(res)
+    let path = '/pages/index/main?',
+        that = this,
+        imageUrl = '';
+
     wx.showShareMenu({
       withShareTicket: true
     })
     if (res.from === 'button') {
       // 来自页面内转发按钮
+      if(res.target.dataset.type=="me"){
+        imageUrl = that.shareData.shareImg
+        path = `/pages/detail?vkey=${this.usersInfo.vkey}`
+      }
     }
+
     return {
-      title: '自定义转发标题',
-      path: '/pages/index/main?type=share'
+      title: '趣名片',
+      path: path,
+      imageUrl: imageUrl
     }
   },
   onLoad(res) {
@@ -535,7 +572,7 @@ export default {
       getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
         getUserInfoApi().then(data => {
-          that.userInfo = data.data
+          that.usersInfo = data.data
           console.log('========',data)
           if(data.data.step!=9){
             that.toCreate.isToCreate = false
@@ -543,6 +580,8 @@ export default {
               that.isCreate()
             }
           }
+
+          that.getShareImg()
         }).catch(e => {
           console.log(e)
         })
@@ -847,13 +886,13 @@ export default {
         //z-index: 100;
         text-align: center;
         padding: 0 45rpx;
-        &.cool_img {
+        .cool_img {
           width:398rpx;
           height:442rpx;
           margin: 0 auto;
           margin-top: 84rpx;
         }
-        &.end_img {
+        .end_img {
           width:422rpx;
           height:568rpx;
           margin: 0 auto;
@@ -1020,8 +1059,8 @@ export default {
         margin-left: -66rpx;
         margin-top: -66rpx;
         image {
-          width: 40rpx;
-          height: 40rpx;
+          width: 100%;
+          height: 100%;
           display: block;
         }
       }
