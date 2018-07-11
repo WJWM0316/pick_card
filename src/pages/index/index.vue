@@ -53,7 +53,7 @@
         </block>
         <!-- 冷却 -->
         <view class="peop_blo blo_type2 blo_cooling" v-if="isCooling">
-            <image class="cool_img" src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            <image class="cool_img" src="/static/images/home_dafulpage_pic_time@3x.png"></image>
             <view class="cool_time">{{coolTime}}</view>
             <view class="cool_cont">
               <view class="blo_hint_txt">你已经看了很多新朋友了，休息一下吧~</view>
@@ -62,7 +62,7 @@
         </view>
         <!-- 到底 -->
         <view class="peop_blo blo_type2 blo_end" v-if="isEnd">
-            <image class="end_img" src="/static/images/home_btn_unlike_nor@3x.png"></image>
+            <image class="end_img" src="/static/images/home_dafulpage_pic_nomore@3x.png"></image>
             <view class="end_cont">
               <view class="blo_hint_txt">很遗憾...暂时没有新的朋友啦，建议你放宽 筛选范围。也可以分享给小伙伴们，大家 一起来玩趣名片哦！</view>
             </view>
@@ -546,6 +546,10 @@ export default {
         }).catch(e => {
           console.log(e)
         })
+
+        if(res.data.length<1){
+          that.isEnd = true
+        }
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
           that.isCooling = true
