@@ -99,6 +99,11 @@
 					privacy_email: parseInt(this.email) + 1,
 					can_change_card: this.card
 				}
+				this.userInfo.privacy_mobile = data.privacy_mobile
+				this.userInfo.privacy_wechat = data.privacy_wechat
+				this.userInfo.privacy_email = data.privacy_email
+				this.userInfo.can_change_card = data.can_change_card
+				this.$store.dispatch('userInfo', this.userInfo)
 				putPrivacyApi(data).then(res => {
 					console.log(res, "设置成功")
 				})
