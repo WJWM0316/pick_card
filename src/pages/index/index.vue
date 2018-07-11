@@ -114,7 +114,7 @@
     </view> -->
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-     <footerTab :type=1 :adaptive=adaptive></footerTab>
+     <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -1070,6 +1070,19 @@ export default {
             bottom: -8rpx;
             left: 50%;
             margin-left: -10rpx;
+          }
+        }
+        &.red {
+          position: relative;
+          &:before {
+            content: '';
+            width:20rpx;
+            height:20rpx;
+            background:red;
+            border-radius:50%;
+            position: absolute;
+            top: 15rpx;
+            right: -5rpx;
           }
         }
       }

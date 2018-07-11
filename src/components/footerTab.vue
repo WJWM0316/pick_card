@@ -3,9 +3,9 @@
     <view class="footer " :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
       <view class="ft_warp">
         <view class="left">
-          <view class="name" :class="{'cur' : type === 1}" @tap="toTab(1)">Pick</view>
-          <view class="name" :class="{'cur' : type === 2}" @tap="toTab(2)">名片夹</view>
-          <view class="name" :class="{'cur' : type === 3}" @tap="toTab(3)">我的名片</view>
+          <view class="name " :class="{'cur' : type === 1}" @tap="toTab(1)">Pick</view>
+          <view class="name " :class="{'cur' : type === 2,'red': isRed == 1}" @tap="toTab(2)">名片夹</view>
+          <view class="name " :class="{'cur' : type === 3}" @tap="toTab(3)">我的名片</view>
         </view>
         <view class="right"> 
           <view class="r_blo" @click="isShare">
@@ -49,6 +49,10 @@
         type: String,
         default: 1
       },
+      isRed:{
+        type: String,
+        default: 0
+      }
       
     },
     data () {
@@ -163,6 +167,20 @@
           bottom: -8rpx;
           left: 50%;
           margin-left: -10rpx;
+        }
+      }
+      &.red {
+        position: relative;
+        &:before {
+          content: '';
+          width:14rpx;
+          height:14rpx;
+          background:rgba(255,81,80,1);
+          background:red;
+          border-radius:50%;
+          position: absolute;
+          top: -10rpx;
+          right: -25rpx;
         }
       }
     }

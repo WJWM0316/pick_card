@@ -1,12 +1,12 @@
 <template>
   <view class="container" >
     <view class="tit">
-      <view class="item" :class="{'cur':nowIndex==0}" @click="select(0)" >个人名片</view>
-      <view class="item flock" :class="{'cur':nowIndex==1}" @click="select(1)" >群名片</view>
+      <view class="item" :class="{'cur':nowIndex==0,'red':friend&&friend.userGroupRedDot&&friend.userGroupRedDot>0}" @click="select(0)" >个人名片</view>
+      <view class="item flock" :class="{'cur':nowIndex==1,'red':florkList&&florkList.userGroupRedDot&&florkList.userGroupRedDot>0}" @click="select(1)" >群名片</view>
     </view>
     <view class="content">
       <view class="ops">
-        <button open-type="share" class="ops_blo shareMe" @tap="toMeDetail">
+        <button open-type="share" data-type="me" class="ops_blo shareMe" @tap="toMeDetail">
           <image src="/static/images/cardcase_banner_left@3x.png"></image>
           分享我的名片
         </button>
@@ -34,16 +34,16 @@
             <block  v-else>
               <view class="none_blo">
                 <view class="none_txt">分享我的名片，获取更多职场人脉</view>
-                <button class="none_btn" open-type="share">去分享 </button>
+                <button class="none_btn" data-type="me" open-type="share">去分享 </button>
               </view>
             </block>
           </block>
 
           <block v-else>
-            <view class="flockList" v-if="florkList.list.length>0">
+            <view class="flockList" v-if="florkList && florkList.list&& florkList.list.length>0">
 
               <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item)">
-                <view class="blo_msg flock_blo" >
+                <view class="blo_msg flock_blo" :class="{'two': item.userGroupTabRedDot == 1}" >
                   <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
                   <image class="blo_img"  src="/static/images/new_pic_defaulhead.jpg" v-else></image>
                   <open-data class="msg_name" type="groupName" :open-gid="item.openGid"></open-data>
@@ -64,14 +64,17 @@
     </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <footerTab :type=2 :adaptive=adaptive></footerTab>
+    <footerTab :type=2 :adaptive=adaptive :isRed=swopRed></footerTab>
   </view>
 </template>
 <script>
   import mptoast from 'mptoast'
   import footerTab from '@/components/footerTab'
   import App from '@/App'
+  import { getUserInfoApi } from '@/api/pages/user'
   import { getFriends, deleteFriends, getUserGroupList, getUserGroupInfo, joinUserGroup, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
+  import { deleteRedDot, redDotApplys, redDot } from '@/api/pages/red'
+  import { getShareImg } from '@/api/pages/login'
 export default {
   interval: '',
   components: {
@@ -87,6 +90,8 @@ export default {
       systemInfo: {},
       spHeight: '80vh',
       adaptive: null,
+      swopRed: 0,
+      shareData: {}
     }
   },
 
@@ -134,12 +139,46 @@ export default {
     getFriends().then((res)=>{
       console.log(res)
       that.friendList = res.data
+
+      if(res.http_status==200){
+        deleteRedDot()
+      }
     },(res)=>{})
 
     getUserGroupList().then((res)=>{
       console.log(res)
       that.florkList = res.data
     },(res)=>{})
+
+    getUserInfoApi().then( data => {
+      let usersInfo = data.data
+      let msg = {
+        uid: usersInfo.id,
+        name: usersInfo.name,
+        img: usersInfo.avatar_info.smallImgUrl,
+        occupation: usersInfo.occupation,
+        company: usersInfo.company,
+        label: [],
+      }
+
+      usersInfo.other_info.realm_info.forEach(item => {
+        msg.label.push(`${item.name} | `)
+      })
+
+      msg.label = msg.label.join('')
+      msg.label = msg.label.slice(0, msg.label.length-3)
+
+      getShareImg(msg).then(res => {
+        msg.shareImg = res.data
+        that.shareData = msg
+      })
+    })
+
+    redDotApplys().then(res=>{
+      if(res.http_status==200){
+        that.swopRed = res.data.user_apply_show_red_dot
+      }
+    })
 
     wx.getSystemInfo({
       success: function(res) {
@@ -151,28 +190,34 @@ export default {
   },
   onShareAppMessage: function (res) {
     console.log(res)
-    let path = '/pages/index/main?'
+    let path = '/pages/index/main?',
+        that = this,
+        imageUrl = '';
+
     wx.showShareMenu({
       withShareTicket: true
     })
+
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
         path+='form=cardHolder&type=flock'
       }
+      if(res.target.dataset.type=="me"){
+        imageUrl = that.shareData.shareImg
+        path = `/pages/detail?vkey=${this.usersInfo.vkey}`
+      }
       // 来自页面内转发按钮
     }
-    console.log(path)
-
     return {
       title: '自定义转发标题',
-      path: path
+      path: path,
+      imageUrl: imageUrl
     }
   },
   onShow(res){
     wx.showShareMenu({
       withShareTicket: true
     })
-    console.log('onshow',res)
   }
 }
 </script>
@@ -201,8 +246,7 @@ export default {
       font-family:PingFangHK-Light;
       color:rgba(53,57,67,1);
       text-align: center;
-      &.flock {
-        margin-left: 100rpx;
+      &.red {
         &.cur {
           &:before {
             content: '';
@@ -213,10 +257,27 @@ export default {
             border-radius:50%;
             position: absolute;
             top: 15rpx;
-            right: 5rpx;
+            right: -5rpx;
           }
         }
-        
+        &.flock{
+          &.cur {
+            &:before {
+              content: '';
+              width:14rpx;
+              height:14rpx;
+              background:rgba(255,81,80,1);
+              background:red;
+              border-radius:50%;
+              position: absolute;
+              top: 15rpx;
+              right: 5rpx;
+            }
+          }
+        }
+      }
+      &.flock {
+        margin-left: 100rpx;
       }
       &.cur {
         font-size:34rpx;
@@ -233,17 +294,6 @@ export default {
           bottom: 0rpx;
           left: 50%;
           margin-left: -10rpx;
-        }
-        &:before {
-          content: '';
-          width:14rpx;
-          height:14rpx;
-          background:rgba(255,81,80,1);
-          background:red;
-          border-radius:50%;
-          position: absolute;
-          top: 15rpx;
-          right: -5rpx;
         }
       }
     }
@@ -336,9 +386,22 @@ export default {
             height:20rpx;
             border-radius: 50%;
             background:rgba(255,102,102,1);
-            position: absolute;
+            position: absolute; 
             top: 62rpx;
             left: 50rpx;
+            //margin-left: -10rpx;
+          }
+        }
+        &.two {
+          &:after {
+            content: '';
+            width:20rpx;
+            height:20rpx;
+            border-radius: 50%;
+            background:rgba(255,102,102,1);
+            position: absolute;
+            top: 0rpx;
+            left: 0rpx;
             //margin-left: -10rpx;
           }
         }

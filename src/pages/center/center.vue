@@ -55,7 +55,7 @@
 				</view>
 			</viwe>
 		</view>
-		<footerTab :type=3 :adaptive=adaptive></footerTab>
+		<footerTab :type=3 :adaptive=adaptive :isRed=swopRed></footerTab>
 	</view>
 </template>
 <script>
@@ -63,6 +63,8 @@
 	import footerTab from '@/components/footerTab'
 	import {putPrivacyApi, getUserInfoApi} from '@/api/pages/user'
 	import {getShareImg} from '@/api/pages/login'
+  import { redDotApplys } from '@/api/pages/red'
+
 	export default {
 		components: {
 			footerTab
@@ -73,6 +75,7 @@
 				checkedTextList: [],
 				isShareImg: '',
 				openSet: false,
+				swopRed: 0,
 				adaptive: null
 			}
 		},
@@ -85,8 +88,11 @@
 		onLoad (option) {
 			this.vkey = option.vkey
 			this.adaptive = wx.getStorageSync('adaptive')
-			
-			
+			redDotApplys().then(res=>{
+			  if(res.http_status==200){
+			    that.swopRed = res.data.user_apply_show_red_dot
+			  }
+			})
 		},
 		onShow () {
 			this.checkedTextList = []
@@ -106,23 +112,23 @@
 				})
 			}
 			if (!this.isShareImg) {
-	      let data = {
-	      	uid: this.info.id,
-	      	name: this.info.name,
-	      	img: this.info.avatar_info.smallImgUrl,
-	      	occupation: this.info.occupation,
-	      	company: this.info.company,
-	      	label: [],
-	      }
-	      this.info.other_info.realm_info.forEach(item => {
-	      	data.label.push(`${item.name} | `)
-	      })
-	      data.label = data.label.join('')
-	      data.label = data.label.slice(0, data.label.length-3)
-	      getShareImg(data).then(res => {
-	      	this.isShareImg = res.data
-	      })
-      }
+			      let data = {
+			      	uid: this.info.id,
+			      	name: this.info.name,
+			      	img: this.info.avatar_info.smallImgUrl,
+			      	occupation: this.info.occupation,
+			      	company: this.info.company,
+			      	label: [],
+			      }
+			      this.info.other_info.realm_info.forEach(item => {
+			      	data.label.push(`${item.name} | `)
+			      })
+			      data.label = data.label.join('')
+			      data.label = data.label.slice(0, data.label.length-3)
+			      getShareImg(data).then(res => {
+			      	this.isShareImg = res.data
+			      })
+		      }
 		},
 		onShareAppMessage: function (res) {
 	    if (res.from === 'button') {

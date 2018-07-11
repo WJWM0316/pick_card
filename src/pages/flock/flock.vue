@@ -70,6 +70,7 @@
     }
     .content {
       background:rgba(250,251,253,1);
+      padding-bottom: 160rpx;
       .card_block {
         position: relative;
         margin: 0 50rpx;
@@ -86,6 +87,19 @@
           box-shadow:0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
           border:4rpx solid rgba(255,255,255,1);
           box-sizing: border-box;
+          &.cur {
+            position: relative;
+            &:after {
+              width:2rpx;
+              height:36rpx;
+              background: rgba(255,255,255,1);
+              content: '';
+              border-radius:4rpx;
+              position: absolute;
+              top: 0rpx;
+              right: 0;
+            }
+          }
         }
         .blo_msg {
           width:600rpx;
@@ -206,82 +220,9 @@
             <view class="msg_name ellipsis">{{item.nickname}}</view>
             <view class="msg_tit ellipsis">{{item.occupation}}</view>
             <view class="msg_company ellipsis">{{item.company}}</view>
-            <view class="flock_style" @tap.stop="swopSlock(item.id)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
+            <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
             <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
             <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
-          </view>
-        </view>
-        <view class="card_block" >
-          <view class="blo_msg" >
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
-            <view class="msg_name ellipsis">撒打算的</view>
-            <view class="msg_tit ellipsis">撒打算打算的</view>
-            <view class="msg_company ellipsis">撒打算的</view>
-            <view class="flock_style" >交换名片</view>
-          </view>
-        </view>
-        <view class="card_block" >
-          <view class="blo_msg" >
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
-            <view class="msg_name ellipsis">撒打算的</view>
-            <view class="msg_tit ellipsis">撒打算打算的</view>
-            <view class="msg_company ellipsis">撒打算的</view>
-            <view class="flock_style" >交换名片</view>
-          </view>
-        </view>
-        <view class="card_block" >
-          <view class="blo_msg" >
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
-            <view class="msg_name ellipsis">撒打算的</view>
-            <view class="msg_tit ellipsis">撒打算打算的</view>
-            <view class="msg_company ellipsis">撒打算的</view>
-            <view class="flock_style" >交换名片</view>
-          </view>
-        </view>
-        <view class="card_block" >
-          <view class="blo_msg" >
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
-            <view class="msg_name ellipsis">撒打算的</view>
-            <view class="msg_tit ellipsis">撒打算打算的</view>
-            <view class="msg_company ellipsis">撒打算的</view>
-            <view class="flock_style" >交换名片</view>
-          </view>
-        </view>
-        <view class="card_block" >
-          <view class="blo_msg" >
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
-            <view class="msg_name ellipsis">撒打算的</view>
-            <view class="msg_tit ellipsis">撒打算打算的</view>
-            <view class="msg_company ellipsis">撒打算的</view>
-            <view class="flock_style" >交换名片</view>
-          </view>
-        </view>
-        <view class="card_block" >
-          <view class="blo_msg" >
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
-            <view class="msg_name ellipsis">撒打算的</view>
-            <view class="msg_tit ellipsis">撒打算打算的</view>
-            <view class="msg_company ellipsis">撒打算的</view>
-            <view class="flock_style" >交换名片</view>
-          </view>
-        </view>
-        <view class="card_block" >
-          <view class="blo_msg" >
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
-            <view class="msg_name ellipsis">撒打算的</view>
-            <view class="msg_tit ellipsis">撒打算打算的</view>
-            <view class="msg_company ellipsis">撒打算的</view>
-            <view class="flock_style" >交换名片</view>
-          </view>
-        </view>
-
-        <view class="card_block" >
-          <view class="blo_msg" >
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg"></image>
-            <view class="msg_name ellipsis">撒打算的</view>
-            <view class="msg_tit ellipsis">撒打算打算的</view>
-            <view class="msg_company ellipsis">撒打算的</view>
-            <view class="flock_style" >交换名片</view>
           </view>
         </view>
       </view>
@@ -305,6 +246,7 @@
   import mptoast from 'mptoast'
   import { joinUserGroup, isJoinUserGroup,getUserGroupInfo, getFriends, deleteFriends, getUserGroupList, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
   import {  indexLike  } from '@/api/pages/user'
+  import { deleteRedDot, redDotApplys, redDot, deleteRedFlock } from '@/api/pages/red'
 
 export default {
   components: {
@@ -316,6 +258,7 @@ export default {
       flockInfo:[],
       isJoin: false,
       isFirst: true,
+      isFirstFlock: true,
       msg: {
         id: '',
         vkey: ''
@@ -342,6 +285,7 @@ export default {
           that.$mptoast('成功加入')
           that.isJoin = true
           that.updateData()
+          
         }
         console.log(1111,res)
       },(res)=>{
@@ -379,7 +323,7 @@ export default {
       })
     },
 
-    swopSlock (id) {
+    swopSlock (id,index) {
       let that = this
       wx.showModal({
         title: '提示',
@@ -392,6 +336,7 @@ export default {
             indexLike(msg).then((res)=>{
               console.log(res)
               if(res.http_status == 200){
+                that.flockInfo.groupMemberList[index].handle_status = 2
                 that.$mptoast('成功')
               }else{
                 that.$mptoast(res.msg)
@@ -420,7 +365,11 @@ export default {
         that.flockInfo = res.data
 
         if(res.http_status == 200){ 
-
+          if(that.isFirstFlock){
+            deleteRedFlock(that.msg.vkey).then((res)=>{
+              that.isFirstFlock = false
+            })
+          }
         }else {
           that.$mptoast(res.msg)
         }
