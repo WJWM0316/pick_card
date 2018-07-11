@@ -23,7 +23,9 @@
 							<text class="picker">
 					     {{careerList[career]}}
 					    </text>
+					    <image class="icon" src="/static/images/edit_icon_label_select@3x.png"></image>
 						</picker>
+
 					</view>
 				</view>
 				<view class="label-con">
@@ -447,7 +449,7 @@
 		padding: 0 40rpx 158rpx;
 		.title {
 			margin-bottom: 30rpx;
-			border-bottom:1px solid rgba(53,57,67,0.1);
+			border-bottom:1rpx solid rgba(53,57,67,0.1);
 			.titlecon {
 				font-size:30rpx;
 				color:#353943;
@@ -501,11 +503,16 @@
 					margin-left: 48rpx;
 					display:inline-block;
 					box-sizing: border-box;
+					.icon {
+						width: 18rpx;
+						height: 12rpx;
+						vertical-align:middle;
+					}
 				}
 			}
 			.label-con {
 				padding: 40rpx 0 20rpx;
-				border-bottom:1px solid rgba(220,227,238,1);
+				border-bottom:1rpx solid rgba(220,227,238,1);
 				.labelBox {
 					overflow: hidden;
 					.label {	
@@ -530,6 +537,7 @@
 		}
 		.other {
 			margin-top: 176rpx;
+			margin-bottom: 80rpx;
 			.other-title {
 				text-align: center;
 				font-size:28rpx;

@@ -21,9 +21,10 @@
 				<view class="itemCon">
 					<view class="left requst">开始时间</view>
 					<view class="right">
-						<picker mode='date' @change="startDateChange" :value="info.start_time_desc" fields=month>
+						<picker mode='date' @change="startDateChange" :value="info.start_time_desc || nowTime" fields=month>
 							<view class="picker">
 					      <text class="placeholder" v-show="info.start_time_desc === ''">开始时间</text>{{info.start_time_desc}}
+					      <image class="icon" src="/static/images/icon_chevron@2x.png"></image>
 					    </view>
 						</picker>
 					</view>
@@ -38,9 +39,10 @@
 							<image class="icon" v-if="!isNow" @tap="choseNow('isNowWork')" src="/static/images/edittime_btn_select_nor@3x.png"></image>
 							至今
 						</view>
-						<picker mode='date' @change="endDateChange" :value="info.end_time_desc" fields=month :disabled="isNow">
+						<picker mode='date' @change="endDateChange" :value="info.end_time_desc || nowTime" fields=month :disabled="isNow">
 							<view class="picker" :class="{'disabled' : isNow}">
 					      <text class="placeholder" v-show="info.end_time_desc === ''">结束时间</text>{{info.end_time_desc}}
+					      <image class="icon" src="/static/images/icon_chevron@2x.png"></image>
 					    </view>
 						</picker>
 					</view>
@@ -60,9 +62,10 @@
 				<view class="itemCon">
 					<view class="left requst">开始时间</view>
 					<view class="right">
-						<picker mode='date' @change="startDateChange" :value="info.start_time_desc" fields=month>
+						<picker mode='date' @change="startDateChange" :value="info.start_time_desc || nowTime" fields=month>
 							<view class="picker">
 					      <text class="placeholder" v-show="info.start_time_desc === ''">开始时间</text>{{info.start_time_desc}}
+					      <image class="icon" src="/static/images/icon_chevron@2x.png"></image>
 					    </view>
 						</picker>
 					</view>
@@ -77,9 +80,10 @@
 							<image class="icon" v-if="!isNow" @tap="choseNow('isNowStudy')" src="/static/images/edittime_btn_select_nor@3x.png"></image>
 							至今
 						</view>
-						<picker mode='date' @change="endDateChange" :value="info.end_time_desc" fields=month :disabled="isNow">
+						<picker mode='date' @change="endDateChange" :value="info.end_time_desc || nowTime" fields=month :disabled="isNow">
 							<view class="picker" :class="{'disabled' : isNow}">
 					      <text class="placeholder" v-show="info.end_time_desc === ''">结束时间</text>{{info.end_time_desc}}
+					      <image class="icon" src="/static/images/icon_chevron@2x.png"></image>
 					    </view>
 						</picker>
 					</view>
@@ -260,8 +264,8 @@
 				if (type === 'education') {
 					let data = {
 						name: this.info.name,
-						start_time : new Date(this.info.start_time_desc).getTime().toString().slice(0, 10),
-						end_time: new Date(this.info.end_time_desc).getTime().toString().slice(0, 10)
+						start_time :this.info.start_time_desc,
+						end_time: this.info.end_time_desc
 					}
 					if (this.isNow) {
 						data.end_time = new Date(this.nowTime).getTime().toString().slice(0, 10)
@@ -280,12 +284,12 @@
 					let data = {
 						name: this.info.name,
 						position: this.info.position,
-						start_time : new Date(this.info.start_time_desc).getTime().toString().slice(0, 10),
-						end_time: new Date(this.info.end_time_desc).getTime().toString().slice(0, 10)
+						start_time : this.info.start_time_desc,
+						end_time: this.info.end_time_desc
 					}
 					console.log(this.isNow, this.nowTime,data.end_time, 222222)
 					if (this.isNow) {
-						data.end_time = new Date(this.nowTime).getTime().toString().slice(0, 10)
+						data.end_time = this.nowTime
 						console.log(this.nowTime, data.end_time, 222222)
 					}
 					if (id !== 'undefined') {
@@ -462,6 +466,12 @@
 							}
 							&.disabled {
 								color: #C3C9D4;
+							}
+							.icon {
+								width: 18rpx;
+								height: 30rpx;
+								margin-left: 16rpx;
+								vertical-align: -4rpx;
 							}
 						}
 						.label {

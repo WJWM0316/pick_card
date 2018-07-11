@@ -114,7 +114,7 @@
 			if (!this.isShareImg) {
 			      let data = {
 			      	uid: this.info.id,
-			      	name: this.info.name,
+			      	name: this.info.nickname,
 			      	img: this.info.avatar_info.smallImgUrl,
 			      	occupation: this.info.occupation,
 			      	company: this.info.company,

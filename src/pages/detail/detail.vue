@@ -1,10 +1,14 @@
 <template>
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
-		<view class="main card">
+		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 0">
+			33人想得到你的名片
+			<view class="flaunt">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></view>
+		</view>
+		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 0}">
 			<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
 			<view class="content">
-				<view class="mycard" v-if="!isSelf" @tap.stop="jumpMy">
+				<view class="mycard" v-if="!isSelf && myCard" @tap.stop="jumpMy">
 					<image class="icon" src="/static/images/float_icon_add@3x.png"></image>
 					<text>我的名片</text>
 				</view>
@@ -19,7 +23,7 @@
 				<view class="job">{{userInfo.occupation}}</view>
 				<view class="company">{{userInfo.company}}</view>
 				<view class="signature">{{userInfo.sign}}</view>
-				<view class="itemMsg">
+				<view class="itemMsg" v-if="userInfo.user_location !== ''">
 					<image class="icon" src="/static/images/details_icon_location@3x.png"></image>
 					<text class="msg">{{userInfo.user_location}}</text>
 				</view>
@@ -38,13 +42,13 @@
 						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_mobile === 1 ? userInfo.privacy_mobile_desc : userInfo.mobile}}
 					</text>
 				</view>
-				<view class="itemMsg">
+				<view class="itemMsg" v-if="userInfo.email !== ''">
 					<image class="icon" src="/static/images/details_icon_email@3x.png"></image>
 					<text class="msg" :class="{'isShow' : !isSelf && userInfo.handle_status !== 4 && userInfo.privacy_email === 1 }">
 						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_email === 1 ?  userInfo.privacy_email_desc : userInfo.email}}
 					</text>
 				</view>
-				<view class="itemMsg">
+				<view class="itemMsg" v-if="userInfo.wechat !== ''">
 					<image class="icon" src="/static/images/details_icon_wechat@3x.png"></image>
 					<text class="msg" :class="{'isShow' :!isSelf &&  userInfo.handle_status !== 4 && userInfo.privacy_wechat === 1 }">
 						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_wechat === 1 ? userInfo.privacy_wechat_desc : userInfo.wechat}}
@@ -69,7 +73,7 @@
 		<view class="other card" v-if="workInfo && workInfo.length > 0 || isSelf">
 			<view class="content">
 				<view class="title">
-					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
+					<image class="icon" src="/static/images/details_icon_work@3x.png"></image>
 					<text class="msg">工作经历</text>
 				</view>
 				<view class="litm" v-for="(item, index) in workInfo" v-if="index < showWorkNum || isSelf" :key="index">
@@ -85,7 +89,7 @@
 		<view class="other card"  v-if="educationsInfo && educationsInfo.length > 0 || isSelf">
 			<view class="content">
 				<view class="title">
-					<image class="icon" src="/static/images/details_icon_label@3x.png"></image>
+					<image class="icon" src="/static/images/details_icon_education@3x.png"></image>
 					<text class="msg">教育经历</text>
 				</view>
 				<view class="litm" v-for="(item, index) in educationsInfo" v-if="index < showEducationNum || isSelf" :key="index">
@@ -153,14 +157,32 @@
 				this.isSelf = false
 			}
 		},
-		onShow () {
+		onShow (option) {
+			console.log(option, 1111111111)
 			let that = this
 			this.userInfo = {}
-			authorizePop.methods.checkLogin().then(res => {
+			this.educationsInfo = []
+			this.workInfo = []
+			this.labelInfo = []
+			this.moreInfo = {}
+			this.checkedTextList = []
+			if (!that.$store.getters.needAuthorize) {
+				authorizePop.methods.checkLogin().then(res => {
+					if (that.isSelf) {
+						console.log('是本人')
+						that.getUserUnfo()
+					} else {
+						console.log('非本人')
+						if (that.$store.getters.userInfo.step < 9) {
+							that.myCard = true
+						}
+						that.getOtherUserInfo()
+					}
+				})
+			} else {
 				if (that.isSelf) {
-					that.userInfo = that.$store.getters.userInfo
 					console.log('是本人')
-					// this.getUserUnfo()
+					that.getUserUnfo()
 				} else {
 					console.log('非本人')
 					if (that.$store.getters.userInfo.step < 9) {
@@ -168,9 +190,7 @@
 					}
 					that.getOtherUserInfo()
 				}
-			})
-			
-
+			}
 		},
 		methods: {
 			open (type) {
@@ -216,7 +236,7 @@
 			},
 			jumpMy () {
 				const vkey = wx.getStorageSync('vkey')
-				wx.navigateTo({
+				wx.redirectTo({
 	        url: `/pages/detail/main?vkey=${vkey}`
 	      })
 			},
@@ -300,6 +320,29 @@
 		&.self {
 			padding-bottom: 30rpx;
 		}
+		.header {
+			width: 100%;
+			height: 80rpx;
+			line-height: 80rpx;
+			padding: 0 40rpx;
+			box-sizing: border-box;
+			font-size: 28rpx;
+			font-weight: light;
+			background:rgba(255,252,240,1);
+			position: absolute;
+			top: 0;
+			left: 0;
+			color: #354048;
+			.flaunt {
+				float: right;
+				color: #FFA200;
+				.icon {
+					width: 14rpx;
+					height: 24rpx;
+					margin-left: 16rpx;
+				}
+			}
+		}
 		.card {
 			width: 100%;
 			background: #fff;
@@ -315,6 +358,9 @@
 			.headImg {
 				width: 670rpx;
 				height: 670rpx;
+			}
+			&.mTop {
+				margin-top: 70rpx;
 			}
 			.content {
 				padding: 40rpx 30rpx 40rpx 40rpx;
@@ -522,7 +568,7 @@
 		.btnControl {
 			width: 100%;
 			height: 140rpx;
-			padding: 12rpx 75rpx 30rpx;
+			padding: 30rpx 75rpx;
 			position: fixed;
 			left: 0;
 			bottom: 0;
