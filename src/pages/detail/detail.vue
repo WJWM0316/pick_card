@@ -140,7 +140,8 @@
 				showWorkNum: 2,
 				showEducationNum: 2,
 				checkedTextList: [],
-				nowTime: ''
+				nowTime: '',
+				myCard: false
 			}
 		},
 		onLoad (option) {
@@ -154,12 +155,17 @@
 		},
 		onShow () {
 			let that = this
+			this.userInfo = {}
 			authorizePop.methods.checkLogin().then(res => {
 				if (that.isSelf) {
-					console.log('是本人', that.$store.getters.userInfo)
+					that.userInfo = that.$store.getters.userInfo
+					console.log('是本人')
 					// this.getUserUnfo()
 				} else {
 					console.log('非本人')
+					if (that.$store.getters.userInfo.step < 9) {
+						that.myCard = true
+					}
 					that.getOtherUserInfo()
 				}
 			})
