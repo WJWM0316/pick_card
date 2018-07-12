@@ -92,26 +92,6 @@
         ></image>
       </view>
     </view>
-    <!-- <view class="footer">
-      <view class="ft_warp">
-        <view class="left">
-          <view class="name cur" @tap="isCreate">Pick</view>
-          <view class="name" @tap="toCardHolder">名片夹</view>
-          <view class="name"  @tap="toCenter">我的名片</view>
-        </view>
-        <view class="right"> 
-          <view class="r_blo" @click="isShare2">
-            <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
-          </view>
-          <view class="r_blo" >
-            <form report-submit="true" class="from-box" @submit="fromClick">
-              <button formType="submit" class="from-mask"></button>
-            </form>
-            <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
-          </view>
-        </view>
-      </view>
-    </view> -->
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
     <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
@@ -133,7 +113,6 @@
 
         <view class="bot_cont">
           <image class="bot_img bot_right_icon1" src="/static/images/dafult_icom_like@3x.png"  v-if="gdData.step==1"></image>
-          
           <image class="bot_img bot_left_icon1" src="/static/images/dafult_icom_unlike@3x.png" v-else></image>
         </view>
       </view>
@@ -577,12 +556,14 @@ export default {
             return
           }
         }
+        if (that.usersInfo.step !== 9) {
+          redDot().then(res=>{
+            that.swopRed = res.data.main_show_red_dot
+          })
+          that.getShareImg()
+        }
+        
 
-        redDot().then(res=>{
-          that.swopRed = res.data.main_show_red_dot
-        })
-
-        that.getShareImg()
         if(res.data.length<1){
           that.isEnd = true
         }
@@ -614,7 +595,7 @@ export default {
 }
 </script>
 <style lang="less" type="text/less" scoped>
-@import url("~@/styles/animate.less");
+  @import url("~@/styles/animate.less");
 
   .container {
     height: 100vh;
@@ -623,7 +604,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     &.small{
-      //height: 1020rpx;
+      height: 1020rpx;
       .content {
         top: -66rpx;
         height: 736rpx;

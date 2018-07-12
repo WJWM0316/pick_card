@@ -219,7 +219,6 @@
       },
       before(type){
         let that = this
-
         that.nowNum = type
       },
       getPhone(e){
@@ -368,16 +367,18 @@
         if(that.nowNum == 0){
           data = that.firstData
           data.nickname = data.nickname.trim()
-          firstSignApi(data).then((res)=>{
-            if(res.http_status == 200){
-              that.nowNum = 1;
-              //this.bindPhone.isPh = true
+          this.upLoad().then(res => {
+            firstSignApi(data).then((res)=>{
+              if(res.http_status == 200){
+                that.nowNum = 1;
+                //this.bindPhone.isPh = true
 
-            }else {
+              }else {
+                this.$mptoast(res.msg)
+              }
+            },(res)=>{
               this.$mptoast(res.msg)
-            }
-          },(res)=>{
-            this.$mptoast(res.msg)
+            })
           })
         }else if(that.nowNum == 1){
           let rli = this.secondRule.rli,
@@ -498,14 +499,11 @@
       },
 
       upLoad () {
-        const info = wx.getStorageSync('cutImgInfo')
-        if (info.path) {
+        return new Promise((resolve, reject) => {
           const data = {
             path: info.path,
             size: info.size
           }
-          this.filePath = info.path
-          console.log(this.filePath, 2222222222222)
           uploadImage(data, {
             onItemSuccess: (resp, file, index) => {
             }
@@ -520,15 +518,14 @@
           }).catch((e, index) => {
             console.log(e, 2)
           })
-        }
+        })
       }
     },
-    onLoad(){
+    onLoad (){
       let that = this
       let data = {
         labelType: '1,2,3,4' //标签类型。1擅长领域,2生活标签,3职业方向,4职业素养
       } 
-
       if(this.$store.getters.userInfo){
         let userInfo = this.$store.getters.userInfo
         if(userInfo.is_zike){
@@ -568,13 +565,13 @@
         that.listData = res.data
       },(res)=>{
       })
-
-
-
     },
     onShow () {
-      this.upLoad()
-    }
+      const info = wx.getStorageSync('cutImgInfo')
+      if (info.path) {
+        
+        this.filePath = info.path
+      }
   }
 </script>
 
