@@ -3,7 +3,7 @@
   <view class="container" >
     <view class="hint" v-if="listData.length>0">记录只保留14天，抓紧时间处理哦~</view>
     <view class="swopList" v-if="listData.length>0">
-      <view class="swop_blo" v-for="(item, index) in listData" :key="key" >
+      <view class="swop_blo" v-for="(item, index) in listData" :key="key" @tap="toDetail">
 
         <view class="blo_top">
           <image class="avatar" :src="item.avatar_info" v-if="item.avatar_info"></image>

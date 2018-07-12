@@ -397,11 +397,9 @@
           secondSignApi(data).then((res)=>{
             if(res.http_status == 200){
               that.nowNum = 2;
-              console.log(1,data)
               postGetCreatedThreeLable({
                 id : data.occupation_label_id 
               }).then((res)=>{
-                console.log('postGetCreatedThreeLable',res)
                 that.nowNum = 2;
                 res.data.forEach((value,index)=>{
                   value.forEach((item,idx)=>{
@@ -443,7 +441,10 @@
       toCode () {
         let that = this,
             next = '';
-
+        if(this.bindPhone.number.length<1){
+          that.$mptoast('手机号码不能为空')
+          return
+        }
         next = that.isPoneAvailable(this.bindPhone.number);
         if(!next){
           that.$mptoast('手机格式不对')
@@ -454,8 +455,6 @@
           return
         }
         this.thirdPost(2)
-
-        
       },
       //  
       phoneCountDown(){
@@ -482,7 +481,6 @@
             that.bindPhone.smsCli = false
             that.codeTime = 60
             that.phoneCountDown();
-            console.log(res)
           },(res)=>{
             that.$mptoast(res.msg)
           })
@@ -530,12 +528,9 @@
       let data = {
         labelType: '1,2,3,4' //标签类型。1擅长领域,2生活标签,3职业方向,4职业素养
       } 
-      console.log('==============',this.$store.getters.userInfo)
 
       if(this.$store.getters.userInfo){
-
         let userInfo = this.$store.getters.userInfo
-        console.log(userInfo.length,userInfo)
         if(userInfo.is_zike){
           this.relevance = true
         }
