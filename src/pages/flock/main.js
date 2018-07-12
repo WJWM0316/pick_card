@@ -7,6 +7,6 @@ app.$mount();
 export default {
   config: {
     navigationBarTitleText: '群组',
-    enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
   },
 };

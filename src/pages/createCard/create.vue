@@ -363,8 +363,6 @@
         let that = this,
             listData = that.listData,
             data = {};
-
-
         console.log(that.nowNum == 0)
         if(that.nowNum == 0){
           const info = wx.getStorageSync('cutImgInfo')
@@ -378,8 +376,11 @@
           })
           uploadImage(parmas, {
             onItemSuccess: (resp, file, index) => {
+              console.log(resp)
             }
           }).then(res0 => {
+
+            console.log(res0)
             that.firstData.avatar_id = res0.file.fileId
             data = that.firstData
             data.nickname = data.nickname.trim()
