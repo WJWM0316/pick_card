@@ -569,9 +569,9 @@
     onShow () {
       const info = wx.getStorageSync('cutImgInfo')
       if (info.path) {
-        
         this.filePath = info.path
       }
+    }
   }
 </script>
 

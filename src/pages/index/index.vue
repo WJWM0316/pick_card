@@ -556,7 +556,7 @@ export default {
             return
           }
         }
-        if (that.usersInfo.step !== 9) {
+        if (that.usersInfo.step === 9) {
           redDot().then(res=>{
             that.swopRed = res.data.main_show_red_dot
           })
