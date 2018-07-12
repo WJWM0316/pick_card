@@ -3,7 +3,7 @@
   <view class="container" >
     <view class="hint" v-if="listData.length>0">记录只保留14天，抓紧时间处理哦~</view>
     <view class="swopList" v-if="listData.length>0">
-      <view class="swop_blo" v-for="(item, index) in listData" :key="key" @tap="toDetail(item)">
+      <view class="swop_blo" v-for="(item, index) in listData" :key="key" >
 
         <view class="blo_top">
           <image class="avatar" :src="item.avatar_info" v-if="item.avatar_info"></image>
@@ -25,119 +25,14 @@
     </view>
     <view class="none_cont" v-else>
         <view class="none_txt_1">暂时没有新的申请</view>
-        <button class="none_txt_2" data-type="me" open-type="share" @tap="toShare">推荐一下自己给你的朋友同事吧</button>
-    </view>
-
-    <!-- 分享弹窗 -->
-    <view class="pop_warp" v-if="pop.isPop" @tap="cloPop">
-      <view class="share_pop" v-if="pop.isShare"> 
-        <image  class="share_clo" src="/static/images/popup_btn_close_nor@3x.png" ></image>
-        <image class="share_cont" src="/static/images/popup_pic_newmatch@3x.png"></image>
-        <view class="tit" >恭喜你!</view>
-        <view class="txt txt_2">你已经和TA成功互换名片了! 现在你可以</view>
-
-        <view class="btns">
-          <button class="btn friend" @click="toDetail">
-            <image class="img_warp" src="/static/images/popup_btn_godetails@3x.png"></image>
-            <view class="bt_txt">看看TA的资料</view>
-          </button>
-          <button class="btn friends" @tap="toShare">
-            <image class="img_warp" src="/static/images/popup_btn_sharenew@3x.png"></image>
-            <view class="bt_txt">炫耀一下新朋友</view>
-          </button>
-        </view>
-      </view>
+        <button class="none_txt_2" data-type="me" open-type="share">推荐一下自己给你的朋友同事吧</button>
     </view>
 
     <mptoast />
-
+    <hintPop :type='consent' :isShow=isShow :consentNowItem=nowItem ></hintPop>
   </view>
 </template>
 <style lang="less" type="text/less" scoped>
-  .pop_warp {
-    background:rgba(0,0,0,0.7);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1001;
-  }
-  .share_pop {
-    width:670rpx;
-    height:800rpx;
-    background:rgba(255,255,255,1);
-    border-radius:18rpx;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    text-align: center;
-    box-sizing: border-box;
-    padding-top: 54rpx;
-    .share_clo {
-      width:28rpx;
-      height:28rpx;
-      position: absolute;
-      right: 40rpx;
-      top: 40rpx;
-    }
-    .share_cont {
-      width:375rpx;
-      height:349rpx;
-      margin: 0 auto;
-    }
-    .tit {
-      height:32rpx;
-      font-size:34rpx;
-      font-family:PingFangSC-Semibold;
-      color:rgba(53,57,67,1);
-      line-height:32rpx;
-      margin-top: 48rpx;
-
-    }
-    .txt {
-      font-size:28rpx;
-      font-family:PingFangSC-Regular;
-      color:rgba(154,161,171,1);
-      line-height:28rpx;
-      margin-top: 17rpx;
-      margin-bottom: 82rpx;
-      &.txt_2 {
-        margin: 17rpx auto 34rpx auto;
-        line-height:34rpx;
-        width: 355rpx;
-      }
-    }
-    .btns {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      .btn {
-        //width:140rpx;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        &.friend {
-          margin-right: 100rpx;
-        }
-        .bt_txt {
-          font-size:28rpx;
-          font-family:PingFangHK-Regular;
-          color:rgba(178,182,194,1);
-          line-height:26rpx;
-        }
-        .img_warp {
-          width:104rpx;
-          height:104rpx;
-          background:rgba(0,208,147,1);
-          margin-bottom: 15rpx;
-          border-radius: 50%;
-        }
-      }
-    }
-  }
   .none_cont {
     height: 100vh;
     flex-direction: column;
@@ -267,6 +162,8 @@
 </style>
 <script>
   import mptoast from 'mptoast'
+  import hintPop from '@/components/hintPop'
+
   import { getLikeList, putLike } from '@/api/pages/user'
   import { deleteRedDot } from '@/api/pages/red'
   import { getUserInfoApi } from '@/api/pages/user'
@@ -274,6 +171,7 @@
   export default {
     
     components: {
+      hintPop,
       mptoast
     },
     data () {
@@ -285,13 +183,13 @@
           isPop: false,
           isShare: false,
         },
+        isShow: false,
         nowItem: {}
       }
     },
     methods: {
       //跳转====
       toDetail (item) {
-        console.log(item)
         let data = {}
         if(item){
           data = item
@@ -303,27 +201,16 @@
           url: `/pages/detail/main?vkey=${data.apply_user_info.vkey}`
         })
       },
-      toShare(res){
+      /*toShare(){
         console.log('to share me')
-        wx.navigateTo({
-          url: `/pages/sharePick/main`
-        })
-      },
-      cloPop (res) {
-        console.log(res)
-        this.nowItem = {};
-        this.pop = {
-          isPop: false,
-          isShare: false,
-        };
-        console.log(res)
-      },
-      openPop () {
-        this.pop = {
-          isPop: true,
-          isShare: true,
+        let that = this
+        if(that.listData[0].apply_user_info.vkey){
+          wx.navigateTo({
+            url: `/pages/sharePick/main?vkey=${that.listData[0].apply_user_info.vkey}?type=me`
+          })
         }
-      },
+      },*/
+
       putApply (id,index) {
         if(!id){return}
         let data = {
@@ -337,7 +224,7 @@
             that.$mptoast('已发送')
             that.listData[index].status = 1
             that.nowItem = that.listData[index]
-            that.openPop()
+            that.isShow = true
           }
         },(res)=>{
           that.$mptoast('已发送','error',2000)
@@ -385,7 +272,8 @@
     },
 
     onShareAppMessage: function (res) {
-      console.log(res)
+      console.log('111111',res)
+
       let path = '/pages/index/main?',
           imageUrl = '';
 
@@ -394,9 +282,6 @@
       })
 
       if (res.from === 'button' ) {
-        if(res.target.dataset.type=="flock"){
-          path+='form=swop&type=flock'
-        }
         if(res.target.dataset.type=="me"){
           imageUrl = shareData.shareImg
           path = `/pages/detail?vkey=${this.usersInfo.vkey}`

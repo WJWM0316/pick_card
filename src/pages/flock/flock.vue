@@ -87,19 +87,6 @@
           box-shadow:0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
           border:4rpx solid rgba(255,255,255,1);
           box-sizing: border-box;
-          &.cur {
-            position: relative;
-            &:after {
-              width:2rpx;
-              height:36rpx;
-              background: rgba(255,255,255,1);
-              content: '';
-              border-radius:4rpx;
-              position: absolute;
-              top: 0rpx;
-              right: 0;
-            }
-          }
         }
         .blo_msg {
           width:600rpx;
@@ -111,6 +98,18 @@
           box-sizing: border-box;
           text-align: left;
           position: relative;
+          &.cur {
+            &:after {
+              content: '';
+              width:20rpx;
+              height:20rpx;
+              border-radius: 50%;
+              background:rgba(255,102,102,1);
+              position: absolute; 
+              top: 62rpx;
+              left: 50rpx;
+            }
+          }
           .msg_name {
             font-size:34rpx;
             font-family:PingFangHK-Medium;
@@ -214,7 +213,7 @@
     <view class="content">
       <view class="peoList">
         <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
-          <view class="blo_msg" @tap="toDetail(item)">
+          <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.memberRedDot>0}">
             <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
             <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
             <view class="msg_name ellipsis">{{item.nickname}}</view>
@@ -246,7 +245,7 @@
   import mptoast from 'mptoast'
   import { joinUserGroup, isJoinUserGroup,getUserGroupInfo, getFriends, deleteFriends, getUserGroupList, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
   import {  indexLike  } from '@/api/pages/user'
-  import { deleteRedDot, redDotApplys, redDot, deleteRedFlock } from '@/api/pages/red'
+  import { deleteRedFlock } from '@/api/pages/red'
 
 export default {
   components: {

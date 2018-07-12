@@ -1,8 +1,8 @@
 <template>
   <view class="container" >
     <view class="tit">
-      <view class="item" :class="{'cur':nowIndex==0,'red':friend&&friend.userGroupRedDot&&friend.userGroupRedDot>0}" @click="select(0)" >个人名片</view>
-      <view class="item flock" :class="{'cur':nowIndex==1,'red':florkList&&florkList.userGroupRedDot&&florkList.userGroupRedDot>0}" @click="select(1)" >群名片</view>
+      <view class="item" :class="{'cur':nowIndex==0,'red':topRed.user_card_count>0}" @click="select(0)" >个人名片</view>
+      <view class="item flock" :class="{'cur':nowIndex==1,'red':topRed.user_group_card_count>0}" @click="select(1)" >群名片</view>
     </view>
     <view class="content">
       <view class="ops">
@@ -19,7 +19,7 @@
             <view class="friendList" v-if="friendList.length>0">
                 <view class="card_block"  v-for="(item, index) in friendList" :key="key">
                   <view class="blo_msg " :class="{'one': item.has_red_dot == 1}" @tap="toDetail(item)">
-                    <image class="blo_img"  :src="item.friend_user_info.avatar_info" v-if="item.friend_user_info.avatar_info.length>0"></image>
+                    <image class="blo_img"  :src="item.friend_user_info.avatar_info" v-if="item&&item.friend_user_info&&item.friend_user_info.avatar_info&&item.friend_user_info.avatar_info.length>0"></image>
                     <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
 
                     <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
@@ -73,7 +73,7 @@
   import App from '@/App'
   import { getUserInfoApi } from '@/api/pages/user'
   import { getFriends, deleteFriends, getUserGroupList, getUserGroupInfo, joinUserGroup, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
-  import { deleteRedDot, redDotApplys, redDot } from '@/api/pages/red'
+  import { deleteRedDot, deleteRedFriends, redDotApplys, redDot } from '@/api/pages/red'
   import { getShareImg } from '@/api/pages/login'
 export default {
   interval: '',
@@ -91,6 +91,7 @@ export default {
       spHeight: '80vh',
       adaptive: null,
       swopRed: 0,
+      topRed: {},
       shareData: {}
     }
   },
@@ -141,7 +142,7 @@ export default {
       that.friendList = res.data
 
       if(res.http_status==200){
-        deleteRedDot()
+        deleteRedFriends()
       }
     },(res)=>{})
 
@@ -150,7 +151,7 @@ export default {
       that.florkList = res.data
     },(res)=>{})
 
-    getUserInfoApi().then( data => {
+    getUserInfoApi().then(data => {
       let usersInfo = data.data
       let msg = {
         uid: usersInfo.id,
@@ -179,7 +180,9 @@ export default {
         that.swopRed = res.data.user_apply_show_red_dot
       }
     })
-
+    redDot().then(res=>{
+      that.topRed = res.data
+    })
     wx.getSystemInfo({
       success: function(res) {
         that.systemInfo = res;

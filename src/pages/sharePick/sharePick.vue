@@ -2,76 +2,37 @@
 <template>
   <view class="container" >
     <view class="state_1" v-if="test">
-      <image  class="one_bg" src="/static/images/share_match_pic_share@3x.png" ></image>
+      <image  class="one_bg" :src="shareData.avatar.smallImgUrl" ></image>
       <view class="cont_tit">哇，一张名片就勾搭到一位大咖！ 你也来试</view>
       <view class="cont_txt">Pick！趣名片，职场新人脉勾搭平台 有趣社交，从这里开始</view>
     </view>
     <view class="state_2" v-else>
       <view class="head_msg">
         <view class="msg_left">
-          <view class="cont_tit">111</view>
-          <view class="cont_txt">22</view>
-          <view class="cont_txt">333</view>
+          <view class="cont_tit">{{shareData.nickname}}</view>
+          <view class="cont_txt">{{shareData.occupation}}</view>
+          <view class="cont_txt">{{shareData.company}}</view>
         </view>
         <image class="msg_right" ></image>
       </view>
-      <image  class="two_bottom" src="/static/images/popup_btn_close_nor@3x.png" ></image>
+      <image  class="two_bottom" src="/static/images/share_icon_chevron@3x.png" ></image>
       <view class="peaple">
-        <view class="ple_num"></view>个人
+        <view class="ple_num">{{shareData.userApplyNum}}</view>个人
       </view>
       <view class="title">都想得到我的名片</view>
-      <image  class="two_pic" src="/static/images/popup_btn_close_nor@3x.png" ></image>
+      <image  class="two_pic" src="/static/images/share_pic_fontbg@3x.png" ></image>
     </view>
     <view class="footer">
-      <button class="btn " >
+      <button class="btn " @tap="toDetail">
         去看看TA的趣名片
       </button>
-      <button class="btn more" >
+      <button class="btn more" @tap="toIndex">
         结识更多有趣的职场人
       </button>
     </view>
     <mptoast />
   </view>
 </template>
-<script>
-  import {getSharePickApi} from '@/api/pages/login'
-  export default {
-    data () {
-      return {
-        vkey: '',
-        test: false
-        // info: {
-        //   nickname: '11',
-        //   occupation: '22',
-        //   company: '33',
-        //   avatar: '44',
-        //   userApplyNum: 0
-        // }
-      }
-    },
-    // onLoad (option) {
-    //   this.vkey = option.vkey
-    //   console.log(this.vkey, 1111111111)
-    //   this.getShare()
-    // },
-    onShow () {
-      console.log(this.vkey, 1111111111)
-    },
-    mounted () {
-      console.log(1111111111111111111111111111111)
-    },
-    methods: {
-      getShare () {
-        const data = {
-          vkey: this.vkey
-        }
-        // getSharePickApi(data).then(res => {
-        //   //this.info = res.data
-        // })
-      }
-    }
-  }
-</script>
 <style lang="less" type="text/less" scoped>
   .container {
     height: 100vh;
@@ -79,6 +40,7 @@
   }
   .state_2 {
     margin: 0 70rpx;
+    padding-top: 70rpx;
     .head_msg {
       display: flex;
       flex-direction: row;
@@ -113,7 +75,6 @@
     .two_bottom {
       width:28rpx;
       height:30rpx;
-      background:rgba(0,208,147,1);
       margin: 38rpx 0 80rpx 10rpx;
     }
     .peaple {
@@ -199,6 +160,7 @@
   }
 </style>
 <script>
+  import {getSharePickApi} from '@/api/pages/login'
   import mptoast from 'mptoast'
   import { getLikeList, putLike } from '@/api/pages/user'
 
@@ -214,10 +176,22 @@
         pop: {
           isPop: false,
           isShare: false,
-        }
+        },
+        shareData: {}
       }
     },
     methods: {
+      toDetail(){
+        let that = this
+        wx.reLaunch({
+          url: `/pages/detail/main?vkey=${that.vkey}`
+        })
+      },
+      toIndex(){
+        wx.reLaunch({
+          url: '/pages/index/main'
+        })
+      },
       toShare(res){
         console.log('to share me')
       },
@@ -257,13 +231,18 @@
 
     },
 
-    onLoad () {
+    onLoad (res) {
       let that = this;
-      console.log(this.listData )
-      getLikeList().then((res)=>{
-        console.log('=====',res)
-        that.listData = res.data
-
+      if(res.type=='other'){
+        that.test = true
+      }
+      if(res.vkey){
+        that.vkey = res.vkey
+      }
+      console.log(res)
+      getSharePickApi({vkey:res.vkey}).then((msg)=>{
+        console.log(msg)
+        that.shareData = msg.data
       })
     },
 

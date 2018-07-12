@@ -38,20 +38,20 @@
       return {
         jobData: [],
         jobAry:[],
-        liveAry:[],
-        liveData: [],
+        liveAry:[0],
+        liveData: [0],
       }
     },
     methods: {
       toIndex(){
         let occupation_label_id = this.jobAry.join(',')
         let realm_label_id = this.liveAry.join(',')
-
-        if(this.jobAry.indexOf(0)<0){
+        console.log(occupation_label_id,realm_label_id)
+        if(this.jobAry.indexOf(0)>0){
           occupation_label_id = 0
         }
 
-        if(this.liveAry.indexOf(0)<0){
+        if(this.liveAry.indexOf(0)>0){
           realm_label_id = 0
         }
 
@@ -61,7 +61,8 @@
 
         let url =  `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
 
-        wx.redirectTo({
+        console.log(url)
+        wx.navigateTo({
           url:url
         })
       },
@@ -125,8 +126,8 @@
             item['isCur'] = false
       　   });
       　 });
-        that.jobData = [{id:0,name:'不限',isCur:true},...res.data[0].son]
-        that.liveData = [{id:0,name:'不限',isCur:true},...res.data[1].son]
+        that.jobData = [{id:0,name:'不限',isCur:true},...res.data[1].son]
+        that.liveData = [{id:0,name:'不限',isCur:true},...res.data[0].son]
       },(res)=>{
         
       })
