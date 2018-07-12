@@ -1,5 +1,5 @@
 <template>
-	<view class="authorize" v-if="needAuthorize" @touchmove.stop="preventEvevt">
+	<view class="authorize" v-if="isClose || needAuthorize" @touchmove.stop="preventEvevt">
 		<view class="pop">
 			<image class="close" v-if="!isIndex" @tap="close" src="/static/images/popup_btn_close_nor@3x.png"></image>
 			<image class="head" src="/static/images/sou.png"></image>
@@ -28,6 +28,7 @@
 		},
 		data () {
 			return {
+				isClose: false
 			}
 		},
 		computed: {
@@ -39,8 +40,8 @@
 			needAuthorize (val) {
 			},
 		},
-		mounted () {
-			 
+		onLoad () {
+			this.isCloseisClose = false
 		},
 		methods: {
 			checkLogin () {
@@ -142,7 +143,7 @@
 	      })
 	    },
 	    close () {
-	    	this.$store.dispatch('needAuthorize', false)
+	    	this.isClose = true
 	    },
 	    preventEvevt (e) {
 				e.preventDefault()

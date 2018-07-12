@@ -2,7 +2,8 @@
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
 		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 0">
-			33人想得到你的名片
+
+			{{userInfo.apply_count}}人想得到你的名片
 			<view class="flaunt">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></view>
 		</view>
 		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 0}">
@@ -166,7 +167,8 @@
 			this.labelInfo = []
 			this.moreInfo = {}
 			this.checkedTextList = []
-			if (!that.$store.getters.needAuthorize) {
+			console.log()
+			if (that.$store.getters.needAuthorize) {
 				authorizePop.methods.checkLogin().then(res => {
 					if (that.isSelf) {
 						console.log('是本人')
@@ -235,9 +237,8 @@
 				}
 			},
 			jumpMy () {
-				const vkey = wx.getStorageSync('vkey')
-				wx.redirectTo({
-	        url: `/pages/detail/main?vkey=${vkey}`
+				wx.navigateTo({
+	        url: `/pages/createCard/main`
 	      })
 			},
 			toEdit (type, id) {
@@ -395,7 +396,7 @@
 					.setEllipsis();
 					.name {
 						font-size: 48rpx;
-						color: ##353943;
+						color: #353943;
 						line-height: 48rpx;
 					}
 					.sex {

@@ -7,5 +7,6 @@ app.$mount();
 export default {
   config: {
     navigationBarTitleText: "图片裁剪",
+    enablePullDownRefresh: false,
   }
 }
