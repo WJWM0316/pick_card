@@ -213,7 +213,7 @@
     <view class="content">
       <view class="peoList">
         <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
-          <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.memberRedDot>0}">
+          <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
             <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
             <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
             <view class="msg_name ellipsis">{{item.nickname}}</view>
@@ -272,8 +272,9 @@ export default {
       })
     },
     toDetail (item) {
+      console.log(item)
       wx.navigateTo({
-        url: `/pages/detail/main?vkey=${item.friend_user_info.vkey}`
+        url: `/pages/detail/main?vkey=${item.vkey}`
       })
     },
     join () {

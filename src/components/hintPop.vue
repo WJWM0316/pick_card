@@ -60,6 +60,8 @@
 		methods: {
 			//跳转====
 			toDetail () {
+
+			  this.isShow = false
 			  wx.navigateTo({
 			    url: `/pages/detail/main?vkey=${this.consentNowItem.apply_user_info.vkey}`
 			  })
