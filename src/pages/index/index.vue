@@ -563,6 +563,9 @@ export default {
     })
 
     authorizePop.methods.checkLogin().then(res => {
+      if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
+         that.isFirst()
+      }
       getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
         that.usersInfo = that.$store.getters.userInfo
@@ -593,7 +596,7 @@ export default {
         }
         this.$mptoast(res.msg)
       })
-      that.isFirst()
+     
     })
 
     //筛选
