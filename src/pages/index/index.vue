@@ -136,6 +136,8 @@
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
+  import Vue from 'vue'
+
 export default {
 
   components: {
@@ -340,7 +342,7 @@ export default {
     },
     isGetUers(){
       let that = this
-      if(this.usersList.length-this.nowIndex == 1){
+      if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
           if(res.data.length<1){
@@ -500,9 +502,11 @@ export default {
   },
   onShareAppMessage: function (res) {
     console.log(res)
-    let path = '/pages/index/main?',
-        that = this,
-        imageUrl = '';
+    let path = '/pages/index/main?'
+    let that = this
+    let title = '趣名片'
+    let imageUrl = ''
+    let shareInfo = Vue.prototype.$store.getters.shareInfo
 
     wx.showShareMenu({
       withShareTicket: true
@@ -511,7 +515,8 @@ export default {
       // 来自页面内转发按钮
       if(res.target.dataset.type=="me"){
         imageUrl = that.shareData.shareImg
-        path = `/pages/detail?vkey=${this.usersInfo.vkey}`
+        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
+        title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片'
       }
     }
 
@@ -523,9 +528,10 @@ export default {
   },
   onLoad(res) {
     console.log(res)
-    let that = this,
-    value = wx.getStorageSync('pickCardFirst'),
-    beforeCreateStep =wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
+    let that = this
+    let value = wx.getStorageSync('pickCardFirst')
+
+    let beforeCreateStep =wx.getStorageSync('beforeCreateStep')&&wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
     that.beforeCreateStep = beforeCreateStep;
 
     wx.getSystemInfo({
@@ -586,10 +592,6 @@ export default {
       this.getPage.occupation_label_id = res.occupation_label_id
       this.getPage.realm_label_id = res.realm_label_id
     }
-
-
-    
-    
   },
   onShow (res) {
   }

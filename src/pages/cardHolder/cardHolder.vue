@@ -19,7 +19,7 @@
             <view class="friendList" v-if="friendList.length>0">
                 <view class="card_block"  v-for="(item, index) in friendList" :key="key">
                   <view class="blo_msg " :class="{'one': item.has_red_dot == 1}" @tap="toDetail(item)">
-                    <image class="blo_img"  :src="item.friend_user_info.avatar_info" v-if="item&&item.friend_user_info&&item.friend_user_info.avatar_info&&item.friend_user_info.avatar_info.length>0"></image>
+                    <image class="blo_img"  :src="item.friend_user_info.avatar_info.smallImgUrl" v-if="item.friend_user_info.avatar_info.smallImgUrl.length>0"></image>
                     <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
 
                     <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
