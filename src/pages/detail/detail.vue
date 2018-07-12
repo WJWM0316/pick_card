@@ -2,9 +2,8 @@
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
 		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 0">
-
 			{{userInfo.apply_count}}人想得到你的名片
-			<view class="flaunt">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></view>
+			<view class="flaunt"><button open-type="share" class="xuyao">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></button></view>
 		</view>
 		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 0}">
 			<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
@@ -110,7 +109,7 @@
 					<text class="msg">更多介紹</text>
 					<image class="share more" v-if="isSelf" @tap="toEdit('more')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
-				<view class="article" v-if="moreInfo.content">{{moreInfo.content}}</view>
+				<view class="article" :class="{'noWord' : moreInfo.content === ''}">{{moreInfo.content || '留下些文字或作品吧，让别人更加了解你～'}}</view>
 				<view class="imgBox" v-if="moreInfo.img_info && moreInfo.img_info.length > 0">
 					<image  v-for="(i, index) in moreInfo.img_info" :key="index" class="img" :src="i.smallImgUrl" @tap.stop="previewImg(index)"></image>
 				</view>
@@ -192,6 +191,17 @@
 				}
 			}
 		},
+		onShareAppMessage: function (res) {
+	    if (res.from === 'button') {
+	      // 来自页面内转发按钮
+	      console.log(res.target)
+      	return {
+		      title: this.$store.getters.shareInfo.showCard.content,
+		      path: `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me`,
+		      imageUrl: this.$store.getters.shareInfo.showCard.path
+		    }
+	    }
+	  },
 		methods: {
 			open (type) {
 				if (type === 1) {
@@ -339,6 +349,10 @@
 			.flaunt {
 				float: right;
 				color: #FFA200;
+				.xuyao {
+					font-size: 28rpx;
+					color: #FFA200;
+				}
 				.icon {
 					width: 14rpx;
 					height: 24rpx;
@@ -435,9 +449,9 @@
 				.signature {
 					color: #B2B6C2;
 					font-size: 28rpx;
-					line-height: 28rpx;
+					line-height: 1.4;
 					margin: 40rpx 0 40rpx;
-					.setEllipsis(2);
+					.setEllipsisLn(2);
 				}
 				.itemMsg {
 					margin-bottom: 30rpx;
@@ -547,8 +561,12 @@
 					margin-top: 28rpx;
 					font-size: 32rpx;
 					color: #353943;
-					line-height: 46rpx;
+					line-height: 1.4;
 					font-weight: light;
+					&.noWord {
+						font-size:28rpx;
+						color:#9AA1AB;
+					}
 				}
 				.imgBox {
 					overflow: hidden;

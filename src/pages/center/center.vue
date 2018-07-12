@@ -40,7 +40,7 @@
 							</view>
 						</view>
 					</view>
-					<navigator target="miniProgram" app-id="wxdf4966c8f6916d05" version="develop" url="pages/home/index">
+					<navigator target="miniProgram" app-id="wxdf4966c8f6916d05" version="develop" url="pages/home/index" hover-class="none">
 					<view class="item">
 						<view class="itemCon">
 							<view class="left">职场学习社区</view>

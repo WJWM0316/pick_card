@@ -50,7 +50,7 @@
 							const ctx = wx.createCanvasContext('shareCanvas')
 
 							// 画布圆角
-							roundRect (0,0,335,600,9)
+							roundRect (0,0,320,750,9)
 							function roundRect (x, y, w, h, r) {
 								ctx.beginPath();
 								ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5  )
@@ -74,31 +74,31 @@
 
 							that.imgUrl = res.tempFilePath
 							// 画头像
-					    ctx.drawImage(that.imgUrl, 0, 0, 335, 335)
+					    ctx.drawImage(that.imgUrl, 0, 0, 320, 280)
 
 					    // 画文案
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
-					    ctx.fillText(that.info.nickname, 17, 290)
+					    ctx.fillText(that.info.nickname, 17, 230)
 
 					    ctx.setFontSize(16)
-					    ctx.fillText(that.info.job, 17, 315)
+					    ctx.fillText(that.info.job, 17, 265)
 
 					    ctx.setFontSize(14)
 					    ctx.setFillStyle('#9AA1AB')
 					    if (that.info.sign.length > 20) {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 360)
-					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, 380)
+					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 307)
+					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, 330)
 					    } else {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 360)
+					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 307)
 					    }
 					    
 					    ctx.setFontSize(12)
 					    ctx.setFillStyle('#00D093')
 					    let position = {
 					    	x: 17,
-					    	y: 400
+					    	y: 360
 					    }
 					    ctx.setStrokeStyle('#00D093')
 							ctx.setLineWidth(1)
@@ -112,17 +112,17 @@
 
 					    // 画标签
 					    function addLabel (item, index) {
-					    	if (!nextLabel) {
+					    	if (lineNun > 2) {
 					    		return
 					    	}
 					    	// 下个标签的宽度
 								let newLabelWidth = ctx.measureText(that.info.label[index+1]).width + 2*r
-								let metrics = 0 // 文本宽度
+								let metrics = ctx.measureText(item).width // 文本宽度
 					    	// 判断是否超过两行切需要打点
-					    	if (lineNun === 2 && newLabelWidth + position.x > (335-17)) {
+					    	console.log(lineNun, metrics, newLabelWidth, position.x, (position.x + metrics + 5), (newLabelWidth + position.x + metrics + 5) > (320-17))
+					    	if (lineNun === 2 && (newLabelWidth + position.x + metrics + 5) > (320-17)) {
 					    		metrics = ctx.measureText('....').width
 									ctx.fillText('....', position.x + r, position.y + r)
-									nextLabel = false
 					    	} else {
 					    		metrics = ctx.measureText(item).width
 									ctx.fillText(item, position.x + r, position.y + r + 4)
@@ -146,11 +146,8 @@
 
 								// 下一个标签的横坐标
 								position.x = position.x + 2*r + metrics + 5
-
-								
-
 								// 判断是否需要换行
-								if (newLabelWidth + position.x > (335-17)) {
+								if ((newLabelWidth + position.x) > (320-17)) {
 									position.x = 17
 									position.y = position.y + 2*r + 7
 									lineNun ++
@@ -162,7 +159,7 @@
 					    ctx.setLineDash([5, 10], 0)
 							ctx.beginPath()
 							ctx.moveTo(17 ,position.y + 18)
-							ctx.lineTo(316, position.y + 18)
+							ctx.lineTo(303, position.y + 18)
 							ctx.stroke()
 
 							// 清除圆镂空部分
@@ -187,7 +184,7 @@
 							clearArc(0, position.y + 10, 10)
 							ctx.save() 
 							stepClear = 1
-							clearArc(335, position.y + 10, 10)
+							clearArc(320, position.y + 10, 10)
 
 							// 画指引文案
 							ctx.setTextAlign('left')
@@ -196,7 +193,7 @@
 					    ctx.fillText('长按添加TA的趣名片', 30, position.y + 18 + 60)
 
 					    // 画二维码
-					    ctx.drawImage(that.imgUrl, 195, position.y + 18 + 10, 100, 100)
+					    ctx.drawImage(that.imgUrl, 200, position.y + 18 + 10, 100, 100)
 
 					    ctx.draw(true, () => {
 					      wx.hideLoading()
@@ -247,8 +244,8 @@
 			height: 600px;
 			margin: 0 auto;
 			#myCanvas {
-				width: 335px;
-				height: 600px;
+				width: 320px;
+				height: 570px;
 			}
 		}
 		.save {

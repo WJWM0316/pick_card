@@ -542,14 +542,9 @@ export default {
     console.log(res)
     let that = this
     let value = wx.getStorageSync('pickCardFirst')
-<<<<<<< HEAD
-
     let beforeCreateStep =wx.getStorageSync('beforeCreateStep')&&wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
     that.beforeCreateStep = beforeCreateStep;
-=======
-    let beforeCreateStep =wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0
-    that.beforeCreateStep = beforeCreateStep
->>>>>>> c4cd35ae7b041a3682ba021e145276b672e5d2d2
+
 
     wx.getSystemInfo({
       success: function(res) {
