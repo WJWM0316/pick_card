@@ -158,8 +158,7 @@
 				this.isSelf = false
 			}
 		},
-		onShow (option) {
-			console.log(option, 1111111111)
+		onShow () {
 			let that = this
 			this.userInfo = {}
 			this.educationsInfo = []
@@ -167,7 +166,6 @@
 			this.labelInfo = []
 			this.moreInfo = {}
 			this.checkedTextList = []
-			console.log()
 			if (that.$store.getters.needAuthorize) {
 				authorizePop.methods.checkLogin().then(res => {
 					if (that.isSelf) {
@@ -218,6 +216,10 @@
 				}
 			},
 			applyFun (type) {
+				if (this.$store.getters.userInfo.step !== 9) {
+					this.jumpMy()
+					return
+				}
 				const data = {
 					to_uid: this.userInfo.id,
 					remarks: '约么'

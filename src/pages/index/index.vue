@@ -251,11 +251,23 @@ export default {
       })
     },
     toFiltrate () {
+      if (this.$store.getters.userInfo.step !== 9) {
+        wx.navigateTo({
+          url: `/pages/createCard/main`
+        })
+        return
+      }
       wx.navigateTo({
         url: `/pages/filtrate/main`
       })
     },
     toSwop () {
+      if (this.$store.getters.userInfo.step !== 9) {
+        wx.navigateTo({
+          url: `/pages/createCard/main`
+        })
+        return
+      }
       wx.navigateTo({
         url: `/pages/swopList/main`
       })
@@ -530,9 +542,14 @@ export default {
     console.log(res)
     let that = this
     let value = wx.getStorageSync('pickCardFirst')
+<<<<<<< HEAD
 
     let beforeCreateStep =wx.getStorageSync('beforeCreateStep')&&wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
     that.beforeCreateStep = beforeCreateStep;
+=======
+    let beforeCreateStep =wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0
+    that.beforeCreateStep = beforeCreateStep
+>>>>>>> c4cd35ae7b041a3682ba021e145276b672e5d2d2
 
     wx.getSystemInfo({
       success: function(res) {
@@ -593,7 +610,7 @@ export default {
       this.getPage.realm_label_id = res.realm_label_id
     }
   },
-  onShow (res) {
+  onShow () {
   }
 }
 </script>
