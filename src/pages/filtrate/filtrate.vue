@@ -62,7 +62,7 @@
         let url =  `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
 
         console.log(url)
-        wx.navigateTo({
+        wx.redirectTo({
           url:url
         })
       },

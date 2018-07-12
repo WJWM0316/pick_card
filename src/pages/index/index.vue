@@ -2,7 +2,7 @@
 <template>
   <view class="container" :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
     <view class="op_top">
-      <view class="left" @click="toFiltrate">筛选{{usersInfo.step}}<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
+      <view class="left" @click="toFiltrate">筛选<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
       <view class="right" @click="toSwop">交换申请<view class="new" v-if="swopRed==1">NEW</view></view>
     </view>
     <view class="content">
@@ -27,7 +27,7 @@
               </view>
               <view class="text">
                 <view class="name ellipsis">{{item.nickname}}</view>
-                <view class="title ellipsis">{{index}}{{item.occupation}}</view>
+                <view class="title ellipsis">{{item.occupation}}{{item.company}}</view>
                 <image class="detail" src="/static/images/hone_btn_more_nor@3x.png"></image>
               </view>
             </view>
@@ -114,7 +114,7 @@
     </view> -->
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-     <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
+    <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -286,7 +286,6 @@ export default {
     },
 
     isCreate (){
-      this.usersInfo.step = 3
       if(this.usersInfo.step!=9){
         this.isPop = false
         this.toMeCreate=true
@@ -421,8 +420,8 @@ export default {
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
-        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.usersInfo.step!=9){
-          that.isCreate()
+        if(res.code==101){
+          //
         }
         that.moveData={
           isMove: false,
@@ -446,10 +445,6 @@ export default {
     unlike(msg){
       let that = this
       indexUnlike(msg).then((res)=>{
-
-        if(that.toCreate.num > 2 && !that.toCreate.isToCreate && that.usersInfo.step!=9){
-          that.isCreate()
-        }
 
         that.moveData = {
           isMove: false,
@@ -556,7 +551,7 @@ export default {
     wx.getSystemInfo({
       success: function(res) {
         that.systemInfo = res
-        if(res.model == 'iPhone X'){
+        if(res.screenHeight>780){
            that.adaptive = 'ten'
         }else if(res.screenHeight<650){
            that.adaptive = 'small'
@@ -576,8 +571,13 @@ export default {
           that.toCreate.isToCreate = false
           if(res.data.length<1 && value){
             that.isCreate()
+            return
           }
         }
+
+        redDot().then(res=>{
+          that.swopRed = res.data.main_show_red_dot
+        })
 
         that.getShareImg()
         if(res.data.length<1){
@@ -603,10 +603,7 @@ export default {
     }
 
 
-    redDot().then(res=>{
-      that.swopRed = res.data.main_show_red_dot
-
-    })
+    
     
   },
   onShow (res) {
