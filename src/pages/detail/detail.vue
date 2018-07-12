@@ -437,7 +437,7 @@
 					font-size: 28rpx;
 					line-height: 28rpx;
 					margin: 40rpx 0 40rpx;
-					.setEllipsis();
+					.setEllipsis(2);
 				}
 				.itemMsg {
 					margin-bottom: 30rpx;
@@ -570,7 +570,6 @@
 		}
 		.btnControl {
 			width: 100%;
-			height: 140rpx;
 			padding: 30rpx 75rpx;
 			position: fixed;
 			left: 0;

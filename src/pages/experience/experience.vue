@@ -268,7 +268,7 @@
 						end_time: this.info.end_time_desc
 					}
 					if (this.isNow) {
-						data.end_time = new Date(this.nowTime).getTime().toString().slice(0, 10)
+						data.end_time = this.nowTime
 					}
 					if (id !== 'undefined') {
 						data.id = id
@@ -287,10 +287,8 @@
 						start_time : this.info.start_time_desc,
 						end_time: this.info.end_time_desc
 					}
-					console.log(this.isNow, this.nowTime,data.end_time, 222222)
 					if (this.isNow) {
 						data.end_time = this.nowTime
-						console.log(this.nowTime, data.end_time, 222222)
 					}
 					if (id !== 'undefined') {
 						data.id = id
