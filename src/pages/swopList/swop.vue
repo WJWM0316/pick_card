@@ -12,7 +12,7 @@
             <view class="msg_name ellipsis">{{item.apply_user_info.nickname}} {{item.apply_user_info.occupation}}</view>
             <view class="msg_form ellipsis">{{item.apply_user_info.company}}</view>
           </view>
-          <button class="top_btn" @tap="putApply(item.id,index)" v-if="item.status==0">同意</button>
+          <button class="top_btn" @tap.stop="putApply(item.id,index)" v-if="item.status==0">同意</button>
           <text class="top_status" v-else>已交换</text>
         </view>
 
@@ -279,9 +279,11 @@
         if(res.target.dataset.type=="me"){
           title = shareInfo.showCard.content
           imageUrl = shareData.shareImg
-          path = `/pages/detail?vkey=${this.usersInfo.vkey}`
+          path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
         }
         if(res.target.dataset.type=="other"){
+            that.isShow = true   //弹框消失
+
             title = shareInfo.otherCard.content
             imageUrl = shareInfo.otherCard.path
             path = `/pages/sharePick/main?vkey=${this.nowItem.apply_user_info.vkey}?type=other`

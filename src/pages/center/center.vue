@@ -141,7 +141,7 @@
 	      console.log(res.target)
       	return {
 		      title: this.shareInfo.mycard.content,
-		      path: `pages/detail?vkey=${this.info.vkey}`,
+		      path: `pages/detail/main?vkey=${this.info.vkey}`,
 		      imageUrl: this.isShareImg
 		    }
 	    }
