@@ -107,7 +107,7 @@
     
     <view class="footer" :class="{'type2':nowNum>0}">
       <block v-if="nowNum === 0">
-        <button class="next toNext" @click.stop="toNext(nowNum)" v-if="firstData.gender!==0 && firstData.avatar_id&&firstData.nickname.length>1&&firstData.nickname.length<11">
+        <button class="next toNext" @click.stop="toNext(nowNum)" v-if="firstData.gender!==0&&firstData.nickname.length>1&&firstData.nickname.length<11">
         下一步
         </button>
         <button class="next" v-else >下一步</button>
@@ -365,21 +365,37 @@
             data = {};
 
         if(that.nowNum == 0){
-          data = that.firstData
-          data.nickname = data.nickname.trim()
-          this.upLoad().then(res => {
+          const info = wx.getStorageSync('cutImgInfo')
+          const parmas = {
+            path: info.path,
+            size: info.size
+          }
+          wx.showLoading({
+            title: '正在提交',
+            mask: true
+          })
+          uploadImage(parmas, {
+            onItemSuccess: (resp, file, index) => {
+            }
+          }).then(res0 => {
+            that.firstData.avatar_id = res0.file.fileId
+            data = that.firstData
+            data.nickname = data.nickname.trim()
+            wx.hideLoading()
             firstSignApi(data).then((res)=>{
               if(res.http_status == 200){
                 that.nowNum = 1;
                 //this.bindPhone.isPh = true
-
               }else {
                 this.$mptoast(res.msg)
               }
             },(res)=>{
               this.$mptoast(res.msg)
             })
+          }).catch((e, index) => {
+            console.log(e, 2)
           })
+ 
         }else if(that.nowNum == 1){
           let rli = this.secondRule.rli,
               oliData = listData[2].son,
@@ -496,29 +512,6 @@
         } else {
             return true
         }
-      },
-
-      upLoad () {
-        return new Promise((resolve, reject) => {
-          const data = {
-            path: info.path,
-            size: info.size
-          }
-          uploadImage(data, {
-            onItemSuccess: (resp, file, index) => {
-            }
-          }).then(res => {
-            const cutImgInfo = {
-              fileId: res.file.fileId,
-              path: res.file.path,
-              size: res.file.size
-            }
-            this.firstData.avatar_id = res.file.fileId
-            wx.removeStorageSync('cutImgInfo')
-          }).catch((e, index) => {
-            console.log(e, 2)
-          })
-        })
       }
     },
     onLoad (){
