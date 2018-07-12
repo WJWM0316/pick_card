@@ -499,15 +499,15 @@ export default {
 
     getShareImg(){
       let that = this,
-          usersInfo = that.usersInfo,
-          msg = {
-            uid: usersInfo.id,
-            name: usersInfo.name,
-            img: usersInfo.avatar_info.smallImgUrl,
-            occupation: usersInfo.occupation,
-            company: usersInfo.company,
-            label: [],
-          }
+      usersInfo = that.usersInfo,
+      msg = {
+        uid: usersInfo.id,
+        name: usersInfo.nickname,
+        img: usersInfo.avatar_info.smallImgUrl,
+        occupation: usersInfo.occupation,
+        company: usersInfo.company,
+        label: [],
+      }
 
       usersInfo.other_info.realm_info.forEach(item => {
         msg.label.push(`${item.name} | `)
@@ -549,9 +549,8 @@ export default {
   onLoad(res) {
     console.log(res)
     let that = this,
-        value = wx.getStorageSync('pickCardFirst'),
-        beforeCreateStep =wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
-
+    value = wx.getStorageSync('pickCardFirst'),
+    beforeCreateStep =wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
     that.beforeCreateStep = beforeCreateStep;
 
     wx.getSystemInfo({
@@ -571,21 +570,16 @@ export default {
     authorizePop.methods.checkLogin().then(res => {
       getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
-        getUserInfoApi().then(data => {
-          that.usersInfo = data.data
-          console.log('========',data)
-          if(data.data.step!=9){
-            that.toCreate.isToCreate = false
-            if(res.data.length<1 && value){
-              that.isCreate()
-            }
+        that.usersInfo = that.$store.getters.userInfo
+        console.log(that.usersInfo, '用户信息')
+        if(that.usersInfo.step!=9){
+          that.toCreate.isToCreate = false
+          if(res.data.length<1 && value){
+            that.isCreate()
           }
+        }
 
-          that.getShareImg()
-        }).catch(e => {
-          console.log(e)
-        })
-
+        that.getShareImg()
         if(res.data.length<1){
           that.isEnd = true
         }

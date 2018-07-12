@@ -11,7 +11,7 @@
 			<view class="item">
 				<view class="itemCon">
 					<view class="left requst">姓名</view>
-					<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#B2B6C2" v-model.lazy="userInfo.nickname"></view>
+					<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.nickname"></view>
 				</view>
 			</view>
 			<view class="item">
@@ -71,7 +71,7 @@
 				<view class="itemCon">
 					<view class="left requst">职位</view>
 					<view class="right">
-						<input type="text" maxlength="20" placeholder="请输入职位" placeholder-style="color:#B2B6C2" v-model.lazy="userInfo.occupation">
+						<input type="text" maxlength="20" placeholder="请输入职位" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.occupation">
 					</view>
 				</view>
 			</view>
@@ -79,7 +79,7 @@
 				<view class="itemCon">
 					<view class="left requst">最近任职公司</view>
 					<view class="right">
-						<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#B2B6C2"  v-model.lazy="userInfo.company">
+						<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.company">
 					</view>
 				</view>
 			</view>
@@ -87,7 +87,7 @@
 				<view class="itemCon">
 					<view class="left">公司地址</view>
 					<view class="right">
-						<input type="text" maxlength="20" placeholder="请输入公司地址" placeholder-style="color:#B2B6C2" v-model.lazy="userInfo.company_location">
+						<input type="text" maxlength="20" placeholder="请输入公司地址" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.company_location">
 					</view>
 				</view>
 			</view>
@@ -98,7 +98,7 @@
 				<view class="itemCon">
 					<view class="left requst">手机号码</view>
 					<view class="right">
-						<input type="number" disabled placeholder="请输入手机号码" placeholder-style="color:#B2B6C2"  v-model.lazy="userInfo.mobile">
+						<input type="number" disabled placeholder="请输入手机号码" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.mobile">
 					</view>
 				</view>
 			</view>
@@ -106,7 +106,7 @@
 				<view class="itemCon">
 					<view class="left">微信号</view>
 					<view class="right">
-						<input type="text" placeholder="请输入微信号" placeholder-style="color:#B2B6C2"  v-model.lazy="userInfo.wechat">
+						<input type="text" placeholder="请输入微信号" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.wechat">
 					</view>
 				</view>
 			</view>
@@ -114,7 +114,7 @@
 				<view class="itemCon">
 					<view class="left">邮箱地址</view>
 					<view class="right">
-						<input type="text" placeholder="请输入邮箱地址" placeholder-style="color:#B2B6C2"  v-model.lazy="userInfo.email">
+						<input type="text" placeholder="请输入邮箱地址" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.email">
 					</view>
 				</view>
 			</view>
@@ -123,14 +123,15 @@
 			<view class="title">个人签名</view>
 			<view class="item sign">
 				<view class="itemCon">
-					<textarea auto-height=true cursor-spacing="50" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#B2B6C2" :value="userInfo.sign" @input="signText"></textarea>
+					<textarea auto-height=true cursor-spacing="50" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#C3C9D4" :value="userInfo.sign" @input="signText"></textarea>
 					<text class="number">{{userInfo.sign ? userInfo.sign.length : 0}}/25</text>
 				</view>
 			</view>
 		</section>
-		<section class="btn">
-			<button @tap.stop="saveUserInfo" class="light">保存资料</button>
-		</section>
+
+		<cover-view class="btn">
+			<cover-view @tap.stop="saveUserInfo" class="light">保存资料</cover-view>
+		</cover-view>
 		<labelPop :isShow="showLablePop" :type="labelBox" :choseList="checkedIdList" @getLabel="getLabel" @close="closePop"></labelPop>
 	</view>
 </template>
@@ -401,6 +402,7 @@
 <style lang="less" type="text/less" scoped>
 	.edit {
 		background: #FAFBFC;
+		padding-bottom: 298rpx;
 		.block {
 			background: #fff;
 			.title {
@@ -454,6 +456,9 @@
 			  	}
 			  	.right {
 						text-align: right;
+						height: 100%;
+						display:flex;
+						align-items:center;
 						overflow: hidden;
 						input {
 							width: 400rpx;
@@ -461,7 +466,7 @@
 							line-height: 120rpx;
 						}
 						.placeholder {
-							color: #B2B6C2;
+							color: #C3C9D4;
 						}
 						.radio {
 							font-size: 0;
@@ -521,7 +526,7 @@
 					}
 					.number {
 						float: right;
-						color: #B2B6C2;
+						color: #C3C9D4;
 						margin-top: 10rpx;
 						font-weight: light;
 						line-height: 40rpx;
@@ -549,20 +554,23 @@
 			}
 		}
 		.btn {
+			width: 100%;
+			position: fixed;
+			left: 0;
+			bottom: 0;
 			margin-top: 99rpx;
 			background: #fff;
 			padding: 30rpx 40rpx;
-			button {
+			box-sizing: border-box;
+			.light {
 				width: 100%;
 				height: 98rpx;
 				line-height: 98rpx;
+				text-align: center;
 				color: #fff;
 				font-size: 32rpx;
-				background: rgba(179, 240, 222, 1);
+				background: rgba(0,208,147,1);
 				border-radius: 49rpx;
-				&.light {
-					background: rgba(0,208,147,1);
-				}
 			}
 		}
 	}
