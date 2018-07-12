@@ -94,6 +94,23 @@
     </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
+    <!-- <view class="footer " >
+      <view class="ft_warp">
+        <view class="left">
+          <view class="name "  @tap="testCreate">Pick</view>
+          <view class="name "  >名片夹</view>
+          <view class="name "  >我的名片</view>
+        </view>
+        <view class="right"> 
+          <view class="r_blo" @click="isShare">
+            <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
+          </view>
+          <view class="r_blo" @click="toSharePeo">
+            <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
+          </view>
+        </view>
+      </view>
+    </view> -->
     <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
