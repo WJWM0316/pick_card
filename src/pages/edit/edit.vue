@@ -119,11 +119,11 @@
 				</view>
 			</view>
 		</section>
-		<section class="block">
+		<section class="block" :class="{'signBox' : isPos}">
 			<view class="title">个人签名</view>
 			<view class="item sign">
 				<view class="itemCon">
-					<textarea auto-height=true cursor-spacing="50" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#C3C9D4" :value="userInfo.sign" @input="signText"></textarea>
+					<textarea auto-height=true cursor-spacing="50" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#C3C9D4" :value="userInfo.sign" @input="signText" @focus="isPos = true" @blur="isPos = false"></textarea>
 					<text class="number">{{userInfo.sign ? userInfo.sign.length : 0}}/25</text>
 				</view>
 			</view>
@@ -169,7 +169,8 @@
 				checkedIdList: '',
 				checkedTextList: [],
 				filePath: '',
-				careerId: ''
+				careerId: '',
+				isPos: false
 			}
 		},
 		onLoad (option) {
@@ -402,9 +403,18 @@
 <style lang="less" type="text/less" scoped>
 	.edit {
 		background: #FAFBFC;
-		padding-bottom: 298rpx;
+		padding-bottom: 198rpx;
 		.block {
 			background: #fff;
+			&.signBox {
+				width: 100%;
+				height: 100%;
+				background: #fff;
+				position: fixed;
+				left: 0;
+				top: 0;
+				z-index: 10;
+			}
 			.title {
 				font-size: 32rpx;
 				color: #353943;

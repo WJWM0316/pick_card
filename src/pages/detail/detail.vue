@@ -166,7 +166,8 @@
 			this.labelInfo = []
 			this.moreInfo = {}
 			this.checkedTextList = []
-			if (!that.$store.getters.needAuthorize) {
+			console.log()
+			if (that.$store.getters.needAuthorize) {
 				authorizePop.methods.checkLogin().then(res => {
 					if (that.isSelf) {
 						console.log('是本人')
