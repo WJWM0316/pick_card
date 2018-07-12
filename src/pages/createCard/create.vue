@@ -100,7 +100,7 @@
           </view>
           <view class="hint_1">该手机号已经在“自客”注册，请更换手机号</view>
           <button class="ip_btn" @click.stop="toCode">完成绑定</button>
-          <view class="hint_2 hidden">点击快速绑定手机号码 > ></view>
+          <button class="hint_2 " open-type="getPhoneNumber" @getphonenumber="getPhone">点击快速绑定手机号码 > ></button>
         </view>
       </view>
     </view>
@@ -224,6 +224,8 @@
       },
       getPhone(e){
         //bindgetphonenumber 从1.2.0 开始支持，但是在1.5.3以下版本中无法使用wx.canIUse进行检测，建议使用基础库版本进行判断。
+        this.bindPhone.isPh = false
+
         if(!e.mp.detail.iv){
           this.bindPhone.isPh = true
         }else {

@@ -1,28 +1,29 @@
 <template>
-	<view class="labelPop" v-if="isShow" @touchmove.stop="preventEvevt">
-		<view class="inner" v-if="type === 'labelBox'">
-			<view class="title">请选择1~3个领域<image @tap="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
-			<view class="con">
-				<labelBox class="labelBox">
-					<label  v-for="(item, index) in labelList" :key="index">
-						<text class="label" :class="{'check' : item.check}" @tap="select(item, index)">{{item.name}}</text>
-					</label>
-				</labelBox>
-				<button @tap="save" class="btn">保存</button>
-			</view>
-		</view>
-		<view class="inner custom" v-show="type === 'custom'">
-			<view class="title">添加自定义标签<image @tap="close" class="close" src="/static/images/popup_btn_close_nor@3x.png"></image></view>
-			<view class="con">
-				<input class="labelInput" focus=true type="text" v-model="customText" maxlength="10" placeholder="有趣的标签更吸引关注哦~" placeholder-style="color:#B2B6C2" />
-				<text class="textNum" v-show="customText.length > 0">{{10 - customText.length}}</text>
-				<text class="textNum" v-else">10</text>
-				<button @tap="addFun" class="btn">添加标签</button>
-			</view>
-		</view>
+	<view class="hintPop" v-if="isShow">
+		<!-- 分享弹窗 -->
+	  <view class="share_pop" v-show="type=='consent'"> 
+	    <image  class="share_clo" src="/static/images/popup_btn_close_nor@3x.png" @tap="cloPop"></image>
+	    <image class="share_cont" src="/static/images/popup_pic_newmatch@3x.png"></image>
+	    <view class="tit" >恭喜你!</view>
+	    <view class="txt txt_2">你已经和TA成功互换名片了! 现在你可以</view>
+
+	    <view class="btns">
+	      <button class="btn friend" @click="toDetail">
+	        <image class="img_warp" src="/static/images/popup_btn_godetails@3x.png"></image>
+	        <view class="bt_txt">看看TA的资料</view>
+	      </button>
+	      <button class="btn friends" data-type="other" open-type="share" >
+	        <image class="img_warp" src="/static/images/popup_btn_sharenew@3x.png"></image>
+	        <button data-type="other" open-type="share" class="bt_txt">炫耀一下新朋友</button>
+	      </button>
+
+	    </view>
+      <view class="again" v-show="consentForm=='swop'" @tap="cloPop">继续寻找新朋友>></view>
+	  </view>
 	</view>
 </template>
 <script>
+	import Vue from 'vue'
 	import {postGetLabelByIds} from '@/api/pages/login'
 	export default {
 		props: {
@@ -32,15 +33,20 @@
 			},
 			type: {
 				type: String,
-				default: 'labelBox'
-			}
+				default: 'consent'
+			},
+			consentForm: {
+				type: String,
+				default: 'swop'
+			},
+			consentNowItem: {
+				type: Object,
+				default: {}
+			},
 		},
 		data () {
 			return {
-				labelList: [],
-				checkedList: [],
-				customText: '',
-				num: 0
+				shareData : {}
 			}
 		},
 		watch: {
@@ -53,9 +59,9 @@
 			customText (val) {}
 		},
 		onLoad () {
-			if (this.type !== 'custom') {
-				this.getLabelList()
-			}
+
+			console.log(this.isShow,this.type)
+			this.shareData = Vue.prototype.$store.getters.shareInfo
 		},
 		methods: {
 			getLabelList () {
@@ -69,168 +75,131 @@
 			getLabel (index) {
 				return index
 			},
-			close () {
+			cloPop () {
 				this.$emit('close')
+				this.isShow = false
 			},
-			addFun () {
-				this.$emit('addLable', this.customText)
-				this.$emit('close')
-			},
-			save () {
-				if (this.num === 0) {
-					wx.showToast({
-					  title: '请至少选择一个标签',
-					  icon: 'none',
-					  duration: 2000
-					})
-					return
-				}
-				let labelId = []
-				let labelText = []
-				this.checkedList.filter(item => {
-					labelId.push(item.id)
-					labelText.push(item.name)
-				})
-				let showList = []
-				labelId = labelId.join(',')
-				console.log('xuanz le ')
-				this.$emit('getLabel', labelId, labelText)
-			},
-			select (item, index) {
-				if (item.check) {
-					let data = this.labelList[index]
-					data.check = false
-					this.labelList.splice(index, 1, data)
-					this.num --
-					this.checkedList.forEach((e, index) => {
-						if (item.id === e.id) {
-							this.checkedList.splice(index, 1)
-						}
-					})
-				} else {
-					let data = this.labelList[index]
-					data.check = true
-					this.labelList.splice(index, 1, data)
-					this.checkedList.push(item)
-					this.num ++
-					if (this.num > 3) {
-						this.labelList.forEach((e,index) => {
-							if (this.checkedList[0].id === e.id) {
-								this.labelList[index].check = false
-								this.num --
-							}
-						})
-						this.checkedList.splice(0, 1)
 
-					}
-				}
-				console.log('已选择', this.checkedList)
-			},
 			preventEvevt (e) {
 				e.preventDefault()
 				e.stopPropagation()
 			}
-		}
+		},
+		onShareAppMessage: function (res) {
+		  console.log('22222',this.consentNowItem)
+
+		  let path = '/pages/index/main?',
+		  	  title = '趣名片',
+		      imageUrl = '';
+
+		  if (res.from === 'button' ) {
+		    if(res.target.dataset.type=="other"){
+		      	title = shareData.otherCard.title
+		      	imageUrl = shareData.otherCard.path
+		      	path = `/pages/sharePick?vkey=${this.consentNowItem.vkey}?type=other`
+		    }
+		    // 来自页面内转发按钮
+		  }
+		  
+		  return {
+		    title: title,
+		    path: path,
+		    imageUrl: imageUrl
+		  }
+		},
 	}
 </script>
 <style lang="less" type="text/less" scoped>
-	.labelPop {
-		width: 100%;
-		height: 100%;
-		position: fixed;
-		top: 0;
-		left: 0;
-		background: rgba(0,0,0,0.4);
-		padding: 138rpx 40rpx 0;
-		box-sizing: border-box;
-		z-index: 2;
-		.inner {
-			width: 670rpx;
-			background: #fff;
-			border-radius: 18rpx;
-			.title {
-				text-align: center;
-				font-size: 32rpx;
-				color: #353943;
-				font-weight: 500;
-				line-height: 92rpx;
-				padding: 0 34rpx;
-				box-shadow: 0px 1rpx 0px 0px rgba(53,57,67,0.1);
-				.close {
-					width: 28rpx;
-					height: 28rpx;
-					float: right;
-					margin-top: 32rpx;
-				}
-			}
-			.con {
-				padding: 60rpx 30rpx 40rpx;
-				font-size: 0;
-				.labelBox {
-					height: 500rpx;
-					overflow-y: auto;
-					display: block;
-				}
-				.label {
-					padding: 0 30rpx;
-					font-size: 28rpx;
-					color: #9AA1AB;
-					line-height: 58rpx;
-					text-align: center;
-					border-radius: 29rpx;
-					border: 1rpx solid rgba(178,182,194,0.4);
-					box-sizing: border-box;
-					white-space: nowrap;
-					display: inline-block;
-					margin-right: 20rpx;
-					margin-bottom: 30rpx;
-					&.check {
-						border-color: rgba(0,208,147,1);
-						background: rgba(0,208,147,0.1);
-						color: #00D093;
-					}
-				}
-				.btn {
-					width: 570rpx;
-					height: 98rpx;
-					line-height: 98rpx;
-					box-sizing: border-box;
-					background: rgba(0,208,147,1);
-					border-radius: 49rpx;
-					color: #fff;
-					text-align: center;
-					margin: 10rpx auto 0;
-				}
-			}
-		}
-		.custom {
-			.con {
-				position: relative;
-				.labelInput {
-					padding: 0 40rpx;
-					box-sizing: border-box;
-					width:550rpx;
-					height:88rpx;
-					background:rgba(249,249,249,1);
-					border-radius:44rpx;
-					margin: 0 auto 52rpx;
-					color: #353943;
-					font-size: 28rpx;
-					display: block;
-				}
-				.textNum {
-					position: absolute;
-					top: 85rpx;
-					right: 100rpx;
-					font-size: 26rpx;
-					color: #B2B6C2;
-				}
-			}
-		}
+	.hintPop {
+	  background:rgba(0,0,0,0.7);
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  z-index: 1001;
 	}
-	checkbox  {
-		appearance: none;
-		display: none;
+	.share_pop {
+	  width:670rpx;
+	  //height:800rpx;
+	  background:rgba(255,255,255,1);
+	  border-radius:18rpx;
+	  position: absolute;
+	  left: 50%;
+	  top: 50%;
+	  transform: translate(-50%,-50%);
+	  text-align: center;
+	  box-sizing: border-box;
+	  padding-top: 54rpx;
+	  .share_clo {
+	    width:28rpx;
+	    height:28rpx;
+	    position: absolute;
+	    right: 40rpx;
+	    top: 40rpx;
+	  }
+	  .share_cont {
+	    width:375rpx;
+	    height:349rpx;
+	    margin: 0 auto;
+	  }
+	  .tit {
+	    height:32rpx;
+	    font-size:34rpx;
+	    font-family:PingFangSC-Semibold;
+	    color:rgba(53,57,67,1);
+	    line-height:32rpx;
+	    margin-top: 48rpx;
+
+	  }
+	  .txt {
+	    font-size:28rpx;
+	    font-family:PingFangSC-Regular;
+	    color:rgba(154,161,171,1);
+	    line-height:28rpx;
+	    margin-top: 17rpx;
+	    margin-bottom: 82rpx;
+	    &.txt_2 {
+	      margin: 17rpx auto 34rpx auto;
+	      line-height:34rpx;
+	      width: 355rpx;
+	    }
+	  }
+	  .btns {
+	    display: flex;
+	    flex-direction: row;
+	    justify-content: center;
+	    align-items: center;
+	    margin-bottom: 30rpx;
+	    .btn {
+	      //width:140rpx;
+	      display: flex;
+	      flex-direction: column;
+	      align-items: center;
+	      &.friend {
+	        margin-right: 100rpx;
+	      }
+	      .bt_txt {
+	        font-size:28rpx;
+	        font-family:PingFangHK-Regular;
+	        color:rgba(178,182,194,1);
+	        line-height:26rpx;
+	      }
+	      .img_warp {
+	        width:104rpx;
+	        height:104rpx;
+	        margin-bottom: 15rpx;
+	        border-radius: 50%;
+	      }
+	    }
+	  }
+
+	  .again {
+	    	font-size:28rpx;
+	    	font-family:PingFangHK-Regular;
+	    	color:rgba(0,208,147,1);
+	    	line-height:40rpx;
+	    	margin-bottom: 38rpx;
+    }
 	}
-	
 </style>

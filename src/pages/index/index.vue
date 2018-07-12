@@ -202,7 +202,7 @@ export default {
       systemInfo: {}, //
       beforeCreateStep: 0,
       swopRed: 0,   //交换红点
-      shareData: {}
+      shareData: {},
     }
   },
   methods: {
@@ -602,14 +602,10 @@ export default {
       this.getPage.realm_label_id = res.realm_label_id
     }
 
-    redDotApplys().then(res=>{
-      if(res.http_status==200){
-        that.swopRed = res.data.user_apply_show_red_dot
-      }
-    })
 
     redDot().then(res=>{
-      console.log('00000-----',res)
+      that.swopRed = res.data.main_show_red_dot
+
     })
     
   },
