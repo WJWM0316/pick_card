@@ -296,8 +296,12 @@
         let that = this
         if(that.secondRule.oli.length>0){
           let oldIndex = that.secondRule.oli[0]
-          if(index == oldIndex){ return }
+
           that.listData[2].son[oldIndex].isCur = false
+          if(index == oldIndex){ 
+            that.secondRule.oli = []
+            return 
+          }
         }
         that.secondRule.oli[0] = index 
         that.listData[2].son[index].isCur = true
@@ -305,17 +309,19 @@
       secondTwo (index) {
         let that = this
         if(that.secondRule.rli.length>0){
-          let oldIndex = that.secondRule.rli[0]
+          let firIndex = that.secondRule.rli[0]
 
           if(that.secondRule.rli.indexOf(index) != -1){
+            that.listData[0].son[index].isCur = false
+            that.secondRule.rli.splice(that.secondRule.rli.indexOf(index), 1)
             return
           }
           if(that.secondRule.rli.length>=3){
-            that.listData[0].son[oldIndex].isCur = false
+            that.listData[0].son[firIndex].isCur = false
             that.secondRule.rli.splice(0, 1)
           }
         }
-        
+        console.log(111)
         that.listData[0].son[index].isCur = true
         that.secondRule.rli.push(index)
       },
@@ -334,6 +340,8 @@
           let oldIndex = that.thirdRule[str2][0]
 
           if(that.thirdRule[str2].indexOf(index) != -1){
+            that.thirdRule[str][index].isCur = false
+            that.thirdRule[str2].splice(that.thirdRule[str2].indexOf(index), 1)
             return
           }
           if(that.thirdRule[str2].length>=5){
@@ -363,8 +371,6 @@
         let that = this,
             listData = that.listData,
             data = {};
-
-
         console.log(that.nowNum == 0)
         if(that.nowNum == 0){
           const info = wx.getStorageSync('cutImgInfo')
@@ -378,8 +384,11 @@
           })
           uploadImage(parmas, {
             onItemSuccess: (resp, file, index) => {
+              console.log(resp)
             }
           }).then(res0 => {
+
+            console.log(res0)
             that.firstData.avatar_id = res0.file.fileId
             data = that.firstData
             data.nickname = data.nickname.trim()

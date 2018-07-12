@@ -1,198 +1,4 @@
-<style lang="less" type="text/less" scoped>
-@import url("~@/styles/animate.less");
-  .container {
-    height: 100vh;
-    position: relative;
-    padding-bottom: 120rpx;
-    background: #fafbfd;
-    .flock_msg {
-      width:750rpx;
-      height:240rpx;
-      background:rgba(255,255,255,1);
-      box-sizing: border-box;
-      padding: 48rpx 0 40rpx 40rpx;
-      text-align: left;
-      position: relative;
-      .name {
-        font-size:48rpx;
-        font-family:PingFangHK-Semibold;
-        color:rgba(53,57,67,1);
-        line-height:48rpx;
-      }
-      .txt {
-        font-size:28rpx;
-        font-family:PingFangHK-Light;
-        color:rgba(154,161,171,1);
-        line-height:28rpx;
-        &.one {
-          margin: 32rpx 0 16rpx 0;
-        }
-      }
 
-      .right {
-        width:174rpx;
-        height:72rpx;
-        background:rgba(220,227,238,1);
-        border-radius:36rpx 0rpx 0rpx 36rpx;
-        position: absolute;
-        right: 0;
-        top: 84rpx;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        .r_wrap {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex: 1;
-          &.cur {
-            position: relative;
-            &:after {
-              width:2rpx;
-              height:36rpx;
-              background: rgba(255,255,255,1);
-              content: '';
-              border-radius:4rpx;
-              position: absolute;
-              top: 0rpx;
-              right: 0;
-            }
-          }
-          
-        }
-        .r_icon {
-          width: 32rpx;
-          height: 32rpx;
-          
-        }
-      }
-    }
-    .content {
-      background:rgba(250,251,253,1);
-      padding-bottom: 160rpx;
-      .card_block {
-        position: relative;
-        margin: 0 50rpx;
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 40rpx;
-        .blo_img {
-          width:130rpx;
-          height:130rpx;
-          position: absolute;
-          border-radius: 50%;
-          left: -50rpx;
-          top: 50rpx;
-          box-shadow:0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
-          border:4rpx solid rgba(255,255,255,1);
-          box-sizing: border-box;
-        }
-        .blo_msg {
-          width:600rpx;
-          height:230rpx;
-          background:rgba(255,255,255,1);
-          box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
-          border-radius:18rpx;
-          padding: 56rpx 0 56rpx 120rpx;
-          box-sizing: border-box;
-          text-align: left;
-          position: relative;
-          &.cur {
-            &:after {
-              content: '';
-              width:20rpx;
-              height:20rpx;
-              border-radius: 50%;
-              background:rgba(255,102,102,1);
-              position: absolute; 
-              top: 62rpx;
-              left: 50rpx;
-            }
-          }
-          .msg_name {
-            font-size:34rpx;
-            font-family:PingFangHK-Medium;
-            color:rgba(70,71,72,1);
-            line-height:34rpx;
-            width: 180rpx;
-          }
-          .msg_tit {
-            font-size:28rpx;
-            font-family:PingFangHK-Light;
-            color:rgba(154,161,171,1);
-            line-height:28rpx;
-            margin: 18rpx 0 10rpx 0;
-          }
-          .msg_company {
-            font-size:28rpx;
-            font-family:PingFangHK-Light;
-            color:rgba(154,161,171,1);
-            line-height:28rpx;
-          }
-          .flock_style {
-            width:170rpx;
-            height:66rpx;
-            position: absolute;
-            right: 32rpx;
-            top: 32rpx;
-            background:rgba(0,208,147,1);
-            border-radius:33rpx;
-            font-size:28rpx;
-            font-family:PingFangHK-Regular;
-            color:rgba(255,255,255,1);
-            line-height:66rpx;
-            text-align: center;
-            &.type_2 {
-              background:rgba(255,255,255,1);
-              color:rgba(154,161,171,1);
-            }
-          }
-        }
-      }
-      .hintJoin {
-        height:37rpx;
-        font-size:26rpx;
-        font-family:PingFangHK-Regular;
-        color:rgba(195,201,212,1);
-        line-height:37rpx;
-        text-align: center;
-        margin-top: 70rpx;
-      }
-    }
-    .peoList {
-    }
-  }
-  .footer {
-    height: 96rpx;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    z-index: 1000;
-    width:100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    font-family:PingFangHK-Regular;
-    line-height: 96rpx;
-    .quit {
-      width:222rpx;
-      color:#B2B6C2;
-      font-size:32rpx;
-      background:#ffffff; 
-    }
-    .joinShare {
-      flex: 1;
-      background:rgba(0,208,147,1);
-      font-family:PingFangHK-Regular;
-      color:rgba(255,255,255,1);
-      height: 96rpx;
-      font-size:32rpx;
-      line-height: 96rpx;
-    }
-  }
-</style>
 <template>
   <view class="container" >
     <view class="flock_msg">
@@ -211,7 +17,31 @@
       </view>
     </view>
     <view class="content">
-      <view class="peoList">
+      <view class="peoList" :style="{ height: spHeight+'rpx' }">
+        <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
+          <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
+            <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
+            <view class="msg_name ellipsis">{{item.nickname}}</view>
+            <view class="msg_tit ellipsis">{{item.occupation}}</view>
+            <view class="msg_company ellipsis">{{item.company}}</view>
+            <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
+            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
+          </view>
+        </view>
+        <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
+          <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
+            <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
+            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
+            <view class="msg_name ellipsis">{{item.nickname}}</view>
+            <view class="msg_tit ellipsis">{{item.occupation}}</view>
+            <view class="msg_company ellipsis">{{item.company}}</view>
+            <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
+            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
+          </view>
+        </view>
         <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
           <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
             <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
@@ -258,6 +88,7 @@ export default {
       isJoin: false,
       isFirst: true,
       isFirstFlock: true,
+      spHeight: '',
       msg: {
         id: '',
         vkey: ''
@@ -385,6 +216,15 @@ export default {
     console.log(res,'群详情页面')
     let that = this
     let user = this.$store.getters.userInfo
+    let adaptive = wx.setStorageSync('adaptive')
+
+    if(!adaptive){
+      wx.getSystemInfo({
+        success: function(res) {
+          that.spHeight = (res.windowHeight-120-50)*2;
+        }
+      })
+    }
     that.userInfo = user
 
     if(res&&res.id){
@@ -413,9 +253,9 @@ export default {
   onShareAppMessage: function (res) {
     console.log(res)
     let path = '/pages/index/main?'
-    wx.showShareMenu({
-      withShareTicket: true
-    })
+      wx.showShareMenu({
+        withShareTicket: true
+      })
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
         path+='form=cardHolder&type=flock'
@@ -432,3 +272,199 @@ export default {
 }
 </script>
 
+<style lang="less" type="text/less" scoped>
+@import url("~@/styles/animate.less");
+  .container {
+    height: 100vh;
+    position: relative;
+    background: #fafbfd;
+    .flock_msg {
+      width:750rpx;
+      height:240rpx;
+      background:rgba(255,255,255,1);
+      box-sizing: border-box;
+      padding: 48rpx 0 40rpx 40rpx;
+      text-align: left;
+      position: relative;
+      .name {
+        font-size:48rpx;
+        font-family:PingFangHK-Semibold;
+        color:rgba(53,57,67,1);
+        line-height:48rpx;
+      }
+      .txt {
+        font-size:28rpx;
+        font-family:PingFangHK-Light;
+        color:rgba(154,161,171,1);
+        line-height:28rpx;
+        &.one {
+          margin: 32rpx 0 16rpx 0;
+        }
+      }
+
+      .right {
+        width:174rpx;
+        height:72rpx;
+        background:rgba(220,227,238,1);
+        border-radius:36rpx 0rpx 0rpx 36rpx;
+        position: absolute;
+        right: 0;
+        top: 84rpx;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        .r_wrap {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: 1;
+          &.cur {
+            position: relative;
+            &:after {
+              width:2rpx;
+              height:36rpx;
+              background: rgba(255,255,255,1);
+              content: '';
+              border-radius:4rpx;
+              position: absolute;
+              top: 0rpx;
+              right: 0;
+            }
+          }
+          
+        }
+        .r_icon {
+          width: 32rpx;
+          height: 32rpx;
+          
+        }
+      }
+    }
+    .content {
+      background:rgba(250,251,253,1);
+      .card_block {
+        position: relative;
+        margin: 0 50rpx;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 40rpx;
+        .blo_img {
+          width:130rpx;
+          height:130rpx;
+          position: absolute;
+          border-radius: 50%;
+          left: -50rpx;
+          top: 50rpx;
+          box-shadow:0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
+          border:4rpx solid rgba(255,255,255,1);
+          box-sizing: border-box;
+        }
+        .blo_msg {
+          width:600rpx;
+          height:230rpx;
+          background:rgba(255,255,255,1);
+          box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
+          border-radius:18rpx;
+          padding: 56rpx 0 56rpx 120rpx;
+          box-sizing: border-box;
+          text-align: left;
+          position: relative;
+          &.cur {
+            &:after {
+              content: '';
+              width:20rpx;
+              height:20rpx;
+              border-radius: 50%;
+              background:rgba(255,102,102,1);
+              position: absolute; 
+              top: 62rpx;
+              left: 50rpx;
+            }
+          }
+          .msg_name {
+            font-size:34rpx;
+            font-family:PingFangHK-Medium;
+            color:rgba(70,71,72,1);
+            line-height:34rpx;
+            width: 180rpx;
+          }
+          .msg_tit {
+            font-size:28rpx;
+            font-family:PingFangHK-Light;
+            color:rgba(154,161,171,1);
+            line-height:28rpx;
+            margin: 18rpx 0 10rpx 0;
+          }
+          .msg_company {
+            font-size:28rpx;
+            font-family:PingFangHK-Light;
+            color:rgba(154,161,171,1);
+            line-height:28rpx;
+          }
+          .flock_style {
+            width:170rpx;
+            height:66rpx;
+            position: absolute;
+            right: 32rpx;
+            top: 32rpx;
+            background:rgba(0,208,147,1);
+            border-radius:33rpx;
+            font-size:28rpx;
+            font-family:PingFangHK-Regular;
+            color:rgba(255,255,255,1);
+            line-height:66rpx;
+            text-align: center;
+            &.type_2 {
+              background:rgba(255,255,255,1);
+              color:rgba(154,161,171,1);
+            }
+          }
+        }
+      }
+      .hintJoin {
+        height:37rpx;
+        font-size:26rpx;
+        font-family:PingFangHK-Regular;
+        color:rgba(195,201,212,1);
+        line-height:37rpx;
+        text-align: center;
+        margin-top: 70rpx;
+      }
+    }
+    .peoList {
+      padding-bottom: 60rpx;
+
+      overflow-y:scroll; 
+    }
+  }
+  .footer {
+    height: 96rpx;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    font-family:PingFangHK-Regular;
+    line-height: 96rpx;
+    .quit {
+      width:222rpx;
+      color:#B2B6C2;
+      font-size:32rpx;
+      background:#ffffff; 
+    }
+    .joinShare {
+      flex: 1;
+      background:rgba(0,208,147,1);
+      font-family:PingFangHK-Regular;
+      color:rgba(255,255,255,1);
+      height: 96rpx;
+      font-size:32rpx;
+      line-height: 96rpx;
+    }
+  }
+</style>

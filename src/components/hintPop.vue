@@ -7,7 +7,7 @@
 	    <view class="tit" >恭喜你!</view>
 	    <view class="txt txt_2">你已经和TA成功互换名片了! 现在你可以</view>
 
-	    <view class="btns">
+	    <view class="btns" :class="{'index':consentForm=='index'}">
 	      <button class="btn friend" @click="toDetail">
 	        <image class="img_warp" src="/static/images/popup_btn_godetails@3x.png"></image>
 	        <view class="bt_txt">看看TA的资料</view>
@@ -18,7 +18,7 @@
 	      </button>
 
 	    </view>
-      <view class="again" v-show="consentForm=='swop'" @tap="cloPop">继续寻找新朋友>></view>
+      <view class="again" v-show="consentForm=='index'" @tap="cloPop">继续寻找新朋友>></view>
 	  </view>
 	</view>
 </template>
@@ -54,6 +54,7 @@
 			},
 			type () {},
 			consentNowItem(){},
+			consentForm(){},
 		},
 		onLoad () {
 		},
@@ -139,7 +140,10 @@
 	    flex-direction: row;
 	    justify-content: center;
 	    align-items: center;
-	    margin-bottom: 30rpx;
+	    margin-bottom: 68rpx;
+	    &.index {
+	    	margin-bottom: 30rpx;
+	    }
 	    .btn {
 	      //width:140rpx;
 	      display: flex;
