@@ -6,6 +6,6 @@ app.$mount()
 export default {
   config: {
     navigationBarTitleText: '交换申请',
-    enablePullDownRefresh: false,
+    enablePullDownRefresh: true,
   },
 };

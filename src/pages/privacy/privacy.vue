@@ -161,15 +161,6 @@
 						color: #C3C9D4;
 						float: right;
 					}
-					&.requst::after {
-						content: '*';
-						color: #FF3636;
-						font-size: 28rpx;
-						position: absolute;
-						top: 50%;
-						margin-top: -8rpx;
-						left: 0;
-					}
 		  	}
 		  	.right {
 					text-align: right;

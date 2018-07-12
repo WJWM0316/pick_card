@@ -7,6 +7,6 @@ app.$mount();
 export default {
   config: {
     navigationBarTitleText: '名片详情',
-    enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
   },
 };

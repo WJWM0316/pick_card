@@ -100,7 +100,7 @@
       },
       toSharePeo () {
         wx.redirectTo({
-          url: '/pages/sharePick/main'
+          url: '/pages/howPlay/main'
         })
       },
       cloSahre () {
