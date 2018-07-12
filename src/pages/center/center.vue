@@ -45,15 +45,20 @@
 						<view class="itemCon">
 							<view class="left">职场学习社区</view>
 							<view class="right">
-								<text>百万职场人都在学</text>
+								<text class="txt">百万职场人都在学</text>
 								<image class="hot" src="/static/images/icon_hot@2x.png"></image>
-								<!-- <image src="/static/images/"></image> -->
+								<image class="jumpIcon" src="/static/images/icon_chevron@2x.png"></image>
 							</view>
 						</view>
 					</view>
 					</navigator>
 				</view>
 			</viwe>
+			<view class="bottomH5">
+				<navigator url="/pages/useHelp/index" open-type="navigate" hover-class="none" class="h5Txt"><text>使用帮助</text></navigator>
+				<navigator url="/pages/userProtocol/index" open-type="navigate" hover-class="none" class="h5Txt"><text>用户协议</text></navigator>
+				<text class="h5Txt noborder" @tap="service">联系客服</text>
+			</view>
 		</view>
 		<footerTab :type=3 :adaptive=adaptive :isRed=swopRed></footerTab>
 	</view>
@@ -182,6 +187,34 @@
 	          console.log(res, 1)
 	        }
 	      })
+			},
+			service () {
+				wx.showModal({
+				  title: '欢迎添加“Pick趣名片”公众号',
+				  content: '了解更多，有疑问请添加客服微信： Pick官方客服',
+				  confirmText: '复制微信',
+				  success: function(res) {
+				    if (res.confirm) {
+				      wx.setClipboardData({
+							  data: 'Pick官方客服',
+							  success: function(res) {
+							    wx.getClipboardData({
+							      success: function(res) {
+							      	wx.showToast({
+											  title: '复制成功',
+											  icon: 'success',
+											  duration: 1000
+											})
+							        console.log(res.data) // data
+							      }
+							    })
+							  }
+							})
+				    } else if (res.cancel) {
+				      console.log('用户点击取消')
+				    }
+				  }
+				})
 			}
 	  }
 	}
@@ -212,7 +245,8 @@
 		padding: 0 40rpx 28rpx;
 	}
 	.main {
-		background: #fff;
+		background: #fff url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/me_pic_bg%403x.png') no-repeat top left;
+		background-size: 100% auto;
 		padding: 40rpx 35rpx 44rpx;
 		border-radius:18rpx;
 		margin-bottom: 30rpx;
@@ -298,14 +332,14 @@
 				display: flex;
 		    align-items: center;
 		    justify-content: space-between;
-		    font-size: 28rpx;
-				line-height: 28rpx;
+		    font-size: 32rpx;
+				line-height: 32rpx;
 		    .left {
 					color: #353943;
 					font-weight: light;
 					position: relative;
 					.titleMsg {
-						font-size: 28rpx;
+						font-size: 32rpx;
 						color: #C3C9D4;
 						float: right;
 					}
@@ -313,9 +347,15 @@
 		  	.right {
 					text-align: right;
 					overflow: hidden;
+					.txt {
+						color: #9AA1AB;
+						font-size:28rpx;
+					}
 					.jumpIcon {
 						width: 18rpx;
 						height: 30rpx;
+						margin-left: 10rpx;
+						vertical-align:-2rpx;
 					}
 					.hot {
 						width: 60rpx;
@@ -329,6 +369,21 @@
 				.itemCon {
 					border: none;
 				}
+			}
+		}
+	}
+	.bottomH5 {
+		display: flex;
+		justify-content:center;
+		margin-top:46rpx;
+		font-size: 28rpx;
+		line-height: 30rpx;
+		color: #9AA1AB;
+		.h5Txt {
+			padding: 0 12rpx;
+			border-right: 1rpx solid #9AA1AB;
+			&.noborder {
+				border: none;
 			}
 		}
 	}

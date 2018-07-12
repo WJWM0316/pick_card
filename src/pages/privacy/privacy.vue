@@ -7,7 +7,9 @@
 					<picker mode='selector' @change="mobileChange" :value="mobile" :range="list">
 						<view class="picker">
 				     	{{list[mobile]}}
+				     	<image class="icon" src="/static/images/icon_chevron@2x.png"></image>
 				    </view>
+				   
 					</picker>
 				</view>
 			</view>
@@ -19,31 +21,34 @@
 					<picker mode='selector' @change="weChatChange" :value="weChat" :range="list">
 						<view class="picker">
 				     	{{list[weChat]}}
+				     	<image class="icon" src="/static/images/icon_chevron@2x.png"></image>
 				    </view>
 					</picker>
 				</view>
 			</view>
 		</view>
 		<view class="item">
-			<view class="itemCon">
+			<view class="itemCon noborder">
 				<view class="left">邮箱</view>
 				<view class="right">
 					<picker mode='selector' @change="emailChange" :value="email" :range="list">
 						<view class="picker">
 				     	{{list[email]}}
+				     	<image class="icon" src="/static/images/icon_chevron@2x.png"></image>
 				    </view>
 					</picker>
 				</view>
 			</view>
 		</view>
-		<view class="item">
-			<view class="itemCon">
+		<view class="item last">
+			<view class="itemCon noborder">
 				<view class="left">右滑直接交换名片</view>
 				<view class="right">
 					<switch :checked="card === 1" @change="switchChange" color="#00D093"/>
 				</view>
 			</view>
 		</view>
+		<view class="tip">开启后，其他人右滑我的名片，双方即可直接交换名片</view>
 	</view>
 </template>
 <script>
@@ -119,11 +124,14 @@
 	padding-top: 20rpx;
 	box-sizing: border-box;
 	.item {
-			padding: 0 0 0 50rpx;
+			padding: 0 0 0 40rpx;
 	    height: 120rpx;
 	    background: #fff;
+	    &.last {
+				margin-top: 20rpx;
+	  	}
 			.itemCon {
-				padding-right: 50rpx;
+				padding-right: 40rpx;
 				height: 100%;
 				border-bottom: 1rpx solid rgba(53,57,67,0.1);
 				box-sizing: border-box;
@@ -132,6 +140,9 @@
 		    justify-content: space-between;
 		    font-size: 28rpx;
 				line-height: 28rpx;
+				&.noborder {
+					border: none;
+				}
 				&.labelBox {
 					justify-content: start;
 					aligh-items: space-between;
@@ -144,7 +155,6 @@
 		    .left {
 					color: #353943;
 					font-weight: light;
-					padding-left: 22rpx;
 					position: relative;
 					.titleMsg {
 						font-size: 28rpx;
@@ -190,6 +200,12 @@
 						color: #353943;
 						.placeholder {
 							color: #C3C9D4;
+						}
+						.icon {
+							width: 18rpx;
+							height: 30rpx;
+							margin-left: 16rpx;
+							vertical-align:-4rpx;
 						}
 					}
 					.label {
@@ -241,6 +257,12 @@
 					border: none;
 				}
 			}
+	}
+	.tip {
+		font-size:26rpx;
+		line-height: 26rpx;
+		color: #B2B6C2;
+		margin: 24rpx 40rpx;
 	}
 	switch {
 		
