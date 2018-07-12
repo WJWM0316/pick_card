@@ -49,7 +49,7 @@
                   <open-data class="msg_name" type="groupName" :open-gid="item.openGid"></open-data>
                   <view class="msg_tit">已有{{item.memberCount}}张群成员名片</view>
 
-                  <view class="new_msg">{{item.newJoinMemberCount}}</view>
+                  <view class="new_msg" v-if="item.newJoinMemberCount>0">{{item.newJoinMemberCount}}</view>
                 </view>
               </view>
             </view>
@@ -207,7 +207,7 @@ export default {
       }
       if(res.target.dataset.type=="me"){
         imageUrl = that.shareData.shareImg
-        path = `/pages/detail?vkey=${this.usersInfo.vkey}`
+        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
       }
       // 来自页面内转发按钮
     }
