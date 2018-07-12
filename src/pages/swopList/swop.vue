@@ -3,8 +3,7 @@
   <view class="container" >
     <view class="hint" v-if="listData.length>0">记录只保留14天，抓紧时间处理哦~</view>
     <view class="swopList" v-if="listData.length>0">
-      <view class="swop_blo" v-for="(item, index) in listData" :key="key" @tap="toDetail">
-
+      <view class="swop_blo" v-for="(item, index) in listData" :key="key" @tap="toDetail(item)">
         <view class="blo_top">
           <image class="avatar" :src="item.avatar_info" v-if="item.avatar_info"></image>
           <image  class="avatar" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
@@ -96,6 +95,7 @@
             color:rgba(53,57,67,1);
             line-height:32rpx;
             margin-bottom: 14rpx;
+            margin-right: 30rpx;
           }
           .msg_form {
             font-size:28rpx;
@@ -168,6 +168,8 @@
   import { deleteRedDot } from '@/api/pages/red'
   import { getUserInfoApi } from '@/api/pages/user'
   import { getShareImg } from '@/api/pages/login'
+  import Vue from 'vue'
+
   export default {
     
     components: {
@@ -177,12 +179,8 @@
     data () {
       return {
         usersInfo: {},
-        shareData: {},
+        shareInfo: {},
         listData: [],
-        pop: {
-          isPop: false,
-          isShare: false,
-        },
         isShow: false,
         nowItem: {}
       }
@@ -191,12 +189,7 @@
       //跳转====
       toDetail (item) {
         let data = {}
-        if(item){
           data = item
-        }else {
-          data = this.nowItem
-        }
-
         wx.navigateTo({
           url: `/pages/detail/main?vkey=${data.apply_user_info.vkey}`
         })
@@ -272,24 +265,32 @@
     },
 
     onShareAppMessage: function (res) {
-      console.log('111111',res)
+      let path = '/pages/index/main?'
+      let imageUrl = ''
+      let title = ''
+      let shareInfo = Vue.prototype.$store.getters.shareInfo
 
-      let path = '/pages/index/main?',
-          imageUrl = '';
-
-      wx.showShareMenu({
-        withShareTicket: true
-      })
+        console.log(shareInfo)
+        wx.showShareMenu({
+          withShareTicket: true
+        })
 
       if (res.from === 'button' ) {
         if(res.target.dataset.type=="me"){
+          title = shareInfo.showCard.content
           imageUrl = shareData.shareImg
           path = `/pages/detail?vkey=${this.usersInfo.vkey}`
         }
+        if(res.target.dataset.type=="other"){
+            title = shareInfo.otherCard.content
+            imageUrl = shareInfo.otherCard.path
+            path = `/pages/sharePick/main?vkey=${this.nowItem.apply_user_info.vkey}?type=other`
+        }
+
         // 来自页面内转发按钮
       }
       return {
-        title: '自定义转发标题',
+        title: title,
         path: path,
         imageUrl: imageUrl
       }

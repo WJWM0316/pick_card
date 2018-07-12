@@ -37,7 +37,7 @@
 			},
 			consentForm: {
 				type: String,
-				default: 'swop'
+				default: ''
 			},
 			consentNowItem: {
 				type: Object,
@@ -50,30 +50,21 @@
 			}
 		},
 		watch: {
-			isShow (val) {
-				if (val) {
-					this.customText = ''
-				}
+			isShow () {
 			},
 			type () {},
-			customText (val) {}
+			consentNowItem(){},
 		},
 		onLoad () {
-
-			console.log(this.isShow,this.type)
-			this.shareData = Vue.prototype.$store.getters.shareInfo
 		},
 		methods: {
-			getLabelList () {
-				const data = {
-					labelType: '1'
-				}
-				postGetLabelByIds(data).then(res => {
-					this.labelList = res.data[0].son
-				})
-			},
-			getLabel (index) {
-				return index
+			//跳转====
+			toDetail () {
+
+			  this.isShow = false
+			  wx.navigateTo({
+			    url: `/pages/detail/main?vkey=${this.consentNowItem.apply_user_info.vkey}`
+			  })
 			},
 			cloPop () {
 				this.$emit('close')
@@ -84,28 +75,6 @@
 				e.preventDefault()
 				e.stopPropagation()
 			}
-		},
-		onShareAppMessage: function (res) {
-		  console.log('22222',this.consentNowItem)
-
-		  let path = '/pages/index/main?',
-		  	  title = '趣名片',
-		      imageUrl = '';
-
-		  if (res.from === 'button' ) {
-		    if(res.target.dataset.type=="other"){
-		      	title = shareData.otherCard.title
-		      	imageUrl = shareData.otherCard.path
-		      	path = `/pages/sharePick?vkey=${this.consentNowItem.vkey}?type=other`
-		    }
-		    // 来自页面内转发按钮
-		  }
-		  
-		  return {
-		    title: title,
-		    path: path,
-		    imageUrl: imageUrl
-		  }
 		},
 	}
 </script>

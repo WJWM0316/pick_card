@@ -363,9 +363,10 @@ export default {
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
             that.isCooling = true;
+            let num = res.data.rest_time
             that.interval = setInterval(()=>{
-              that.transformTime(res.data.rest_time);
-              res.data.rest_time--;
+              that.transformTime(num);
+              num--;
             },1000);
           }
           this.$mptoast(res.msg);

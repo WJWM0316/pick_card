@@ -75,6 +75,8 @@
   import { getFriends, deleteFriends, getUserGroupList, getUserGroupInfo, joinUserGroup, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
   import { deleteRedDot, deleteRedFriends, redDotApplys, redDot } from '@/api/pages/red'
   import { getShareImg } from '@/api/pages/login'
+  import Vue from 'vue'
+
 export default {
   interval: '',
   components: {
@@ -92,7 +94,8 @@ export default {
       adaptive: null,
       swopRed: 0,
       topRed: {},
-      shareData: {}
+      shareData: {},
+      shareInfo: {}
     }
   },
 
@@ -136,6 +139,8 @@ export default {
   onLoad() {
     let that = this;
 
+    this.shareInfo = Vue.prototype.$store.getters.shareInfo
+    console.log(Vue.prototype.$store.getters.shareInfo) 
     that.adaptive = wx.getStorageSync('adaptive')
     getFriends().then((res)=>{
       console.log(res)
@@ -195,6 +200,7 @@ export default {
     console.log(res)
     let path = '/pages/index/main?',
         that = this,
+        title = '',
         imageUrl = '';
 
     wx.showShareMenu({
@@ -203,16 +209,19 @@ export default {
 
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
+        title = that.shareInfo.sharGroupCard?that.shareInfo.sharGroupCard.content:'' 
+        imageUrl = that.shareInfo.sharGroupCard.path?that.shareInfo.sharGroupCard.path:''
         path+='form=cardHolder&type=flock'
       }
       if(res.target.dataset.type=="me"){
+        title = that.shareInfo.mycard?that.shareInfo.mycard.content:''
         imageUrl = that.shareData.shareImg
         path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
       }
       // 来自页面内转发按钮
     }
     return {
-      title: '自定义转发标题',
+      title: title,
       path: path,
       imageUrl: imageUrl
     }
@@ -392,7 +401,6 @@ export default {
             position: absolute; 
             top: 62rpx;
             left: 50rpx;
-            //margin-left: -10rpx;
           }
         }
         &.two {
@@ -403,9 +411,8 @@ export default {
             border-radius: 50%;
             background:rgba(255,102,102,1);
             position: absolute;
-            top: 0rpx;
-            left: 0rpx;
-            //margin-left: -10rpx;
+            top: 27rpx;
+            left: 50rpx;
           }
         }
         &.flock_blo {
