@@ -364,15 +364,16 @@
             listData = that.listData,
             data = {};
 
+
+        console.log(that.nowNum == 0)
         if(that.nowNum == 0){
           data = that.firstData
           data.nickname = data.nickname.trim()
           this.upLoad().then(res => {
+            console.log(res)
             firstSignApi(data).then((res)=>{
               if(res.http_status == 200){
                 that.nowNum = 1;
-                //this.bindPhone.isPh = true
-
               }else {
                 this.$mptoast(res.msg)
               }
@@ -443,7 +444,7 @@
         let that = this,
             next = '';
         if(this.bindPhone.number.length<1){
-          that.$mptoast('手机号码不能为空')
+          that.$mptoast('请输入手机号码')
           return
         }
         next = that.isPoneAvailable(this.bindPhone.number);
@@ -499,6 +500,7 @@
       },
 
       upLoad () {
+        console.log(111)
         return new Promise((resolve, reject) => {
           const data = {
             path: info.path,
