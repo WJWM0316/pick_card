@@ -388,17 +388,7 @@ export default {
           //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
-            that.isCooling = true;
-            let num = res.data.rest_time
-            that.interval = setInterval(()=>{
-              console.log(num)
-              that.transformTime(num);
-              num--;
-              if(num<0){
-                that.isGetUers()
-                that.tEnd()
-              }
-            },1000);
+            that.intervalTime(res.data.rest_time)
           }
           this.$mptoast(res.msg);
         })
@@ -436,7 +426,6 @@ export default {
         that.isNext = true;
         that.isGetUers()
       },800)
-
     },
     like(msg){
       let that = this;
@@ -457,12 +446,26 @@ export default {
         },800)
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
-          that.isCooling = true
-          that.transformTime(res.data.rest_time)
+          that.intervalTime(res.data.rest_time)
         }
         that.$mptoast(res.msg)
         that.isNext = true
       })
+    },
+
+    intervalTime(time){
+      let that = this
+      let num = time
+      that.isCooling = true;
+
+      that.interval = setInterval(()=>{
+        that.transformTime(num);
+        num--;
+        if(num<0){
+          that.isGetUers()
+          that.tEnd()
+        }
+      },1000);
     },
 
     unlike(msg){
@@ -615,17 +618,7 @@ export default {
         }
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
-          that.isCooling = true
-          let num = res.data.rest_time
-          that.interval = setInterval(()=>{
-            that.transformTime(num)
-            num --
-
-            if(num<0){
-              that.isGetUers()
-              that.tEnd()
-            }
-          },1000);
+          that.intervalTime(res.data.rest_time)
         }
         this.$mptoast(res.msg)
       })
