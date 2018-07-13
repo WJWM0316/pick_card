@@ -148,7 +148,7 @@
     </view>
 
     <!-- 同意弹窗 -->
-    <hintPop :type='consent' :consentForm="index" :isShow=isShow :consentNowItem=nowItem ></hintPop>
+    <hintPop :type='consent' :consentForm="index" :isShow=isShow :consentNowItem=nowItem @form-id.user="fromClick"></hintPop>
   </view>
 </template>
 <script>
@@ -341,6 +341,7 @@ export default {
       })
     },
     fromClick (e) {
+      console.log(e,22222)
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
         fromAddress: '/pages/index'
@@ -985,7 +986,7 @@ export default {
         display: block;
         //z-index: 100;
         text-align: center;
-        padding: 0 45rpx;
+        //padding: 0 45rpx;
         .cool_img {
           width:398rpx;
           height:442rpx;

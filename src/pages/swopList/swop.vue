@@ -1,7 +1,12 @@
 
 <template>
   <view class="container" >
-    <view class="hint" v-if="listData.length>0">记录只保留14天，抓紧时间处理哦~</view>
+    <view class="hint" v-if="listData.length>0">
+      <form report-submit="true" class="from-box" @submit="fromClick">
+          <button formType="submit" class="from-mask  "></button>
+      </form>
+    记录只保留14天，抓紧时间处理哦~
+    </view>
     <view class="swopList" v-if="listData.length>0">
       <view class="swop_blo" v-for="(item, index) in listData" :key="key" @tap="toDetail(item)">
         <view class="blo_top">
@@ -169,6 +174,7 @@
   import { getUserInfoApi } from '@/api/pages/user'
   import { getShareImg } from '@/api/pages/login'
   import Vue from 'vue'
+  import App from '@/App'
 
   export default {
     
@@ -186,6 +192,13 @@
       }
     },
     methods: {
+      fromClick (e) {
+        console.log(e,22222)
+        App.methods.sendFormId({
+          fromId: e.mp.detail.formId,
+          fromAddress: '/pages/index'
+        })
+      },
       //跳转====
       toDetail (item) {
         let data = {}

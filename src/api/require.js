@@ -59,7 +59,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
         }
       },
       fail(res) {
-        console.error(url, res);
+        console.error('fail',url, res);
         util.unloading(isLoading)
         reject(res);
       },

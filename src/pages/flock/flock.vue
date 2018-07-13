@@ -20,7 +20,7 @@
       <view class="peoList" :style="{ height: spHeight+'rpx' }">
         <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
           <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
-            <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
+            <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
             <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
             <view class="msg_name ellipsis">{{item.nickname}}</view>
             <view class="msg_tit ellipsis">{{item.occupation}}</view>
@@ -44,6 +44,7 @@
       </block>
     </view>
     <mptoast />
+    <authorize-pop></authorize-pop>
     
   </view>
 </template>
@@ -52,10 +53,12 @@
   import { joinUserGroup, isJoinUserGroup,getUserGroupInfo, getFriends, deleteFriends, getUserGroupList, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
   import {  indexLike  } from '@/api/pages/user'
   import { deleteRedFlock } from '@/api/pages/red'
+  import authorizePop from '@/components/authorize'
 
 export default {
   components: {
-    mptoast
+    mptoast,
+    authorizePop
   },
   data () {
     return { 
@@ -72,6 +75,81 @@ export default {
     }
   },
 
+  created () {
+  },
+
+  onLoad(res) {
+
+    console.log(res,'群详情页面')
+    let that = this
+    let user = this.$store.getters.userInfo
+    let adaptive = wx.setStorageSync('adaptive')
+
+    if(!adaptive){
+      wx.getSystemInfo({
+        success: function(res) {
+          that.spHeight = (res.windowHeight-120-50)*2;
+        }
+      })
+    }
+    that.userInfo = user
+
+    if(res&&res.id){
+      that.msg= {
+        id: res.id,
+        vkey: res.vkey
+      }
+      
+      //是否登陆授权
+      if (!that.$store.getters.needAuthorize) {
+        authorizePop.methods.checkLogin().then(res => {
+          that.updateData()
+          isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
+            if(msg.code == 201){
+              that.isJoin = false
+            }else if(msg.code==0){
+              that.isJoin = true
+            }
+          })
+        })
+      } else {
+        that.updateData()
+        isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
+          if(msg.code == 201){
+            that.isJoin = false
+          }else if(msg.code==0){
+            that.isJoin = true
+          }
+        })
+      }
+    }else {
+      that.$mptoast('缺少信息')
+    }
+  },
+
+  onShow(){
+    
+  },
+
+  onShareAppMessage: function (res) {
+    console.log(res)
+    let path = '/pages/index/main?'
+      wx.showShareMenu({
+        withShareTicket: true
+      })
+    if (res.from === 'button' ) {
+      if(res.target.dataset.type=="flock"){
+        path+='form=cardHolder&type=flock'
+      }
+      // 来自页面内转发按钮
+    }
+    console.log(path)
+
+    return {
+      title: '自定义转发标题',
+      path: path
+    }
+  },
   methods: {
     toIndex () {
       wx.reLaunch({
@@ -183,67 +261,6 @@ export default {
     },
   },
 
-  created () {
-  },
-
-  onLoad(res) {
-
-    console.log(res,'群详情页面')
-    let that = this
-    let user = this.$store.getters.userInfo
-    let adaptive = wx.setStorageSync('adaptive')
-
-    if(!adaptive){
-      wx.getSystemInfo({
-        success: function(res) {
-          that.spHeight = (res.windowHeight-120-50)*2;
-        }
-      })
-    }
-    that.userInfo = user
-
-    if(res&&res.id){
-      that.msg= {
-        id: res.id,
-        vkey: res.vkey
-      }
-
-      isJoinUserGroup({userGroupId
-        : res.vkey}).then((msg)=>{
-        console.log(msg)
-        if(msg.code == 201){
-          console.log('weijiaru')
-          that.isJoin = false
-        }else if(msg.code==0){
-          that.isJoin = true
-        }
-      })
-      that.updateData()
-    }else {
-      that.$mptoast('缺少信息')
-    }
-
-  },
-
-  onShareAppMessage: function (res) {
-    console.log(res)
-    let path = '/pages/index/main?'
-      wx.showShareMenu({
-        withShareTicket: true
-      })
-    if (res.from === 'button' ) {
-      if(res.target.dataset.type=="flock"){
-        path+='form=cardHolder&type=flock'
-      }
-      // 来自页面内转发按钮
-    }
-    console.log(path)
-
-    return {
-      title: '自定义转发标题',
-      path: path
-    }
-  },
 }
 </script>
 
@@ -364,6 +381,7 @@ export default {
             line-height:34rpx;
             width: 180rpx;
             margin-right: 20rpx;
+            height: 38rpx;
           }
           .msg_tit {
             font-size:28rpx;
