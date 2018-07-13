@@ -133,8 +133,7 @@ export default {
     swopSlock (id,index) {
       let that = this
       wx.showModal({
-        title: '提示',
-        content: '是否申请与该用户交换名片',
+        content: '我要勾搭这个大咖',
         success: function(res) {
           let msg = {
               to_uid: id, //data.unionid

@@ -54,7 +54,7 @@
                   <open-data class="msg_name" type="groupName" :open-gid="item.openGid"></open-data>
                   <view class="msg_tit">已有{{item.memberCount}}张群成员名片</view>
 
-                  <view class="new_msg" v-if="item.newJoinMemberCount>0">{{item.newJoinMemberCount}}</view>
+                  <view class="new_msg" v-if="item.newJoinMemberCount&&item.newJoinMemberCount>0">{{item.newJoinMemberCount}}</view>
                 </view>
               </view>
             </view>
@@ -212,13 +212,10 @@ export default {
       })
     })
 
-    redDotApplys().then(res=>{
-      if(res.http_status==200){
-        that.swopRed = res.data.user_apply_show_red_dot
-      }
-    })
+    redDotApplys()
     redDot().then(res=>{
       that.topRed = res.data
+      that.swopRed = res.data.main_show_red_dot
     })
     wx.getSystemInfo({
       success: function(res) {

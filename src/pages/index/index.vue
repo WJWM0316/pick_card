@@ -199,7 +199,7 @@ export default {
       isPop: false,     //遮罩
       isCooling: false, //冷却
       isShare: false,    //分享弹窗
-      coolTime: 123123123,//冷却倒计时
+      coolTime: 0,//冷却倒计时
       isEnd: false,   //翻完
       isNext: true,  //翻页
 
@@ -346,7 +346,7 @@ export default {
     },
     tEnd (e) {
       clearInterval(this.interval); // 清除setInterval  
-      this.time = 0;  
+      this.coolTime = 0;  
     },
     
     //左右划操作
@@ -383,22 +383,28 @@ export default {
           if(res.data.length<1){
             that.isEnd = true;
           }
-          this.usersList = [...this.usersList,...res.data];
+          that.isCooling = false;
+          that.usersList = [...this.usersList,...res.data];
           //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
             that.isCooling = true;
             let num = res.data.rest_time
             that.interval = setInterval(()=>{
+              console.log(num)
               that.transformTime(num);
               num--;
+              if(num<0){
+                that.isGetUers()
+                that.tEnd()
+              }
             },1000);
           }
           this.$mptoast(res.msg);
         })
       }
-      
     },
+
     firstOp(type){
       let that = this,
           beforeCreateStep = this.beforeCreateStep;
@@ -570,7 +576,7 @@ export default {
     wx.getSystemInfo({
       success: function(res) {
         that.systemInfo = res
-        if(res.screenHeight>780){
+        if(res.model.toString().indexOf("iPhone X") != -1){
            that.adaptive = 'ten'
         }else if(res.screenHeight<650){
            that.adaptive = 'small'
@@ -610,9 +616,15 @@ export default {
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
           that.isCooling = true
+          let num = res.data.rest_time
           that.interval = setInterval(()=>{
-            that.transformTime(res.data.rest_time)
-            res.data.rest_time --
+            that.transformTime(num)
+            num --
+
+            if(num<0){
+              that.isGetUers()
+              that.tEnd()
+            }
           },1000);
         }
         this.$mptoast(res.msg)

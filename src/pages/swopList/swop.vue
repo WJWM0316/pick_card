@@ -228,7 +228,6 @@
     onLoad () {
       let that = this;
 
-      this.isShow = true
       getLikeList().then((res)=>{
         console.log('=====',res)
         that.listData = res.data

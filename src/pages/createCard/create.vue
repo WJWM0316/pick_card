@@ -1,6 +1,6 @@
 
 <template>
-  <div class="container" >
+  <div class="container " :class="{'small': adaptive == 'small'}">
     <view class="hintJoined " v-if="relevance && nowNum == 0">
      <image class="hint_img" src="/static/images/new_pic_alert@3x.png"></image>
       <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有 对应账号，已自动加载相关信息</view>
@@ -194,6 +194,7 @@
         isShow: false,
         userInfo: {},
         relevance: false,  //是否有关联
+        adaptive: null,
       }
     },
     computed: {
@@ -528,6 +529,7 @@
       let data = {
         labelType: '1,2,3,4' //标签类型。1擅长领域,2生活标签,3职业方向,4职业素养
       } 
+      that.adaptive = wx.getStorageSync('adaptive')
       if(this.$store.getters.userInfo){
         let userInfo = this.$store.getters.userInfo
         if(userInfo.is_zike){
@@ -588,7 +590,25 @@
   width: 500rpx;
 }
   .container {
-    //padding-bottom: 160rpx;
+    &.small {
+      .one_txt {
+        margin: 30rpx 0 50rpx 0;
+      }
+      .img_wrap {
+        width: 300rpx;
+        height: 300rpx;
+      }
+      .one_name {
+        margin:30rpx auto 40rpx auto;
+
+      }
+      .one_gender {
+        .gender{
+          width: 110rpx;
+          height: 110rpx;
+        }
+      }
+    }
   }
   .pop_warp {
     position: fixed;
@@ -779,8 +799,8 @@
       .img_wrap {
         width: 360rpx;
         height: 360rpx;
-        //border: 1rpx dashed #cccccc;
         border-radius:18rpx;
+        overflow: hidden;
         position: relative;
         margin: 0 auto;
         .pic {
@@ -827,8 +847,8 @@
         align-items: center;
         border-radius: 50%;
         image {
-          width:130rpx;
-          height:130rpx;
+          width:100%;
+          height:100%;
         }
       }
       .boy {
