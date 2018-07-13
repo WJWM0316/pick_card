@@ -10,9 +10,14 @@
           <image src="/static/images/cardcase_banner_left@3x.png"></image>
           分享我的名片
         </button>
-        <button open-type="share" data-type="flock" class="ops_blo createFlock" @tap="createFlock">
+
+        <button class="ops_blo createFlock" open-type="share" data-type="flock" v-if="firstCreateFlock>0">
           <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
         </button>
+        <button  @tap="openPop"  class="ops_blo createFlock" v-else>
+          <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
+        </button>
+
       </view>
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
           <block v-if="nowIndex == 0">
@@ -56,12 +61,29 @@
             <block  v-else>
               <view class="none_blo">
                 <view class="none_txt">创建群名片，把微信群友变成你的职场人脉</view>
-                <button class="none_btn" data-type="flock" open-type="share">去创建 </button>
+                <button class="none_btn" data-type="flock" open-type="share"  v-if="firstCreateFlock>0">去创建 </button>
+                <button class="none_btn" @tap="openPop"  v-else>去创建 </button>
               </view>
             </block>
           </block>
       </view>
     </view>
+
+      <view class="hintPop" v-if="isShow">
+        <!-- 分享弹窗 -->
+        <view class="hint_cont" > 
+          <view class="cont_tit" >小阔爱，sorry啦~</view>
+          <view class="cont_txt">因为微信平台有限制。你分享之后，需要 到对应的微信群聊里边，点击你分享的小 程序卡片才能成功创建群名片喔~</view>
+          <view class="cont_line"></view>
+
+          <view class="cont_tit2">步骤详解：</view>
+          <view class="cont_txt2">1.点击创建群名片——分享群名片到相应群 </view>
+          <view class="cont_txt2">2.打开需要创建群名片的微信群聊 </view>
+          <view class="cont_txt2">3.点击你分享的小程序卡片 </view>
+          <view class="cont_txt2">4.完成创建</view>
+          <button class="cont_btn " data-type="flock" open-type="share">知道了</button>
+        </view>
+      </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
     <footerTab :type=2 :adaptive=adaptive :isRed=swopRed></footerTab>
@@ -94,8 +116,10 @@ export default {
       adaptive: null,
       swopRed: 0,
       topRed: {},
-      shareData: {},
-      shareInfo: {}
+      shareData: {},    //
+      shareInfo: {},   //分享信息
+      isShow: false,   //创建群提示
+      firstCreateFlock: true, //是否第一次创建群
     }
   },
 
@@ -111,8 +135,10 @@ export default {
         url: `/pages/index/main`
       })
     },
-    createFlock(){
-
+    openPop(){
+      this.isShow = true
+      this.firstCreateFlock = 1
+      wx.setStorageSync('firstCreateFlock', 1)
     },
     toFlock (res) {
       if(res.openGid){
@@ -138,6 +164,12 @@ export default {
   },
   onLoad() {
     let that = this;
+    let firstCreateFlock =  wx.getStorageSync('firstCreateFlock');
+
+    console.log(firstCreateFlock)
+    if(firstCreateFlock>0){
+      this.firstCreateFlock = 1
+    }
 
     this.shareInfo = Vue.prototype.$store.getters.shareInfo
     console.log(Vue.prototype.$store.getters.shareInfo) 
@@ -209,6 +241,8 @@ export default {
 
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
+
+        that.isShow = false;
         title = that.shareInfo.sharGroupCard?that.shareInfo.sharGroupCard.content:'' 
         imageUrl = that.shareInfo.sharGroupCard.path?that.shareInfo.sharGroupCard.path:''
         path+='form=cardHolder&type=flock'
@@ -236,6 +270,72 @@ export default {
 
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
+  .hintPop {
+    background:rgba(0,0,0,0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+    .hint_cont{
+      width:670rpx;
+      background:rgba(255,255,255,1);
+      border-radius:18rpx;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+      box-sizing: border-box;
+      padding: 80rpx 70rpx 40rpx 70rpx;
+      text-align: left;
+      .cont_tit {
+        font-size:36rpx;
+        font-family:PingFangSC-Semibold;
+        color:rgba(53,57,67,1);
+        line-height:34rpx;
+        margin-bottom: 40rpx;
+      }
+      .cont_txt {
+        font-size:28rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(154,161,171,1);
+        line-height:36rpx;
+      }
+      .cont_tit2 {
+        font-size:28rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(53,57,67,1);
+        line-height:40rpx;
+        margin-bottom: 14rpx;
+      }
+      .cont_txt2 {
+        font-size:28rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(154,161,171,1);
+        line-height:40rpx;
+      }
+      .cont_line {
+        width: 100%;
+        height: 2rpx;
+        background: rgba(221,221,221,1);
+        margin: 40rpx 0;
+      }
+      .cont_btn {
+        height:98rpx;
+        background:rgba(0,208,147,1);
+        border-radius:49rpx;
+        margin: 0 auto;
+        font-size:32rpx;
+        font-family:PingFangSC-Regular;
+        color:rgba(255,255,255,1);
+        line-height:98rpx;
+        text-align: center;
+        margin-top: 60rpx;
+      }
+    }
+  }
   .container {
     height: 100vh;
     //height: 930rpx;
@@ -411,7 +511,7 @@ export default {
             border-radius: 50%;
             background:rgba(255,102,102,1);
             position: absolute;
-            top: 27rpx;
+            top: 33rpx;
             left: 50rpx;
           }
         }

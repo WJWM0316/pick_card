@@ -57,14 +57,16 @@
             <view class="cool_time">{{coolTime}}</view>
             <view class="cool_cont">
               <view class="blo_hint_txt">你已经看了很多新朋友了，休息一下吧~</view>
-              <view class="blo_hint_txt">分享邀请3位新朋友，即可立刻刷新冷却时间</view>
+              <view class="blo_hint_txt">你也可以分享自己的名片给好友，</view>
+              <view class="blo_hint_txt">分享邀请3位新朋友，即可立刻刷新冷却时间哦～</view>
             </view>
         </view>
         <!-- 到底 -->
         <view class="peop_blo blo_type2 blo_end" v-if="isEnd">
             <image class="end_img" src="/static/images/home_dafulpage_pic_nomore@3x.png"></image>
             <view class="end_cont">
-              <view class="blo_hint_txt">很遗憾...暂时没有新的朋友啦，建议你放宽 筛选范围。也可以分享给小伙伴们，大家 一起来玩趣名片哦！</view>
+              <view class="blo_hint_txt">好友名片已经到底啦～放宽筛选范围试试吧 </view>
+              <view class="blo_hint_txt">也可邀请好友一起来玩趣名片哦～</view>
             </view>
         </view>
         <view class="btns" >
@@ -92,6 +94,7 @@
         ></image>
       </view>
     </view>
+
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
     <!-- <view class="footer " >
@@ -143,6 +146,9 @@
         <button class="btn" @tap="isCreate" type="primary">创建自己的名片</button>
       </view>
     </view>
+
+    <!-- 同意弹窗 -->
+    <hintPop :type='consent' :consentForm="index" :isShow=isShow :consentNowItem=nowItem ></hintPop>
   </view>
 </template>
 <script>
@@ -550,7 +556,7 @@ export default {
     }
 
     return {
-      title: '趣名片',
+      title: title,
       path: path,
       imageUrl: imageUrl
     }
@@ -634,7 +640,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     &.small{
-      height: 1020rpx;
+      //height: 1020rpx;
       .content {
         top: -66rpx;
         height: 736rpx;
@@ -658,6 +664,48 @@ export default {
           }
           .btns {
 
+          }
+          .blo_end {
+            padding: none;
+            .end_img {
+              width: 338rpx;
+              margin-top: 60rpx;
+              height: 454rpx;
+            }
+            .end_cont {
+              margin-top: 47rpx;
+              .blo_hint_txt {
+                font-family: PingFangSC-Light;
+                font-size: 26rpx;
+                color: #9AA1AB;
+                letter-spacing: 0;
+                text-align: center;
+                line-height: 37rpx;
+              }
+            }
+          }
+          .blo_cooling {
+            padding: none;
+            
+            .cool_time {
+              margin-top: 48rpx;
+            }
+            .cool_img {
+              width: 322rpx;
+              height: 358rpx;
+              margin-top: 49rpx;
+            }
+            .cool_cont {
+              padding: 0 13rpx;
+              .blo_hint_txt {
+                font-family: PingFangSC-Light;
+                font-size: 26rpx;
+                color: #9AA1AB;
+                letter-spacing: 0;
+                text-align: center;
+                line-height: 37rpx;
+              }
+            }
           }
         }
       }
@@ -901,7 +949,7 @@ export default {
           width:422rpx;
           height:568rpx;
           margin: 0 auto;
-          margin-top: 62rpx;
+          margin-top: 80rpx;
         }
         .blo_hint_txt {
           font-size:28rpx;
@@ -920,7 +968,7 @@ export default {
 
         }
         .end_cont {
-          margin-top: 30rpx;
+          margin-top: 54rpx;
         }
 
       }
