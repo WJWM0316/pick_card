@@ -69,6 +69,7 @@
     height:140rpx;
     background:rgba(250,251,252,1);
     text-align: center;
+    position: relative;
   }
   .swopList {
     background: #ffffff;

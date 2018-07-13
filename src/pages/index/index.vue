@@ -300,20 +300,23 @@ export default {
     }
   },
   onShow (res) {
-    console.log('show=======')
+    console.log('show=======',this.beforeCreateStep,this.onShowSock)
     let that = this
     if(this.onShowSock){
       this.onShowSock = false
     }else {
+      console.log(11111)
       getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
-        that.nowIndex = 0
         if(that.usersInfo.step!=9){
+          that.nowIndex = that.beforeCreateStep
           that.toCreate.isToCreate = false
           if(res.data.length<1 && value){
             that.isCreate()
             return
           }
+        }else {
+          that.nowIndex = 0
         }
         if (that.usersInfo.step === 9) {
           redDot().then(res=>{
