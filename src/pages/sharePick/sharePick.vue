@@ -1,8 +1,9 @@
 
 <template>
-  <view class="container" >
+  <view class="container">
+    <view class="bg">
     <view class="state_1" v-if="test">
-      <image  class="one_bg" :src="shareData.avatar.smallImgUrl" ></image>
+      <image  class="one_bg" src="/static/images/share_match_pic_share@3x.png"></image>
       <view class="cont_tit">哇，一张名片就勾搭到一位大咖！ 你也来试</view>
       <view class="cont_txt">Pick！趣名片，职场新人脉勾搭平台 有趣社交，从这里开始</view>
     </view>
@@ -13,7 +14,7 @@
           <view class="cont_txt">{{shareData.occupation}}</view>
           <view class="cont_txt">{{shareData.company}}</view>
         </view>
-        <image class="msg_right" ></image>
+        <image class="msg_right" v-if="shareData.avatar" :src="shareData.avatar[0].middleImgUrl"></image>
       </view>
       <image  class="two_bottom" src="/static/images/share_icon_chevron@3x.png" ></image>
       <view class="peaple">
@@ -30,13 +31,19 @@
         结识更多有趣的职场人
       </button>
     </view>
+    </view>
     <mptoast />
   </view>
 </template>
 <style lang="less" type="text/less" scoped>
   .container {
     height: 100vh;
-    background:rgba(250,251,252,1);
+    background: rgba(250,251,252,1) url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/share_bg1%402x.png') no-repeat top left;
+    background-size: 100% auto;
+    .bg {
+      background: url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/share_bg2%402x.png') no-repeat 0 474rpx;
+      background-size: 100% auto;
+    }
   }
   .state_2 {
     margin: 0 70rpx;

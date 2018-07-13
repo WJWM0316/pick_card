@@ -1,10 +1,12 @@
 <template>
 	<view class="poster">
 		<view class="wrap">
-			<canvas canvas-id="shareCanvas" id="myCanvas">
+			<canvas canvas-id="shareCanvas" id="myCanvas" :class="{'hidden' : showImg !== ''}">
 			</canvas>
+			<image class="showImg" :src="showImg"></image>
 		</view>
-		<cover-view @tap.stop="save" class="save"><cover-image class="icon" src="/static/images/share_btn_savepic@3x.png"></cover-image>&emsp;&emsp;保存图片</cover-view>
+		<button class="save" open-type="openSetting" v-if="openSet"><image class="icon" src="/static/images/share_btn_savepic@3x.png"></image>保存图片</button>
+		<button @tap.stop="save" class="save" v-else><image class="icon" src="/static/images/share_btn_savepic@3x.png"></image>保存图片</button>
 	</view>
 </template>
 <script>
@@ -14,6 +16,7 @@
 				imgH: 0,
 				imgW: 0,
 				showImg: '',
+				openSet: false,
 				info: {
 					nickname: '',
 					job: '',
@@ -23,18 +26,31 @@
 				imgUrl: ''
 			}
 		},
-		onLoad () {
+		onShow (option) {
+			let that = this
+			wx.getSetting({
+        success(res) {
+          console.log(res, res.authSetting['scope.writePhotosAlbum'])
+          if (res.authSetting['scope.writePhotosAlbum']) {
+          	that.openSet = false
+        	}
+        }
+      })
+			if (that.openSet) { return }
 			let userInfo = this.$store.getters.userInfo
 			this.info.nickname = userInfo.nickname
-			this.job = userInfo.occupation + ' | ' + userInfo.company
+			console.log(userInfo, 1111111)
+			this.info.job = userInfo.occupation + ' | ' + userInfo.company
 			this.info.sign = userInfo.sign
 			this.info.label = userInfo.other_info.label_info
 			this.imgUrl = userInfo.avatar_info.middleImgUrl
+			
 			wx.showLoading({
         title: '正在生成图片',
         mask: true
       })
 			this.create()
+			
 		},
 		methods: {
 			create () {
@@ -48,7 +64,7 @@
 							const ctx = wx.createCanvasContext('shareCanvas')
 
 							// 画布圆角
-							roundRect (0,0,320,750,9)
+							roundRect (0,0,320,550,9)
 							function roundRect (x, y, w, h, r) {
 								ctx.beginPath();
 								ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5  )
@@ -78,10 +94,10 @@
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
-					    ctx.fillText(that.info.nickname, 17, 230)
+					    ctx.fillText(that.info.nickname, 17, 240)
 
 					    ctx.setFontSize(16)
-					    ctx.fillText(that.info.job, 17, 265)
+					    ctx.fillText(that.info.job, 17, 260)
 
 					    ctx.setFontSize(14)
 					    ctx.setFillStyle('#9AA1AB')
@@ -104,6 +120,7 @@
 					    let lineNun = 1
 					    let nextLabel = true
 					    that.info.label.forEach((item, index) => {
+					    	console.log(111, item.name)
 					    	addLabel(item.name, index)
 					    })
 
@@ -114,7 +131,7 @@
 					    		return
 					    	}
 					    	// 下个标签的宽度
-								let newLabelWidth = ctx.measureText(that.info.label[index+1]).width + 2*r
+								let newLabelWidth = ctx.measureText(that.info.label[index+1].name).width + 2*r
 								let metrics = ctx.measureText(item).width // 文本宽度
 					    	// 判断是否超过两行切需要打点
 					    	console.log(lineNun, metrics, newLabelWidth, position.x, (position.x + metrics + 5), (newLabelWidth + position.x + metrics + 5) > (320-17))
@@ -122,10 +139,11 @@
 					    		metrics = ctx.measureText('....').width
 									ctx.fillText('....', position.x + r, position.y + r)
 					    	} else {
+					    		console.log(222, item)
 					    		metrics = ctx.measureText(item).width
 									ctx.fillText(item, position.x + r, position.y + r + 4)
 					    	}
-
+					    	console.log(item, 3333)
 					    	
 								ctx.beginPath()
 								ctx.moveTo(position.x + r, position.y)
@@ -194,36 +212,64 @@
 					    ctx.drawImage(that.imgUrl, 200, position.y + 18 + 10, 100, 100)
 
 					    ctx.draw(true, () => {
-					      wx.hideLoading()
+					    	wx.canvasToTempFilePath({
+								  x: 0,
+								  y: 0,
+								  width: 320,
+								  height: 550,
+								  destWidth: 960,
+								  destHeight: 1650,
+								  canvasId: 'shareCanvas',
+								  success: function(res) {
+								  	that.showImg = res.tempFilePath
+								  	wx.hideLoading()
+								  } 
+								})
+					      
 					    })
 					  }
 					}
 				})
-				
 			},
 			save () {
-				const that = this
-				wx.canvasToTempFilePath({
-				  x: 0,
-				  y: 0,
-				  canvasId: 'shareCanvas',
-				  success: function(res) {
-				  	that.showImg = res.tempFilePath
-				  	wx.saveImageToPhotosAlbum({
-              filePath: that.showImg,
-              success: function (e) {
-                console.log('保存成功', e)
-                wx.showToast({
-                  title: '已保存至您的相册',
-                  icon: 'success'
-                })
-              },
-              fail: function (e) {
-                console.log('保存失败', e)
-              }
-            })
-				  } 
-				})
+				let that = this
+				wx.getSetting({
+	        success(res) {
+	          console.log(res, res.authSetting['scope.writePhotosAlbum'])
+	          if (!res.authSetting['scope.writePhotosAlbum']) {
+	            wx.authorize({
+	              scope: 'scope.writePhotosAlbum',
+	              success() {
+	                that.openSet = false
+	                svae()
+	              },
+	              fail (res) {
+	                if (res.errMsg === 'authorize:fail auth deny') {
+	                  that.openSet = true
+	                } 
+	              }
+	            })
+	          } else {
+	          	svae()
+	          }
+	         }
+	      })
+	      function svae () {
+	      	wx.saveImageToPhotosAlbum({
+	          filePath: that.showImg,
+	          success: function (e) {
+	            console.log('保存成功', e)
+	            wx.showToast({
+	              title: '已保存至您的相册',
+	              icon: 'success'
+	            })
+	          },
+	          fail: function (e) {
+	            console.log('保存失败', e)
+	          }
+	        })
+	      }
+				
 			}
 		},
 
@@ -237,13 +283,22 @@
 		box-sizing: border-box;
 		padding: 20rpx 0 100rpx;
 		box-shadow:0px 17px 28px 0px rgba(52,62,59,0.03);
+		overflow-y:auto;
 		.wrap {
-			width: 335px;
-			height: 600px;
+			width: 320px;
+			height: 550px;
 			margin: 0 auto;
 			#myCanvas {
 				width: 320px;
-				height: 570px;
+				height: 550px;
+				&.hidden {
+					width: 0;
+					height: 0;
+				}
+			}
+			.showImg {
+				width: 640rpx;
+				height: 1100rpx;
 			}
 		}
 		.save {
@@ -268,6 +323,7 @@
 		.icon {
 			width: 33rpx;
 			height: 28rpx;
+			margin-right: 24rpx;
 			vertical-align: -6rpx;
 		}
 }

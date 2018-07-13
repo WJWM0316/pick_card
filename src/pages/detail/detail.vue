@@ -3,10 +3,16 @@
 		<!-- 主要展示 -->
 		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 0">
 			{{userInfo.apply_count}}人想得到你的名片
-			<view class="flaunt"><button open-type="share" class="xuyao">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></button></view>
+			<view class="flaunt"><button open-type="share" data-type="flaunt" class="xuyao">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></button></view>
 		</view>
 		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 0}">
-			<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
+			<view class="positon">
+				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
+				<view class="floor" v-if="!isSelf">
+					<image class="icon toIndex" @tap="toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
+					<button open-type="share" data-type="myShare"><image class="icon toShare" @tap="toShare" src="/static/images/float_btn_share@3x.png"></image></button>
+				</view>
+			</view>
 			<view class="content">
 				<view class="mycard" v-if="!isSelf && myCard" @tap.stop="jumpMy">
 					<image class="icon" src="/static/images/float_icon_add@3x.png"></image>
@@ -127,6 +133,7 @@
 	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike} from '@/api/pages/user'
 	import {formatTime} from '@/utils/index'
 	import authorizePop from '@/components/authorize'
+	import {getShareImg} from '@/api/pages/login'
 	export default {
 		components: {
 			authorizePop
@@ -145,7 +152,8 @@
 				showEducationNum: 2,
 				checkedTextList: [],
 				nowTime: '',
-				myCard: false
+				myCard: false,
+				isShareImg: ''
 			}
 		},
 		onLoad (option) {
@@ -190,16 +198,26 @@
 					that.getOtherUserInfo()
 				}
 			}
+
+			
 		},
 		onShareAppMessage: function (res) {
 	    if (res.from === 'button') {
 	      // 来自页面内转发按钮
 	      console.log(res.target)
-      	return {
-		      title: this.$store.getters.shareInfo.showCard.content,
-		      path: `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me`,
-		      imageUrl: this.$store.getters.shareInfo.showCard.path
-		    }
+	      if (res.target.type === 'flaunt') {
+	      	return {
+			      title: this.$store.getters.shareInfo.showCard.content,
+			      path: `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.showCard.type}`,
+			      imageUrl: this.$store.getters.shareInfo.showCard.path
+			    }
+	      } else {
+	      		return {
+			      title: this.$store.getters.shareInfo.otherCard.content,
+			      path: `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.otherCard.type}`,
+			      imageUrl: this.isShareImg
+			    }
+	      }
 	    }
 	  },
 		methods: {
@@ -251,6 +269,11 @@
 			jumpMy () {
 				wx.navigateTo({
 	        url: `/pages/createCard/main`
+	      })
+			},
+			toIndex () {
+				wx.navigateTo({
+	        url: `/pages/index/main`
 	      })
 			},
 			toEdit (type, id) {
@@ -310,6 +333,24 @@
 						this.checkedTextList.push(e.name)
 					})
 					this.nowTime = formatTime(new Date(), 'YYYY-MM')
+					if (!this.isShareImg) {
+			      let data = {
+			      	uid: this.userInfo.id,
+			      	name: this.userInfo.nickname,
+			      	img: this.userInfo.avatar_info.smallImgUrl,
+			      	occupation: this.userInfo.occupation,
+			      	company: this.userInfo.company,
+			      	label: [],
+			      }
+			      this.userInfo.other_info.realm_info.forEach(item => {
+			      	data.label.push(`${item.name} | `)
+			      })
+			      data.label = data.label.join('')
+			      data.label = data.label.slice(0, data.label.length-3)
+			      getShareImg(data).then(res => {
+			      	this.isShareImg = res.data
+			      })
+	 			 	}
 				})
 			},
 			previewImg (index) {
@@ -365,7 +406,6 @@
 			background: #fff;
 			border-radius: 18rpx;
 			margin-bottom: 30rpx;
-			overflow: hidden;
 			box-shadow:0px 10px 30px 0px rgba(153,193,214,0.1), 0px -5px 40px 0px rgba(153,193,214,0.08);
 			&.more {
 				margin-bottom: 0;
@@ -375,6 +415,33 @@
 			.headImg {
 				width: 670rpx;
 				height: 670rpx;
+				border-radius: 18rpx 18rpx 0 0;
+			}
+			.positon {
+				position: relative;
+			}
+			.floor {
+				width: 174rpx;
+				height: 72rpx;
+				display: flex;
+				justify-content:center;
+				align-items:center;
+				position: absolute;
+				top: 54rpx;
+				right: -40rpx;
+				background:rgba(53,57,67,0.3);
+				border-radius:36rpx 0px 0px 36rpx;
+				.icon {
+					width: 32rpx;
+					height: 32rpx;
+					&.toIndex {
+						padding-right: 24rpx;
+						border-right: 1rpx solid #fff;
+					}
+					&.toShare {
+						padding-left: 24rpx;
+					}
+				}
 			}
 			&.mTop {
 				margin-top: 70rpx;

@@ -27,8 +27,7 @@
 					</view>
 				</view>
 				<button open-type="share" class="share">发名片</button>
-				<button class="save" open-type="openSetting" v-if="openSet">保存我的名片</button>
-				<button class="save" @tap="toSaveImg" v-else>保存我的名片</button>
+				<button class="save" @tap="toSaveImg">保存我的名片</button>
 			</view>
 			<viwe class="setting">
 				<view class="inner">
@@ -133,7 +132,7 @@
 			      getShareImg(data).then(res => {
 			      	this.isShareImg = res.data
 			      })
-		      }
+		  }
 		},
 		onShareAppMessage: function (res) {
 	    if (res.from === 'button') {
@@ -141,7 +140,7 @@
 	      console.log(res.target)
       	return {
 		      title: this.shareInfo.mycard.content,
-		      path: `pages/detail/main?vkey=${this.info.vkey}`,
+		      path: `pages/detail/main?vkey=${this.info.vkey}&shareUid=${this.info.vkey}&shareType=${this.$store.getters.shareInfo.mycard.type}`,
 		      imageUrl: this.isShareImg
 		    }
 	    }
@@ -158,34 +157,8 @@
 	      })
 			},
 			toSaveImg () {
-				let that = this
-				wx.getSetting({
-	        success(res) {
-	          console.log(res, res.authSetting['scope.writePhotosAlbum'])
-	          if (!res.authSetting['scope.writePhotosAlbum']) {
-	            wx.authorize({
-	              scope: 'scope.writePhotosAlbum',
-	              success() {
-	                that.openSet = false
-	                wx.navigateTo({
-						        url: `/pages/poster/main`
-						      })
-	              },
-	              fail (res) {
-	                if (res.errMsg === 'authorize:fail auth deny') {
-	                  that.openSet = true
-	                } 
-	              }
-	            })
-	          } else {
-	          	wx.navigateTo({
-				        url: `/pages/poster/main`
-				      })
-	          }
-	        },
-	        fail(res) {
-	          console.log(res, 1)
-	        }
+      	wx.navigateTo({
+	        url: `/pages/poster/main`
 	      })
 			},
 			service () {
