@@ -305,9 +305,14 @@
 			},
 			remove () {
 				let _this = this
+				let title = ''
+				if (this.option.type === 'work') {
+					title = '是否删除本段工作经历'
+				} else {
+					title = '是否删除本段教育经历'
+				}
 				wx.showModal({
-					title: '提示',
-					content: '是否确定删除',
+					content: title,
 					success: function (res) {
 						if (res.confirm) {
 				      function removeFun () {

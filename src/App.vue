@@ -168,7 +168,9 @@ page {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
+* {
+  -webkit-tap-highlight-color: rgba(200,200,200,0);
+}
 button {
   content: "";  
   border:0; padding: 0; margin: 0;
