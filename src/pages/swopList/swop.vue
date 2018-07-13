@@ -10,7 +10,7 @@
     <view class="swopList" v-if="listData.length>0">
       <view class="swop_blo" v-for="(item, index) in listData" :key="key" @tap="toDetail(item)">
         <view class="blo_top">
-          <image class="avatar" :src="item.avatar_info" v-if="item.avatar_info"></image>
+          <image class="avatar" :src="item.apply_user_info.avatar_info.smallImgUrl" v-if="item.apply_user_info&&item.apply_user_info.avatar_info&&item.apply_user_info.avatar_info.smallImgUrl"></image>
           <image  class="avatar" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
 
           <view class="msg_detail ellipsis">
