@@ -660,7 +660,7 @@ export default {
         uid: usersInfo.id,
         name: usersInfo.nickname,
         img: usersInfo.avatar_info.smallImgUrl,
-        occupation: usersInfo.occupation,
+        occupation: usersInfo.occupation?usersInfo.occupation:'test',
         company: usersInfo.company,
         label: [],
       }
