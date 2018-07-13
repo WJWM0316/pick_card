@@ -204,10 +204,10 @@
 			    }
 	      } else {
 	      	if (!this.$store.getters.needAuthorize) {
-					authorizePop.methods.checkLogin().then(res => {
-					})
-					return
-				}
+						authorizePop.methods.checkLogin().then(res => {
+						})
+						return
+					}
 	      		return {
 			      title: this.$store.getters.shareInfo.otherCard.content,
 			      path: `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.otherCard.type}`,
@@ -288,7 +288,7 @@
 	      })
 			},
 			toIndex () {
-				wx.navigateTo({
+				wx.reLaunch({
 	        url: `/pages/index/main`
 	      })
 			},

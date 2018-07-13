@@ -11,7 +11,10 @@
         <view class="r_wrap cur" @tap="toIndex">
           <image class="r_icon" src="/static/images/float_btn_returnhome@3x.png"></image>
         </view>
-        <button class="r_wrap" open-type="share" data-type="flock">
+        <view class="r_wrap" v-if="!needAuthorize" @tap="toShare">
+          <image class="r_icon" src="/static/images/float_btn_share@3x.png"></image>
+        </view>
+        <button v-else class="r_wrap" open-type="share" data-type="flock">
           <image class="r_icon" src="/static/images/float_btn_share@3x.png"></image>
         </button>
       </view>
@@ -101,28 +104,16 @@ export default {
         vkey: res.vkey
       }
       
-      //是否登陆授权
-      if (!that.$store.getters.needAuthorize) {
-        authorizePop.methods.checkLogin().then(res => {
-          that.updateData()
-          isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
-            if(msg.code == 201){
-              that.isJoin = false
-            }else if(msg.code==0){
-              that.isJoin = true
-            }
-          })
-        })
-      } else {
-        that.updateData()
-        isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
-          if(msg.code == 201){
-            that.isJoin = false
-          }else if(msg.code==0){
-            that.isJoin = true
-          }
-        })
-      }
+
+      that.updateData()
+      isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
+        if(msg.code == 201){
+          that.isJoin = false
+        }else if(msg.code==0){
+          that.isJoin = true
+        }
+      })
+
     }else {
       that.$mptoast('缺少信息')
     }
@@ -152,18 +143,47 @@ export default {
     }
   },
   methods: {
+    toShare () {
+      if (!this.$store.getters.needAuthorize) {
+        authorizePop.methods.checkLogin().then(res => {
+        })
+        return
+      }
+    },
     toIndex () {
       wx.reLaunch({
         url: `/pages/index/main`
       })
     },
     toDetail (item) {
+      if (!this.$store.getters.needAuthorize) {
+        authorizePop.methods.checkLogin().then(res => {
+        })
+        return
+      }
+      if (this.$store.getters.userInfo.step !== 9) {
+        wx.navigateTo({
+          url: `/pages/createCard/main`
+        })
+        return
+      }
       console.log(item)
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
       })
     },
     join () {
+      if (!this.$store.getters.needAuthorize) {
+        authorizePop.methods.checkLogin().then(res => {
+        })
+        return
+      }
+      if (this.$store.getters.userInfo.step !== 9) {
+        wx.navigateTo({
+          url: `/pages/createCard/main`
+        })
+        return
+      }
       let that = this
       console.log('jiaru=========')
       joinUserGroup({userGroupId:this.msg.vkey}).then((res)=>{
@@ -181,6 +201,17 @@ export default {
     },
 
     quit () {
+      if (!this.$store.getters.needAuthorize) {
+        authorizePop.methods.checkLogin().then(res => {
+        })
+        return
+      }
+      if (this.$store.getters.userInfo.step !== 9) {
+        wx.navigateTo({
+          url: `/pages/createCard/main`
+        })
+        return
+      }
       let that = this
       wx.showModal({
         title: '提示',
@@ -210,6 +241,17 @@ export default {
     },
 
     swopSlock (id,index) {
+      if (!this.$store.getters.needAuthorize) {
+        authorizePop.methods.checkLogin().then(res => {
+        })
+        return
+      }
+      if (this.$store.getters.userInfo.step !== 9) {
+        wx.navigateTo({
+          url: `/pages/createCard/main`
+        })
+        return
+      }
       let that = this
       wx.showModal({
         content: '我要勾搭这个大咖',
@@ -429,8 +471,8 @@ export default {
     }
     .peoList {
       padding-bottom: 60rpx;
-
-      overflow-y:scroll; 
+      overflow-y:scroll;
+      -webkit-overflow-scrolling: touch;
     }
   }
   .footer {

@@ -78,10 +78,10 @@
           <view class="blo" v-for="(item, index) in thirdRule.liveData" :class="{'cur':item.isCur}" :key="key" @click="thirdOp(index,'live')">{{item.name}}</view>
         </view>
       </view>
-      <view class="table_blo row_style_three">
+      <view class="table_blo row_style_three" :class="{'signBox' : isPos}">
         <view class="tit">个性签名</view>
         <textarea maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="这个只有在按钮点击的时候才聚焦" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
-        v-if="!bindPhone.isPh" />
+        v-if="!bindPhone.isPh" @focus="isPos = true" @blur="isPos = false"/>
         <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
     </view>
@@ -195,6 +195,7 @@
         userInfo: {},
         relevance: false,  //是否有关联
         adaptive: null,
+        isPos: false
       }
     },
     computed: {
@@ -904,12 +905,23 @@
     &.op_third {
       .table_blo {
         margin-bottom: 56rpx;
-
+        
       }
     }
     .table_blo {
       margin-bottom: 80rpx;
       position: relative;
+      &.signBox {
+        width: 100%;
+        height: 100%;
+        padding: 0 40rpx;
+        box-sizing: border-box;
+        background: #fff;
+        position: fixed !important;
+        left: 0;
+        top: 0;
+        z-index: 10;
+      }
       .tit_small {
         font-size:26rpx;
         font-family:PingFangSC-Regular;

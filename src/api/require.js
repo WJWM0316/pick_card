@@ -52,6 +52,14 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
               util.unloading(isLoading)
               resolve(msg)
               break
+            case 401:
+              // 未登录 跳去首页
+              wx.reLaunch({
+                url: `/pages/index/main`
+              })
+              util.unloading(isLoading)
+              resolve(msg)
+              break
             default:
               util.unloading(isLoading)
               reject(msg)
