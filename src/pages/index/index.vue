@@ -199,7 +199,7 @@ export default {
       isPop: false,     //遮罩
       isCooling: false, //冷却
       isShare: false,    //分享弹窗
-      coolTime: 0,//冷却倒计时
+      coolTime: '00:00:00',//冷却倒计时
       isEnd: false,   //翻完
       isNext: true,  //翻页
 
@@ -459,9 +459,12 @@ export default {
       that.isCooling = true;
 
       that.interval = setInterval(()=>{
+        console.log(num)
         that.transformTime(num);
         num--;
         if(num<0){
+        console.log('========',num)
+
           that.isGetUers()
           that.tEnd()
         }
