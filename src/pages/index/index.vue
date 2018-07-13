@@ -199,7 +199,7 @@ export default {
       isPop: false,     //遮罩
       isCooling: false, //冷却
       isShare: false,    //分享弹窗
-      coolTime: 0,//冷却倒计时
+      coolTime: '00:00:00',//冷却倒计时
       isEnd: false,   //翻完
       isNext: true,  //翻页
 
@@ -377,6 +377,7 @@ export default {
     },
     isGetUers(){
       let that = this
+
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
@@ -388,20 +389,12 @@ export default {
           //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
-            that.isCooling = true;
-            let num = res.data.rest_time
-            that.interval = setInterval(()=>{
-              console.log(num)
-              that.transformTime(num);
-              num--;
-              if(num<0){
-                that.isGetUers()
-                that.tEnd()
-              }
-            },1000);
+            that.intervalTime(res.data.rest_time)
           }
           this.$mptoast(res.msg);
         })
+      }else {
+        that.isCooling = false
       }
     },
 
@@ -436,7 +429,6 @@ export default {
         that.isNext = true;
         that.isGetUers()
       },800)
-
     },
     like(msg){
       let that = this;
@@ -457,15 +449,33 @@ export default {
         },800)
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
-          that.isCooling = true
-          that.transformTime(res.data.rest_time)
+          that.intervalTime(res.data.rest_time)
         }
         that.$mptoast(res.msg)
         that.isNext = true
       })
     },
 
+    intervalTime(time){
+      let that = this
+      let num = time
+      that.isCooling = true;
+
+      that.interval = setInterval(()=>{
+        console.log(num)
+        that.transformTime(num);
+        num--;
+        if(num<0){
+        console.log('========',num)
+
+          that.isGetUers()
+          that.tEnd()
+        }
+      },1000);
+    },
+
     unlike(msg){
+
       let that = this
       indexUnlike(msg).then((res)=>{
 
@@ -568,6 +578,7 @@ export default {
     }
   },
   onLoad(res) {
+    console.log('onLoad=======')
     console.log(res)
     let that = this
     let value = wx.getStorageSync('pickCardFirst')
@@ -615,17 +626,7 @@ export default {
         }
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
-          that.isCooling = true
-          let num = res.data.rest_time
-          that.interval = setInterval(()=>{
-            that.transformTime(num)
-            num --
-
-            if(num<0){
-              that.isGetUers()
-              that.tEnd()
-            }
-          },1000);
+          that.intervalTime(res.data.rest_time)
         }
         this.$mptoast(res.msg)
       })
@@ -638,7 +639,8 @@ export default {
       this.getPage.realm_label_id = res.realm_label_id
     }
   },
-  onShow () {
+  onShow (res) {
+    console.log('show=======')
   }
 }
 </script>

@@ -47,7 +47,7 @@
           <block v-else>
             <view class="flockList" v-if="florkList && florkList.list&& florkList.list.length>0">
 
-              <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item)">
+              <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item,index)">
                 <view class="blo_msg flock_blo" :class="{'two': item.userGroupTabRedDot == 1}" >
                   <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
                   <image class="blo_img"  src="/static/images/new_pic_defaulhead.jpg" v-else></image>
@@ -119,7 +119,7 @@ export default {
       shareData: {},    //
       shareInfo: {},   //分享信息
       isShow: false,   //创建群提示
-      firstCreateFlock: true, //是否第一次创建群
+      firstCreateFlock: 0, //是否第一次创建群
     }
   },
 
@@ -140,8 +140,12 @@ export default {
       this.firstCreateFlock = 1
       wx.setStorageSync('firstCreateFlock', 1)
     },
-    toFlock (res) {
+    toFlock (res,index) {
+      console.log(index)
       if(res.openGid){
+        this.florkList.list[index].newJoinMemberCount = 0
+        this.florkList.list[index].userGroupTabRedDot = 0
+        this.swopRed = 0
         wx.navigateTo({
           url: `/pages/flock/main?id=${res.openGid}&vkey=${res.vkey}`
         })
@@ -166,7 +170,7 @@ export default {
     let that = this;
     let firstCreateFlock =  wx.getStorageSync('firstCreateFlock');
 
-    console.log(firstCreateFlock)
+    console.log('=-=-=',firstCreateFlock)
     if(firstCreateFlock>0){
       this.firstCreateFlock = 1
     }
@@ -189,17 +193,17 @@ export default {
     },(res)=>{})
 
     getUserInfoApi().then(data => {
-      let usersInfo = data.data
+      that.usersInfo = data.data
       let msg = {
-        uid: usersInfo.id,
-        name: usersInfo.name,
-        img: usersInfo.avatar_info.smallImgUrl,
-        occupation: usersInfo.occupation,
-        company: usersInfo.company,
+        uid: that.usersInfo.id,
+        name: that.usersInfo.name,
+        img: that.usersInfo.avatar_info.smallImgUrl,
+        occupation: that.usersInfo.occupation,
+        company: that.usersInfo.company,
         label: [],
       }
 
-      usersInfo.other_info.realm_info.forEach(item => {
+      that.usersInfo.other_info.realm_info.forEach(item => {
         msg.label.push(`${item.name} | `)
       })
 
@@ -240,8 +244,8 @@ export default {
       if(res.target.dataset.type=="flock"){
 
         that.isShow = false;
-        title = that.shareInfo.sharGroupCard?that.shareInfo.sharGroupCard.content:'' 
-        imageUrl = that.shareInfo.sharGroupCard.path?that.shareInfo.sharGroupCard.path:''
+        title = that.shareInfo.createGroupCard?that.shareInfo.createGroupCard.content:'' 
+        imageUrl = that.shareInfo.createGroupCard.path?that.shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
       }
       if(res.target.dataset.type=="me"){
@@ -550,6 +554,8 @@ export default {
           font-family:PingFangHK-Medium;
           color:rgba(70,71,72,1);
           line-height:34rpx;
+          height: 38rpx;
+
         }
         .msg_tit {
           font-size:28rpx;
