@@ -17,7 +17,7 @@
       <div
         class="getCropperImage"
         @tap="getCropperImage">
-        裁剪图片
+        完成
       </div>
     </div>
   </div>
