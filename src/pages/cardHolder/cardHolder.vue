@@ -119,7 +119,7 @@ export default {
       shareData: {},    //
       shareInfo: {},   //分享信息
       isShow: false,   //创建群提示
-      firstCreateFlock: true, //是否第一次创建群
+      firstCreateFlock: 0, //是否第一次创建群
     }
   },
 
@@ -166,7 +166,7 @@ export default {
     let that = this;
     let firstCreateFlock =  wx.getStorageSync('firstCreateFlock');
 
-    console.log(firstCreateFlock)
+    console.log('=-=-=',firstCreateFlock)
     if(firstCreateFlock>0){
       this.firstCreateFlock = 1
     }
@@ -240,8 +240,8 @@ export default {
       if(res.target.dataset.type=="flock"){
 
         that.isShow = false;
-        title = that.shareInfo.sharGroupCard?that.shareInfo.sharGroupCard.content:'' 
-        imageUrl = that.shareInfo.sharGroupCard.path?that.shareInfo.sharGroupCard.path:''
+        title = that.shareInfo.createGroupCard?that.shareInfo.createGroupCard.content:'' 
+        imageUrl = that.shareInfo.createGroupCard.path?that.shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
       }
       if(res.target.dataset.type=="me"){
@@ -550,6 +550,8 @@ export default {
           font-family:PingFangHK-Medium;
           color:rgba(70,71,72,1);
           line-height:34rpx;
+          height: 38rpx;
+          
         }
         .msg_tit {
           font-size:28rpx;
