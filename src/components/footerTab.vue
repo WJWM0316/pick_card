@@ -91,6 +91,11 @@
             break
         }
       },
+      toPic () {
+        wx.navigateTo({
+          url: '/pages/poster/main'
+        })
+      },
       isShare () {
         if (this.$store.getters.userInfo.step !== 9) {
           this.toCreateCard()

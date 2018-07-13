@@ -1,10 +1,8 @@
 <template>
 	<view class="poster">
 		<view class="wrap">
-			<scroll-view>
-				<canvas canvas-id="shareCanvas" id="myCanvas">
-				</canvas>
-			</scroll-view>
+			<canvas canvas-id="shareCanvas" id="myCanvas">
+			</canvas>
 		</view>
 		<cover-view @tap.stop="save" class="save"><cover-image class="icon" src="/static/images/share_btn_savepic@3x.png"></cover-image>&emsp;&emsp;保存图片</cover-view>
 	</view>
