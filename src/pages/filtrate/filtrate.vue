@@ -58,11 +58,15 @@
         if(occupation_label_id == 0 && realm_label_id == 0){
           url = '/pages/index/main'
         }
-
+        let data = {
+          occupation_label_id: occupation_label_id,
+          realm_label_id: realm_label_id
+        }
+        wx.setStorageSync('labelId', data)
         let url =  `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
 
         console.log(url)
-        wx.redirectTo({
+        wx.navigateTo({
           url:url
         })
       },
@@ -116,6 +120,7 @@
       }
     },
     onLoad(){
+
       let that = this
       let data = {
         labelType: '1,3'
@@ -128,6 +133,21 @@
       　 });
         that.jobData = [{id:0,name:'不限',isCur:true},...res.data[1].son]
         that.liveData = [{id:0,name:'不限',isCur:true},...res.data[0].son]
+        if (wx.getStorageSync('labelId')) {
+          let labelId = wx.getStorageSync('labelId')
+          console.log(11111, labelId.occupation_label_id.split(','))
+          labelId.occupation_label_id.split(',').forEach((e, i) => {
+            that.jobData.forEach((j, k) => {
+              if (j.id == e) {
+                that.jobData[k].isCur = true
+                return
+              }
+            })
+          })
+          labelId.realm_label_id.forEach(e => {
+            that.liveData[e].isCur = true
+          })
+        }
       },(res)=>{
         
       })

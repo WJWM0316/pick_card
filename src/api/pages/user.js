@@ -182,6 +182,17 @@ export const delLike = (data) => {
   })
 }
 
+//删除好友
+export const delFriend = (data) => {
+  return request({
+    method: 'delete',
+    url: `/cur/friends/${data.id}`,
+    data
+  })
+}
+
+
+
 //首页卡片不喜欢
 export const indexUnlike = (data) => {
   return request({

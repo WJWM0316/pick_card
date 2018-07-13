@@ -122,15 +122,17 @@
 			</view>
 		</view>
 		<view class="btnControl" v-if="!isSelf">
+			<button class="btn apply" @tap="applyFun('authorize')" v-if="userInfo.handle_status === 0">申请和TA交换名片</button>
 			<button class="btn apply" @tap="applyFun('launch')" v-if="userInfo.handle_status === 1">申请和TA交换名片</button>
 			<button class="btn applying" v-if="userInfo.handle_status === 2" disabled=true>已申请和TA交换名片</button>
 			<button class="btn applyed" @tap="applyFun('agree')" v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
 			<button class="btn remove" @tap="applyFun('remove')" v-if="userInfo .handle_status === 4">移除名片</button>
 		</view>
+		<authorize-pop></authorize-pop>
 	</view>
 </template>
 <script>
-	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike} from '@/api/pages/user'
+	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike, delFriend} from '@/api/pages/user'
 	import {formatTime} from '@/utils/index'
 	import authorizePop from '@/components/authorize'
 	import {getShareImg} from '@/api/pages/login'
@@ -244,11 +246,14 @@
 				}
 			},
 			applyFun (type) {
+				if (type === "authorize") {
+					this.$store.dispatch('needAuthorize', true)
+				}
 				if (this.$store.getters.userInfo.step !== 9) {
 					this.jumpMy()
 					return
 				}
-				const data = {
+				let data = {
 					to_uid: this.userInfo.id,
 					remarks: '约么'
 				}
@@ -257,11 +262,21 @@
 						this.userInfo.handle_status = 2
 					})
 				} else if (type === 'agree') {
+					data = {
+						id: this.userInfo.handle_apply_info.id,
+						status: 1,
+						remarks: '约么'
+					}
 					putLike(data).then(res => {
 						this.userInfo.handle_status = 3
+						this.getOtherUserInfo()
 					})
 				} else {
-					delLike(data).then(res => {
+					data = {
+						id: this.userInfo.relation_info.id,
+						remarks: '约么'
+					}
+					delFriend(data).then(res => {
 						this.userInfo.handle_status = 1
 					})
 				}
