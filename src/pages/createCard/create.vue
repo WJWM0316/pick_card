@@ -248,11 +248,6 @@
             live = [],
             that = this;
 
-        if(that.isNull(that.thirdData.sign)){
-          that.$mptoast('个性签名不能含有空格，请重新输入')
-          return 
-        }
-
         that.thirdData['build_label_id'] = []
         that.thirdRule.job.forEach((value,index)=>{
           console.log(value)
@@ -555,7 +550,7 @@
           sign: userInfo.sign, //个性签名
         }
 
-        //userInfo.mobile=''
+        userInfo.mobile=''
         this.bindPhone.number = userInfo.mobile
         that.userInfo = userInfo
       }
