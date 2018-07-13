@@ -475,7 +475,7 @@ export default {
     },
 
     unlike(msg){
-      
+
       let that = this
       indexUnlike(msg).then((res)=>{
 
@@ -578,6 +578,7 @@ export default {
     }
   },
   onLoad(res) {
+    console.log('onLoad=======')
     console.log(res)
     let that = this
     let value = wx.getStorageSync('pickCardFirst')
@@ -638,7 +639,8 @@ export default {
       this.getPage.realm_label_id = res.realm_label_id
     }
   },
-  onShow () {
+  onShow (res) {
+    console.log('show=======')
   }
 }
 </script>

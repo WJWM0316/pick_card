@@ -47,7 +47,7 @@
           <block v-else>
             <view class="flockList" v-if="florkList && florkList.list&& florkList.list.length>0">
 
-              <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item)">
+              <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item,index)">
                 <view class="blo_msg flock_blo" :class="{'two': item.userGroupTabRedDot == 1}" >
                   <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
                   <image class="blo_img"  src="/static/images/new_pic_defaulhead.jpg" v-else></image>
@@ -140,8 +140,12 @@ export default {
       this.firstCreateFlock = 1
       wx.setStorageSync('firstCreateFlock', 1)
     },
-    toFlock (res) {
+    toFlock (res,index) {
+      console.log(index)
       if(res.openGid){
+        this.florkList.list[index].newJoinMemberCount = 0
+        this.florkList.list[index].userGroupTabRedDot = 0
+        this.swopRed = 0
         wx.navigateTo({
           url: `/pages/flock/main?id=${res.openGid}&vkey=${res.vkey}`
         })
@@ -551,7 +555,7 @@ export default {
           color:rgba(70,71,72,1);
           line-height:34rpx;
           height: 38rpx;
-          
+
         }
         .msg_tit {
           font-size:28rpx;
