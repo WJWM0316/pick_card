@@ -34,7 +34,7 @@
 				},
 				files: [],	// 图片数组
 				filesId: [], // 上传成功返回的id
-				count: 20,
+				count: 0,
 				oldNum: 0,
 				loading: false,
 			}
@@ -71,8 +71,12 @@
 			},
 			chooseImage(e) {
 	      const _this = this;
+	      let imgNum = 9
+	      if (20-this.count < 9) {
+	      	imgNum = this.count
+	      }
 	      wx.chooseImage({
-	      	count: 1, // 默认9
+	      	count: imgNum, // 默认9
 	        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
 	        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
 	        success: function (res) {

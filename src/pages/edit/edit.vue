@@ -203,10 +203,16 @@
 						size: info.size
 					}
 					this.filePath = info.path
+					wx.showLoading({
+					  title: '正在上传',
+					  duration: 1000,
+					  mask: true
+					})
 					uploadImage(data, {
 		        onItemSuccess: (resp, file, index) => {
 		        }
 		      }).then(res => {
+		      	wx.hideLoading()
 		        const cutImgInfo = {
 		          fileId: res.file.fileId,
 		          path: res.file.path,
