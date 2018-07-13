@@ -97,7 +97,7 @@
 
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <!-- <view class="footer " >
+    <view class="footer " >
       <view class="ft_warp">
         <view class="left">
           <view class="name "  @tap="testCreate">Pick</view>
@@ -113,8 +113,8 @@
           </view>
         </view>
       </view>
-    </view> -->
-    <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
+    </view>
+    <!-- <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab> -->
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -148,7 +148,7 @@
     </view>
 
     <!-- 同意弹窗 -->
-    <hintPop :type='consent' :consentForm="index" :isShow=isShow :consentNowItem=nowItem ></hintPop>
+    <hintPop :type='consent' :consentForm="index" :isShow=isShow :consentNowItem=nowItem @form-id.user="fromClick"></hintPop>
   </view>
 </template>
 <script>
@@ -341,6 +341,7 @@ export default {
       })
     },
     fromClick (e) {
+      console.log(e,22222)
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
         fromAddress: '/pages/index'
@@ -985,7 +986,7 @@ export default {
         display: block;
         //z-index: 100;
         text-align: center;
-        padding: 0 45rpx;
+        //padding: 0 45rpx;
         .cool_img {
           width:398rpx;
           height:442rpx;

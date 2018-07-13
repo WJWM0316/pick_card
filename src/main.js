@@ -26,6 +26,9 @@ export default {
       navigationBarTitleText: '趣名片',// 顶部栏中间标题
       navigationBarBackgroundColor: '#fff',  // 顶部栏背景色
       navigationBarTextStyle:"black"
+    },
+    networkTimeout: {
+      request: 15000,
     }
   }
 }

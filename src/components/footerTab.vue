@@ -11,7 +11,10 @@
           <view class="r_blo" @click="isShare">
             <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
           </view>
-          <view class="r_blo" @click="toSharePeo">
+          <view class="r_blo" >
+            <form report-submit="true" class="from-box" @submit="fromClick">
+                <button formType="submit" class="from-mask  "></button>
+            </form>
             <image class="detail" src="/static/images/home_tab_btn_info_nor@3x.png"></image>
           </view>
         </view>
@@ -65,6 +68,10 @@
       this.index = this.type
     },
     methods: {
+      fromClick (e) {
+        console.log(e)
+        this.$emit('form-id', e)
+      },
       toTab (type) {
         if (this.$store.getters.userInfo.step !== 9) {
           this.toCreateCard()
