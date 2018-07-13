@@ -234,7 +234,7 @@
             that.isShow = true
           }
         },(res)=>{
-          that.$mptoast('已发送','error',2000)
+          that.$mptoast(res.msg,'error',2000)
         })
       }
     },
