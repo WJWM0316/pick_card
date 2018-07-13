@@ -30,30 +30,6 @@
             <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
           </view>
         </view>
-        <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
-          <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
-            <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
-            <view class="msg_name ellipsis">{{item.nickname}}</view>
-            <view class="msg_tit ellipsis">{{item.occupation}}</view>
-            <view class="msg_company ellipsis">{{item.company}}</view>
-            <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
-            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
-            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
-          </view>
-        </view>
-        <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
-          <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
-            <image class="blo_img" :src="item.headimgurl" v-if="item.headimgurl"></image>
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
-            <view class="msg_name ellipsis">{{item.nickname}}</view>
-            <view class="msg_tit ellipsis">{{item.occupation}}</view>
-            <view class="msg_company ellipsis">{{item.company}}</view>
-            <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
-            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
-            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
-          </view>
-        </view>
       </view>
 
       <view class="hintJoin" v-if="!isJoin && isFirst">—— 加入后即可查看所有群成员的名片 ——</view>
@@ -366,7 +342,7 @@ export default {
           background:rgba(255,255,255,1);
           box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
           border-radius:18rpx;
-          padding: 56rpx 0 56rpx 120rpx;
+          padding: 56rpx 30rpx 56rpx 120rpx;
           box-sizing: border-box;
           text-align: left;
           position: relative;
@@ -388,6 +364,7 @@ export default {
             color:rgba(70,71,72,1);
             line-height:34rpx;
             width: 180rpx;
+            margin-right: 20rpx;
           }
           .msg_tit {
             font-size:28rpx;
