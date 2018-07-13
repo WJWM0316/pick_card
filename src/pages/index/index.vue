@@ -207,7 +207,131 @@ export default {
       beforeCreateStep: 0,
       swopRed: 0,   //交换红点
       shareData: {},
+
+      onShowSock: true
     }
+  },
+  onShareAppMessage: function (res) {
+    console.log(res)
+    let path = '/pages/index/main?'
+    let that = this
+    let title = '趣名片'
+    let imageUrl = ''
+    let shareInfo = Vue.prototype.$store.getters.shareInfo
+
+    wx.showShareMenu({
+      withShareTicket: true
+    })
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      if(res.target.dataset.type=="me"){
+        imageUrl = that.shareData.shareImg
+        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
+        title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片'
+      }
+    }
+
+    return {
+      title: title,
+      path: path,
+      imageUrl: imageUrl
+    }
+  },
+  onLoad(res) {
+    console.log('onLoad=======')
+    console.log(res)
+    let that = this
+    let value = wx.getStorageSync('pickCardFirst')
+    let beforeCreateStep =wx.getStorageSync('beforeCreateStep')&&wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
+    that.beforeCreateStep = beforeCreateStep;
+    wx.getSystemInfo({
+      success: function(res) {
+        that.systemInfo = res
+        if(res.model.toString().indexOf("iPhone X") != -1){
+           that.adaptive = 'ten'
+        }else if(res.screenHeight<650){
+           that.adaptive = 'small'
+        }
+
+        wx.setStorageSync('adaptive', that.adaptive)
+        console.log(res)
+      }
+    })
+
+    authorizePop.methods.checkLogin().then(res => {
+      if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
+         that.isFirst()
+      }
+      getIndexUsers(that.getPage).then((res)=>{
+        that.usersList = res.data
+        that.usersInfo = that.$store.getters.userInfo
+        console.log(that.usersInfo, '用户信息')
+        if(that.usersInfo.step!=9){
+          that.toCreate.isToCreate = false
+          if(res.data.length<1 && value){
+            that.isCreate()
+            return
+          }
+        }
+        if (that.usersInfo.step === 9) {
+          redDot().then(res=>{
+            that.swopRed = res.data.main_show_red_dot
+          })
+          that.getShareImg()
+        }
+        
+
+        if(res.data.length<1){
+          that.isEnd = true
+        }
+      },(res)=>{
+        if(res.http_status == 400 && res.code == 99){
+          that.intervalTime(res.data.rest_time)
+        }
+        this.$mptoast(res.msg)
+      })
+     
+    })
+
+    //筛选
+    if(res.from && res.from == 'filtrate'){
+      this.getPage.occupation_label_id = res.occupation_label_id
+      this.getPage.realm_label_id = res.realm_label_id
+    }
+  },
+  onShow (res) {
+    console.log('show=======')
+    let that = this
+    if(this.onShowSock){
+      this.onShowSock = false
+    }else {
+      getIndexUsers(that.getPage).then((res)=>{
+        that.usersList = res.data
+        that.nowIndex = 0
+        if(that.usersInfo.step!=9){
+          that.toCreate.isToCreate = false
+          if(res.data.length<1 && value){
+            that.isCreate()
+            return
+          }
+        }
+        if (that.usersInfo.step === 9) {
+          redDot().then(res=>{
+            that.swopRed = res.data.main_show_red_dot
+          })
+          that.getShareImg()
+        }
+        if(res.data.length<1){
+          that.isEnd = true
+        }
+      },(res)=>{
+        if(res.http_status == 400 && res.code == 99){
+          that.intervalTime(res.data.rest_time)
+        }
+        this.$mptoast(res.msg)
+      })
+    }
+
   },
   methods: {
     //测试去创建
@@ -550,97 +674,6 @@ export default {
       })
     },
 
-  },
-  onShareAppMessage: function (res) {
-    console.log(res)
-    let path = '/pages/index/main?'
-    let that = this
-    let title = '趣名片'
-    let imageUrl = ''
-    let shareInfo = Vue.prototype.$store.getters.shareInfo
-
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-    if (res.from === 'button') {
-      // 来自页面内转发按钮
-      if(res.target.dataset.type=="me"){
-        imageUrl = that.shareData.shareImg
-        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
-        title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片'
-      }
-    }
-
-    return {
-      title: title,
-      path: path,
-      imageUrl: imageUrl
-    }
-  },
-  onLoad(res) {
-    console.log('onLoad=======')
-    console.log(res)
-    let that = this
-    let value = wx.getStorageSync('pickCardFirst')
-    let beforeCreateStep =wx.getStorageSync('beforeCreateStep')&&wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
-    that.beforeCreateStep = beforeCreateStep;
-    wx.getSystemInfo({
-      success: function(res) {
-        that.systemInfo = res
-        if(res.model.toString().indexOf("iPhone X") != -1){
-           that.adaptive = 'ten'
-        }else if(res.screenHeight<650){
-           that.adaptive = 'small'
-        }
-
-        wx.setStorageSync('adaptive', that.adaptive)
-        console.log(res)
-      }
-    })
-
-    authorizePop.methods.checkLogin().then(res => {
-      if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
-         that.isFirst()
-      }
-      getIndexUsers(that.getPage).then((res)=>{
-        that.usersList = res.data
-        that.usersInfo = that.$store.getters.userInfo
-        console.log(that.usersInfo, '用户信息')
-        if(that.usersInfo.step!=9){
-          that.toCreate.isToCreate = false
-          if(res.data.length<1 && value){
-            that.isCreate()
-            return
-          }
-        }
-        if (that.usersInfo.step === 9) {
-          redDot().then(res=>{
-            that.swopRed = res.data.main_show_red_dot
-          })
-          that.getShareImg()
-        }
-        
-
-        if(res.data.length<1){
-          that.isEnd = true
-        }
-      },(res)=>{
-        if(res.http_status == 400 && res.code == 99){
-          that.intervalTime(res.data.rest_time)
-        }
-        this.$mptoast(res.msg)
-      })
-     
-    })
-
-    //筛选
-    if(res.from && res.from == 'filtrate'){
-      this.getPage.occupation_label_id = res.occupation_label_id
-      this.getPage.realm_label_id = res.realm_label_id
-    }
-  },
-  onShow (res) {
-    console.log('show=======')
   }
 }
 </script>
