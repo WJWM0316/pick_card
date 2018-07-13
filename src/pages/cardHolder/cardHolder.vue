@@ -38,7 +38,7 @@
             </view>
             <block  v-else>
               <view class="none_blo">
-                <view class="none_txt">分享我的名片，获取更多职场人脉</view>
+                <view class="none_txt">让名片替你说话，不动声色展现实力</view>
                 <button class="none_btn" data-type="me" open-type="share">去分享 </button>
               </view>
             </block>
