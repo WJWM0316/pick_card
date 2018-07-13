@@ -377,6 +377,7 @@ export default {
     },
     isGetUers(){
       let that = this
+
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
@@ -392,6 +393,8 @@ export default {
           }
           this.$mptoast(res.msg);
         })
+      }else {
+        that.isCooling = false
       }
     },
 
@@ -472,6 +475,7 @@ export default {
     },
 
     unlike(msg){
+      
       let that = this
       indexUnlike(msg).then((res)=>{
 

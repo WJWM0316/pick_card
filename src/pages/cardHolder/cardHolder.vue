@@ -189,17 +189,17 @@ export default {
     },(res)=>{})
 
     getUserInfoApi().then(data => {
-      let usersInfo = data.data
+      that.usersInfo = data.data
       let msg = {
-        uid: usersInfo.id,
-        name: usersInfo.name,
-        img: usersInfo.avatar_info.smallImgUrl,
-        occupation: usersInfo.occupation,
-        company: usersInfo.company,
+        uid: that.usersInfo.id,
+        name: that.usersInfo.name,
+        img: that.usersInfo.avatar_info.smallImgUrl,
+        occupation: that.usersInfo.occupation,
+        company: that.usersInfo.company,
         label: [],
       }
 
-      usersInfo.other_info.realm_info.forEach(item => {
+      that.usersInfo.other_info.realm_info.forEach(item => {
         msg.label.push(`${item.name} | `)
       })
 
