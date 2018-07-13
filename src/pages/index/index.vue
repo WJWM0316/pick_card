@@ -97,7 +97,7 @@
 
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <view class="footer " >
+    <!-- <view class="footer " >
       <view class="ft_warp">
         <view class="left">
           <view class="name "  @tap="testCreate">Pick</view>
@@ -113,8 +113,8 @@
           </view>
         </view>
       </view>
-    </view>
-    <!-- <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab> -->
+    </view> -->
+    <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
