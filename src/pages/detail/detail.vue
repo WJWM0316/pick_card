@@ -10,11 +10,12 @@
 				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
 				<view class="floor" v-if="!isSelf">
 					<image class="icon toIndex" @tap="toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
-					<button open-type="share" data-type="myShare"><image class="icon toShare" @tap="toShare" src="/static/images/float_btn_share@3x.png"></image></button>
+					<image class="icon toShare" v-if="!needAuthorize" @tap="toShare" src="/static/images/float_btn_share@3x.png"></image>
+					<button open-type="share" data-type="myShare" v-else><image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image></button>
 				</view>
 			</view>
 			<view class="content">
-				<view class="mycard" v-if="!isSelf && myCard" @tap.stop="jumpMy">
+				<view class="mycard" v-if="!isSelf && myCard || !needAuthorize" @tap.stop="jumpMy">
 					<image class="icon" src="/static/images/float_icon_add@3x.png"></image>
 					<text>我的名片</text>
 				</view>
@@ -155,7 +156,8 @@
 				checkedTextList: [],
 				nowTime: '',
 				myCard: false,
-				isShareImg: ''
+				isShareImg: '',
+				needAuthorize: false // 是否需要登录
 			}
 		},
 		onLoad (option) {
@@ -175,38 +177,25 @@
 			this.labelInfo = []
 			this.moreInfo = {}
 			this.checkedTextList = []
-			if (that.$store.getters.needAuthorize) {
-				authorizePop.methods.checkLogin().then(res => {
-					if (that.isSelf) {
-						console.log('是本人')
-						that.getUserUnfo()
-					} else {
-						console.log('非本人')
-						if (that.$store.getters.userInfo.step < 9) {
-							that.myCard = true
-						}
-						that.getOtherUserInfo()
-					}
-				})
+			this.needAuthorize = this.$store.getters.needAuthorize
+			if (that.isSelf) {
+				console.log('是本人')
+				that.getUserUnfo()
 			} else {
-				if (that.isSelf) {
-					console.log('是本人')
-					that.getUserUnfo()
-				} else {
-					console.log('非本人')
-					if (that.$store.getters.userInfo.step < 9) {
-						that.myCard = true
-					}
-					that.getOtherUserInfo()
+				console.log('非本人')
+				if (that.$store.getters.userInfo.step < 9) {
+					that.myCard = true
 				}
+				that.getOtherUserInfo()
 			}
-
-			
 		},
 		onShareAppMessage: function (res) {
+
 	    if (res.from === 'button') {
 	      // 来自页面内转发按钮
+	      
 	      console.log(res.target)
+	      
 	      if (res.target.type === 'flaunt') {
 	      	return {
 			      title: this.$store.getters.shareInfo.showCard.content,
@@ -214,6 +203,11 @@
 			      imageUrl: this.$store.getters.shareInfo.showCard.path
 			    }
 	      } else {
+	      	if (!this.$store.getters.needAuthorize) {
+					authorizePop.methods.checkLogin().then(res => {
+					})
+					return
+				}
 	      		return {
 			      title: this.$store.getters.shareInfo.otherCard.content,
 			      path: `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.otherCard.type}`,
@@ -246,8 +240,10 @@
 				}
 			},
 			applyFun (type) {
-				if (type === "authorize") {
-					this.$store.dispatch('needAuthorize', true)
+				if (!this.$store.getters.needAuthorize) {
+					authorizePop.methods.checkLogin().then(res => {
+					})
+					return
 				}
 				if (this.$store.getters.userInfo.step !== 9) {
 					this.jumpMy()
@@ -282,6 +278,11 @@
 				}
 			},
 			jumpMy () {
+				if (!this.$store.getters.needAuthorize) {
+					authorizePop.methods.checkLogin().then(res => {
+					})
+					return
+				}
 				wx.navigateTo({
 	        url: `/pages/createCard/main`
 	      })
@@ -290,6 +291,13 @@
 				wx.navigateTo({
 	        url: `/pages/index/main`
 	      })
+			},
+			toShare () {
+				if (!this.$store.getters.needAuthorize) {
+					authorizePop.methods.checkLogin().then(res => {
+					})
+					return
+				}
 			},
 			toEdit (type, id) {
 				switch (type) {

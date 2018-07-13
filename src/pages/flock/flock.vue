@@ -71,7 +71,8 @@ export default {
       msg: {
         id: '',
         vkey: ''
-      }
+      },
+      needAuthorize: false
     }
   },
 
@@ -128,7 +129,7 @@ export default {
   },
 
   onShow(){
-    
+    this.needAuthorize = this.$store.getters.needAuthorize
   },
 
   onShareAppMessage: function (res) {
