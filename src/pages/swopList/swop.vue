@@ -228,13 +228,12 @@
         putLike(data).then((res)=>{
           console.log('=====',res)
           if(res.http_status == 200){
-            that.$mptoast('已发送')
             that.listData[index].status = 1
             that.nowItem = that.listData[index]
             that.isShow = true
           }
         },(res)=>{
-          that.$mptoast('已发送','error',2000)
+          that.$mptoast(res.msg,'error',2000)
         })
       }
     },
@@ -258,9 +257,9 @@
 
         let msg = {
           uid: usersInfo.id,
-          name: usersInfo.name,
+          name: usersInfo.nickname,
           img: usersInfo.avatar_info.smallImgUrl,
-          occupation: usersInfo.occupation,
+          occupation: usersInfo.occupation?usersInfo.occupation:'test',
           company: usersInfo.company,
           label: [],
         }
@@ -271,7 +270,7 @@
 
         msg.label = msg.label.join('')
         msg.label = msg.label.slice(0, msg.label.length-3)
-
+        console.log(msg)
         getShareImg(msg).then(res => {
           msg.shareImg = res.data
           that.shareData = msg
@@ -297,8 +296,7 @@
           path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
         }
         if(res.target.dataset.type=="other"){
-            that.isShow = true   //弹框消失
-
+            that.isShow = false   //弹框消失
             title = shareInfo.otherCard.content
             imageUrl = shareInfo.otherCard.path
             path = `/pages/sharePick/main?vkey=${this.nowItem.apply_user_info.vkey}?type=other`
