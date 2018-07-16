@@ -133,21 +133,6 @@
       　 });
         that.jobData = [{id:0,name:'不限',isCur:true},...res.data[1].son]
         that.liveData = [{id:0,name:'不限',isCur:true},...res.data[0].son]
-        if (wx.getStorageSync('labelId')) {
-          let labelId = wx.getStorageSync('labelId')
-          console.log(11111, labelId.occupation_label_id.split(','))
-          labelId.occupation_label_id.split(',').forEach((e, i) => {
-            that.jobData.forEach((j, k) => {
-              if (j.id == e) {
-                that.jobData[k].isCur = true
-                return
-              }
-            })
-          })
-          labelId.realm_label_id.forEach(e => {
-            that.liveData[e].isCur = true
-          })
-        }
       },(res)=>{
         
       })

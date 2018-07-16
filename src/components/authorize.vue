@@ -100,6 +100,18 @@
 	    },
 			onGetUserinfo (e) {
 	      console.log('用户手动同意微信授权', e.mp.detail)
+	      // 授权完毕 重新调回原页面刷新当前数据
+			  let params = ''
+        let url = ''
+        for (var i in wx.getStorageSync('routeInfo').query) {
+        	params += `${i}=${wx.getStorageSync('routeInfo').query[i]}&`
+        }
+        if (params != '') {
+        	url = `/${wx.getStorageSync('routeInfo').path}?${params}`
+        } else {
+        	url = `/${wx.getStorageSync('routeInfo').path}`
+        }
+        console.log(url, '授权返回路由')
 	      // 这里不取微信返回的用户信息，而是将加密后的用户信息请求后端，后端将用户信息入库，再返回的整理后的给前端。
 	      // console.log('微信userInfo换自己服务的userInfo,', res)
 	      const data = {
@@ -122,17 +134,7 @@
 	        this.$store.dispatch('userInfo', res.data.data)
 	        console.log('已将个人信息存入store', Vue.prototype.$store.getters.userInfo)
 	        this.$store.dispatch('needAuthorize', false)
-	        // 授权完毕 重新调回原页面刷新当前数据
-				  let params = ''
-	        let url = ''
-	        for (var i in wx.getStorageSync('routeInfo').query) {
-	        	params += `${i}=${wx.getStorageSync('routeInfo').query[i]}&`
-	        }
-	        if (params != '') {
-	        	url = `/${wx.getStorageSync('routeInfo').path}?${params}`
-	        } else {
-	        	url = `/${wx.getStorageSync('routeInfo').path}`
-	        }
+
 	        wx.reLaunch({
 					  url: url
 					})
