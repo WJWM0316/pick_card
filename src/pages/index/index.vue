@@ -101,7 +101,7 @@
       <view class="ft_warp">
         <view class="left">
           <view class="name "  @tap="testCreate">Pick</view>
-          <view class="name "  >名片夹</view>
+          <view class="name "  @tap="toCardHolder">名片夹</view>
           <view class="name "  >我的名片</view>
         </view>
         <view class="right"> 
@@ -138,13 +138,13 @@
       </view>
 
       <!-- 跳转创建 -->
-      <view class="createMe" v-if="toMeCreate">
+      <!-- <view class="createMe" v-if="toMeCreate">
         <image class="close"  @tap="cloCrea" src="/static/images/popup_btn_close_nor@3x.png"></image>
         <image class="head" src="/static/images/img.jpg"></image>
         <view class="title">Opps！你还没创建自己的名片</view>
         <view class="msg">要和这几位大咖交换名片的话， 点击下方按钮，创建自己的名片吧!</view>
         <button class="btn" @tap="isCreate" type="primary">创建自己的名片</button>
-      </view>
+      </view> -->
     </view>
 
     <!-- 同意弹窗 -->
@@ -208,7 +208,8 @@ export default {
       swopRed: 0,   //交换红点
       shareData: {},
 
-      onShowSock: true
+      onShowSock: true,
+      toCreateSock: true,
     }
   },
   onShareAppMessage: function (res) {
@@ -344,7 +345,6 @@ export default {
       })
     },
     fromClick (e) {
-      console.log(e,22222)
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
         fromAddress: '/pages/index'
@@ -381,8 +381,6 @@ export default {
         }
         try {
             wx.setStorageSync('pickCardFirst', '1')
-            //this.isPop = true
-            //this.toMeCreate=true
         } catch (e) {    
         }
       }
@@ -431,8 +429,15 @@ export default {
 
     isCreate (){
       if(this.usersInfo.step!=9){
+
         this.isPop = false
-        this.toMeCreate=true
+        if(!this.toCreateSock){
+            return 
+        }
+        this.toMeCreate=false
+        setTimeout(()=>{
+          this.canNav = true 
+        },1000)
         wx.navigateTo({
           url: `/pages/createCard/main`
         })
@@ -489,6 +494,8 @@ export default {
           msg = {
             to_uid: data.id, //data.unionid
           };
+
+      console.log('likeOp')
       if(status && status == 'right') {
         if(beforeCreateStep<3&&step<9){
           that.firstOp(status);
