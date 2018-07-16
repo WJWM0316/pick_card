@@ -17,6 +17,10 @@
 	import index from '@/pages/index'
 	export default {
 		props: {
+			isShow: {
+				type: Boolean,
+				default: false
+			},
 			routeInfo: {
 				type: String,
 				default: `/pages/index/main`

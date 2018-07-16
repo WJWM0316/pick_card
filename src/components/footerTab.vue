@@ -66,7 +66,6 @@
     },
     mounted () {
       this.index = this.type
-      console.log(22)
     },
     methods: {
       fromClick (e) {

@@ -62,7 +62,9 @@
 				    if (res.statusCode === 200) {
 				    	console.log(res, '下载成功')
 							const ctx = wx.createCanvasContext('shareCanvas')
-
+							ctx.clearActions()
+							ctx.clearRect(0, 0, 320, 550)
+							that.showImg = ''
 							// 画布圆角
 							roundRect (0,0,320,550,9)
 							function roundRect (x, y, w, h, r) {
@@ -88,24 +90,24 @@
 
 							that.imgUrl = res.tempFilePath
 							// 画头像
-					    ctx.drawImage(that.imgUrl, 0, 0, 320, 280)
+					    ctx.drawImage(that.imgUrl, 0, 0, 320, 295)
 
 					    // 画文案
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
-					    ctx.fillText(that.info.nickname, 17, 240)
+					    ctx.fillText(that.info.nickname, 17, 250)
 
 					    ctx.setFontSize(16)
-					    ctx.fillText(that.info.job, 17, 260)
+					    ctx.fillText(that.info.job, 17, 270)
 
 					    ctx.setFontSize(14)
 					    ctx.setFillStyle('#9AA1AB')
 					    if (that.info.sign.length > 20) {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 307)
-					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, 330)
+					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 319)
+					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, 339)
 					    } else {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 307)
+					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 319)
 					    }
 					    
 					    ctx.setFontSize(12)
@@ -120,7 +122,6 @@
 					    let lineNun = 1
 					    let nextLabel = true
 					    that.info.label.forEach((item, index) => {
-					    	console.log(111, item.name)
 					    	addLabel(item.name, index)
 					    })
 
@@ -130,8 +131,15 @@
 					    	if (lineNun > 2) {
 					    		return
 					    	}
+					    	ctx.setLineDash([0, 1], 1);
 					    	// 下个标签的宽度
-								let newLabelWidth = ctx.measureText(that.info.label[index+1].name).width + 2*r
+					    	let newLabelWidth = 0
+					    	if (index < that.info.label.length-1) {
+					    		console.log(111111111111)
+					    		console.log(that.info.label[index+1].name)
+					    		newLabelWidth = ctx.measureText(that.info.label[index+1].name).width + 2*r
+					    	}
+								
 								let metrics = ctx.measureText(item).width // 文本宽度
 					    	// 判断是否超过两行切需要打点
 					    	console.log(lineNun, metrics, newLabelWidth, position.x, (position.x + metrics + 5), (newLabelWidth + position.x + metrics + 5) > (320-17))
@@ -139,12 +147,10 @@
 					    		metrics = ctx.measureText('....').width
 									ctx.fillText('....', position.x + r, position.y + r)
 					    	} else {
-					    		console.log(222, item)
 					    		metrics = ctx.measureText(item).width
 									ctx.fillText(item, position.x + r, position.y + r + 4)
 					    	}
-					    	console.log(item, 3333)
-					    	
+				    	
 								ctx.beginPath()
 								ctx.moveTo(position.x + r, position.y)
 								ctx.lineTo(position.x + r + metrics, position.y)
@@ -168,14 +174,15 @@
 									position.y = position.y + 2*r + 7
 									lineNun ++
 								}
-					    }
-					    
+					    }			    
+
+
 					    // 画虚线
 					    ctx.setStrokeStyle('#DCE3EE')
 					    ctx.setLineDash([5, 10], 0)
 							ctx.beginPath()
-							ctx.moveTo(17 ,position.y + 18)
-							ctx.lineTo(303, position.y + 18)
+							ctx.moveTo(17, 430)
+							ctx.lineTo(303, 430)
 							ctx.stroke()
 
 							// 清除圆镂空部分
@@ -206,12 +213,13 @@
 							ctx.setTextAlign('left')
 					    ctx.setFillStyle('#B2B6C2')
 					    ctx.setFontSize(14)
-					    ctx.fillText('长按添加TA的趣名片', 30, position.y + 18 + 60)
+					    ctx.fillText('长按添加TA的趣名片', 30, 500)
 
 					    // 画二维码
-					    ctx.drawImage(that.imgUrl, 200, position.y + 18 + 10, 100, 100)
+					    ctx.drawImage(that.imgUrl, 200, 440, 100, 100)
 
 					    ctx.draw(true, () => {
+					    	console.log('画图成功')
 					    	wx.canvasToTempFilePath({
 								  x: 0,
 								  y: 0,
