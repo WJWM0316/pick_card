@@ -131,18 +131,15 @@
 					    	if (lineNun > 2) {
 					    		return
 					    	}
-					    	ctx.setLineDash([0, 1], 1);
+					    	ctx.setLineDash([1000]);
 					    	// 下个标签的宽度
 					    	let newLabelWidth = 0
 					    	if (index < that.info.label.length-1) {
-					    		console.log(111111111111)
-					    		console.log(that.info.label[index+1].name)
 					    		newLabelWidth = ctx.measureText(that.info.label[index+1].name).width + 2*r
 					    	}
 								
 								let metrics = ctx.measureText(item).width // 文本宽度
 					    	// 判断是否超过两行切需要打点
-					    	console.log(lineNun, metrics, newLabelWidth, position.x, (position.x + metrics + 5), (newLabelWidth + position.x + metrics + 5) > (320-17))
 					    	if (lineNun === 2 && (newLabelWidth + position.x + metrics + 5) > (320-17)) {
 					    		metrics = ctx.measureText('....').width
 									ctx.fillText('....', position.x + r, position.y + r)
@@ -268,7 +265,7 @@
 	          success: function (e) {
 	            console.log('保存成功', e)
 	            wx.showToast({
-	              title: '已保存至您的相册',
+	              title: '已保存至相册',
 	              icon: 'success'
 	            })
 	          },
