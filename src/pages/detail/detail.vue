@@ -1,17 +1,17 @@
 <template>
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
-		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 0">
+		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 10">
 			{{userInfo.apply_count}}人想得到你的名片
 			<view class="flaunt"><button open-type="share" data-type="flaunt" class="xuyao">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></button></view>
 		</view>
-		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 0}">
+		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 10}">
 			<view class="positon">
 				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
-				<view class="floor" v-if="!isSelf">
+				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 10}">
 					<image class="icon toIndex" @tap="toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
 					<image class="icon toShare" v-if="needAuthorize" @tap="toShare" src="/static/images/float_btn_share@3x.png"></image>
-					<button open-type="share" data-type="myShare" v-else><image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image></button>
+					<button open-type="share" data-type="people" :data-self="isSelf" v-else><image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image></button>
 				</view>
 			</view>
 			<view class="content">
@@ -196,27 +196,48 @@
 	      
 	      console.log(res.target)
 	      
-	      if (res.target.type === 'flaunt') {
+	      if (res.target.dataset.type == 'flaunt') {
 	      	return {
 			      title: this.$store.getters.shareInfo.showCard.content,
 			      path: `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.showCard.type}`,
 			      imageUrl: this.$store.getters.shareInfo.showCard.path
 			    }
-	      } else {
-	      	if (!this.$store.getters.needAuthorize) {
-						authorizePop.methods.checkLogin().then(res => {
-						})
-						return
+	      }
+
+	      if (res.target.dataset.type == "people") {
+	      	let shareType
+					if (res.target.self) {
+						shareType = this.$store.getters.shareInfo.mycard.type
+					} else {
+						shareType = this.$store.getters.shareInfo.otherCard.type
 					}
-	      		return {
+      		return {
 			      title: this.$store.getters.shareInfo.otherCard.content,
-			      path: `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.otherCard.type}`,
+			      path: `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${shareType}`,
 			      imageUrl: this.isShareImg
-			    }
+		    	}
 	      }
 	    }
 	  },
 		methods: {
+			getShareImg () {
+	      let data = {
+	      	uid: this.userInfo.id,
+	      	name: this.userInfo.nickname,
+	      	img: this.userInfo.avatar_info.smallImgUrl,
+	      	occupation: this.userInfo.occupation,
+	      	company: this.userInfo.company,
+	      	label: [],
+	      }
+	      this.userInfo.other_info.realm_info.forEach(item => {
+	      	data.label.push(`${item.name} | `)
+	      })
+	      data.label = data.label.join('')
+	      data.label = data.label.slice(0, data.label.length-3)
+	      getShareImg(data).then(res => {
+	      	this.isShareImg = res.data
+	      })
+			},
 			open (type) {
 				if (type === 1) {
 					if (this.showWorkNum === 2) {
@@ -268,13 +289,20 @@
 						this.getOtherUserInfo()
 					})
 				} else {
-					data = {
-						friend_id : this.userInfo.id,
-						remarks: '约么'
-					}
-					delDetFriend(data).then(res => {
-						this.userInfo.handle_status = 1
-						this.getOtherUserInfo()
+					wx.showModal({
+		        content: '确定要删除名片？',
+		        success: function(res) {
+		          if (res.confirm) {
+								data = {
+									friend_id : this.userInfo.id,
+									remarks: '约么'
+								}
+								delDetFriend(data).then(res => {
+									this.userInfo.handle_status = 1
+									this.getOtherUserInfo()
+								})
+							}
+						}
 					})
 				}
 			},
@@ -343,6 +371,7 @@
 					})
 					this.nowTime = formatTime(new Date(), 'YYYY-MM')
 					this.$store.dispatch('userInfo', res.data)
+					this.getShareImg()
 				})
 			},                                                                                                                             
 			getOtherUserInfo () {
@@ -357,24 +386,7 @@
 						this.checkedTextList.push(e.name)
 					})
 					this.nowTime = formatTime(new Date(), 'YYYY-MM')
-					if (!this.isShareImg) {
-			      let data = {
-			      	uid: this.userInfo.id,
-			      	name: this.userInfo.nickname,
-			      	img: this.userInfo.avatar_info.smallImgUrl,
-			      	occupation: this.userInfo.occupation,
-			      	company: this.userInfo.company,
-			      	label: [],
-			      }
-			      this.userInfo.other_info.realm_info.forEach(item => {
-			      	data.label.push(`${item.name} | `)
-			      })
-			      data.label = data.label.join('')
-			      data.label = data.label.slice(0, data.label.length-3)
-			      getShareImg(data).then(res => {
-			      	this.isShareImg = res.data
-			      })
-	 			 	}
+					this.getShareImg()
 				})
 			},
 			previewImg (index) {
@@ -450,11 +462,14 @@
 				display: flex;
 				justify-content:center;
 				align-items:center;
-				position: absolute;
+				position: fixed;
 				top: 54rpx;
-				right: -40rpx;
+				right: 0;
 				background:rgba(53,57,67,0.3);
 				border-radius:36rpx 0px 0px 36rpx;
+				&.floor-t {
+					top: 100rpx;
+				}
 				.icon {
 					width: 32rpx;
 					height: 32rpx;
