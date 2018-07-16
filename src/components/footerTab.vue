@@ -46,7 +46,7 @@
     props: {
       type:{
         type: Number,
-        default: 1
+        default: null
       },
       adaptive:{
         type: String,
@@ -66,6 +66,7 @@
     },
     mounted () {
       this.index = this.type
+      console.log(22)
     },
     methods: {
       fromClick (e) {

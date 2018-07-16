@@ -191,7 +191,7 @@
         codeTime: 60,
         nowNum : 0,
         isIp: false,
-        filePath: '/static/images/new_pic_defaulhead.jpg',
+        filePath: '',
         isShow: false,
         userInfo: {},
         relevance: false,  //是否有关联
@@ -319,7 +319,6 @@
             that.secondRule.rli.splice(0, 1)
           }
         }
-        console.log(111)
         that.listData[0].son[index].isCur = true
         that.secondRule.rli.push(index)
       },
@@ -365,10 +364,23 @@
       },
 
       toNext (num) {
+        
         console.log('toNext',num)
         let that = this,
             listData = that.listData,
             data = {};
+        if (!this.filePath) {
+          this.$mptoast('请上传您的图片')
+          return
+        }
+        if (!this.firstData.nickname) {
+          this.$mptoast('请输入您的姓名')
+          return
+        }
+        if (this.firstData.gender === 0) {
+          this.$mptoast('请选择您的性别')
+          return
+        }
         console.log(that.nowNum == 0)
         if(that.nowNum == 0 && wx.getStorageSync('cutImgInfo')){
           const info = wx.getStorageSync('cutImgInfo')
@@ -529,7 +541,6 @@
       that.adaptive = wx.getStorageSync('adaptive')
       if(this.$store.getters.userInfo){
         let userInfo = this.$store.getters.userInfo
-
         if(userInfo.is_zike){
           this.relevance = true
         }

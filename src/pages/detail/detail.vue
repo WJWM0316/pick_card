@@ -15,7 +15,7 @@
 				</view>
 			</view>
 			<view class="content">
-				<view class="mycard" v-if="!isSelf && myCard || !needAuthorize" @tap.stop="jumpMy">
+				<view class="mycard" v-if="!isSelf && myCard" @tap.stop="jumpMy">
 					<image class="icon" src="/static/images/float_icon_add@3x.png"></image>
 					<text>我的名片</text>
 				</view>
