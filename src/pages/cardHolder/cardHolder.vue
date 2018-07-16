@@ -196,7 +196,7 @@ export default {
       that.usersInfo = data.data
       let msg = {
         uid: that.usersInfo.id,
-        name: that.usersInfo.name,
+        name: that.usersInfo.nickname,
         img: that.usersInfo.avatar_info.smallImgUrl,
         occupation: that.usersInfo.occupation,
         company: that.usersInfo.company,
@@ -207,6 +207,7 @@ export default {
         msg.label.push(`${item.name} | `)
       })
 
+      console.log(msg)
       msg.label = msg.label.join('')
       msg.label = msg.label.slice(0, msg.label.length-3)
 
@@ -414,28 +415,21 @@ export default {
   .content {
     background:rgba(250,251,253,1);
     .ops {
-      height: 120rpx;
+      height: 160rpx;
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      margin: 30rpx 0 50rpx 0;
+      margin: 30rpx 0 10rpx 0;
       .ops_blo {
         width:322rpx;
-        height:120rpx;
-        box-shadow:0rpx 0rpx 0rpx 0rpx rgba(0,0,0,0.08);
+        height:160rpx;
         border-radius:16rpx;
         font-size:26rpx;
         font-family:PingFangHK-Regular;
         color:rgba(255,255,255,1);
         line-height:120rpx;
         position: relative;
-        &.shareMe {
-          box-shadow:0rpx 0rpx 0rpx 0rpx rgba(0,0,0,0.08);
-        }
-        &.createFlock {
-          box-shadow:0rpx 0rpx 0rpx 0rpx rgba(0,0,0,0.08);
-        }
         image {
           width: 100%;
           height: 100%;
