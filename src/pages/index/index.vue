@@ -172,6 +172,7 @@ export default {
     return { 
       adaptive: '1',   //ten  small
       interval: null,
+      interval2: null,
       usersList: [],
       usersInfo: [],
       toCreate: {
@@ -281,7 +282,6 @@ export default {
           that.getShareImg()
         }
         
-
         if(res.data.length<1){
           that.isEnd = true
         }
@@ -303,14 +303,15 @@ export default {
   onShow (res) {
     console.log('show=======',this.beforeCreateStep,this.onShowSock)
     let that = this
+
+    this.toCreateSock = true
     if(this.onShowSock){
       this.onShowSock = false
     }else {
-      console.log(11111)
       getIndexUsers(that.getPage).then((res)=>{
         that.usersList = res.data
         if(that.usersInfo.step!=9){
-          that.nowIndex = that.beforeCreateStep
+          //that.nowIndex = that.beforeCreateStep
           that.toCreate.isToCreate = false
           if(res.data.length<1 && value){
             that.isCreate()
@@ -319,6 +320,8 @@ export default {
         }else {
           that.nowIndex = 0
         }
+          that.nowIndex = 0
+
         if (that.usersInfo.step === 9) {
           redDot().then(res=>{
             that.swopRed = res.data.main_show_red_dot
@@ -335,7 +338,6 @@ export default {
         this.$mptoast(res.msg)
       })
     }
-
   },
   methods: {
     //测试去创建
@@ -376,9 +378,9 @@ export default {
           step: 1
         }
         this.isPop = false
-        if(this.usersList.length<1){
+        /*if(this.usersList.length<1){
           this.isCreate()
-        }
+        }*/
         try {
             wx.setStorageSync('pickCardFirst', '1')
         } catch (e) {    
@@ -428,13 +430,14 @@ export default {
     },
 
     isCreate (){
+      console.log('isCreate',this.toCreateSock)
       if(this.usersInfo.step!=9){
 
         this.isPop = false
         if(!this.toCreateSock){
             return 
         }
-        this.toMeCreate=false
+        this.toCreateSock = false
         setTimeout(()=>{
           this.canNav = true 
         },1000)
@@ -450,7 +453,7 @@ export default {
     tStart (e) {
       let that = this
       that.touchDot = e.touches[0].pageX
-      that.interval =  setInterval(function () {  
+      that.interval2 =  setInterval(function () {  
          that.time++;  
       }, 100);  
 
@@ -463,7 +466,7 @@ export default {
       let touchMove = e.touches[0].pageX
       let touchDot = this.touchDot
       let status = false
-      /*console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot)); */
+      console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));
       // 向左滑动    
       if (touchMove - touchDot <= -80 && this.time < 10) {  
         status = 'left'
@@ -478,8 +481,8 @@ export default {
       }
     },
     tEnd (e) {
-      clearInterval(this.interval); // 清除setInterval  
-      this.coolTime = 0;  
+      clearInterval(this.interval2); // 清除setInterval  
+      this.time = 0;  
     },
     
     //左右划操作
@@ -498,13 +501,13 @@ export default {
       console.log('likeOp')
       if(status && status == 'right') {
         if(beforeCreateStep<3&&step<9){
-          that.firstOp(status);
+          that.firstOp(status,msg);
         }else {
           that.like(msg);
         }
       }else if(status && status == 'left'){
         if(beforeCreateStep<3&&step<9){
-          that.firstOp(status);
+          that.firstOp(status,msg);
         }else {
           that.unlike(msg);
         }
@@ -533,16 +536,19 @@ export default {
       }
     },
 
-    firstOp(type){
+    firstOp(type,msg){
       let that = this,
           beforeCreateStep = this.beforeCreateStep;
 
       beforeCreateStep++;
       if(beforeCreateStep == 3){
+        console.log('firstOp==beforeCreateStep == 3')
         wx.setStorageSync('beforeCreateStep', beforeCreateStep);
         that.isNext = true;
         that.isCreate()
         return
+      }else {
+        indexUnlike(msg)
       }
       console.log(beforeCreateStep)
       if(type=='left'){
@@ -601,10 +607,11 @@ export default {
         that.transformTime(num);
         num--;
         if(num<0){
-        console.log('========',num)
+          console.log('========',num)
 
           that.isGetUers()
-          that.tEnd()
+          clearInterval(that.interval)
+          this.coolTime = 0;  
         }
       },1000);
     },
@@ -627,8 +634,6 @@ export default {
           that.moveData.style = ''
           that.isNext = true
         },800)
-
-        
       },(res)=>{
         console.log(res)
         that.$mptoast(res.msg)
@@ -659,7 +664,6 @@ export default {
       this.coolTime = t
       //return t;
     },
-
     getShareImg(){
       let that = this,
       usersInfo = that.usersInfo,
@@ -684,7 +688,6 @@ export default {
         that.shareData = msg
       })
     },
-
   }
 }
 </script>

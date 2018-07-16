@@ -48,7 +48,7 @@
             <view class="flockList" v-if="florkList && florkList.list&& florkList.list.length>0">
 
               <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item,index)">
-                <view class="blo_msg flock_blo" :class="{'two': item.userGroupTabRedDot == 1}" >
+                <view class="blo_msg flock_blo" >
                   <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
                   <image class="blo_img"  src="/static/images/new_pic_defaulhead.jpg" v-else></image>
                   <open-data class="msg_name" type="groupName" :open-gid="item.openGid"></open-data>
