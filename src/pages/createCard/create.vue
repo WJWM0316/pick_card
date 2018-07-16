@@ -80,9 +80,9 @@
       </view>
       <view class="table_blo row_style_three" >
         <view class="tit">个性签名</view>
-        <!-- @focus="isPos = true" @blur="isPos = false" -->
+        <!--  -->
         <textarea maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
-        v-if="!bindPhone.isPh" cursor-spacing="100"/>
+        v-if="!bindPhone.isPh" cursor-spacing="50" />
         <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
     </view>
@@ -529,12 +529,6 @@
       that.adaptive = wx.getStorageSync('adaptive')
       if(this.$store.getters.userInfo){
         let userInfo = this.$store.getters.userInfo
-
-        userInfo.step=3
-
-
-
-
 
         if(userInfo.is_zike){
           this.relevance = true
