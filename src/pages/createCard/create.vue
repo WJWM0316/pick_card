@@ -82,7 +82,7 @@
         <view class="tit">个性签名</view>
         <!--  -->
         <textarea maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
-        v-if="!bindPhone.isPh" cursor-spacing="50" />
+        v-if="!bindPhone.isPh" cursor-spacing="100" />
         <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
     </view>
@@ -382,6 +382,8 @@
           return
         }
         console.log(that.nowNum == 0)
+        console.log(wx.getStorageSync('cutImgInfo'))
+
         if(that.nowNum == 0 && wx.getStorageSync('cutImgInfo')){
           const info = wx.getStorageSync('cutImgInfo')
           const parmas = {

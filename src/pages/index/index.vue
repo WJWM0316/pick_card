@@ -6,7 +6,7 @@
       <view class="right" @click="toSwop">交换申请<view class="new" v-if="swopRed==1">NEW</view></view>
     </view>
     <view class="content">
-      <view class="peopList">
+      <view class="peopList" v-if="usersList.length>0">
         <block v-for="(item, index) in usersList" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
@@ -97,7 +97,7 @@
 
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-<!--     <view class="footer " >
+<view class="footer " >
       <view class="ft_warp">
         <view class="left">
           <view class="name "  @tap="testCreate">Pick</view>
@@ -113,8 +113,8 @@
           </view>
         </view>
       </view>
-    </view> -->
-    <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
+    </view>
+    <!-- <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab> -->
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -313,14 +313,14 @@ export default {
         if(that.usersInfo.step!=9){
           //that.nowIndex = that.beforeCreateStep
           that.toCreate.isToCreate = false
-          if(res.data.length<1 && value){
+          if(res.data.length<1){
             that.isCreate()
             return
           }
-        }else {
+        }/*else {
           that.nowIndex = 0
-        }
-          that.nowIndex = 0
+        }*/
+        that.nowIndex = 0
 
         if (that.usersInfo.step === 9) {
           redDot().then(res=>{
