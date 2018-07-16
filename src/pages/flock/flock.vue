@@ -11,10 +11,10 @@
         <view class="r_wrap cur" @tap="toIndex">
           <image class="r_icon" src="/static/images/float_btn_returnhome@3x.png"></image>
         </view>
-        <view class="r_wrap" v-if="!needAuthorize" @tap="toShare">
+<!--         <view class="r_wrap" v-if="!needAuthorize" @tap="toShare">
           <image class="r_icon" src="/static/images/float_btn_share@3x.png"></image>
-        </view>
-        <button v-else class="r_wrap" open-type="share" data-type="flock">
+        </view> -->
+        <button class="r_wrap" open-type="share" data-type="flock">
           <image class="r_icon" src="/static/images/float_btn_share@3x.png"></image>
         </button>
       </view>
@@ -75,7 +75,7 @@ export default {
         id: '',
         vkey: ''
       },
-      needAuthorize: false
+      needAuthorize: null
     }
   },
 
@@ -104,7 +104,7 @@ export default {
         vkey: res.vkey
       }
       
-
+      console.log()
       that.updateData()
       isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
         if(msg.code == 201){
@@ -121,6 +121,7 @@ export default {
 
   onShow(){
     this.needAuthorize = this.$store.getters.needAuthorize
+    console.log(this.needAuthorize, this.$store.getters.needAuthorize, 1111111111)
   },
 
   onShareAppMessage: function (res) {

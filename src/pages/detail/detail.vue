@@ -133,7 +133,7 @@
 	</view>
 </template>
 <script>
-	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike, delFriend} from '@/api/pages/user'
+	import {getUserInfo2Api, getUserInfoApi, indexLike, putLike, delLike, delDetFriend} from '@/api/pages/user'
 	import {formatTime} from '@/utils/index'
 	import authorizePop from '@/components/authorize'
 	import {getShareImg} from '@/api/pages/login'
@@ -269,11 +269,12 @@
 					})
 				} else {
 					data = {
-						id: this.userInfo.relation_info.id,
+						friend_id : this.userInfo.id,
 						remarks: '约么'
 					}
-					delFriend(data).then(res => {
+					delDetFriend(data).then(res => {
 						this.userInfo.handle_status = 1
+						this.getOtherUserInfo()
 					})
 				}
 			},

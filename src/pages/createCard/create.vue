@@ -370,7 +370,7 @@
             listData = that.listData,
             data = {};
         console.log(that.nowNum == 0)
-        if(that.nowNum == 0){
+        if(that.nowNum == 0 && wx.getStorageSync('cutImgInfo')){
           const info = wx.getStorageSync('cutImgInfo')
           const parmas = {
             path: info.path,
