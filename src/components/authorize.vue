@@ -131,8 +131,8 @@
 	        wx.setStorageSync('token', res.data.token) // 更新token状态
           wx.setStorageSync('key', res.data.key)
 	        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
-	        this.$store.dispatch('userInfo', res.data.data)
-	        console.log('已将个人信息存入store', Vue.prototype.$store.getters.userInfo)
+	        this.$store.dispatch('userInfo', res.data)
+	        console.log('已将个人信息存入store', res.data)
 	        this.$store.dispatch('needAuthorize', false)
 
 	        wx.reLaunch({
@@ -174,8 +174,9 @@
 				width: 28rpx;
 				height: 28rpx;
 				position: absolute;
-				top: 40rpx;
-				right: 40rpx;
+				top: 0;
+				right: 0;
+				padding: 40rpx;
 			}
 			.head {
 				width:342rpx;
