@@ -45,12 +45,6 @@
     },
     methods: {
       toIndex(){
-        if (this.jobAry.indexOf(0) !== -1) {
-          this.jobAry = [0]
-        }
-        if (this.liveAry.indexOf(0) !== -1) {
-          this.liveAry = [0]
-        }
         let occupation_label_id = this.jobAry.join(',')
         let realm_label_id = this.liveAry.join(',')
         console.log(occupation_label_id,realm_label_id)
