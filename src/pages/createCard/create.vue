@@ -268,7 +268,6 @@
         that.thirdData.sign.trim()
         thirdSignApi(that.thirdData).then((res)=>{
           if(res.http_status==200){
-            that.$mptoast('创建成功')
             this.bindPhone.isPh = false
             setTimeout(()=>{
               that.nowNum = 0
@@ -277,9 +276,7 @@
               })
             },1000)
           }else {
-
             that.$mptoast(res.msg)
-
             if(res.code == 210){
               that.bindPhone.isPh = true
             }

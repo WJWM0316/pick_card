@@ -355,7 +355,7 @@
           box-sizing: border-box;
           &.cur {
             background:rgba(0,208,147,0.05);
-            border:2rpx solid rgba(0,208,147,1);
+            border:1rpx solid rgba(0,208,147,1);
             font-family:SFUIDisplay-Regular;
             color:rgba(0,208,147,1);
           }
