@@ -211,6 +211,12 @@ export default {
         
         title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片';
       }
+
+      if(res.target.dataset.type=="index"){
+        title = shareInfo.index?shareInfo.index.content:''
+        imageUrl = shareInfo.index.path
+        path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.vkey}&shareType=${shareInfo.showCard.type}`
+      }
     }
 
     return {

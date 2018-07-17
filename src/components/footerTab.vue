@@ -23,12 +23,14 @@
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="share_pop"> 
-        <image @click="cloSahre" class="share_clo" src="/static/images/popup_btn_close_nor@3x.png"></image>
+        <view @click="cloSahre" class="share_wrap" >
+          <image  class="share_clo" src="/static/images/popup_btn_close_nor@3x.png"></image>
+        </view>
         <image class="share_cont" src="/static/images/popup_pic_share@3x.png"></image>
         <view class="tit" @tap="toCardHolder">分享你的趣名片</view>
         <view class="txt">召唤你的朋友们一起来玩吧！</view>
         <view class="btns">
-          <button class="btn friend" open-type="share">
+          <button class="btn friend" open-type="share" data-type="index">
             <image class="img_warp" src="/static/images/popup_btn_sharewechat@3x.png"></image>
             <view class="bt_txt">分享到微信</view>
           </button>
@@ -152,13 +154,21 @@
       height:300rpx;
       margin: 0 auto;
     }
-    .share_clo {
-      width:28rpx;
-      height:28rpx;
+    .share_wrap {
+      width: 80rpx;
+      height: 80rpx;
       position: absolute;
       right: 40rpx;
       top: 40rpx;
+      .share_clo {
+        width:28rpx;
+        height:28rpx;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
     }
+    
     .tit {
       height:32rpx;
       font-size:34rpx;

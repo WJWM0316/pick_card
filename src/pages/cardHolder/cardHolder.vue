@@ -97,7 +97,6 @@
   import { getFriends, deleteFriends, getUserGroupList, getUserGroupInfo, joinUserGroup, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
   import { deleteRedDot, deleteRedFriends, redDotApplys, redDot } from '@/api/pages/red'
   import { getShareImg } from '@/api/pages/login'
-  import Vue from 'vue'
 
 export default {
   interval: '',
@@ -117,7 +116,6 @@ export default {
       swopRed: 0,
       topRed: {},
       shareData: {},    //
-      shareInfo: {},   //分享信息
       isShow: false,   //创建群提示
       onShowSock: true,
       isCheck: false,
@@ -131,7 +129,7 @@ export default {
     if(isCheck>0){
       this.isCheck = true
     }
-    this.shareInfo = Vue.prototype.$store.getters.shareInfo
+    this.shareInfo = this.$store.getters.shareInfo
     that.adaptive = wx.getStorageSync('adaptive')
     getUserInfoApi().then(data => {
       that.usersInfo = data.data
@@ -168,11 +166,11 @@ export default {
   },
   onShareAppMessage: function (res) {
     console.log(res)
-    let path = '/pages/index/main?',
-        that = this,
-        title = '',
-        imageUrl = '';
-
+    let path = '/pages/index/main?';
+    let that = this;
+    let title = '';
+    let imageUrl = '';
+    let shareInfo = this.$store.getters.shareInfo;
     wx.showShareMenu({
       withShareTicket: true
     })
@@ -180,18 +178,22 @@ export default {
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
 
-        title = that.shareInfo.createGroupCard?that.shareInfo.createGroupCard.content:'' 
-        imageUrl = that.shareInfo.createGroupCard.path?that.shareInfo.createGroupCard.path:''
+        title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 
+        imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
       }
       if(res.target.dataset.type=="me"){
-        title = that.shareInfo.mycard?that.shareInfo.mycard.content:''
+        title = shareInfo.mycard?shareInfo.mycard.content:''
         imageUrl = that.shareData.shareImg
         path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
       }
+      if(res.target.dataset.type=="index"){
+        title = shareInfo.index?shareInfo.index.content:''
+        imageUrl = shareInfo.index.path
+        path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.vkey}&shareType=${shareInfo.showCard.type}`
+      }
       // 来自页面内转发按钮
     }
-      console.log(that.isCheck)
 
     return {
       title: title,
@@ -199,7 +201,7 @@ export default {
       imageUrl: imageUrl,
       complete(){
       console.log(that.isCheck)
-        
+
         if(res.target.dataset.type=="flock" && !that.isCheck){
           that.isShow = true;
         }
@@ -218,7 +220,7 @@ export default {
     that.getList()
     setTimeout(function(){
         wx.stopPullDownRefresh()
-    },1500)
+    },2000)
   },
 
   onReachBottom(res){

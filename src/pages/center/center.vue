@@ -135,16 +135,35 @@
 		  }
 		},
 		onShareAppMessage: function (res) {
-	    if (res.from === 'button') {
-	      // 来自页面内转发按钮
-	      console.log(res.target)
-      	return {
-		      title: this.shareInfo.mycard.content,
-		      path: `pages/detail/main?vkey=${this.info.vkey}&shareUid=${this.info.vkey}&shareType=${this.$store.getters.shareInfo.mycard.type}`,
-		      imageUrl: this.isShareImg
-		    }
-	    }
-	  },
+			console.log(res)
+			let path = '/pages/index/main?';
+			let that = this;
+			let title = '';
+			let imageUrl = '';
+			let shareInfo = that.$store.getters.shareInfo;
+
+	    	if (res.from === 'button') {
+				//footer 弹框分享
+		    	if(res.target.dataset.type=="index"){
+		    		title = shareInfo.index?shareInfo.index.content:''
+		    		imageUrl = shareInfo.index.path
+		    		path = `/pages/index/main?vkey=${that.info.vkey}&shareUid=${that.info.vkey}&shareType=${shareInfo.showCard.type}`
+		    	}else {
+		      		// 来自页面内转发按钮
+    		      		console.log(res.target)
+    			      title = shareInfo.mycard.content,
+    			      path= `pages/detail/main?vkey=${that.info.vkey}&shareUid=${that.info.vkey}&shareType=${shareInfo.mycard.type}`,
+    			      imageUrl= that.isShareImg
+		    	}
+		      		
+	    	}
+
+	    	return {
+	    	  title: title,
+	    	  path: path,
+	    	  imageUrl: imageUrl,
+	    	}
+	 	 },
 		methods: {
 			toJump () {
 				wx.navigateTo({
@@ -157,40 +176,40 @@
 	      })
 			},
 			toSaveImg () {
-      	wx.navigateTo({
-	        url: `/pages/poster/main`
-	      })
-			},
-			service () {
-				wx.showModal({
-				  title: '欢迎添加“Pick趣名片”公众号',
-				  content: '了解更多，有疑问请添加客服微信： Pick官方客服',
-				  confirmText: '复制微信',
-				  success: function(res) {
-				    if (res.confirm) {
-				      wx.setClipboardData({
-							  data: 'Pick官方客服',
-							  success: function(res) {
-							    wx.getClipboardData({
-							      success: function(res) {
-							      	wx.showToast({
-											  title: '复制成功',
-											  icon: 'success',
-											  duration: 1000
-											})
-							        console.log(res.data) // data
-							      }
-							    })
-							  }
-							})
-				    } else if (res.cancel) {
-				      console.log('用户点击取消')
-				    }
-				  }
-				})
-			}
-	  }
-	}
+	      	wx.navigateTo({
+		        url: `/pages/poster/main`
+		      })
+				},
+				service () {
+					wx.showModal({
+					  title: '欢迎添加“Pick趣名片”公众号',
+					  content: '了解更多，有疑问请添加客服微信： Pick官方客服',
+					  confirmText: '复制微信',
+					  success: function(res) {
+					    if (res.confirm) {
+					      wx.setClipboardData({
+								  data: 'Pick官方客服',
+								  success: function(res) {
+								    wx.getClipboardData({
+								      success: function(res) {
+								      	wx.showToast({
+												  title: '复制成功',
+												  icon: 'success',
+												  duration: 1000
+												})
+								        console.log(res.data) // data
+								      }
+								    })
+								  }
+								})
+					    } else if (res.cancel) {
+					      console.log('用户点击取消')
+					    }
+					  }
+					})
+				}
+		  }
+		}
 </script>
 <style lang="less" type="text/less" scoped>
 @import url('~@/assets/css/mixins.less');
