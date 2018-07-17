@@ -608,6 +608,7 @@ export default {
       let num = time
       that.isCooling = true;
 
+      clearInterval(that.interval)
       that.interval = setInterval(()=>{
         console.log(num)
         that.transformTime(num);
@@ -653,8 +654,10 @@ export default {
 
     //转换时分秒
     transformTime(s){
-      if(!s){return 0}
-
+      if(!s){
+        this.coolTime = '00:00:00'
+        return 0
+      }
       let t;
       if(s > -1){
           let hour = Math.floor(s/3600);
