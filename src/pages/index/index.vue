@@ -97,7 +97,6 @@
 
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-
     <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
@@ -474,11 +473,11 @@ export default {
       console.log(this.nowIndex,this.usersList.length,status,this.isNext)
       if(!this.isNext){return}
       this.isNext = false
-      let that = this,
-          data = this.usersList[this.nowIndex],
-          beforeCreateStep = this.beforeCreateStep,
-          step = this.usersInfo.step,
-          msg = {
+      let  that = this;
+      let  data = this.usersList[this.nowIndex];
+      let  beforeCreateStep = this.beforeCreateStep;
+      let  step = this.usersInfo.step;
+      let  msg = {
             to_uid: data.id, //data.unionid
           };
 
@@ -498,11 +497,17 @@ export default {
       } 
     },
     isGetUers(){
-      let that = this
+      let that = this;
+      let step = this.usersInfo.step;
 
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
+
+          if(step!=9){
+            that.isCreate()
+            return
+          }
           if(res.data.length<1){
             that.isEnd = true;
           }
@@ -620,6 +625,10 @@ export default {
         },800)
       },(res)=>{
         console.log(res)
+
+        if(res.http_status == 400 && res.code == 99){
+          that.intervalTime(res.data.rest_time)
+        }
         that.$mptoast(res.msg)
         that.isNext = true
       })
