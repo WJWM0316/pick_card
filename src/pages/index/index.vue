@@ -402,6 +402,8 @@ export default {
     tStart (e) {
       let that = this
       that.touchDot = e.touches[0].pageX
+
+      clearInterval(that.interval2)
       that.interval2 =  setInterval(function () {  
          that.time++;  
       }, 100);  
@@ -430,6 +432,7 @@ export default {
       }
     },
     tEnd (e) {
+      console.log('tend')
       clearInterval(this.interval2); // 清除setInterval  
       this.time = 0;  
     },
