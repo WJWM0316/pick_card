@@ -146,10 +146,12 @@ export default {
       withShareTicket: true
     })
     
-    if(option && option.shareTicket){
+    if(option && option.shareTicket &&option.query.type&&option.query.type=='flock'){
       this.test = option.shareTicket
       this.checkLogin()
-    } 
+    }else {
+      this.test = false
+    }
   },
    // 捕获 app error
   onError (err) {
