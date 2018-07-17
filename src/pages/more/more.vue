@@ -6,8 +6,8 @@
 			<view class="num"><text :class="{'numText' : info.content && info.content.length > 0}">{{info.content.length}}</text>/250</view>
 		</view>
 		<view class="imgBox">
-			<view class="item">
-				<image mode=aspectFill @tap="chooseImage" v-if="files.length < 20" src="/static/images/edit_btn_addphoto@2x.png"></image>
+			<view class="item" v-if="files.length < 20">
+				<image mode=aspectFill @tap="chooseImage"  src="/static/images/edit_btn_addphoto@2x.png"></image>
 			</view>
 			<view class="item" v-for="(i, index) in files" :key="index" v-if="index < 20">
 				<image :src="i.path" mode=aspectFill @tap.stop="previewImage(index)"></image>
@@ -66,7 +66,6 @@
 		},
 		methods: {
 			disableFun (e) {
-				console.log(e)
 				this.info.content = e.target.value
 			},
 			chooseImage(e) {
@@ -245,7 +244,7 @@
 			position: fixed;
 			bottom: 0;
 			left: 0;
-			z-index: 2;
+			z-index: 3;
 			
 			button {
 				background: #00D093;

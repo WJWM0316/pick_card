@@ -47,7 +47,7 @@
       </block>
     </view>
     <mptoast />
-    <authorize-pop></authorize-pop>
+    <authorize-pop :showPop='showPop'></authorize-pop>
     
   </view>
 </template>
@@ -77,7 +77,8 @@ export default {
         vkey: ''
       },
       needAuthorize: null,
-      shareData: {},    //
+      shareData: {},
+      showPop: false
     }
   },
 
@@ -88,8 +89,7 @@ export default {
   },
   computed: {
     authorize () {
-      console.log(this.userInfo, 1111111111111111)
-      if (this.userInfo) {
+      if (this.$store.getters.userInfo.vkey) {
         return true
       } else {
         return false
@@ -158,7 +158,6 @@ export default {
 
   onShow(){
     this.needAuthorize = this.$store.getters.needAuthorize
-    console.log(this.authorize, 1111111111111111)
     if (!this.authorize) {
       authorizePop.methods.checkLogin().then(res => {
       })
@@ -197,6 +196,7 @@ export default {
   methods: {
     toShare () {
       if (!this.authorize) {
+        this.showPop = true
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -209,6 +209,7 @@ export default {
     },
     toDetail (item) {
       if (!this.authorize) {
+        this.showPop = true
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -225,8 +226,8 @@ export default {
       })
     },
     join () {
-      console.log(11111, this.authorize)
       if (!this.authorize) {
+        this.showPop = true
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -255,6 +256,7 @@ export default {
 
     quit () {
       if (!this.authorize) {
+        this.showPop = true
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -294,6 +296,7 @@ export default {
 
     swopSlock (id,index) {
       if (!this.authorize) {
+        this.showPop = true
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -330,8 +333,6 @@ export default {
     },
 
     toCreate () {
-      this.$mptoast('创建')
-
       wx.navigateTo({
         url: `/pages/createCard/main`
       })

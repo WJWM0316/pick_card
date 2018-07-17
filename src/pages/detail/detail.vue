@@ -135,7 +135,7 @@
 			<button class="btn applyed" @tap="applyFun('agree')" v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
 			<button class="btn remove" @tap="applyFun('remove')" v-if="userInfo .handle_status === 4">移除名片</button>
 		</view>
-		<authorize-pop></authorize-pop>
+		<authorize-pop :showPop='showPop'></authorize-pop>
 	</view>
 </template>
 <script>
@@ -143,7 +143,6 @@
 	import {formatTime} from '@/utils/index'
 	import authorizePop from '@/components/authorize'
 	import {getShareImg} from '@/api/pages/login'
-	import {mapState} from 'vuex'
 	export default {
 		components: {
 			authorizePop
@@ -165,16 +164,12 @@
 				myCard: false,
 				isShareImg: '',
 				stopShow: false, // 阻止onShow的进行
+				showPop: false
 			}
 		},
 		computed: {
-			...mapState({
-				info: state => state.global.userInfo,
-			})
-		},
-		computed: {
 			authorize () {
-				if (this.info) {
+				if (this.$store.getters.userInfo.vkey) {
 					return true
 				} else {
 					return false
@@ -204,10 +199,14 @@
 			this.labelInfo = []
 			this.moreInfo = {}
 			this.checkedTextList = []
+			if (!this.authorize) {
+	      authorizePop.methods.checkLogin().then(res => {
+	      })
+	    }
 			if (that.isSelf) {
-				console.log('是本人')
+	    	console.log('是本人')
 				that.getUserUnfo()
-			} else {
+	    } else {
 				console.log('非本人')
 				if (that.$store.getters.userInfo.step < 9) {
 					that.myCard = true
@@ -288,6 +287,7 @@
 			},
 			applyFun (type) {
 				if (!this.authorize) {
+					this.showPop = true
 					authorizePop.methods.checkLogin().then(res => {
 					})
 					return
@@ -336,6 +336,7 @@
 			},
 			jumpMy () {
 				if (!this.authorize) {
+					this.showPop = true
 					authorizePop.methods.checkLogin().then(res => {
 					})
 					return
@@ -351,6 +352,7 @@
 			},
 			toShare () {
 				if (!this.authorize) {
+					this.showPop = true
 					authorizePop.methods.checkLogin().then(res => {
 					})
 					return
