@@ -12,16 +12,16 @@
 					<view class="tapIndex"  @tap="toIndex">
 						<image class="icon toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
 					</view>
-					<view class="tapShare" @tap="toShare" v-if="needAuthorize" >
-						<image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image>
-					</view>
-					<button open-type="share" data-type="people" :data-self="isSelf" v-if="!needAuthorize" >
+					<button open-type="share" data-type="people" :data-self="isSelf" v-if="authorize" >
 						<view class="tapShare"><image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image></view>
 					</button>
+					<view class="tapShare" @tap="toShare" v-else>
+						<image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image>
+					</view>
 				</view>
 			</view>
 			<view class="content">
-				<view class="mycard" v-if="!isSelf && myCard || needAuthorize" @tap.stop="jumpMy">
+				<view class="mycard" v-if="!isSelf && myCard || !authorize" @tap.stop="jumpMy">
 					<image class="icon" src="/static/images/float_icon_add@3x.png"></image>
 					<text>我的名片</text>
 				</view>
@@ -143,6 +143,7 @@
 	import {formatTime} from '@/utils/index'
 	import authorizePop from '@/components/authorize'
 	import {getShareImg} from '@/api/pages/login'
+	import {mapState} from 'vuex'
 	export default {
 		components: {
 			authorizePop
@@ -164,7 +165,20 @@
 				myCard: false,
 				isShareImg: '',
 				stopShow: false, // 阻止onShow的进行
-				needAuthorize: false // 是否需要登录
+			}
+		},
+		computed: {
+			...mapState({
+				info: state => state.global.userInfo,
+			})
+		},
+		computed: {
+			authorize () {
+				if (this.info) {
+					return true
+				} else {
+					return false
+				}
 			}
 		},
 		onLoad (option) {
@@ -190,7 +204,6 @@
 			this.labelInfo = []
 			this.moreInfo = {}
 			this.checkedTextList = []
-			this.needAuthorize = this.$store.getters.needAuthorize
 			if (that.isSelf) {
 				console.log('是本人')
 				that.getUserUnfo()
@@ -209,7 +222,7 @@
 	      
 	      console.log(res.target)
 	      
-	      if (res.dataset.type == 'flaunt') {
+	      if (res.target.dataset.type == 'flaunt') {
 	      	return {
 			      title: this.$store.getters.shareInfo.showCard.content,
 			      path: `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.showCard.type}`,
@@ -217,9 +230,9 @@
 			    }
 	      }
 
-	      if (res.dataset.type == "people") {
+	      if (res.target.dataset.type == "people") {
 	      	let shareType
-					if (res.dataset.self) {
+					if (res.target.dataset.self) {
 						shareType = this.$store.getters.shareInfo.mycard.type
 					} else {
 						shareType = this.$store.getters.shareInfo.otherCard.type
@@ -274,7 +287,7 @@
 				}
 			},
 			applyFun (type) {
-				if (!this.$store.getters.userInfo.vkey) {
+				if (!this.authorize) {
 					authorizePop.methods.checkLogin().then(res => {
 					})
 					return
@@ -322,7 +335,7 @@
 				}
 			},
 			jumpMy () {
-				if (this.$store.getters.needAuthorize) {
+				if (!this.authorize) {
 					authorizePop.methods.checkLogin().then(res => {
 					})
 					return
@@ -337,7 +350,7 @@
 	      })
 			},
 			toShare () {
-				if (this.$store.getters.needAuthorize) {
+				if (!this.authorize) {
 					authorizePop.methods.checkLogin().then(res => {
 					})
 					return

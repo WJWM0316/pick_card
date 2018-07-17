@@ -11,10 +11,10 @@
         <view class="r_wrap cur" @tap="toIndex">
           <image class="r_icon" src="/static/images/float_btn_returnhome@3x.png"></image>
         </view>
-        <view class="r_wrap" v-if="needAuthorize" @tap="toShare">
+        <view class="r_wrap" v-if="!authorize" @tap="toShare">
           <image class="r_icon" src="/static/images/float_btn_share@3x.png"></image>
         </view>
-        <button class="r_wrap" open-type="share" data-type="flock">
+        <button class="r_wrap" v-else open-type="share" data-type="flock">
           <image class="r_icon" src="/static/images/float_btn_share@3x.png"></image>
         </button>
       </view>
@@ -58,7 +58,7 @@
   import { deleteRedFlock } from '@/api/pages/red'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi } from '@/api/pages/user'
-
+  import {mapState} from 'vuex'
 export default {
   components: {
     mptoast,
@@ -81,7 +81,20 @@ export default {
     }
   },
 
-  created () {
+  computed: {
+    ...mapState({
+      userInfo: state => state.global.userInfo,
+    })
+  },
+  computed: {
+    authorize () {
+      console.log(this.userInfo, 1111111111111111)
+      if (this.userInfo) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
 
   onLoad(res) {
@@ -145,6 +158,11 @@ export default {
 
   onShow(){
     this.needAuthorize = this.$store.getters.needAuthorize
+    console.log(this.authorize, 1111111111111111)
+    if (!this.authorize) {
+      authorizePop.methods.checkLogin().then(res => {
+      })
+    }
   },
 
   onShareAppMessage: function (res) {
@@ -152,7 +170,7 @@ export default {
     let  that = this;
     let  title = '';
     let  imageUrl = '';
-    let   shareInfo = this.$store.getters.shareInfo
+    let  shareInfo = this.$store.getters.shareInfo
 
     wx.showShareMenu({
       withShareTicket: true
@@ -178,7 +196,7 @@ export default {
 
   methods: {
     toShare () {
-      if (this.$store.getters.needAuthorize) {
+      if (!this.authorize) {
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -190,7 +208,7 @@ export default {
       })
     },
     toDetail (item) {
-      if (this.$store.getters.needAuthorize) {
+      if (!this.authorize) {
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -207,7 +225,8 @@ export default {
       })
     },
     join () {
-      if (this.$store.getters.needAuthorize) {
+      console.log(11111, this.authorize)
+      if (!this.authorize) {
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -235,7 +254,7 @@ export default {
     },
 
     quit () {
-      if (this.$store.getters.needAuthorize) {
+      if (!this.authorize) {
         authorizePop.methods.checkLogin().then(res => {
         })
         return
@@ -274,7 +293,7 @@ export default {
     },
 
     swopSlock (id,index) {
-      if (this.$store.getters.needAuthorize) {
+      if (!this.authorize) {
         authorizePop.methods.checkLogin().then(res => {
         })
         return
