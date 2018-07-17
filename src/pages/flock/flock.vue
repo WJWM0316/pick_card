@@ -58,7 +58,6 @@
   import { deleteRedFlock } from '@/api/pages/red'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi } from '@/api/pages/user'
-  import Vue from 'vue'
 
 export default {
   components: {
@@ -78,7 +77,6 @@ export default {
         vkey: ''
       },
       needAuthorize: null,
-      shareInfo: {},   //分享信息
       shareData: {},    //
     }
   },
@@ -119,7 +117,6 @@ export default {
       return
     }
 
-    this.shareInfo = Vue.prototype.$store.getters.shareInfo
     getUserInfoApi().then(data => {
       that.userInfo = data.data
       let msg = {
@@ -155,6 +152,7 @@ export default {
     let  that = this;
     let  title = '';
     let  imageUrl = '';
+    let   shareInfo = this.$store.getters.shareInfo
 
     wx.showShareMenu({
       withShareTicket: true
@@ -162,8 +160,8 @@ export default {
 
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
-        title = that.shareInfo.createGroupCard?that.shareInfo.createGroupCard.content:'' 
-        imageUrl = that.shareInfo.createGroupCard.path?that.shareInfo.createGroupCard.path:''
+        title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 
+        imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
       }
       // 来自页面内转发按钮

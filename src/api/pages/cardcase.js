@@ -8,6 +8,7 @@ export const getFriends = (data) => {
   	method: 'get',
     url: '/cur/friends',
     data,
+    isLoading: true
   })
 }
 
