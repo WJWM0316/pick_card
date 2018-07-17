@@ -175,7 +175,6 @@ export default {
       this.firstCreateFlock = 1
     }
     this.shareInfo = Vue.prototype.$store.getters.shareInfo
-    console.log(Vue.prototype.$store.getters.shareInfo) 
     that.adaptive = wx.getStorageSync('adaptive')
     getUserInfoApi().then(data => {
       that.usersInfo = data.data
@@ -264,7 +263,6 @@ export default {
       that.topRed = res.data
       that.swopRed = res.data.main_show_red_dot
     })
-
   }
 }
 </script>
@@ -448,6 +446,7 @@ export default {
       height: 100%;
       text-align: center;
       overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
     }
     .card_block {
       position: relative;

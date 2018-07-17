@@ -68,8 +68,8 @@
 			  })
 			},
 			cloPop () {
-				this.$emit('close')
 				this.isShow = false
+				this.$emit('close')
 			},
 
 			preventEvevt (e) {
