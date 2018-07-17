@@ -268,12 +268,11 @@
         that.thirdData.sign.trim()
         thirdSignApi(that.thirdData).then((res)=>{
           if(res.http_status==200){
-            that.$mptoast('创建成功')
             this.bindPhone.isPh = false
             setTimeout(()=>{
               that.nowNum = 0
-              wx.redirectTo({
-                url: `/pages/index/main`
+              wx.navigateBack({
+                delta: 1
               })
             },1000)
           }else {

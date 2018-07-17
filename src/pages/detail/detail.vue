@@ -119,7 +119,7 @@
 			<view class="content">
 				<view class="title">
 					<image class="icon" src="/static/images/details_icon_more@3x.png"></image>
-					<text class="msg">更多介紹</text>
+					<text class="msg">更多介绍</text>
 					<image class="share more" v-if="isSelf" @tap="toEdit('more')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
 				<view class="article" :class="{'noWord' : moreInfo.content === ''}">{{moreInfo.content || '留下些文字或作品吧，让别人更加了解你～'}}</view>
@@ -326,8 +326,9 @@
 								}
 								delDetFriend(data).then(res => {
 									that.userInfo.handle_status = 1
-
-									that.getOtherUserInfo()
+									wx.navigateBack({
+									  delta: 1
+									})
 								})
 							}
 						}
@@ -590,8 +591,9 @@
 				.company {
 					font-size: 28rpx;
 					line-height: 28rpx;
-					color: #C3C9D4;
+					color: #353943;
 					margin-top: 13rpx;
+					font-weight: light;
 					.setEllipsis();
 				}
 				.signature {

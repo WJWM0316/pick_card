@@ -471,7 +471,7 @@
 					.label {	
 						font-size: 28rpx;
 						line-height: 54rpx;
-						color: #DCE3EE;
+						color: #9AA1AB;
 						border-radius:35px;
 						padding: 0 30rpx;
 						border: 1rpx solid rgba(178,182,194,0.4);
@@ -479,6 +479,7 @@
 						box-sizing: border-box;
 						margin-right: 20rpx;
 						margin-top: 20rpx;
+						font-weight: light;
 						&.check {
 							border-color: rgba(0,208,147,1);
 							color: #00D093;
@@ -518,9 +519,10 @@
 					.label {	
 						font-size: 28rpx;
 						line-height: 54rpx;
-						color: #DCE3EE;
+						color: #9AA1AB;
 						border-radius:35px;
 						padding: 0 30rpx;
+						font-family:PingFangSC-Light;
 						border: 1rpx solid rgba(178,182,194,0.4);
 						display:inline-block;
 						box-sizing: border-box;
@@ -556,7 +558,7 @@
 			}
 		}
 		.btn {
-			background: #fff;
+			background: rgba(255,255,255,0.7);
 			margin-top: 80rpx;
 			padding: 30rpx;
 			position: fixed;
