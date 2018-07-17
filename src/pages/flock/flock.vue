@@ -57,6 +57,8 @@
   import {  indexLike  } from '@/api/pages/user'
   import { deleteRedFlock } from '@/api/pages/red'
   import authorizePop from '@/components/authorize'
+  import { getUserInfoApi } from '@/api/pages/user'
+  import Vue from 'vue'
 
 export default {
   components: {
@@ -75,7 +77,9 @@ export default {
         id: '',
         vkey: ''
       },
-      needAuthorize: null
+      needAuthorize: null,
+      shareInfo: {},   //分享信息
+      shareData: {},    //
     }
   },
 
@@ -83,12 +87,9 @@ export default {
   },
 
   onLoad(res) {
-
     console.log(res,'群详情页面')
     let that = this
-    let user = this.$store.getters.userInfo
     let adaptive = wx.setStorageSync('adaptive')
-
     if(!adaptive){
       wx.getSystemInfo({
         success: function(res) {
@@ -96,7 +97,6 @@ export default {
         }
       })
     }
-    that.userInfo = user
 
     if(res&&res.id){
       that.msg= {
@@ -104,7 +104,6 @@ export default {
         vkey: res.vkey
       }
       
-      console.log()
       that.updateData()
       isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
         if(msg.code == 201){
@@ -113,10 +112,38 @@ export default {
           that.isJoin = true
         }
       })
-
     }else {
-      that.$mptoast('缺少信息')
+      wx.navigateTo({
+        url: `/pages/index/main`
+      })
+      return
     }
+
+    this.shareInfo = Vue.prototype.$store.getters.shareInfo
+    getUserInfoApi().then(data => {
+      that.userInfo = data.data
+      let msg = {
+        uid: that.userInfo.id,
+        name: that.userInfo.nickname,
+        img: that.userInfo.avatar_info.smallImgUrl,
+        occupation: that.userInfo.occupation,
+        company: that.userInfo.company,
+        label: [],
+      }
+
+      that.userInfo.other_info.realm_info.forEach(item => {
+        msg.label.push(`${item.name} | `)
+      })
+
+      console.log(msg)
+      msg.label = msg.label.join('')
+      msg.label = msg.label.slice(0, msg.label.length-3)
+
+      getShareImg(msg).then(res => {
+        msg.shareImg = res.data
+        that.shareData = msg
+      })
+    })
   },
 
   onShow(){
@@ -124,13 +151,19 @@ export default {
   },
 
   onShareAppMessage: function (res) {
-    console.log(res)
-    let path = '/pages/index/main?'
-      wx.showShareMenu({
-        withShareTicket: true
-      })
+    let  path = '/pages/flock/main?';
+    let  that = this;
+    let  title = '';
+    let  imageUrl = '';
+
+    wx.showShareMenu({
+      withShareTicket: true
+    })
+
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
+        title = that.shareInfo.createGroupCard?that.shareInfo.createGroupCard.content:'' 
+        imageUrl = that.shareInfo.createGroupCard.path?that.shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
       }
       // 来自页面内转发按钮
@@ -138,10 +171,13 @@ export default {
     console.log(path)
 
     return {
-      title: '自定义转发标题',
-      path: path
+      title: title,
+      path: path,
+      imageUrl: imageUrl
     }
   },
+
+
   methods: {
     toShare () {
       if (this.$store.getters.needAuthorize) {
@@ -214,8 +250,7 @@ export default {
       }
       let that = this
       wx.showModal({
-        title: '提示',
-        content: '确定要退出 “群名片名称” 群名片么？',
+        content: '群里面的大咖都勾搭完了吗',
         success: function(res) {
           if (res.confirm) {
             quitGroup({id:that.msg.vkey}).then((res)=>{

@@ -123,50 +123,6 @@ export default {
       onShowSock: true,
     }
   },
-
-  methods: {
-    toDetail (item) {
-      console.log(item)
-      wx.navigateTo({
-        url: `/pages/detail/main?vkey=${item.friend_user_info.vkey}`
-      })
-    },
-    toIndex () {
-      wx.navigateTo({
-        url: `/pages/index/main`
-      })
-    },
-    openPop(){
-      this.isShow = true
-      this.firstCreateFlock = 1
-      wx.setStorageSync('firstCreateFlock', 1)
-    },
-    toFlock (res,index) {
-      console.log(index)
-      if(res.openGid){
-        this.florkList.list[index].newJoinMemberCount = 0
-        this.florkList.list[index].userGroupTabRedDot = 0
-        this.swopRed = 0
-        wx.navigateTo({
-          url: `/pages/flock/main?id=${res.openGid}&vkey=${res.vkey}`
-        })
-      }else {
-        this.$mptoast('缺少群id')
-      }
-    },
-    toCenter () {
-      wx.navigateTo({
-        url: `/pages/center/main`
-      })
-    },
-    select (type) {
-      if(type==this.nowIndex){
-        return
-      }else {
-        this.nowIndex = this.nowIndex == 1 ? 0: 1
-      }
-    },
-  },
   onLoad() {
     let that = this;
     let firstCreateFlock =  wx.getStorageSync('firstCreateFlock');
@@ -175,7 +131,6 @@ export default {
       this.firstCreateFlock = 1
     }
     this.shareInfo = Vue.prototype.$store.getters.shareInfo
-    console.log(Vue.prototype.$store.getters.shareInfo) 
     that.adaptive = wx.getStorageSync('adaptive')
     getUserInfoApi().then(data => {
       that.usersInfo = data.data
@@ -244,28 +199,95 @@ export default {
   },
   onShow(res){
     let that = this;
+    that.getList();
+  },
+  onPullDownRefresh(res){
+    let that = this;
+    
+    //doing some thing
+    console.log('下拉刷新执行完毕要停止当前页面下拉刷新',res)
+    //setTimeout(function(){
+        //wx.stopPullDownRefresh()
+    //},1000)
 
-    getFriends().then((res)=>{
-      console.log(res)
-      that.friendList = res.data
+    that.getList()
 
-      if(res.http_status==200){
-        deleteRedFriends()
+  },
+  onReachBottom(res){
+    let that = this;
+
+    console.log('下拉刷新执行完毕要停止当前页面下拉刷新',res)
+    //wx.showToast({
+        //title: 'onReachBottom',
+        //icon: 'none',
+        //duration: 600
+    //});
+  },
+  methods: {
+    getList(){
+      let that = this;
+      getFriends().then((res)=>{
+        console.log(res)
+        that.friendList = res.data
+
+        if(res.http_status==200){
+          deleteRedFriends()
+        }
+      },(res)=>{})
+
+      getUserGroupList().then((res)=>{
+        console.log(res)
+        that.florkList = res.data
+      },(res)=>{})
+
+      redDot().then(res=>{
+        that.topRed = res.data
+        that.swopRed = res.data.main_show_red_dot
+      })
+    },
+    toDetail (item) {
+      console.log(item)
+      wx.navigateTo({
+        url: `/pages/detail/main?vkey=${item.friend_user_info.vkey}`
+      })
+    },
+    toIndex () {
+      wx.navigateTo({
+        url: `/pages/index/main`
+      })
+    },
+    openPop(){
+      this.isShow = true
+      this.firstCreateFlock = 1
+      wx.setStorageSync('firstCreateFlock', 1)
+    },
+    toFlock (res,index) {
+      console.log(index)
+      if(res.openGid){
+        this.florkList.list[index].newJoinMemberCount = 0
+        this.florkList.list[index].userGroupTabRedDot = 0
+        this.swopRed = 0
+        wx.navigateTo({
+          url: `/pages/flock/main?id=${res.openGid}&vkey=${res.vkey}`
+        })
+      }else {
+        this.$mptoast('缺少群id')
       }
-    },(res)=>{})
+    },
+    toCenter () {
+      wx.navigateTo({
+        url: `/pages/center/main`
+      })
+    },
+    select (type) {
+      if(type==this.nowIndex){
+        return
+      }else {
+        this.nowIndex = this.nowIndex == 1 ? 0: 1
+      }
+    },
+  },
 
-    getUserGroupList().then((res)=>{
-      console.log(res)
-      that.florkList = res.data
-    },(res)=>{})
-
-    redDotApplys()
-    redDot().then(res=>{
-      that.topRed = res.data
-      that.swopRed = res.data.main_show_red_dot
-    })
-
-  }
 }
 </script>
 
@@ -439,15 +461,12 @@ export default {
         margin-left: 26rpx; 
       }
     }
-    .swip {
-      //height: 90vh;
-    }
+    .swip {}
     .friendList,.flockList {
-      //display: flex;
-      //flex-direction: column;
       height: 100%;
       text-align: center;
       overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
     }
     .card_block {
       position: relative;

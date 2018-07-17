@@ -247,7 +247,6 @@ export default {
     }
   },
   onShow (res) {
-    console.log(this.$store.getters.userInfo.vkey, this.getPage, 22222222)
     if (!this.$store.getters.userInfo.vkey) {
       authorizePop.methods.checkLogin().then(res => {
         if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
@@ -281,6 +280,8 @@ export default {
         
         if(res.data.length<1){
           this.isEnd = true
+        }else {
+          this.isEnd = false
         }
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
