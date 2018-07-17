@@ -140,7 +140,6 @@ export default {
   },
 
   onShow (option) {
-    console.log('test===>onShow', option)
     wx.setStorageSync('routeInfo', option)
     wx.showShareMenu({
       withShareTicket: true

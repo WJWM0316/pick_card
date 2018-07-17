@@ -62,6 +62,7 @@
 				    if (res.statusCode === 200) {
 				    	console.log(res, '下载成功')
 							const ctx = wx.createCanvasContext('shareCanvas')
+							ctx.width = 320
 							ctx.clearActions()
 							ctx.clearRect(0, 0, 320, 550)
 							that.showImg = ''
@@ -114,7 +115,7 @@
 					    ctx.setFillStyle('#00D093')
 					    let position = {
 					    	x: 17,
-					    	y: 360
+					    	y: 355
 					    }
 					    ctx.setStrokeStyle('#00D093')
 							ctx.setLineWidth(1)
@@ -219,15 +220,14 @@
 
 					    ctx.draw(true, () => {
 					    	console.log('画图成功')
+					    	wx.hideLoading()
 					    	wx.canvasToTempFilePath({
 								  x: 0,
 								  y: 0,
-								  width: 320,
-								  height: 550,
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
+								  	console.log('导出图片成功')
 								  	that.showImg = res.tempFilePath
-								  	wx.hideLoading()
 								  } 
 								})
 					      

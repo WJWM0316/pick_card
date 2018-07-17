@@ -157,6 +157,7 @@
 				nowTime: '',
 				myCard: false,
 				isShareImg: '',
+				stopShow: false, // 阻止onShow的进行
 				needAuthorize: false // 是否需要登录
 			}
 		},
@@ -169,7 +170,13 @@
 				this.isSelf = false
 			}
 		},
+		onHide () {
+			this.stopShow = false
+		},
 		onShow () {
+			if (this.stopShow) {
+				return
+			}
 			let that = this
 			this.userInfo = {}
 			this.educationsInfo = []
@@ -190,7 +197,7 @@
 			}
 		},
 		onShareAppMessage: function (res) {
-
+			this.stopShow = true
 	    if (res.from === 'button') {
 	      // 来自页面内转发按钮
 	      
@@ -392,13 +399,17 @@
 				})
 			},
 			previewImg (index) {
+				const _this = this
 				let list = []
 				this.moreInfo.img_info.forEach(item => {
 					list.push(item.bigImgUrl)
 				})
 				wx.previewImage({
 				  current: list[index], // 当前显示图片的http链接
-				  urls: list // 需要预览的图片http链接列表
+				  urls: list, // 需要预览的图片http链接列表
+				  complete: function () {
+				  	_this.stopShow = true
+				  }
 				})
 			}
 		}
