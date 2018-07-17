@@ -293,13 +293,12 @@ export default {
           })
           that.getShareImg()
         }
-        
+        this.nowIndex = 0
         if(res.data.length<1){
           that.isEnd = true
         }else {
           that.isEnd = false
-        }
-
+        } 
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
           that.intervalTime(res.data.rest_time)
