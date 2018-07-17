@@ -9,9 +9,15 @@
 			<view class="positon">
 				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
 				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 0}">
-					<image class="icon toIndex" @tap="toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
-					<image class="icon toShare" v-if="needAuthorize" @tap="toShare" src="/static/images/float_btn_share@3x.png"></image>
-					<button open-type="share" data-type="people" :data-self="isSelf" v-else><image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image></button>
+					<view class="tapIndex"  @tap="toIndex">
+						<image class="icon toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
+					</view>
+					<view class="tapShare" @tap="toShare" v-if="needAuthorize" >
+						<image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image>
+					</view>
+					<button open-type="share" data-type="people" :data-self="isSelf" v-if="!needAuthorize" >
+						<view class="tapShare"><image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image></view>
+					</button>
 				</view>
 			</view>
 			<view class="content">
@@ -268,7 +274,7 @@
 				}
 			},
 			applyFun (type) {
-				if (this.$store.getters.needAuthorize) {
+				if (!this.$store.getters.userInfo.vkey) {
 					authorizePop.methods.checkLogin().then(res => {
 					})
 					return
@@ -480,12 +486,20 @@
 				right: 0;
 				background:rgba(53,57,67,0.3);
 				border-radius:36rpx 0px 0px 36rpx;
+				z-index: 1;
 				&.floor-t {
 					top: 100rpx;
+				}
+				.tapIndex {
+					padding: 20rpx 0 20rpx 20rpx;
+				}
+				.tapShare {
+					padding: 20rpx 20rpx 20rpx 0;
 				}
 				.icon {
 					width: 32rpx;
 					height: 32rpx;
+					display: block;
 					&.toIndex {
 						padding-right: 24rpx;
 						border-right: 1rpx solid #fff;
