@@ -289,17 +289,19 @@
 						this.getOtherUserInfo()
 					})
 				} else {
+					let that = this
 					wx.showModal({
 		        content: '确定要删除名片？',
 		        success: function(res) {
 		          if (res.confirm) {
 								data = {
-									friend_id : this.userInfo.id,
+									friend_id : that.userInfo.id,
 									remarks: '约么'
 								}
 								delDetFriend(data).then(res => {
-									this.userInfo.handle_status = 1
-									this.getOtherUserInfo()
+									that.userInfo.handle_status = 1
+
+									that.getOtherUserInfo()
 								})
 							}
 						}

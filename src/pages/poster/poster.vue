@@ -143,7 +143,7 @@
 					    	if (lineNun === 2 && (newLabelWidth + position.x + metrics + 5) > (320-17)) {
 					    		metrics = ctx.measureText('....').width
 									ctx.fillText('....', position.x + r, position.y + r)
-									return
+									//return
 					    	} else {
 					    		metrics = ctx.measureText(item).width
 									ctx.fillText(item, position.x + r, position.y + r + 4)
@@ -303,8 +303,8 @@
 				}
 			}
 			.showImg {
-				width: 640rpx;
-				height: 1100rpx;
+				width: 320px;
+				height: 550px;
 			}
 		}
 		.save {
