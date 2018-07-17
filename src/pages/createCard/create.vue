@@ -81,7 +81,7 @@
       <view class="table_blo row_style_three" >
         <view class="tit">个性签名</view>
         <!--  -->
-        <textarea maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
+        <textarea maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="用一句话介绍你自己吧～" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
         v-if="!bindPhone.isPh" cursor-spacing="100" />
         <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
