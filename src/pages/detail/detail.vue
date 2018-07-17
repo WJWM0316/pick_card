@@ -1,14 +1,14 @@
 <template>
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
-		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 10">
+		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 0">
 			{{userInfo.apply_count}}人想得到你的名片
 			<view class="flaunt"><button open-type="share" data-type="flaunt" class="xuyao">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></button></view>
 		</view>
-		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 10}">
+		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 0}">
 			<view class="positon">
 				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
-				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 10}">
+				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 0}">
 					<image class="icon toIndex" @tap="toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
 					<image class="icon toShare" v-if="needAuthorize" @tap="toShare" src="/static/images/float_btn_share@3x.png"></image>
 					<button open-type="share" data-type="people" :data-self="isSelf" v-else><image class="icon toShare" src="/static/images/float_btn_share@3x.png"></image></button>
@@ -118,7 +118,7 @@
 				</view>
 				<view class="article" :class="{'noWord' : moreInfo.content === ''}">{{moreInfo.content || '留下些文字或作品吧，让别人更加了解你～'}}</view>
 				<view class="imgBox" v-if="moreInfo.img_info && moreInfo.img_info.length > 0">
-					<image  v-for="(i, index) in moreInfo.img_info" :key="index" class="img" :src="i.smallImgUrl" @tap.stop="previewImg(index)"></image>
+					<image  v-for="(i, index) in moreInfo.img_info" mode="aspectFill" :key="index" class="img" :src="i.smallImgUrl" @tap.stop="previewImg(index)"></image>
 				</view>
 			</view>
 		</view>

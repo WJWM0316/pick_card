@@ -241,38 +241,6 @@ export default {
       }
     })
 
-    authorizePop.methods.checkLogin().then(res => {
-      if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
-         that.isFirst()
-      }
-      getIndexUsers(that.getPage).then((res)=>{
-        that.usersList = res.data
-        that.usersInfo = that.$store.getters.userInfo
-        console.log(that.usersInfo, '用户信息')
-        if(that.usersInfo.step!=9){
-          if(res.data.length<1 && value){
-            that.isCreate()
-            return
-          }
-        }else if (that.usersInfo.step === 9) {
-          redDot().then(res=>{
-            that.swopRed = res.data.main_show_red_dot
-          })
-          that.getShareImg()
-        }
-        
-        if(res.data.length<1){
-          that.isEnd = true
-        }
-      },(res)=>{
-        if(res.http_status == 400 && res.code == 99){
-          that.intervalTime(res.data.rest_time)
-        }
-        this.$mptoast(res.msg)
-      })
-     
-    })
-
     //筛选
     if(res.from && res.from == 'filtrate'){
       this.getPage.occupation_label_id = res.occupation_label_id
@@ -280,47 +248,49 @@ export default {
     }
   },
   onShow (res) {
-    console.log('show=======',this.beforeCreateStep,this.onShowSock)
-    let that = this
-
-    this.toCreateSock = true
-    if(this.onShowSock){
-      this.onShowSock = false
-    }else {
-      getIndexUsers(that.getPage).then((res)=>{
-        that.usersList = res.data
-        if(that.usersInfo.step!=9){
-          //that.nowIndex = that.beforeCreateStep
-          if(res.data.length<1){
-            that.isCreate()
-            return
-          }
-        }/*else {
-          that.nowIndex = 0
-        }*/
-        that.nowIndex = 0
-
-        if (that.usersInfo.step === 9) {
-          redDot().then(res=>{
-            that.swopRed = res.data.main_show_red_dot
-          })
-          that.getShareImg()
+    if (!this.$store.getters.userInfo.vkey) {
+      authorizePop.methods.checkLogin().then(res => {
+        if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
+           this.isFirst()
         }
-        if(res.data.length<1){
-          that.isEnd = true
-        }else {
-          that.isEnd = false
-        }
-      },(res)=>{
-        if(res.http_status == 400 && res.code == 99){
-          that.intervalTime(res.data.rest_time)
-        }
-        this.$mptoast(res.msg)
+        this.dataList()
       })
+    } else {
+      this.isFirst()
+      this.dataList()
     }
   },
   methods: {
-
+    dataList () {
+      let that = this
+      getIndexUsers(this.getPage).then((res)=>{
+        this.usersList = res.data
+        this.usersInfo = this.$store.getters.userInfo
+        console.log(this.usersInfo, '用户信息')
+        if(this.usersInfo.step!=9){
+          if(res.data.length<1 && value){
+            this.isCreate()
+            return
+          }
+        }else if (this.usersInfo.step === 9) {
+          redDot().then(res=>{
+            this.swopRed = res.data.main_show_red_dot
+          })
+          this.getShareImg()
+        }
+        
+        if(res.data.length<1){
+          this.isEnd = true
+        }else {
+          this.isEnd = false
+        }
+      },(res)=>{
+        if(res.http_status == 400 && res.code == 99){
+          this.intervalTime(res.data.rest_time)
+        }
+        this.$mptoast(res.msg)
+      })
+    },
     fromClick (e) {
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
