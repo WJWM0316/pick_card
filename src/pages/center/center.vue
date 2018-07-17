@@ -13,7 +13,7 @@
 							<view class="name">{{info.nickname}}</view>
 							<view class="job">{{info.occupation}}</view>
 						</view>
-						<image class="headImg" :src="info.avatar_info.smallImgUrl"></image>
+						<image class="headImg" :src="info.avatar_info.middleImgUrl"></image>
 					</view>
 					<view class="con">
 						<view class="product"><image class="icon" src="/static/images/me_icon_company@2x.png"></image>{{info.company}}</view>
@@ -310,7 +310,7 @@
 		.save {
 			margin: 0 5rpx;
 			color: #00D093;
-			background: rgba(0,208,147,0.04);
+			background: #F5FDFB;
 			border: 1rpx solid rgba(0,208,147,0.4);
 		}
 	}

@@ -271,8 +271,8 @@
             this.bindPhone.isPh = false
             setTimeout(()=>{
               that.nowNum = 0
-              wx.redirectTo({
-                url: `/pages/index/main`
+              wx.navigateBack({
+                delta: 1
               })
             },1000)
           }else {

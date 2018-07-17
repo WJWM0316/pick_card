@@ -45,6 +45,12 @@
     },
     methods: {
       toIndex(){
+        if (this.jobAry.indexOf(0) !== -1) {
+          this.jobAry = [0]
+        }
+        if (this.liveAry.indexOf(0) !== -1) {
+          this.liveAry = [0]
+        }
         let occupation_label_id = this.jobAry.join(',')
         let realm_label_id = this.liveAry.join(',')
         console.log(occupation_label_id,realm_label_id)
@@ -59,12 +65,7 @@
         if(occupation_label_id == 0 && realm_label_id == 0){
           url = '/pages/index/main'
         }
-        if (occupation_label_id.indexOf(0) !== -1) {
-          occupation_label_id = [0]
-        }
-        if (realm_label_id.indexOf(0) !== -1) {
-          realm_label_id = [0]
-        }
+        
         let data = {
           occupation_label_id: occupation_label_id,
           realm_label_id: realm_label_id

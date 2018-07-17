@@ -1,5 +1,5 @@
 <template>
-	<view class="authorize" v-if="needAuthorize" @touchmove.stop="preventEvevt">
+	<view class="authorize" v-if="needAuthorize && showPop" @touchmove.stop="preventEvevt">
 		<view class="pop">
 			<image class="close" v-if="!isIndex" @tap="close" src="/static/images/popup_btn_close_nor@3x.png"></image>
 			<image class="head" src="/static/images/sou.png"></image>
@@ -28,6 +28,10 @@
 			isIndex: {
 				type: Boolean,
 				default: false
+			},
+			showPop: {
+				type: Boolean,
+				default: true
 			}
 		},
 		data () {
@@ -40,8 +44,8 @@
 			})
 		},
 		watch: {
-			needAuthorize (val) {
-			},
+			needAuthorize (val) {},
+			showPop () {}
 		},
 		onLoad () {
 		},
