@@ -1,8 +1,8 @@
 <template>
   <view class="container" >
     <view class="tit">
-      <view class="item" :class="{'cur':nowIndex==0,'red':topRed.user_card_count>0}" @click="select(0)" >个人名片</view>
-      <view class="item flock" :class="{'cur':nowIndex==1,'red':topRed.user_group_card_count>0}" @click="select(1)" >群名片</view>
+      <view class="item "  :class="{'cur':nowIndex==0,'red':topRed.user_card_count>0}" @click="select(0)" >个人名片</view>
+      <view class="item flock " :class="{'cur':nowIndex==1,'red':topRed.user_group_card_count>0}" @click="select(1)" >群名片</view>
     </view>
     <view class="content">
       <view class="ops">
@@ -120,6 +120,7 @@ export default {
       shareInfo: {},   //分享信息
       isShow: false,   //创建群提示
       firstCreateFlock: 0, //是否第一次创建群
+      onShowSock: true,
     }
   },
 
@@ -170,28 +171,12 @@ export default {
     let that = this;
     let firstCreateFlock =  wx.getStorageSync('firstCreateFlock');
 
-    console.log('=-=-=',firstCreateFlock)
     if(firstCreateFlock>0){
       this.firstCreateFlock = 1
     }
-
     this.shareInfo = Vue.prototype.$store.getters.shareInfo
     console.log(Vue.prototype.$store.getters.shareInfo) 
     that.adaptive = wx.getStorageSync('adaptive')
-    getFriends().then((res)=>{
-      console.log(res)
-      that.friendList = res.data
-
-      if(res.http_status==200){
-        deleteRedFriends()
-      }
-    },(res)=>{})
-
-    getUserGroupList().then((res)=>{
-      console.log(res)
-      that.florkList = res.data
-    },(res)=>{})
-
     getUserInfoApi().then(data => {
       that.usersInfo = data.data
       let msg = {
@@ -216,12 +201,7 @@ export default {
         that.shareData = msg
       })
     })
-
-    redDotApplys()
-    redDot().then(res=>{
-      that.topRed = res.data
-      that.swopRed = res.data.main_show_red_dot
-    })
+    
     wx.getSystemInfo({
       success: function(res) {
         that.systemInfo = res;
@@ -263,9 +243,28 @@ export default {
     }
   },
   onShow(res){
-    wx.showShareMenu({
-      withShareTicket: true
+    let that = this;
+
+    getFriends().then((res)=>{
+      console.log(res)
+      that.friendList = res.data
+
+      if(res.http_status==200){
+        deleteRedFriends()
+      }
+    },(res)=>{})
+
+    getUserGroupList().then((res)=>{
+      console.log(res)
+      that.florkList = res.data
+    },(res)=>{})
+
+    redDotApplys()
+    redDot().then(res=>{
+      that.topRed = res.data
+      that.swopRed = res.data.main_show_red_dot
     })
+
   }
 }
 </script>
@@ -360,8 +359,23 @@ export default {
       font-family:PingFangHK-Light;
       color:rgba(53,57,67,1);
       text-align: center;
+      position: relative;
       &.red {
-        &.cur {
+        &:before {
+          content: '';
+          width:14rpx;
+          height:14rpx;
+          background:rgba(255,81,80,1);
+          background:red;
+          border-radius:50%;
+          position: absolute;
+          top: 15rpx;
+          right: -5rpx;
+        }
+      }
+      &.flock {
+        margin-left: 100rpx;
+        &.red {
           &:before {
             content: '';
             width:14rpx;
@@ -371,27 +385,9 @@ export default {
             border-radius:50%;
             position: absolute;
             top: 15rpx;
-            right: -5rpx;
+            right: 5rpx;
           }
         }
-        &.flock{
-          &.cur {
-            &:before {
-              content: '';
-              width:14rpx;
-              height:14rpx;
-              background:rgba(255,81,80,1);
-              background:red;
-              border-radius:50%;
-              position: absolute;
-              top: 15rpx;
-              right: 5rpx;
-            }
-          }
-        }
-      }
-      &.flock {
-        margin-left: 100rpx;
       }
       &.cur {
         font-size:34rpx;
@@ -577,7 +573,7 @@ export default {
     justify-content: center;
     align-items: center;
     margin-top: 78rpx;
-    margin-bottom: 78rpx;
+    margin-bottom: 176rpx;
     text-align: center;
     color: #9AA1AB;
     button {
