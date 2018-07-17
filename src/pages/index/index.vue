@@ -6,7 +6,7 @@
       <view class="right" @click="toSwop">交换申请<view class="new" v-if="swopRed==1">NEW</view></view>
     </view>
     <view class="content">
-      <view class="peopList" v-if="usersList.length>0">
+      <view class="peopList" v-if="usersList.length>0&&usersInfo.step==9">
         <block v-for="(item, index) in usersList" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
