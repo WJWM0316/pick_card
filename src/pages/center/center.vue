@@ -270,6 +270,8 @@
 				height: 160rpx;
 				width: 160rpx;
 				border-radius: 50%;
+				background: url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/new_pic_alert%403x.png') no-repeat;
+				background-size: 100% 100%;
 			}
 		}
 		.con {
