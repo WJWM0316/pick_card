@@ -87,7 +87,6 @@ export default {
   },
 
   onLoad(res) {
-
     console.log(res,'群详情页面')
     let that = this
     let adaptive = wx.setStorageSync('adaptive')
@@ -114,7 +113,6 @@ export default {
         }
       })
     }else {
-      that.$mptoast('缺少信息')
       wx.navigateTo({
         url: `/pages/index/main`
       })
@@ -146,8 +144,6 @@ export default {
         that.shareData = msg
       })
     })
-
-    
   },
 
   onShow(){
@@ -155,7 +151,7 @@ export default {
   },
 
   onShareAppMessage: function (res) {
-    let path = '/pages/flock/main?';
+    let  path = '/pages/flock/main?';
     let  that = this;
     let  title = '';
     let  imageUrl = '';
@@ -180,6 +176,8 @@ export default {
       imageUrl: imageUrl
     }
   },
+
+
   methods: {
     toShare () {
       if (this.$store.getters.needAuthorize) {
@@ -252,8 +250,7 @@ export default {
       }
       let that = this
       wx.showModal({
-        title: '提示',
-        content: '确定要退出 “群名片名称” 群名片么？',
+        content: '群里面的大咖都勾搭完了吗',
         success: function(res) {
           if (res.confirm) {
             quitGroup({id:that.msg.vkey}).then((res)=>{
