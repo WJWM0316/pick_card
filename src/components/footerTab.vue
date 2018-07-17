@@ -3,7 +3,7 @@
     <view class="footer " :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
       <view class="ft_warp">
         <view class="left">
-          <view class="name " :class="{'cur' : type === 1}" @tap="toTab(1)">Pick</view>
+          <view class="name " :class="{'cur' : type === 1}" @tap="toTab(1)">PickMe</view>
           <view class="name " :class="{'cur' : type === 2,'red': isRed == 1}" @tap="toTab(2)">名片夹</view>
           <view class="name " :class="{'cur' : type === 3}" @tap="toTab(3)">我的名片</view>
         </view>
@@ -148,10 +148,10 @@
     transform: translate(-50%,-50%);
     text-align: center;
     box-sizing: border-box;
-    padding-top: 54rpx;
+    padding-top: 40rpx;
     .share_cont {
-      width:300rpx;
-      height:300rpx;
+      width:375rpx;
+      height:350rpx;
       margin: 0 auto;
     }
     .share_wrap {
@@ -254,7 +254,7 @@
     color:rgba(117,121,128,1);
     .name {
       &.cur {
-        font-size:32rpx;
+        font-size:34rpx;
         font-family:SFUIDisplay-Semibold;
         color:rgba(53,64,72,1);
         position: relative;

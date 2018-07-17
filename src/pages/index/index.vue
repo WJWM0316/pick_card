@@ -3,9 +3,13 @@
   <view class="container" :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
     <view class="op_top">
       <view class="left" @click="toFiltrate">筛选<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
-      <view class="right" @click="toSwop">交换申请<view class="new" v-if="swopRed==1">NEW</view></view>
+      <view class="right" @click="toSwop">
+        交换申请<view class="new" v-if="swopRed==1">NEW</view>
+      </view>
     </view>
     <view class="content">
+      <image class="card_bg" src="/static/images/home_bg@3x.png"></image>
+
       <view class="peopList" >
         <block v-for="(item, index) in usersList" :key="key" >
           <view :index="index" class="peop_blo "
@@ -69,8 +73,12 @@
               <view class="blo_hint_txt">也可邀请好友一起来玩趣名片哦～</view>
             </view>
         </view>
+
         <view class="btns" >
-          <button class="btn type2" data-type="me" open-type="share" v-if="isCooling || isEnd">
+
+          <button class="btn type2"  v-if="isCooling || isEnd">
+            
+
             <image src="/static/images/dafulpage_btn_share@3x.png"></image>
           </button>
           <block v-else>
@@ -81,6 +89,7 @@
               <image src="/static/images/home_btn_like_nor@3x.png"></image>
             </button>
           </block>
+          
         </view>
         <image class="moveImg moveLeft"  src="/static/images/home_toast_unlike@3x.png"
         :class="{'fadeOutLeft animated show': 
@@ -269,35 +278,37 @@ export default {
   methods: {
     dataList () {
       let that = this
-      getIndexUsers(this.getPage).then((res)=>{
-        this.usersList = res.data
-        this.usersInfo = this.$store.getters.userInfo
-        console.log(this.usersInfo, '用户信息')
-        if(this.usersInfo.step!=9){
+      getIndexUsers(that.getPage).then((res)=>{
+        that.usersList = res.data
+        that.usersInfo = that.$store.getters.userInfo
+        console.log(that.usersInfo, '用户信息')
+        if(that.usersInfo.step!=9){
           if(res.data.length<1 && value){
-            this.isCreate()
+            that.isCreate()
             return
           }
-        }else if (this.usersInfo.step === 9) {
+        }else if (that.usersInfo.step === 9) {
           redDot().then(res=>{
-            this.swopRed = res.data.main_show_red_dot
+            that.swopRed = res.data.main_show_red_dot
           })
-          this.getShareImg()
+          that.getShareImg()
         }
         
         if(res.data.length<1){
-          this.isEnd = true
+          that.isEnd = true
         }else {
-          this.isEnd = false
+          that.isEnd = false
         }
+
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
-          this.intervalTime(res.data.rest_time)
+          that.intervalTime(res.data.rest_time)
         }
-        this.$mptoast(res.msg)
+        that.$mptoast(res.msg)
       })
     },
     fromClick (e) {
+      console.log(111)
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
         fromAddress: '/pages/index'
@@ -936,7 +947,7 @@ export default {
 
     .peopList {
       width:640rpx;
-      height:930rpx;
+      height:900rpx;
       //height: 100%;
       display: flex;
       flex-direction: row;
@@ -944,12 +955,21 @@ export default {
       align-items: center;
       margin: 0 auto;
     }
+    .card_bg {
+      width: 740rpx;
+      height: 820rpx;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -410rpx 0  0 -370rpx; 
+    }
     .peopList {
       position: relative;
+
     }
     .peop_blo {
       width:640rpx;
-      height:930rpx;
+      height:900rpx;
       margin: 0 auto;
       border-radius: 18rpx;
       overflow: hidden;
@@ -959,6 +979,7 @@ export default {
       background: #ffffff;
       display: none;
       box-shadow:0rpx 17rpx 28rpx 0rpx rgba(220,227,238,0.2);
+
       &.blo_type2 {
         display: block;
         //z-index: 100;
@@ -979,8 +1000,8 @@ export default {
         .blo_hint_txt {
           font-size:28rpx;
           font-family:PingFangSC-Light;
-          color:rgba(53,57,67,1);
-          line-height:35rpx;
+          color: #9AA1AB;
+          line-height:38rpx;
         }
         .cool_time {
           font-size:48rpx;
@@ -1038,7 +1059,7 @@ export default {
           }
         }
         .text {
-          height: 120rpx;
+          height: 150rpx;
           position: absolute;
           background:linear-gradient(180deg,rgba(255,255,255,0),rgba(0,0,0,0.4));
           bottom: 0;
@@ -1052,6 +1073,7 @@ export default {
             color:rgba(250,251,252,1);
             line-height:48rpx;
             margin-bottom: 10rpx;
+            padding-top: 30rpx;
           }
           .title {
             width: 470rpx;
@@ -1073,14 +1095,16 @@ export default {
         width:100%;
         height:340rpx;
         background: #ffffff;
-        padding: 24rpx 34rpx;
+        padding: 24rpx 45rpx;
         box-sizing: border-box;
         .signature {
+          height: 70rpx;
           font-size:28rpx;
           font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:28rpx;
-          margin-bottom: 34rpx;
+          margin-bottom: 14rpx;
+          overflow: hidden;
         }
         .labelList {
           display: flex;

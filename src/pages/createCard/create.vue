@@ -276,9 +276,7 @@
               })
             },1000)
           }else {
-
             that.$mptoast(res.msg)
-
             if(res.code == 210){
               that.bindPhone.isPh = true
             }

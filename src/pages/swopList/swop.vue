@@ -74,7 +74,7 @@
   .swopList {
     background: #ffffff;
     .swop_blo {
-      border-bottom:2rpx solid #eaebec;
+      border-bottom:1rpx solid #eaebec;
       padding: 40rpx;
 
       .blo_top {
@@ -309,6 +309,10 @@
         path: path,
         imageUrl: imageUrl
       }
+    },
+
+    onShow(){
+      this.isShow = false
     },
 
     created () {

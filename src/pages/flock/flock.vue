@@ -24,7 +24,7 @@
         <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
           <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
             <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
-            <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
+            <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
             <view class="msg_name ellipsis">{{item.nickname}}</view>
             <view class="msg_tit ellipsis">{{item.occupation}}</view>
             <view class="msg_company ellipsis">{{item.company}}</view>
@@ -158,10 +158,12 @@ export default {
 
   onShow(){
     this.needAuthorize = this.$store.getters.needAuthorize
+
     if (!this.authorize) {
       authorizePop.methods.checkLogin().then(res => {
       })
     }
+    this.updateData()
   },
 
   onShareAppMessage: function (res) {
@@ -319,7 +321,7 @@ export default {
               console.log(res)
               if(res.http_status == 200){
                 that.flockInfo.groupMemberList[index].handle_status = 2
-                that.$mptoast('成功')
+                that.$mptoast('申请成功')
               }else{
                 that.$mptoast(res.msg)
               }
@@ -376,13 +378,13 @@ export default {
       position: relative;
       .name {
         font-size:48rpx;
-        font-family:PingFangHK-Semibold;
+        font-family:PingFangSC-Semibold;
         color:rgba(53,57,67,1);
         line-height:48rpx;
       }
       .txt {
         font-size:28rpx;
-        font-family:PingFangHK-Light;
+        font-family:PingFangSC-Light;
         color:rgba(154,161,171,1);
         line-height:28rpx;
         &.one {
@@ -472,7 +474,7 @@ export default {
           }
           .msg_name {
             font-size:34rpx;
-            font-family:PingFangHK-Medium;
+            font-family:PingFangSC-Medium;
             color:rgba(70,71,72,1);
             line-height:34rpx;
             width: 180rpx;
@@ -481,14 +483,14 @@ export default {
           }
           .msg_tit {
             font-size:28rpx;
-            font-family:PingFangHK-Light;
+            font-family:PingFangSC-Light;
             color:rgba(154,161,171,1);
             line-height:28rpx;
             margin: 18rpx 0 10rpx 0;
           }
           .msg_company {
             font-size:28rpx;
-            font-family:PingFangHK-Light;
+            font-family:PingFangSC-Light;
             color:rgba(154,161,171,1);
             line-height:28rpx;
           }
@@ -501,7 +503,7 @@ export default {
             background:rgba(0,208,147,1);
             border-radius:33rpx;
             font-size:28rpx;
-            font-family:PingFangHK-Regular;
+            font-family:PingFangSC-Regular;
             color:rgba(255,255,255,1);
             line-height:66rpx;
             text-align: center;
@@ -515,7 +517,7 @@ export default {
       .hintJoin {
         height:37rpx;
         font-size:26rpx;
-        font-family:PingFangHK-Regular;
+        font-family:PingFangSC-Regular;
         color:rgba(195,201,212,1);
         line-height:37rpx;
         text-align: center;
@@ -526,6 +528,7 @@ export default {
       padding-bottom: 60rpx;
       overflow-y:scroll;
       -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
     }
   }
   .footer {
@@ -539,7 +542,7 @@ export default {
     flex-direction: row;
     align-items: center;
     text-align: center;
-    font-family:PingFangHK-Regular;
+    font-family:PingFangSC-Regular;
     line-height: 96rpx;
     .quit {
       width:222rpx;
@@ -550,7 +553,7 @@ export default {
     .joinShare {
       flex: 1;
       background:rgba(0,208,147,1);
-      font-family:PingFangHK-Regular;
+      font-family:PingFangSC-Regular;
       color:rgba(255,255,255,1);
       height: 96rpx;
       font-size:32rpx;

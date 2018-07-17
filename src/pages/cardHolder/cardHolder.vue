@@ -5,22 +5,23 @@
       <view class="item flock " :class="{'cur':nowIndex==1,'red':topRed.user_group_card_count>0}" @click="select(1)" >群名片</view>
     </view>
     <view class="content">
-      <view class="ops">
-        <button open-type="share" data-type="me" class="ops_blo shareMe" >
-          <image src="/static/images/cardcase_banner_left@3x.png"></image>
-          分享我的名片
-        </button>
-        <button class="ops_blo createFlock" open-type="share" data-type="flock" >
-          <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
-        </button>
-      </view>
+      
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
+          <view class="ops">
+            <button open-type="share" data-type="me" class="ops_blo shareMe" >
+              <image src="/static/images/cardcase_banner_left@3x.png"></image>
+              分享我的名片
+            </button>
+            <button class="ops_blo createFlock" open-type="share" data-type="flock" >
+              <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
+            </button>
+          </view>
           <block v-if="nowIndex == 0">
             <view class="friendList" v-if="friendList.length>0">
                 <view class="card_block"  v-for="(item, index) in friendList" :key="key">
                   <view class="blo_msg " :class="{'one': item.has_red_dot == 1}" @tap="toDetail(item)">
-                    <image class="blo_img"  :src="item.friend_user_info.avatar_info.smallImgUrl" v-if="item.friend_user_info.avatar_info"></image>
-                    <image class="blo_img" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
+                    <image class="blo_img" :src="item.friend_user_info.avatar_info.smallImgUrl" v-if="item.friend_user_info.avatar_info"></image>
+                    <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
 
                     <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
                     <view class="msg_tit  ellipsis">{{item.friend_user_info.occupation}}</view>
@@ -45,7 +46,7 @@
               <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item,index)">
                 <view class="blo_msg flock_blo" >
                   <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
-                  <image class="blo_img"  src="/static/images/new_pic_defaulhead.jpg" v-else></image>
+                  <image class="blo_img"  src="/static/images/pic_defaulhead@3x.png" v-else></image>
                   <open-data class="msg_name" type="groupName" :open-gid="item.openGid"></open-data>
                   <view class="msg_tit">已有{{item.memberCount}}张群成员名片</view>
 
@@ -160,7 +161,7 @@ export default {
       success: function(res) {
         that.systemInfo = res;
         console.log(res)
-        that.spHeight = (res.windowHeight-44-60-40-50)*2;
+        that.spHeight = (res.windowHeight-40-50)*2;
       }
     })
   },
@@ -342,6 +343,7 @@ export default {
         color:rgba(53,57,67,1);
         line-height:34rpx;
         margin-bottom: 40rpx;
+        text-align: center;
       }
       .cont_txt {
         font-size:28rpx;
@@ -360,7 +362,7 @@ export default {
         font-size:28rpx;
         font-family:PingFangSC-Regular;
         color:rgba(154,161,171,1);
-        line-height:40rpx;
+        line-height:50rpx;
       }
       .cont_line {
         width: 100%;
@@ -378,7 +380,7 @@ export default {
         color:rgba(255,255,255,1);
         line-height:98rpx;
         text-align: center;
-        margin-top: 60rpx;
+        margin-top: 20rpx;
       }
     }
   }
@@ -401,7 +403,7 @@ export default {
     .item {
       width: 150rpx;
       font-size:34rpx;
-      font-family:PingFangHK-Light;
+      font-family:PingFangSC-Light;
       color:rgba(53,57,67,1);
       text-align: center;
       position: relative;
@@ -410,12 +412,13 @@ export default {
           content: '';
           width:14rpx;
           height:14rpx;
+          border: 3rpx solid #ffffff;
           background:rgba(255,81,80,1);
           background:red;
           border-radius:50%;
           position: absolute;
           top: 15rpx;
-          right: -5rpx;
+          right: -10rpx;
         }
       }
       &.flock {
@@ -425,6 +428,7 @@ export default {
             content: '';
             width:14rpx;
             height:14rpx;
+            border: 3rpx solid #ffffff;
             background:rgba(255,81,80,1);
             background:red;
             border-radius:50%;
@@ -436,7 +440,7 @@ export default {
       }
       &.cur {
         font-size:34rpx;
-        font-family:PingFangHK-Medium;
+        font-family:PingFangSC-Medium;
         color:rgba(53,57,67,1);
         position: relative;
         &:after {
@@ -467,7 +471,7 @@ export default {
         height:160rpx;
         border-radius:16rpx;
         font-size:26rpx;
-        font-family:PingFangHK-Regular;
+        font-family:PingFangSC-Regular;
         color:rgba(255,255,255,1);
         line-height:120rpx;
         position: relative;
@@ -484,12 +488,14 @@ export default {
         margin-left: 26rpx; 
       }
     }
-    .swip {}
-    .friendList,.flockList {
+    .swip {
       height: 100%;
       text-align: center;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
+    }
+    .friendList,.flockList {
+      
     }
     .card_block {
       position: relative;
@@ -506,8 +512,8 @@ export default {
         border-radius: 50%;
         left: -50rpx;
         top: 50rpx;
-        //box-shadow:0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
-        border:4rpx solid rgba(255,255,255,1);
+        box-shadow: 0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
+        border: 4rpx solid rgba(255,255,255,1);
         box-sizing: border-box;
         
       }
@@ -515,7 +521,6 @@ export default {
         width:600rpx;
         height:230rpx;
         background:rgba(255,255,255,1);
-        //box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 40rpx rgba(153,193,214,0.08);
         border-radius:18rpx;
         padding: 56rpx 30rpx 56rpx 120rpx;
         box-sizing: border-box;
@@ -555,7 +560,7 @@ export default {
           }
           .msg_tit {
             font-size: 28rpx;
-            font-family: PingFangHK-Light;
+            font-family: PingFangSC-Light;
             color: rgba(154,161,171,1);
             line-height: 28rpx;
             margin: 18rpx 0 0rpx 0;
@@ -578,12 +583,12 @@ export default {
           text-align: center;
           line-height: 44rpx;
           font-size:26rpx;
-          font-family:PingFangHK-Medium;
+          font-family:PingFangSC-Medium;
           color:rgba(255,255,255,1);
         }
         .msg_name {
           font-size:34rpx;
-          font-family:PingFangHK-Medium;
+          font-family:PingFangSC-Medium;
           color:rgba(70,71,72,1);
           line-height:34rpx;
           height: 38rpx;
@@ -591,14 +596,14 @@ export default {
         }
         .msg_tit {
           font-size:28rpx;
-          font-family:PingFangHK-Light;
+          font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:28rpx;
           margin: 18rpx 0 10rpx 0;
         }
         .msg_company {
           font-size:28rpx;
-          font-family:PingFangHK-Light;
+          font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:28rpx;
         }
@@ -608,14 +613,14 @@ export default {
   .to_share {
     height:26rpx;
     font-size:26rpx;
-    font-family:PingFangHK-Regular;
+    font-family:PingFangSC-Regular;
     line-height:26rpx;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     margin-top: 78rpx;
-    margin-bottom: 176rpx;
+    margin-bottom: 78rpx;
     text-align: center;
     color: #9AA1AB;
     button {
@@ -642,7 +647,7 @@ export default {
     background:rgba(0,208,147,1);
     border-radius:50rpx;
     font-size:32rpx;
-    font-family:PingFangHK-Regular;
+    font-family:PingFangSC-Regular;
     color:rgba(255,255,255,1);
     line-height:100rpx;
     margin: 0 auto;
