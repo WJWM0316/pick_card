@@ -1,6 +1,6 @@
 <template>
 	<view class="privacy">
-		<view class="item">
+		<view class="item" v-if="false">
 			<view class="itemCon">
 				<view class="left">手机号码</view>
 				<view class="right">
