@@ -127,8 +127,9 @@
 
 
 					    // 画标签
+					    let last = false
 					    function addLabel (item, index) {
-					    	if (lineNun > 2) {
+					    	if (lineNun > 2 || last) {
 					    		return
 					    	}
 					    	ctx.setLineDash([1000]);
@@ -143,7 +144,7 @@
 					    	if (lineNun === 2 && (newLabelWidth + position.x + metrics + 5) > (320-17)) {
 					    		metrics = ctx.measureText('....').width
 									ctx.fillText('....', position.x + r, position.y + r)
-									//return
+									last = true
 					    	} else {
 					    		metrics = ctx.measureText(item).width
 									ctx.fillText(item, position.x + r, position.y + r + 4)
@@ -179,42 +180,42 @@
 					    ctx.setStrokeStyle('#DCE3EE')
 					    ctx.setLineDash([5, 10], 0)
 							ctx.beginPath()
-							ctx.moveTo(17, 430)
-							ctx.lineTo(303, 430)
+							ctx.moveTo(17, 420)
+							ctx.lineTo(303, 420)
 							ctx.stroke()
 
 							// 清除圆镂空部分
-							function clearArc(x,y,radius){ //圆心(x,y)，半径radius
-								var calcWidth = radius - stepClear;
-								var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
+							// function clearArc(x,y,radius){ //圆心(x,y)，半径radius
+							// 	var calcWidth = radius - stepClear;
+							// 	var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
 								
-								var posX = x - calcWidth
-								var posY = y - calcHeight
+							// 	var posX = x - calcWidth
+							// 	var posY = y - calcHeight
 								
-								var widthX = 2 * calcWidth
-								var heightY = 2 * calcHeight
+							// 	var widthX = 2 * calcWidth
+							// 	var heightY = 2 * calcHeight
 								
-								if(stepClear <= radius){
-									ctx.clearRect(posX, posY, widthX, heightY)
-									stepClear += 1
-									clearArc(x, y, radius)
-								}
-							}
-							let stepClear = 1;//别忘记这一步
-							ctx.beginPath();
-							clearArc(0, position.y + 10, 10)
-							ctx.save() 
-							stepClear = 1
-							clearArc(320, position.y + 10, 10)
+							// 	if(stepClear <= radius){
+							// 		ctx.clearRect(posX, posY, widthX, heightY)
+							// 		stepClear += 1
+							// 		clearArc(x, y, radius)
+							// 	}
+							// }
+							// let stepClear = 1;//别忘记这一步
+							// ctx.beginPath();
+							// clearArc(0, position.y + 10, 10)
+							// ctx.save() 
+							// stepClear = 1
+							// clearArc(320, position.y + 10, 10)
 
 							// 画指引文案
 							ctx.setTextAlign('left')
 					    ctx.setFillStyle('#B2B6C2')
 					    ctx.setFontSize(14)
-					    ctx.fillText('长按添加TA的趣名片', 30, 500)
+					    ctx.fillText('长按添加TA的趣名片', 30, 490)
 
 					    // 画二维码
-					    ctx.drawImage(that.imgUrl, 200, 440, 100, 100)
+					    ctx.drawImage(that.imgUrl, 200, 430, 100, 100)
 
 					    ctx.draw(true, () => {
 					    	console.log('画图成功')
@@ -223,8 +224,6 @@
 								  y: 0,
 								  width: 320,
 								  height: 550,
-								  destWidth: 960,
-								  destHeight: 1650,
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
 								  	that.showImg = res.tempFilePath
