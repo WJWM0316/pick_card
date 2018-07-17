@@ -6,7 +6,7 @@
     </view>
     <view class="content">
       <view class="ops">
-        <button open-type="share" data-type="me" class="ops_blo shareMe" @tap="toMeDetail">
+        <button open-type="share" data-type="me" class="ops_blo shareMe" >
           <image src="/static/images/cardcase_banner_left@3x.png"></image>
           分享我的名片
         </button>
@@ -28,7 +28,7 @@
                   </view>
                 </view>
               <view class="to_share">
-                <button open-type="share">分享我的名片</button>，获取更多职场人脉
+                <button open-type="share" data-type="me">分享我的名片</button>，获取更多职场人脉
               </view>
             </view>
             <block  v-else>
@@ -174,10 +174,9 @@ export default {
     wx.showShareMenu({
       withShareTicket: true
     })
-
+    console.log(shareInfo)
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
-
         title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 
         imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
