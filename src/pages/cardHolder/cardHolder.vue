@@ -10,14 +10,9 @@
           <image src="/static/images/cardcase_banner_left@3x.png"></image>
           分享我的名片
         </button>
-
-        <button class="ops_blo createFlock" open-type="share" data-type="flock" v-if="firstCreateFlock>0">
+        <button class="ops_blo createFlock" open-type="share" data-type="flock" >
           <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
         </button>
-        <button  @tap="openPop"  class="ops_blo createFlock" v-else>
-          <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
-        </button>
-
       </view>
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
           <block v-if="nowIndex == 0">
@@ -61,8 +56,7 @@
             <block  v-else>
               <view class="none_blo">
                 <view class="none_txt">创建群名片，把微信群友变成你的职场人脉</view>
-                <button class="none_btn" data-type="flock" open-type="share"  v-if="firstCreateFlock>0">去创建 </button>
-                <button class="none_btn" @tap="openPop"  v-else>去创建 </button>
+                <button class="none_btn" data-type="flock" open-type="share" >去创建 </button>
               </view>
             </block>
           </block>
@@ -81,7 +75,13 @@
           <view class="cont_txt2">2.打开需要创建群名片的微信群聊 </view>
           <view class="cont_txt2">3.点击你分享的小程序卡片 </view>
           <view class="cont_txt2">4.完成创建</view>
-          <button class="cont_btn " data-type="flock" open-type="share">知道了</button>
+          <view class="cont_btn " @tap="cloShow">知道了</view>
+
+          <view class="radio-group" @tap="radioChange">
+            <image class="radio-group_img" src="/static/images/popup_btn_select_nor@3x.png" v-if="!isCheck"></image>
+            <image class="radio-group_img" src="/static/images/popup_btn_select_sel@3x.png" v-if="isCheck"></image>
+            不在提示
+          </view>
         </view>
       </view>
     <authorize-pop :isIndex='true'></authorize-pop>
@@ -119,16 +119,17 @@ export default {
       shareData: {},    //
       shareInfo: {},   //分享信息
       isShow: false,   //创建群提示
-      firstCreateFlock: 0, //是否第一次创建群
       onShowSock: true,
+      isCheck: false,
     }
   },
   onLoad() {
     let that = this;
-    let firstCreateFlock =  wx.getStorageSync('firstCreateFlock');
+    let isCheck =  wx.getStorageSync('isCheck');
 
-    if(firstCreateFlock>0){
-      this.firstCreateFlock = 1
+    console.log('=-=-=-=-',isCheck)
+    if(isCheck>0){
+      this.isCheck = true
     }
     this.shareInfo = Vue.prototype.$store.getters.shareInfo
     that.adaptive = wx.getStorageSync('adaptive')
@@ -179,7 +180,6 @@ export default {
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
 
-        that.isShow = false;
         title = that.shareInfo.createGroupCard?that.shareInfo.createGroupCard.content:'' 
         imageUrl = that.shareInfo.createGroupCard.path?that.shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
@@ -191,10 +191,19 @@ export default {
       }
       // 来自页面内转发按钮
     }
+      console.log(that.isCheck)
+
     return {
       title: title,
       path: path,
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
+      complete(){
+      console.log(that.isCheck)
+        
+        if(res.target.dataset.type=="flock" && !that.isCheck){
+          that.isShow = true;
+        }
+      }
     }
   },
   onShow(res){
@@ -203,27 +212,30 @@ export default {
   },
   onPullDownRefresh(res){
     let that = this;
-    
+
     //doing some thing
     console.log('下拉刷新执行完毕要停止当前页面下拉刷新',res)
-    //setTimeout(function(){
-        //wx.stopPullDownRefresh()
-    //},1000)
-
     that.getList()
-
+    setTimeout(function(){
+        wx.stopPullDownRefresh()
+    },1500)
   },
+
   onReachBottom(res){
     let that = this;
-
-    console.log('下拉刷新执行完毕要停止当前页面下拉刷新',res)
-    //wx.showToast({
-        //title: 'onReachBottom',
-        //icon: 'none',
-        //duration: 600
-    //});
   },
+
   methods: {
+    radioChange(e){
+      this.isCheck = !this.isCheck
+    },
+    cloShow(){
+      this.isShow = false
+
+      if(this.isCheck){
+        wx.setStorageSync('isCheck', 1)
+      }
+    },
     getList(){
       let that = this;
       getFriends().then((res)=>{
@@ -255,11 +267,6 @@ export default {
       wx.navigateTo({
         url: `/pages/index/main`
       })
-    },
-    openPop(){
-      this.isShow = true
-      this.firstCreateFlock = 1
-      wx.setStorageSync('firstCreateFlock', 1)
     },
     toFlock (res,index) {
       console.log(index)
@@ -293,6 +300,21 @@ export default {
 
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
+  .radio-group {
+    text-align: center;
+    font-size:30fpx;
+    font-family:PingFangSC-Regular;
+    color:rgba(154,161,171,1);
+    margin-top: 40rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    image {
+      width: 40rpx;
+      height: 40rpx;
+      margin-right: 14rpx;
+    }
+  }
   .hintPop {
     background:rgba(0,0,0,0.7);
     position: fixed;

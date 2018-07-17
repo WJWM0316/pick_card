@@ -198,7 +198,7 @@ export default {
     let that = this
     let title = '趣名片'
     let imageUrl = ''
-    let shareInfo = Vue.prototype.$store.getters.shareInfo
+    let shareInfo = this.$store.getters.shareInfo
 
     wx.showShareMenu({
       withShareTicket: true
@@ -206,9 +206,10 @@ export default {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       if(res.target.dataset.type=="me"){
-        imageUrl = that.shareData.shareImg
-        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
-        title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片'
+        imageUrl = that.shareData.shareImg;
+        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.vkey}&shareType=${shareInfo.showCard.type}`;
+        
+        title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片';
       }
     }
 
