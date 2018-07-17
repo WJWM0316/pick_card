@@ -209,7 +209,7 @@
 	      
 	      console.log(res.target)
 	      
-	      if (res.target.dataset.type == 'flaunt') {
+	      if (res.dataset.type == 'flaunt') {
 	      	return {
 			      title: this.$store.getters.shareInfo.showCard.content,
 			      path: `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.showCard.type}`,
@@ -217,9 +217,9 @@
 			    }
 	      }
 
-	      if (res.target.dataset.type == "people") {
+	      if (res.dataset.type == "people") {
 	      	let shareType
-					if (res.target.self) {
+					if (res.dataset.self) {
 						shareType = this.$store.getters.shareInfo.mycard.type
 					} else {
 						shareType = this.$store.getters.shareInfo.otherCard.type
