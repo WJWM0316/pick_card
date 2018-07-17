@@ -40,18 +40,26 @@ export const postGetLabelByIds = (data) => {
   return request({
     method: 'post',
     url: '/label/getLabelByIds',
-    data,
-    isLoading: false
+    data
   })
 }
+
+// 获取用户已筛选标签
+export const getChoiceLabel = (data) => {
+  return request({
+    method: 'post',
+    url: '/label/showUserChoiceLabel',
+    data,
+  })
+}
+
 
 // 获取用户标签接口
 export const postUserLabel = (data) => {
   return request({
     method: 'post',
     url: '/label/showSimpleLabel',
-    data,
-    isLoading: false
+    data
   })
 }
 

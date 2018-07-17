@@ -128,6 +128,15 @@
 			this.option = option
 		},
 		onShow () {
+			if (this.option.type == 'education') {
+				wx.setNavigationBarTitle({
+				  title: '编辑教育经历'
+				})
+			} else {
+				wx.setNavigationBarTitle({
+				  title: '编辑工作经历'
+				})
+			}
 			this.isNow = false
 			this.nowTime = formatTime(new Date(), 'YYYY-MM')
 			if (this.option.id !== 'undefined') {

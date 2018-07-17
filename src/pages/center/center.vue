@@ -13,7 +13,7 @@
 							<view class="name">{{info.nickname}}</view>
 							<view class="job">{{info.occupation}}</view>
 						</view>
-						<image class="headImg" :src="info.avatar_info.smallImgUrl || '/static/images/new_pic_defaulhead.jpg'"></image>
+						<image class="headImg" :src="info.avatar_info.smallImgUrl"></image>
 					</view>
 					<view class="con">
 						<view class="product"><image class="icon" src="/static/images/me_icon_company@2x.png"></image>{{info.company}}</view>
@@ -229,11 +229,15 @@
 			align-items: center;
 			justify-content: space-between;
 			padding: 0 5rpx;
+			.msg {
+				width: 394rpx;
+			}
 			.name {
 				color: #353943;
 				font-size: 56rpx;
 				line-height: 56rpx;
 				font-weight: 500;
+				.setEllipsis();
 			}
 			.job {
 				color: #353943;
@@ -241,6 +245,7 @@
 				line-height: 32rpx;
 				font-weight: light;
 				margin-top: 10rpx;
+				.setEllipsis();
 			}
 			.headImg {
 				height: 160rpx;

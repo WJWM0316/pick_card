@@ -1,6 +1,6 @@
 
 <template>
-  <view class="container" >
+  <view class="container" v-if="show">
     <view class="hint">会根据你选择的条件,来发现你的职场新朋友,可多选噢～</view>
     <view class="op_two ">
       <view class="table_blo row_style_two">
@@ -27,7 +27,7 @@
 
 <script>
   import mptoast from 'mptoast'
-  import { postGetLabelByIds } from '@/api/pages/login'
+  import { postGetLabelByIds, getChoiceLabel } from '@/api/pages/login'
 
   export default {
     
@@ -36,10 +36,11 @@
     },
     data () {
       return {
+        show: false,
         jobData: [],
         jobAry:[],
-        liveAry:[0],
-        liveData: [0],
+        liveAry:[],
+        liveData: [],
       }
     },
     methods: {
@@ -58,6 +59,12 @@
         if(occupation_label_id == 0 && realm_label_id == 0){
           url = '/pages/index/main'
         }
+        if (occupation_label_id.indexOf(0) !== -1) {
+          occupation_label_id = [0]
+        }
+        if (realm_label_id.indexOf(0) !== -1) {
+          realm_label_id = [0]
+        }
         let data = {
           occupation_label_id: occupation_label_id,
           realm_label_id: realm_label_id
@@ -66,7 +73,7 @@
         let url =  `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
 
         console.log(url)
-        wx.navigateTo({
+        wx.reLaunch({
           url:url
         })
       },
@@ -131,8 +138,31 @@
             item['isCur'] = false
       　   });
       　 });
-        that.jobData = [{id:0,name:'不限',isCur:true},...res.data[1].son]
-        that.liveData = [{id:0,name:'不限',isCur:true},...res.data[0].son]
+        that.jobData = [{id:0,name:'不限',isCur:false},...res.data[1].son]
+        that.liveData = [{id:0,name:'不限',isCur:false},...res.data[0].son]
+
+        getChoiceLabel().then(res => {
+          let list = res.data
+          that.show = true
+          list.forEach(item => {
+            if (item.oneLevel === 3) {
+              that.jobAry.push(item.id)
+              that.jobData.forEach((e,index) => {
+                if (item.id == e.id) {
+                  that.jobData[index].isCur = true
+                }
+              })
+            } else if (item.oneLevel === 1) {
+              that.liveAry.push(item.id)
+              that.liveData.forEach((e,index) => {
+                if (item.id == e.id) {
+                  that.liveData[index].isCur = true
+                }
+              })
+            }
+          })
+        })
+
       },(res)=>{
         
       })
