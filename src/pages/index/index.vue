@@ -6,7 +6,7 @@
       <view class="right" @click="toSwop">交换申请<view class="new" v-if="swopRed==1">NEW</view></view>
     </view>
     <view class="content">
-      <view class="peopList" v-if="usersList.length>0">
+      <view class="peopList" >
         <block v-for="(item, index) in usersList" :key="key" >
           <view :index="index" class="peop_blo "
           :class="{
@@ -158,10 +158,6 @@ export default {
       interval2: null,
       usersList: [],
       usersInfo: [],
-      toCreate: {
-        isToCreate: true,
-        num: 0
-      },
 
       touchDot: 0,
       time: 0,
@@ -229,6 +225,7 @@ export default {
     let value = wx.getStorageSync('pickCardFirst')
     let beforeCreateStep =wx.getStorageSync('beforeCreateStep')&&wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
     that.beforeCreateStep = beforeCreateStep;
+
     wx.getSystemInfo({
       success: function(res) {
         that.systemInfo = res
@@ -252,13 +249,11 @@ export default {
         that.usersInfo = that.$store.getters.userInfo
         console.log(that.usersInfo, '用户信息')
         if(that.usersInfo.step!=9){
-          that.toCreate.isToCreate = false
           if(res.data.length<1 && value){
             that.isCreate()
             return
           }
-        }
-        if (that.usersInfo.step === 9) {
+        }else if (that.usersInfo.step === 9) {
           redDot().then(res=>{
             that.swopRed = res.data.main_show_red_dot
           })
@@ -295,7 +290,6 @@ export default {
         that.usersList = res.data
         if(that.usersInfo.step!=9){
           //that.nowIndex = that.beforeCreateStep
-          that.toCreate.isToCreate = false
           if(res.data.length<1){
             that.isCreate()
             return
@@ -323,12 +317,7 @@ export default {
     }
   },
   methods: {
-    //测试去创建
-    testCreate(){
-      wx.navigateTo({
-        url: `/pages/createCard/main`
-      })
-    },
+
     fromClick (e) {
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
@@ -427,8 +416,6 @@ export default {
         wx.navigateTo({
           url: `/pages/createCard/main`
         })
-      }else if(this.usersInfo.step == 9){
-        this.toCreate.isToCreate = true
       }
     },
     //跳转====
@@ -616,7 +603,6 @@ export default {
           style: 'left', 
         }
         that.nowIndex ++
-        that.toCreate.num++
 
         that.isGetUers()
 
