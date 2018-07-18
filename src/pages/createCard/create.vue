@@ -274,9 +274,11 @@
               that.nowNum = 0
               that.$store.dispatch('userInfo', res.data)
               console.log('已更新个人信息', that.$store.getters.userInfo)
-              wx.navigateBack({
-                delta: 1
-              })
+              setTimeout(function () {
+                wx.navigateBack({
+                  delta: 1
+                })
+              }, 1000)
             })
           }else {
             that.$mptoast(res.msg)

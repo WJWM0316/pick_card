@@ -307,9 +307,9 @@ export default {
   methods: {
     dataList () {
       let that = this
-      that.usersInfo = that.$store.getters.userInfo
-      console.log(that.usersInfo, '用户信息')
       getIndexUsers(that.getPage).then((res)=>{
+        that.usersInfo = that.$store.getters.userInfo
+        console.log(that.usersInfo, '用户信息')
         that.usersList = res.data
         if(that.usersInfo.step!=9){
           if(res.data.length<1 && value){
