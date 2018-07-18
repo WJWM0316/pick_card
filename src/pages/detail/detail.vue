@@ -1,14 +1,14 @@
 <template>
 	<view class="detail" :class="{'self' : isSelf}">
 		<!-- 主要展示 -->
-		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 0">
+		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 10">
 			{{userInfo.apply_count}}人想得到你的名片
 			<view class="flaunt"><button open-type="share" data-type="flaunt" class="xuyao">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></button></view>
 		</view>
-		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 0}">
+		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 10}">
 			<view class="positon">
 				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.bigImgUrl"></image>
-				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 0}">
+				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 10}">
 					<view class="tapIndex"  @tap="toIndex">
 						<image class="icon toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
 					</view>

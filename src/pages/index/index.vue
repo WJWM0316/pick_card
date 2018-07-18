@@ -31,7 +31,7 @@
           @touchmove="tMove" >
             <form report-submit="true" class="top" @submit="fromClick">
             <button class="top" @tap="toDetail(item)" formType="submit">
-              <image class="bage" :src="item.avatar_info.bigImgUrl" v-if="item.avatar_info.middleImgUrl"></image>
+              <image class="bage" :src="item.avatar_info.bigImgUrl" mode=widthFix v-if="item.avatar_info.bigImgUrl"></image>
               <image class="bage" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
               <view class="location">
                 <image class="adr" src="/static/images/home_icon_location_nor@3x.png"></image>
@@ -1072,7 +1072,7 @@ export default {
       .top {
         width:100%;
         height:590rpx;
-        
+        overflow:hidden;
         border-radius:18rpx 18rpx 0rpx 0rpx;
         position: relative;
         .bage {

@@ -3,8 +3,8 @@
 		<view class="pop">
 			<image class="close" v-if="!isIndex" @tap="close" src="/static/images/popup_btn_close_nor@3x.png"></image>
 			<image class="head" src="/static/images/sou.png"></image>
-			<view class="title">欢迎来到 Pick！趣名片<br>使用名片功能需要获取你的授权</view>
-			<view class="msg">Pick！趣名片向你保证不会将你的信息泄 露给第三方，仅用于读取名片夹的信息和 名片信息的展示。</view>
+			<view class="title">欢迎来到趣名片PickMe<br>使用名片功能需要获取你的授权</view>
+			<view class="msg">趣名片PickMe向你保证不会将你的信息泄露给第三方，仅用于读取名片夹的信息和名片信息的展示。</view>
 			<button class="btn" @getuserinfo="onGetUserinfo" open-type="getUserInfo" type="primary">授权</button>
 		</view>
 	</view>

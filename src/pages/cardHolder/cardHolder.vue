@@ -68,7 +68,7 @@
       <!-- 分享弹窗 -->
       <view class="hint_cont" > 
         <view class="cont_tit" >小阔爱，sorry啦~</view>
-        <view class="cont_txt">因为微信平台有限制。你分享之后，需要 到对应的微信群聊里边，点击你分享的小 程序卡片才能成功创建群名片喔~</view>
+        <view class="cont_txt">因为微信平台有限制。你分享之后，需要到对应的微信群聊里边，点击你分享的小程序卡片才能成功创建群名片喔~</view>
         <view class="cont_line"></view>
 
         <view class="cont_tit2">步骤详解：</view>

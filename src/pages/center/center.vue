@@ -26,7 +26,7 @@
 							<image class="san" src="/static/images/me_icon_edit_chevron@2x.png"></image></view>
 					</view>
 				</view>
-				<button open-type="myDetail" class="share">发名片</button>
+				<button open-type="share" data-type="myDetail" class="share">发名片</button>
 				<button class="save" @tap="toSaveImg">保存名片到相册</button>
 			</view>
 			<viwe class="setting">
