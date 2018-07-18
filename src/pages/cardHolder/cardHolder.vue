@@ -133,7 +133,6 @@ export default {
     this.shareInfo = this.$store.getters.shareInfo
     that.adaptive = wx.getStorageSync('adaptive')
 
-    console.log()
     getUserInfoApi().then(data => {
       that.usersInfo = data.data
       let msg = {
@@ -240,7 +239,7 @@ export default {
         wx.setStorageSync('isCheck', 1)
       }
     },
-    getList(){
+    getList(num){
       let that = this;
       getFriends().then((res)=>{
         console.log(res)

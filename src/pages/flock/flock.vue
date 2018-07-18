@@ -114,7 +114,6 @@ export default {
         id: res.id,
         vkey: res.vkey
       }
-      
       that.updateData()
       isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
         if(msg.code == 201){
@@ -181,7 +180,7 @@ export default {
       if(res.target.dataset.type=="flock"){
         title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 
         imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
-        path+='form=cardHolder&type=flock'
+        path='/pages/index/main?form=cardHolder&type=flock'
       }
       // 来自页面内转发按钮
     }
