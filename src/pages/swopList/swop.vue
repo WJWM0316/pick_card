@@ -28,8 +28,8 @@
           <text class="top_status" v-else>已交换</text>
         </view>
 
-        <view class="txt_img ">
-          <image class="none_img" src="/static/images/applylist_icon_like@3x.png"></image>
+        <view class="blo_bot ">
+          <image class="txt_img" src="/static/images/applylist_icon_like@3x.png"></image>
           <view class="txt ellipsis">{{item.remarks}}</view>
         </view>
       </view>
