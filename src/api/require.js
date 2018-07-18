@@ -32,6 +32,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
     }
     wx.request({
       url: config.baseHost+url,
+      cv: 100,
       header: addHttpHead,
       data: data,
       method: method,

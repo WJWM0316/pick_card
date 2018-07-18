@@ -26,7 +26,7 @@
 							<image class="san" src="/static/images/me_icon_edit_chevron@2x.png"></image></view>
 					</view>
 				</view>
-				<button open-type="share" class="share">发名片</button>
+				<button open-type="myDetail" class="share">发名片</button>
 				<button class="save" @tap="toSaveImg">保存名片到相册</button>
 			</view>
 			<viwe class="setting">
@@ -116,24 +116,23 @@
 					this.checkedTextList.push(e.name)
 				})
 			}
-			if (!this.isShareImg) {
-	      let data = {
-	      	uid: this.info.id,
-	      	name: this.info.nickname,
-	      	img: this.info.avatar_info.bigImgUrl,
-	      	occupation: this.info.occupation,
-	      	company: this.info.company,
-	      	label: [],
-	      }
-	      this.info.other_info.realm_info.forEach(item => {
-	      	data.label.push(`${item.name} | `)
-	      })
-	      data.label = data.label.join('')
-	      data.label = data.label.slice(0, data.label.length-3)
-	      getShareImg(data).then(res => {
-	      	this.isShareImg = res.data
-	      })
-		  }
+      let data = {
+      	uid: this.info.id,
+      	name: this.info.nickname,
+      	img: this.info.avatar_info.bigImgUrl,
+      	occupation: this.info.occupation,
+      	company: this.info.company,
+      	label: [],
+      }
+      this.info.other_info.realm_info.forEach(item => {
+      	data.label.push(`${item.name} | `)
+      })
+      data.label = data.label.join('')
+      data.label = data.label.slice(0, data.label.length-3)
+      getShareImg(data).then(res => {
+      	this.isShareImg = res.data
+      })
+
 		},
 		onShareAppMessage: function (res) {
 			console.log(res)
@@ -143,27 +142,26 @@
 			let title = shareInfo.index.content
 			let imageUrl = shareInfo.index.path
 
-	    	if (res.from === 'button') {
-				//footer 弹框分享
-		    	if(res.target.dataset.type=="index"){
-		    		title = shareInfo.index?shareInfo.index.content:''
-		    		imageUrl = shareInfo.index.path
-		    		path = `/pages/index/main?vkey=${that.info.vkey}&shareUid=${that.info.vkey}&shareType=${shareInfo.showCard.type}`
-		    	}else {
-		      		// 来自页面内转发按钮
-    		      		console.log(res.target)
-    			      title = shareInfo.mycard.content,
-    			      path= `pages/detail/main?vkey=${that.info.vkey}&shareUid=${that.info.vkey}&shareType=${shareInfo.mycard.type}`,
-    			      imageUrl= that.isShareImg
-		    	}
-		      		
-	    	}
+    	if (res.from === 'button') {
+			//footer 弹框分享
+	    	if(res.target.dataset.type=="index"){
+	    		title = shareInfo.index?shareInfo.index.content:''
+	    		imageUrl = shareInfo.index.path
+	    		path = `/pages/index/main?vkey=${that.info.vkey}&shareUid=${that.info.vkey}&shareType=${shareInfo.showCard.type}`
+	    	} else if (res.target.dataset.type=='myDetail') {
+	      	// 来自页面内转发按钮
+	      	console.log(res.target)
+		      title = shareInfo.mycard.content,
+		      path= `pages/detail/main?vkey=${that.info.vkey}&shareUid=${that.info.vkey}&shareType=${shareInfo.mycard.type}`,
+		      imageUrl= that.isShareImg
+	    	}		
+    	}
 
-	    	return {
-	    	  title: title,
-	    	  path: path,
-	    	  imageUrl: imageUrl,
-	    	}
+    	return {
+    	  title: title,
+    	  path: path,
+    	  imageUrl: imageUrl,
+    	}
  	 	},
 		methods: {
 			toJump () {

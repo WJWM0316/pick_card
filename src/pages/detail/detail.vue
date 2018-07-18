@@ -7,7 +7,7 @@
 		</view>
 		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 0}">
 			<view class="positon">
-				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.middleImgUrl"></image>
+				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.bigImgUrl"></image>
 				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 0}">
 					<view class="tapIndex"  @tap="toIndex">
 						<image class="icon toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
@@ -617,7 +617,7 @@
 					}
 					.msg {
 						font-size: 28rpx;
-						line-height: 28rpx;
+						line-height: 40rpx;
 						color: #353943;
 						margin-left: 26rpx;
 						&.isShow {

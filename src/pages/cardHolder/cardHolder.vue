@@ -8,7 +8,7 @@
       
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
           <view class="ops">
-            <button open-type="share" data-type="me" class="ops_blo shareMe" >
+            <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
               <image src="/static/images/cardcase_banner_left@3x.png"></image>
               分享我的名片
             </button>
@@ -184,7 +184,7 @@ export default {
         imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
       }
-      if(res.target.dataset.type=="me"){
+      if(res.target.dataset.type=="myDetail"){
         title = shareInfo.mycard?shareInfo.mycard.content:''
         imageUrl = that.shareData.shareImg
         path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`

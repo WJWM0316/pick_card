@@ -127,7 +127,6 @@ export default {
         id: res.id,
         vkey: res.vkey
       }
-      //that.updateData()
 
 
       that.isFlockId = true

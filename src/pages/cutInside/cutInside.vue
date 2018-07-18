@@ -39,7 +39,7 @@ export default {
         width,
         height,
         scale: 2.5,
-        zoom: 8,
+        zoom: 10,
         cut: {
           x: (width - 330) / 2,
           y: (height - 330) / 2,
