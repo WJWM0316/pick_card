@@ -28,7 +28,7 @@
                     <view class="msg_company ellipsis">{{item.friend_user_info.company}}</view>
                   </view>
                 </view>
-              <view class="to_share">
+              <view class="to_share" :class="{ten: adaptive == 'ten'}">
                 <button open-type="share" data-type="me">分享我的名片</button>，获取更多职场人脉
               </view>
             </view>
@@ -64,27 +64,27 @@
       </view>
     </view>
 
-      <view class="hintPop" v-if="isShow">
-        <!-- 分享弹窗 -->
-        <view class="hint_cont" > 
-          <view class="cont_tit" >小阔爱，sorry啦~</view>
-          <view class="cont_txt">因为微信平台有限制。你分享之后，需要 到对应的微信群聊里边，点击你分享的小 程序卡片才能成功创建群名片喔~</view>
-          <view class="cont_line"></view>
+    <view class="hintPop" v-if="isShow">
+      <!-- 分享弹窗 -->
+      <view class="hint_cont" > 
+        <view class="cont_tit" >小阔爱，sorry啦~</view>
+        <view class="cont_txt">因为微信平台有限制。你分享之后，需要 到对应的微信群聊里边，点击你分享的小 程序卡片才能成功创建群名片喔~</view>
+        <view class="cont_line"></view>
 
-          <view class="cont_tit2">步骤详解：</view>
-          <view class="cont_txt2">1.点击创建群名片——分享群名片到相应群 </view>
-          <view class="cont_txt2">2.打开需要创建群名片的微信群聊 </view>
-          <view class="cont_txt2">3.点击你分享的小程序卡片 </view>
-          <view class="cont_txt2">4.完成创建</view>
-          <view class="cont_btn " @tap="cloShow">知道了</view>
+        <view class="cont_tit2">步骤详解：</view>
+        <view class="cont_txt2">1.点击创建群名片——分享群名片到相应群 </view>
+        <view class="cont_txt2">2.打开需要创建群名片的微信群聊 </view>
+        <view class="cont_txt2">3.点击你分享的小程序卡片 </view>
+        <view class="cont_txt2">4.完成创建</view>
+        <view class="cont_btn " @tap="cloShow">知道了</view>
 
-          <view class="radio-group" @tap="radioChange">
-            <image class="radio-group_img" src="/static/images/popup_btn_select_nor@3x.png" v-if="!isCheck"></image>
-            <image class="radio-group_img" src="/static/images/popup_btn_select_sel@3x.png" v-if="isCheck"></image>
-            不在提示
-          </view>
+        <view class="radio-group" @tap="radioChange">
+          <image class="radio-group_img" src="/static/images/popup_btn_select_nor@3x.png" v-if="!isCheck"></image>
+          <image class="radio-group_img" src="/static/images/popup_btn_select_sel@3x.png" v-if="isCheck"></image>
+          不在提示
         </view>
       </view>
+    </view>
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
     <footerTab :type=2 :adaptive=adaptive :isRed=swopRed></footerTab>
@@ -132,6 +132,8 @@ export default {
     }
     this.shareInfo = this.$store.getters.shareInfo
     that.adaptive = wx.getStorageSync('adaptive')
+
+    console.log()
     getUserInfoApi().then(data => {
       that.usersInfo = data.data
       let msg = {
@@ -623,6 +625,9 @@ export default {
     margin-bottom: 78rpx;
     text-align: center;
     color: #9AA1AB;
+    &.ten {
+      margin-bottom: 158rpx;
+    }
     button {
       color: #00D093;
       font-size: 26rpx;
