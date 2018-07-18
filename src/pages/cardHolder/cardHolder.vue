@@ -81,7 +81,7 @@
         <view class="radio-group" @tap="radioChange">
           <image class="radio-group_img" src="/static/images/popup_btn_select_nor@3x.png" v-if="!isCheck"></image>
           <image class="radio-group_img" src="/static/images/popup_btn_select_sel@3x.png" v-if="isCheck"></image>
-          不在提示
+          不再提示
         </view>
       </view>
     </view>

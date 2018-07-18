@@ -78,7 +78,8 @@ export default {
       },
       needAuthorize: null,
       shareData: {},
-      showPop: false
+      showPop: false,
+      isFlockId: false,
     }
   },
 
@@ -114,7 +115,8 @@ export default {
         id: res.id,
         vkey: res.vkey
       }
-      that.updateData()
+
+      that.isFlockId = true
       isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
         if(msg.code == 201){
           that.isJoin = false
@@ -162,7 +164,10 @@ export default {
       authorizePop.methods.checkLogin().then(res => {
       })
     }
-    this.updateData()
+
+    if (this.isFlockId){
+       this.updateData()
+    }
   },
 
   onShareAppMessage: function (res) {
@@ -507,7 +512,7 @@ export default {
             line-height:66rpx;
             text-align: center;
             &.type_2 {
-              font-size:28px;
+              font-size:28rpx;
               font-family:PingFangHK-Light;
               background:rgba(255,255,255,1);
               color:rgba(154,161,171,1);
