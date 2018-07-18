@@ -268,17 +268,17 @@
         that.thirdData.sign.trim()
         thirdSignApi(that.thirdData).then((res)=>{
           if(res.http_status==200){
-            this.$mptoast('创建成功')
-            this.bindPhone.isPh = false
-            getUserInfoApi().then(res0 => {
-              that.nowNum = 0
-              that.$store.dispatch('userInfo', res.data)
+            that.$mptoast('创建成功')
+            that.bindPhone.isPh = false
+            getUserInfoApi().then(res0 => {     
+              that.$store.dispatch('userInfo', res0.data)
               console.log('已更新个人信息', that.$store.getters.userInfo)
               setTimeout(function () {
+                that.nowNum = 0
                 wx.navigateBack({
                   delta: 1
                 })
-              }, 1000)
+              }, 2000)
             })
           }else {
             that.$mptoast(res.msg)
