@@ -20,12 +20,11 @@
             <view class="msg_name ellipsis">{{item.apply_user_info.nickname}} {{item.apply_user_info.occupation}}</view>
             <view class="msg_form ellipsis">{{item.apply_user_info.company}}</view>
           </view>
-          <button class="top_btn" @tap.stop="putApply(item.id,index)" v-if="item.status==0">
-            同意
-            <form report-submit="true" class="from-box" @submit="fromClick">
-                <button formType="submit" class="from-mask  "></button>
-            </form>
-          </button>
+
+          <form report-submit="true" class="top_btn" @submit="fromClick" v-if="item.status==0">
+              <button formType="submit" class="top_btn" @tap.stop="putApply(item.id,index)"  >同意</button>
+          </form>
+
           <text class="top_status" v-else>已交换</text>
         </view>
 
