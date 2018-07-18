@@ -1125,18 +1125,21 @@ export default {
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
+          height: 116rpx;
+          overflow: hidden;
           .label_blo {
-            padding: 12rpx 26rpx;
+            padding: 0 26rpx;
             box-sizing: border-box;
             font-size:24rpx;
             font-family:PingFangHK-Regular;
-            border-radius:24px;
+            border-radius:24rpx;
             color:rgba(0,208,147,1);
-            line-height:24rpx;
+            line-height:48rpx;
             text-align: center;
             border: 1rpx solid rgba(0,208,147,1);
             margin-right: 10rpx;
             margin-bottom: 14rpx;
+            height: 48rpx;
           }
         }
       }
