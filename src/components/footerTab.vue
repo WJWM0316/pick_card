@@ -252,9 +252,10 @@
     font-size:32rpx;
     font-family:PingFangHK-Light;
     color:rgba(117,121,128,1);
+    margin: 0 48rpx;
     .name {
       &.cur {
-        font-size:34rpx;
+        font-size:32rpx;
         font-family:SFUIDisplay-Semibold;
         color:rgba(53,64,72,1);
         position: relative;

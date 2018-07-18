@@ -339,7 +339,6 @@ export default {
           }
         })
       })
-        
     },
     fromClick (e) {
       console.log(111)
@@ -519,9 +518,11 @@ export default {
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
 
-          if(step!=9){
+          if(step!=9 && step){
             that.isCreate()
             return
+          }else {
+            console.log(step)
           }
           if(res.data.length<1){
             that.isEnd = true;
@@ -1144,7 +1145,7 @@ export default {
           font-size:28rpx;
           font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
-          line-height:28rpx;
+          line-height:35rpx;
           margin-bottom: 14rpx;
           overflow: hidden;
         }
