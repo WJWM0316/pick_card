@@ -307,35 +307,33 @@ export default {
   methods: {
     dataList () {
       let that = this
-      getUserInfoApi().then(msg=>{
-        that.usersInfo = msg.data
-        console.log(that.usersInfo, '用户信息')
-        getIndexUsers(that.getPage).then((res)=>{
-          that.usersList = res.data
-          if(that.usersInfo.step!=9){
-            if(res.data.length<1 && value){
-              that.isCreate()
-              return
-            }
-          }else if (that.usersInfo.step === 9) {
-            redDot().then(res=>{
-              that.swopRed = res.data.main_show_red_dot
-            })
-            that.getShareImg()
+      that.usersInfo = that.$store.getters.userInfo
+      console.log(that.usersInfo, '用户信息')
+      getIndexUsers(that.getPage).then((res)=>{
+        that.usersList = res.data
+        if(that.usersInfo.step!=9){
+          if(res.data.length<1 && value){
+            that.isCreate()
+            return
           }
-          this.nowIndex = 0
-          if(res.data.length<1){
-            that.isEnd = true
-          }else {
-            that.isEnd = false
-          } 
-        },(res)=>{
-          if(res.http_status == 400 && res.code == 99){
-            that.intervalTime(res.data.rest_time)
-          }else {
-            that.$mptoast(res.msg)
-          }
-        })
+        }else if (that.usersInfo.step === 9) {
+          redDot().then(res=>{
+            that.swopRed = res.data.main_show_red_dot
+          })
+          that.getShareImg()
+        }
+        this.nowIndex = 0
+        if(res.data.length<1){
+          that.isEnd = true
+        }else {
+          that.isEnd = false
+        } 
+      },(res)=>{
+        if(res.http_status == 400 && res.code == 99){
+          that.intervalTime(res.data.rest_time)
+        }else {
+          that.$mptoast(res.msg)
+        }
       })
     },
     fromClick (e) {
