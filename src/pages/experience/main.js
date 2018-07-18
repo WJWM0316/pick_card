@@ -6,7 +6,7 @@ app.$mount();
 
 export default {
   config: {
-    navigationBarTitleText: '编辑经历',
+    navigationBarTitleText: '',
     enablePullDownRefresh: false,
   },
 };

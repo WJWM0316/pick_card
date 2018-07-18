@@ -135,7 +135,7 @@ export default {
       let msg = {
         uid: that.userInfo.id,
         name: that.userInfo.nickname,
-        img: that.userInfo.avatar_info.smallImgUrl,
+        img: that.userInfo.avatar_info.bigImgUrl,
         occupation: that.userInfo.occupation,
         company: that.userInfo.company,
         label: [],

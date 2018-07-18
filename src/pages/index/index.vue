@@ -161,7 +161,7 @@
   import App from '@/App'
   import {loginApi,getShareImg,getChoiceLabel} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
-  import { getIndexUsers, indexLike, indexUnlike, getUserInfoApi } from '@/api/pages/user'
+  import { getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
   import Vue from 'vue'
 
@@ -680,7 +680,7 @@ export default {
       msg = {
         uid: usersInfo.id,
         name: usersInfo.nickname,
-        img: usersInfo.avatar_info.smallImgUrl,
+        img: usersInfo.avatar_info.bigImgUrl,
         occupation: usersInfo.occupation?usersInfo.occupation:'test',
         company: usersInfo.company,
         label: [],

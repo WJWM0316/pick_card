@@ -149,10 +149,6 @@
 					end_time_desc: ''
 				}
 			}
-			console.log(this.nowTime, this.info.end_time_desc, this.nowTime === this.info.end_time_desc, 11111111111)
-			if (this.nowTime === this.info.end_time_desc) {
-				this.isNow = true
-			}
 		},
 		onReady () {
 		},
@@ -277,7 +273,7 @@
 						end_time: this.info.end_time_desc
 					}
 					if (this.isNow) {
-						data.end_time = this.nowTime
+						data.end_time = '至今'
 					}
 					if (id !== 'undefined') {
 						data.id = id
@@ -297,7 +293,7 @@
 						end_time: this.info.end_time_desc
 					}
 					if (this.isNow) {
-						data.end_time = this.nowTime
+						data.end_time = '至今'
 					}
 					if (id !== 'undefined') {
 						data.id = id
@@ -365,6 +361,10 @@
 				list.filter(item => {
 					if (item.id == id) {
 						this.info = item
+						if (this.info && this.info.end_time_desc === '至今') {
+							this.info.end_time_desc = ''
+							this.isNow = true
+						}
 					}
 				})
 			},
