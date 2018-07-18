@@ -82,7 +82,7 @@
     .two_bottom {
       width:28rpx;
       height:30rpx;
-      margin: 38rpx 0 80rpx 10rpx;
+      margin: 32rpx 0 68rpx 10rpx;
     }
     .peaple {
       height:100rpx;
@@ -109,8 +109,8 @@
       margin: 34rpx 0 110rpx 0;
     }
     .two_pic {
-      height:70rpx;
-      width: 430rpx;
+      height:82rpx;
+      width: 443rpx;
     }
   }
   .state_1 {
@@ -136,7 +136,7 @@
       width: 480rpx;
       line-height:34rpx;
       font-size:27rpx;
-      font-family:PingFangSC-Regular;
+      font-family:SFUIDisplay-Heavy;
       color:rgba(53,57,67,0.81);
       text-align: center;
     }

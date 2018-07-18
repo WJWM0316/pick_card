@@ -159,7 +159,7 @@
   import mptoast from 'mptoast'
   import footerTab from '@/components/footerTab'
   import App from '@/App'
-  import {loginApi,getShareImg} from '@/api/pages/login'
+  import {loginApi,getShareImg,getChoiceLabel} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
   import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
@@ -269,9 +269,25 @@ export default {
     })
 
     //筛选
+    this.getPage.occupation_label_id = ''
+    this.getPage.realm_label_id = ''
     if(res.from && res.from == 'filtrate'){
       this.getPage.occupation_label_id = res.occupation_label_id
       this.getPage.realm_label_id = res.realm_label_id
+    } else {
+      let occupation_label = [],
+          realm_label = []
+      getChoiceLabel().then(res => {
+        res.data.forEach(item => {
+          if (item.oneLevel === 1) {
+            occupation_label.push(item.id)
+          } else {
+            realm_label.push(item.id)
+          }
+        })
+        this.getPage.occupation_label_id = occupation_label.join(',')
+        this.getPage.realm_label_id = realm_label.join(',')
+      })
     }
   },
   onShow (res) {
