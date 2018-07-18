@@ -213,35 +213,39 @@
 			}
 		},
 		onShareAppMessage: function (res) {
+			let path = '/pages/index/main?';
+			let shareInfo = this.$store.getters.shareInfo
+			let that = this
+			let title = shareInfo.index.content
+			let imageUrl = shareInfo.index.path
 			this.stopShow = true
-	    if (res.from === 'button') {
-	      // 来自页面内转发按钮
-	      
-	      console.log(res.target)
-	      
-	      if (res.target.dataset.type == 'flaunt') {
-	      	return {
-			      title: this.$store.getters.shareInfo.showCard.content,
-			      path: `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.vkey}&shareType=${this.$store.getters.shareInfo.showCard.type}`,
-			      imageUrl: this.$store.getters.shareInfo.showCard.path
-			    }
-	      }
+		    if (res.from === 'button') {
+		      // 来自页面内转发按钮
+		      console.log(res.target)
+		      if (res.target.dataset.type == 'flaunt') {
+			      title = shareInfo.showCard.content,
+			      path = `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.vkey}&shareType=${shareInfo.showCard.type}`,
+			      imageUrl = shareInfo.showCard.path
+		      }
 
-	      if (res.target.dataset.type == "people") {
-	      	let shareType
-					if (res.target.dataset.self) {
-						shareType = this.$store.getters.shareInfo.mycard.type
-					} else {
-						shareType = this.$store.getters.shareInfo.otherCard.type
-					}
-      		return {
-			      title: this.$store.getters.shareInfo.otherCard.content,
-			      path: `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${shareType}`,
-			      imageUrl: this.isShareImg
-		    	}
-	      }
-	    }
-	  },
+		      if (res.target.dataset.type == "people") {
+		      	let shareType
+				if (res.target.dataset.self) {
+					shareType = shareInfo.mycard.type
+				} else {
+					shareType = shareInfo.otherCard.type
+				}
+			      title = shareInfo.otherCard.content,
+			      path = `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${shareType}`,
+			      imageUrl = this.isShareImg
+		      }
+		    }
+		    return {
+		      title: title,
+		      path: path,
+		      imageUrl: imageUrl,
+		    }
+		 },
 		methods: {
 			getShareImg () {
 	      let data = {

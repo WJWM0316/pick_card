@@ -301,11 +301,11 @@
     },
 
     onShareAppMessage: function (res) {
-      let that = this;
       let path = '/pages/index/main?'
-      let imageUrl = ''
-      let title = ''
-      let shareInfo = Vue.prototype.$store.getters.shareInfo
+      let shareInfo = this.$store.getters.shareInfo
+      let that = this
+      let title = shareInfo.index.content
+      let imageUrl = shareInfo.index.path
 
         console.log(shareInfo)
         wx.showShareMenu({

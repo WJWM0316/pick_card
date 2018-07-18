@@ -169,14 +169,15 @@ export default {
   onShareAppMessage: function (res) {
     console.log(res)
     let path = '/pages/index/main?';
-    let that = this;
-    let title = '';
-    let imageUrl = '';
-    let shareInfo = this.$store.getters.shareInfo;
+    let shareInfo = this.$store.getters.shareInfo
+    let that = this
+    let title = shareInfo.index.content
+    let imageUrl = shareInfo.index.path
+
     wx.showShareMenu({
       withShareTicket: true
     })
-    console.log(shareInfo)
+    
     if (res.from === 'button' ) {
       if(res.target.dataset.type=="flock"){
         title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 

@@ -181,7 +181,21 @@
       },(res)=>{
         
       })
-    }
+    },
+    onShareAppMessage: function (res) {
+      console.log(res)
+      let path = '/pages/index/main?';
+      let shareInfo = this.$store.getters.shareInfo
+      let that = this
+      let title = shareInfo.index.content
+      let imageUrl = shareInfo.index.path
+
+      return {
+        title: title,
+        path: path,
+        imageUrl: imageUrl,
+      }
+    },
   }
 </script>
 

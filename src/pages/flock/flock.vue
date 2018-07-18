@@ -22,27 +22,42 @@
     <view class="content">
       <view class="peoList" :style="{ height: spHeight+'rpx' }">
         <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
-          <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}">
-            <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
-            <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
-            <view class="msg_name ellipsis">{{item.nickname}}</view>
-            <view class="msg_tit ellipsis">{{item.occupation}}</view>
-            <view class="msg_company ellipsis">{{item.company}}</view>
-            <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
-            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
-            <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
-          </view>
+          <block v-if="!isJoin">
+            <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" v-if="index<10">
+              <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
+              <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
+              <view class="msg_name ellipsis">{{item.nickname}}</view>
+              <view class="msg_tit ellipsis">{{item.occupation}}</view>
+              <view class="msg_company ellipsis">{{item.company}}</view>
+              <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
+              <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+              <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
+            </view>
+          </block>
+          <block v-else>
+            <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" >
+              <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
+              <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
+              <view class="msg_name ellipsis">{{item.nickname}}</view>
+              <view class="msg_tit ellipsis">{{item.occupation}}</view>
+              <view class="msg_company ellipsis">{{item.company}}</view>
+              <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
+              <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+              <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
+            </view>
+          </block>
         </view>
+        <view class="hintJoin" v-if="!isJoin">—— 加入后即可查看所有群成员的名片 ——</view>
       </view>
 
-      <view class="hintJoin" v-if="!isJoin && isFirst">—— 加入后即可查看所有群成员的名片 ——</view>
+      
     </view>
     <view class="footer">
       <block v-if="isJoin">
         <view class="quit" @tap="quit">退出该群</view>
         <button open-type="share" data-type="flock" class="joinShare">邀请群里的成员加入</button>
       </block>
-      <block v-if="!isJoin && isFirst">
+      <block v-if="!isJoin">
         <button class="joinShare" @tap="join">加入该群名片</button>
       </block>
     </view>
@@ -69,7 +84,6 @@ export default {
       userInfo: [],
       flockInfo:[],
       isJoin: false,
-      isFirst: true,
       isFirstFlock: true,
       spHeight: '',
       msg: {
@@ -172,10 +186,10 @@ export default {
 
   onShareAppMessage: function (res) {
     let  path = '/pages/flock/main?';
-    let  that = this;
-    let  title = '';
-    let  imageUrl = '';
-    let  shareInfo = this.$store.getters.shareInfo
+    let shareInfo = this.$store.getters.shareInfo
+    let that = this
+    let title = shareInfo.index.content
+    let imageUrl = shareInfo.index.path
 
     wx.showShareMenu({
       withShareTicket: true
@@ -527,7 +541,6 @@ export default {
         color:rgba(195,201,212,1);
         line-height:37rpx;
         text-align: center;
-        margin-top: 70rpx;
       }
     }
     .peoList {
