@@ -83,7 +83,8 @@
 	          const curIndex = _this.files.length
 	          _this.files = _this.files.concat(res.tempFiles || [])
 	          _this.loading = true
-	          _this.count =+ res.tempFiles.length
+	          _this.count += res.tempFiles.length
+	          console.log(_this.count, res.tempFiles, 111111111)
 	          uploadImages(res.tempFiles, {
 			        onItemSuccess: (resp, file, index) => {
 			        },

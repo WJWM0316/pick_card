@@ -291,9 +291,7 @@ export default {
     }
   },
   onShow (res) {
-
     this.isNext = true;
-
     if (!this.$store.getters.userInfo.vkey) {
       authorizePop.methods.checkLogin().then(res => {
         if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
@@ -311,6 +309,8 @@ export default {
       let that = this
       getUserInfoApi().then(msg=>{
         that.usersInfo = msg.data
+        that.usersInfo = that.$store.getters.userInfo
+
         console.log(that.usersInfo, '用户信息')
         getIndexUsers(that.getPage).then((res)=>{
           that.usersList = res.data
@@ -339,7 +339,7 @@ export default {
           }
         })
       })
-      
+        
     },
     fromClick (e) {
       console.log(111)
@@ -518,6 +518,7 @@ export default {
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
+
           if(step!=9){
             that.isCreate()
             return
@@ -527,6 +528,7 @@ export default {
           }
           that.isCooling = false;
           that.usersList = [...this.usersList,...res.data];
+          //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
             that.intervalTime(res.data.rest_time)
