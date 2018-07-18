@@ -117,7 +117,6 @@ export const getSessionKeyApi = (data) => {
   return request({
     url: '/auth/getSessionKey',
     data,
-    isLoading: true
   })
 }
 
@@ -158,7 +157,8 @@ export const getShareConfig = (data) => {
 export const getShareImg = (data) => {
   return request({
     url: '/share/getShareImages',
-    data
+    data,
+    isLoading: false
   })
 }
 

@@ -161,7 +161,7 @@
   import App from '@/App'
   import {loginApi,getShareImg,getChoiceLabel} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
-  import { getIndexUsers, indexLike, indexUnlike, getUserInfoApi } from '@/api/pages/user'
+  import { getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
   import Vue from 'vue'
 
@@ -308,12 +308,9 @@ export default {
   methods: {
     dataList () {
       let that = this
-      that.usersInfo = that.$store.getters.userInfo
-      console.log(that.usersInfo, '用户信息')
-
-      
-
       getIndexUsers(that.getPage).then((res)=>{
+        that.usersInfo = that.$store.getters.userInfo
+        console.log(that.usersInfo, '用户信息')
         that.usersList = res.data
         if(that.usersInfo.step!=9){
           if(res.data.length<1 && value){
@@ -689,7 +686,7 @@ export default {
       msg = {
         uid: usersInfo.id,
         name: usersInfo.nickname,
-        img: usersInfo.avatar_info.smallImgUrl,
+        img: usersInfo.avatar_info.bigImgUrl,
         occupation: usersInfo.occupation?usersInfo.occupation:'test',
         company: usersInfo.company,
         label: [],

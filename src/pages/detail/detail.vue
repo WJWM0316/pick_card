@@ -90,7 +90,7 @@
 					<text class="msg">工作经历</text>
 				</view>
 				<view class="litm" v-for="(item, index) in workInfo" v-if="index < showWorkNum || isSelf" :key="index">
-					<view class="date">{{item.start_time_desc}} - {{nowTime !== item.end_time_desc ? item.end_time_desc : '至今'}}<image class="share" v-if="isSelf" @tap.stop="toEdit('work', item.id)" src="/static/images/deta_btn_edit@3x.png"></image></view>
+					<view class="date">{{item.start_time_desc}} - {{item.end_time_desc}}<image class="share" v-if="isSelf" @tap.stop="toEdit('work', item.id)" src="/static/images/deta_btn_edit@3x.png"></image></view>
 					<view class="job">{{item.position}}</view>
 					<view class="company">{{item.name}}</view>
 				</view>
@@ -106,7 +106,7 @@
 					<text class="msg">教育经历</text>
 				</view>
 				<view class="litm" v-for="(item, index) in educationsInfo" v-if="index < showEducationNum || isSelf" :key="index">
-					<view class="date">{{item.start_time_desc}} - {{nowTime !== item.end_time_desc ? item.end_time_desc : '至今'}}<image class="share" v-if="isSelf"  @tap.stop="toEdit('education', item.id)"src="/static/images/deta_btn_edit@3x.png"></image></view>
+					<view class="date">{{item.start_time_desc}} - {{item.end_time_desc}}<image class="share" v-if="isSelf"  @tap.stop="toEdit('education', item.id)"src="/static/images/deta_btn_edit@3x.png"></image></view>
 					<view class="school">{{item.name}}</view>
 				</view>
 				<button class="open" v-if="!isSelf" v-show="educationsInfo.length > 2" @tap="open(2)"><text v-show="showEducationNum === 2">展开查看更多</text><text v-show="showEducationNum > 2">收起</text></button>
@@ -249,7 +249,7 @@
 	      let data = {
 	      	uid: this.userInfo.id,
 	      	name: this.userInfo.nickname,
-	      	img: this.userInfo.avatar_info.smallImgUrl,
+	      	img: this.userInfo.avatar_info.bigImgUrl,
 	      	occupation: this.userInfo.occupation,
 	      	company: this.userInfo.company,
 	      	label: [],
@@ -400,7 +400,6 @@
 					this.userInfo.other_info.realm_info.forEach(e => {
 						this.checkedTextList.push(e.name)
 					})
-					this.nowTime = formatTime(new Date(), 'YYYY-MM')
 					this.$store.dispatch('userInfo', res.data)
 					this.getShareImg()
 				})
@@ -416,7 +415,6 @@
 					this.userInfo.other_info.realm_info.forEach(e => {
 						this.checkedTextList.push(e.name)
 					})
-					this.nowTime = formatTime(new Date(), 'YYYY-MM')
 					this.getShareImg()
 				})
 			},

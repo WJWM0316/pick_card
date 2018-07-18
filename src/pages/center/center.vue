@@ -119,7 +119,7 @@
 			      let data = {
 			      	uid: this.info.id,
 			      	name: this.info.nickname,
-			      	img: this.info.avatar_info.smallImgUrl,
+			      	img: this.info.avatar_info.bigImgUrl,
 			      	occupation: this.info.occupation,
 			      	company: this.info.company,
 			      	label: [],
