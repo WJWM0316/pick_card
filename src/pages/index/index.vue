@@ -161,7 +161,7 @@
   import App from '@/App'
   import {loginApi,getShareImg,getChoiceLabel} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
-  import { getUserInfoApi, getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
+  import { getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
   import Vue from 'vue'
 
@@ -194,8 +194,8 @@ export default {
       },  //
       getPage: {       // 首页列表信息参数
         count: 10,
-        occupation_label_id: '',
-        realm_label_id: '',
+        occupation_label_id: 0,
+        realm_label_id: 0,
       },                
       isPop: false,     //遮罩
       isCooling: false, //冷却
@@ -269,11 +269,11 @@ export default {
     })
 
     //筛选
-    this.getPage.occupation_label_id = ''
-    this.getPage.realm_label_id = ''
+    this.getPage.occupation_label_id = '0'
+    this.getPage.realm_label_id = '0'
     if(res.from && res.from == 'filtrate'){
-      this.getPage.occupation_label_id = res.occupation_label_id
-      this.getPage.realm_label_id = res.realm_label_id
+      this.getPage.occupation_label_id = res.occupation_label_id || 0
+      this.getPage.realm_label_id = res.realm_label_id || 0
     } else {
       let occupation_label = [],
           realm_label = []
@@ -285,8 +285,8 @@ export default {
             realm_label.push(item.id)
           }
         })
-        this.getPage.occupation_label_id = occupation_label.join(',')
-        this.getPage.realm_label_id = realm_label.join(',')
+        this.getPage.occupation_label_id = occupation_label.join(',') || 0
+        this.getPage.realm_label_id = realm_label.join(',') || 0
       })
     }
   },
@@ -1004,6 +1004,8 @@ export default {
       border-radius: 18rpx;
       overflow: hidden;
       position: absolute;
+      top: 0;
+      left: 0;
       //border: 1rpx solid red;
       box-sizing: border-box;
       background: #ffffff;
