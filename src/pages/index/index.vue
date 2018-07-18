@@ -161,7 +161,7 @@
   import App from '@/App'
   import {loginApi,getShareImg,getChoiceLabel} from '@/api/pages/login'
   import authorizePop from '@/components/authorize'
-  import { getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
+  import { getIndexUsers, indexLike, indexUnlike, getUserInfoApi } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
   import Vue from 'vue'
 
@@ -309,8 +309,6 @@ export default {
       let that = this
       getUserInfoApi().then(msg=>{
         that.usersInfo = msg.data
-        that.usersInfo = that.$store.getters.userInfo
-
         console.log(that.usersInfo, '用户信息')
         getIndexUsers(that.getPage).then((res)=>{
           that.usersList = res.data
