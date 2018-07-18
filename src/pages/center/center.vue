@@ -138,10 +138,10 @@
 		onShareAppMessage: function (res) {
 			console.log(res)
 			let path = '/pages/index/main?';
-			let that = this;
-			let title = '';
-			let imageUrl = '';
-			let shareInfo = that.$store.getters.shareInfo;
+			let shareInfo = this.$store.getters.shareInfo
+			let that = this
+			let title = shareInfo.index.content
+			let imageUrl = shareInfo.index.path
 
 	    	if (res.from === 'button') {
 				//footer 弹框分享
@@ -164,7 +164,7 @@
 	    	  path: path,
 	    	  imageUrl: imageUrl,
 	    	}
-	 	 },
+ 	 	},
 		methods: {
 			toJump () {
 				wx.navigateTo({
