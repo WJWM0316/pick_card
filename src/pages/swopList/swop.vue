@@ -9,6 +9,9 @@
     </view>
     <view class="swopList" v-if="listData.length>0">
       <view class="swop_blo" v-for="(item, index) in listData" :key="key" @tap="toDetail(item)">
+        <form report-submit="true" class="from-box" @submit="fromClick">
+            <button formType="submit" class="from-mask  "></button>
+        </form>
         <view class="blo_top">
           <image class="avatar" :src="item.apply_user_info.avatar_info.smallImgUrl" v-if="item.apply_user_info&&item.apply_user_info.avatar_info&&item.apply_user_info.avatar_info.smallImgUrl"></image>
           <image  class="avatar" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
@@ -17,7 +20,12 @@
             <view class="msg_name ellipsis">{{item.apply_user_info.nickname}} {{item.apply_user_info.occupation}}</view>
             <view class="msg_form ellipsis">{{item.apply_user_info.company}}</view>
           </view>
-          <button class="top_btn" @tap.stop="putApply(item.id,index)" v-if="item.status==0">同意</button>
+          <button class="top_btn" @tap.stop="putApply(item.id,index)" v-if="item.status==0">
+            同意
+            <form report-submit="true" class="from-box" @submit="fromClick">
+                <button formType="submit" class="from-mask  "></button>
+            </form>
+          </button>
           <text class="top_status" v-else>已交换</text>
         </view>
 
@@ -76,7 +84,7 @@
     .swop_blo {
       border-bottom:1rpx solid #eaebec;
       padding: 40rpx;
-
+      position: relative;
       .blo_top {
         height: 110rpx;
         display: flex;
@@ -120,6 +128,7 @@
           font-family:PingFangSC-Regular;
           color:rgba(255,255,255,1);
           line-height:60rpx;
+          position: relative;
         }
         .top_status {
           width:140rpx;
@@ -189,7 +198,8 @@
         shareInfo: {},
         listData: [],
         isShow: false,
-        nowItem: {}
+        nowItem: {},
+        shareData: {}
       }
     },
     methods: {
@@ -279,6 +289,7 @@
     },
 
     onShareAppMessage: function (res) {
+      let that = this;
       let path = '/pages/index/main?'
       let imageUrl = ''
       let title = ''
@@ -292,7 +303,7 @@
       if (res.from === 'button' ) {
         if(res.target.dataset.type=="me"){
           title = shareInfo.showCard.content
-          imageUrl = shareData.shareImg
+          imageUrl = that.shareData.shareImg
           path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
         }
         if(res.target.dataset.type=="other"){
