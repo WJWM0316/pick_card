@@ -6,21 +6,31 @@
       <view class="table_blo row_style_two">
         <view class="tit">职位</view>
         <view class="list_selct">
-          <view class="blo" v-for="(item, index) in jobData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'job')">{{item.name}}</view>
+          <view class="blo" v-for="(item, index) in jobData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'job')">
+          {{item.name}}
+            <form report-submit="true" class="from-box" @submit="fromClick">
+                <button formType="submit" class="from-mask  "></button>
+            </form>
+          </view>
         </view>
       </view>
 
       <view class="table_blo row_style_two">
         <view class="tit">领域</view>
         <view class="list_selct">
-          <view class="blo" v-for="(item, index) in liveData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'live')">{{item.name}}</view>
+          <view class="blo" v-for="(item, index) in liveData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'live')">
+            {{item.name}}
+            <form report-submit="true" class="from-box" @submit="fromClick">
+                <button formType="submit" class="from-mask  "></button>
+            </form>
+          </view>
         </view>
       </view>
     </view>
 
-    <view class="footer">
-      <button class="next toNext" @click="toIndex(1)">提交</button>
-    </view>
+      <form report-submit="true" class="footer" @submit="fromClick">
+          <button formType="submit" class="next toNext"  @click="toIndex(1)">提交</button>
+      </form>
     <mptoast />
   </view>
 </template>
@@ -28,6 +38,7 @@
 <script>
   import mptoast from 'mptoast'
   import { postGetLabelByIds, getChoiceLabel } from '@/api/pages/login'
+  import App from '@/App'
 
   export default {
     
@@ -44,6 +55,13 @@
       }
     },
     methods: {
+      fromClick (e) {
+        console.log(111)
+        App.methods.sendFormId({
+          fromId: e.mp.detail.formId,
+          fromAddress: '/pages/index'
+        })
+      },
       toIndex(){
         let occupation_label_id = this.jobAry.join(',')
         let realm_label_id = this.liveAry.join(',')
@@ -352,6 +370,7 @@
           line-height:60rpx;
           text-align: center;
           box-sizing: border-box;
+          position: relative;
           &.cur {
             background:rgba(0,208,147,0.05);
             border:1rpx solid rgba(0,208,147,1);

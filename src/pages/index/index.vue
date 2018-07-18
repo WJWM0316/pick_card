@@ -2,8 +2,16 @@
 <template>
   <view class="container" :class="{'ten': adaptive == 'ten','small': adaptive == 'small'}">
     <view class="op_top">
-      <view class="left" @click="toFiltrate">筛选<image class="single" src="/static/images/home_icon_select.jpg" ></image></view>
+      <view class="left" @click="toFiltrate">
+        <form report-submit="true" class="from-box" @submit="fromClick">
+            <button formType="submit" class="from-mask  "></button>
+        </form>
+        筛选<image class="single" src="/static/images/home_icon_select.jpg" ></image>
+      </view>
       <view class="right" @click="toSwop">
+        <form report-submit="true" class="from-box" @submit="fromClick">
+            <button formType="submit" class="from-mask  "></button>
+        </form>
         交换申请<view class="new" v-if="swopRed==1">NEW</view>
       </view>
     </view>
@@ -17,12 +25,12 @@
             'test': nowIndex==index, 
             'outLeft animated test': nowIndex-1==index&&moveData.style=='left',  
             'outRight animated test': nowIndex-1==index&&moveData.style=='right'
-          }" 
-          @tap="toDetail(item)" 
+          }"
           @touchstart="tStart" 
           @touchend="tEnd" 
           @touchmove="tMove" >
-            <view class="top">
+            <form report-submit="true" class="top" @submit="fromClick">
+            <button class="top" @tap="toDetail(item)" formType="submit">
               <image class="bage" :src="item.avatar_info.middleImgUrl" v-if="item.avatar_info.middleImgUrl"></image>
               <image class="bage" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
               <view class="location">
@@ -34,7 +42,9 @@
                 <view class="title ellipsis">{{item.occupation}}{{item.company}}</view>
                 <image class="detail" src="/static/images/hone_btn_more_nor@3x.png"></image>
               </view>
-            </view>
+            </button>
+            </form>
+
             <view class="bottom">
               <view class="signature" v-if="item.sign.length>0">{{item.sign}}</view>
               <view class="signature" v-else>这个人很懒，不想写个性签名~</view>
@@ -75,21 +85,23 @@
         </view>
 
         <view class="btns" >
-
-          <button class="btn type2"  v-if="isCooling || isEnd">
-            
-
-            <image src="/static/images/dafulpage_btn_share@3x.png"></image>
-          </button>
+          <form report-submit="true" class="btn type2" @submit="fromClick" v-if="isCooling || isEnd">
+            <button formType="submit" class="btn type2" data-type="me" open-type="share"  >
+              <image src="/static/images/dafulpage_btn_share@3x.png"></image>
+            </button>
+          </form>
           <block v-else>
-            <button class="btn delate" @click="likeOp('left')">
-              <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
-            </button>
-            <button class="btn like" @tap="likeOp('right')">
-              <image src="/static/images/home_btn_like_nor@3x.png"></image>
-            </button>
+            <form report-submit="true" class="btn delate" @submit="fromClick">
+              <button class="btn delate" formType="submit" @click="likeOp('left')">
+                <image src="/static/images/home_btn_unlike_nor@3x.png"></image>
+              </button>
+            </form>
+            <form report-submit="true" class="btn delate" @submit="fromClick">
+              <button class="btn like" formType="submit" @click="likeOp('right')">
+                <image src="/static/images/home_btn_like_nor@3x.png"></image>
+              </button>
+            </form>
           </block>
-          
         </view>
         <image class="moveImg moveLeft"  src="/static/images/home_toast_unlike@3x.png"
         :class="{'fadeOutLeft animated show': 
@@ -913,6 +925,7 @@ export default {
       flex-direction: row;
       justify-content: center;
       align-items: center;
+      position: relative;
       .new {
         width:60rpx;
         height:30rpx;
@@ -929,13 +942,15 @@ export default {
       }
     }
     .left {
+      width: 200rpx;
+      position: relative;
       .single {
         width:18rpx;
         height:12rpx;
         background:rgba(53,57,67,1);
-        margin-left: 8rpx;
-        position: relative;
-        top: -5rpx;
+        position: absolute;
+        top: 40rpx;
+        left: 88rpx;
       }
     }
   }
@@ -1066,6 +1081,7 @@ export default {
           width: 100%;
           padding: 0 0 0 34rpx;
           box-sizing: border-box;
+          text-align: left;
           .name {
             font-size:48rpx;
             font-family:PingFang-SC-Medium;
@@ -1109,18 +1125,21 @@ export default {
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
+          height: 116rpx;
+          overflow: hidden;
           .label_blo {
-            padding: 12rpx 26rpx;
+            padding: 0 26rpx;
             box-sizing: border-box;
             font-size:24rpx;
             font-family:PingFangHK-Regular;
-            border-radius:24px;
+            border-radius:24rpx;
             color:rgba(0,208,147,1);
-            line-height:24rpx;
+            line-height:48rpx;
             text-align: center;
             border: 1rpx solid rgba(0,208,147,1);
             margin-right: 10rpx;
             margin-bottom: 14rpx;
+            height: 48rpx;
           }
         }
       }
