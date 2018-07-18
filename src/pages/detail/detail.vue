@@ -247,7 +247,7 @@
 	      let data = {
 	      	uid: this.userInfo.id,
 	      	name: this.userInfo.nickname,
-	      	img: this.userInfo.avatar_info.bigImgUrl,
+	      	img: this.userInfo.avatar_info.smallImgUrl,
 	      	occupation: this.userInfo.occupation,
 	      	company: this.userInfo.company,
 	      	label: [],
@@ -315,7 +315,7 @@
 				} else {
 					let that = this
 					wx.showModal({
-		        content: '确定要删除名片？',
+		        content: '确定要移除名片？',
 		        success: function(res) {
 		          if (res.confirm) {
 								data = {

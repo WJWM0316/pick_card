@@ -6,7 +6,7 @@ app.$mount();
 
 export default {
   config: {
-    navigationBarTitleText: '您的名片',
+    navigationBarTitleText: '保存名片到相册',
     enablePullDownRefresh: false,
   },
 };

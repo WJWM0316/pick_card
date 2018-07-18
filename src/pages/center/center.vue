@@ -27,7 +27,7 @@
 					</view>
 				</view>
 				<button open-type="share" class="share">发名片</button>
-				<button class="save" @tap="toSaveImg">保存我的名片</button>
+				<button class="save" @tap="toSaveImg">保存名片到相册</button>
 			</view>
 			<viwe class="setting">
 				<view class="inner">

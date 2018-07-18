@@ -5,7 +5,7 @@
 			<view class="head item">
 				<view class="itemCon">
 					<view class="left requst">头像</view>
-					<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath || '/static/images/new_pic_defaulhead.jpg'"></image></view>
+					<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath"></image></view>
 				</view>
 			</view>
 			<view class="item">
@@ -203,26 +203,7 @@
 						size: info.size
 					}
 					this.filePath = info.path
-					wx.showLoading({
-					  title: '正在上传',
-					  duration: 1000,
-					  mask: true
-					})
-					uploadImage(data, {
-		        onItemSuccess: (resp, file, index) => {
-		        }
-		      }).then(res => {
-		      	wx.hideLoading()
-		        const cutImgInfo = {
-		          fileId: res.file.fileId,
-		          path: res.file.path,
-		          size: res.file.size
-		        }
-						this.userInfo.avatar_id = res.file.fileId
-						wx.removeStorageSync('cutImgInfo')
-		      }).catch((e, index) => {
-		        console.log(e, 2)
-		      })
+					
 				}
 			},
 			signText (e) {
@@ -245,129 +226,156 @@
 				})
 			},
 			saveUserInfo () {
-				let title = ''
-				if (this.userInfo.avatar_id === '') {
-					wx.showToast({
-					  title: '请选择头像',
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
-				}
-				if (this.userInfo.nickname === '' || this.userInfo.nickname.length < 2) {
-					if (this.userInfo.nickname === '') {
-						title = '请填写姓名'
-					} else if (this.userInfo.nickname.length < 2 || this.userInfo.nickname.length > 10) {
-						title = '姓名需为2-10个字'
+				const info = wx.getStorageSync('cutImgInfo')
+				let data1 = {}
+				if (info.path) {
+					data1 = {
+						path: info.path,
+						size: info.size
 					}
-					wx.showToast({
-					  title: title,
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
 				}
-				if (this.userInfo.gender === '') {
-					wx.showToast({
-					  title: '请选择性别',
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
-				}
-				if (this.careerId === '') {
-					wx.showToast({
-					  title: '请选择职业方向',
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
-				}
-				if (this.checkedIdList === '') {
-					wx.showToast({
-					  title: '请选择擅长领域',
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
-				}
-				if (this.userInfo.occupation === '' || this.userInfo.occupation.length < 2 || this.userInfo.occupation.length > 20) {
-					if (this.userInfo.occupation === '') {
-						title = '请填写职位'
-					} else if (this.userInfo.occupation.length < 2 || this.userInfo.occupation.length > 20) {
-						title = '职位需为2-20个字'
-					}
-					wx.showToast({
-					  title: title,
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
-				}
-				if (this.userInfo.company === '' || this.userInfo.company.length < 2 || this.userInfo.company.length > 50) {
-					if (this.userInfo.company === '') {
-						title = '请填写最近任职公司'
-					} else if (this.userInfo.company.length < 2 || this.userInfo.company.length > 50) {
-						title = '公司需为2-50个字'
-					}
-					wx.showToast({
-					  title: title,
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
-				}
-
-				let reg1 = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/
-				let regPhone = /^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/
-				if (this.userInfo.wechat !== '' && !reg1.test(this.userInfo.wechat) && !regPhone.test(this.userInfo.wechat)) { 
-					wx.showToast({
-					  title: '微信号格式不正确',
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
-				}
-				let reg2 = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
-				if (this.userInfo.email !== '' && !reg2.test(this.userInfo.email)) {                                                                                    
-					wx.showToast({
-					  title: '邮箱地址格式不正确',
-					  icon: 'none',
-					  duration: 1000
-					})
-					return
-				}
-				let data = {
-					avatar_id: this.userInfo.avatar_id,
-					nickname: this.userInfo.nickname.trim(),
-					gender: this.userInfo.gender,
-					user_location: this.region[1],
-					occupation: this.userInfo.occupation.trim(),
-					company: this.userInfo.company.trim(),
-					company_location: this.userInfo.company_location.trim(),
-					// mobile: this.userInfo.mobile,
-					wechat: this.userInfo.wechat.trim(),
-					email: this.userInfo.email.trim(),
-					sign: this.userInfo.sign.trim(),
-					occupation_label_id: this.careerId.toString() || '',
-					realm_label_id: this.checkedIdList,
-					city: this.region[1],
-					province: this.region[0],
-					country: '中国'
-				}
-				upDataUserInfoApi(data).then(res => {
-					console.log('成功了', res)
-					wx.navigateBack({
-						delta: 1
-					})
-				}).catch(e => {
-					wx.showToast({
-					  title: e.msg,
-					  icon: 'none',
-					  duration: 1000
-					})
-					console.log('错误了', e)
+				wx.showLoading({
+					title: '加载中...',
+					mask: true
 				})
+				uploadImage(data1, {
+	        onItemSuccess: (resp, file, index) => {
+	        }
+	      }).then(res => {
+	        const cutImgInfo = {
+	          fileId: res.file.fileId,
+	          path: res.file.path,
+	          size: res.file.size
+	        }
+	        wx.hideLoading()
+					this.userInfo.avatar_id = res.file.fileId
+					wx.removeStorageSync('cutImgInfo')
+					let title = ''
+					if (this.userInfo.avatar_id === '') {
+						wx.showToast({
+						  title: '请选择头像',
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.userInfo.nickname === '' || this.userInfo.nickname.length < 2) {
+						if (this.userInfo.nickname === '') {
+							title = '请填写姓名'
+						} else if (this.userInfo.nickname.length < 2 || this.userInfo.nickname.length > 10) {
+							title = '姓名需为2-10个字'
+						}
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.userInfo.gender === '') {
+						wx.showToast({
+						  title: '请选择性别',
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.careerId === '') {
+						wx.showToast({
+						  title: '请选择职业方向',
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.checkedIdList === '') {
+						wx.showToast({
+						  title: '请选择擅长领域',
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.userInfo.occupation === '' || this.userInfo.occupation.length < 2 || this.userInfo.occupation.length > 20) {
+						if (this.userInfo.occupation === '') {
+							title = '请填写职位'
+						} else if (this.userInfo.occupation.length < 2 || this.userInfo.occupation.length > 20) {
+							title = '职位需为2-20个字'
+						}
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					if (this.userInfo.company === '' || this.userInfo.company.length < 2 || this.userInfo.company.length > 50) {
+						if (this.userInfo.company === '') {
+							title = '请填写最近任职公司'
+						} else if (this.userInfo.company.length < 2 || this.userInfo.company.length > 50) {
+							title = '公司需为2-50个字'
+						}
+						wx.showToast({
+						  title: title,
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+
+					let reg1 = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/
+					let regPhone = /^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/
+					if (this.userInfo.wechat !== '' && !reg1.test(this.userInfo.wechat) && !regPhone.test(this.userInfo.wechat)) { 
+						wx.showToast({
+						  title: '微信号格式不正确',
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					let reg2 = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+					if (this.userInfo.email !== '' && !reg2.test(this.userInfo.email)) {                                                                                    
+						wx.showToast({
+						  title: '邮箱地址格式不正确',
+						  icon: 'none',
+						  duration: 1000
+						})
+						return
+					}
+					let data = {
+						avatar_id: this.userInfo.avatar_id,
+						nickname: this.userInfo.nickname.trim(),
+						gender: this.userInfo.gender,
+						user_location: this.region[1],
+						occupation: this.userInfo.occupation.trim(),
+						company: this.userInfo.company.trim(),
+						company_location: this.userInfo.company_location.trim(),
+						// mobile: this.userInfo.mobile,
+						wechat: this.userInfo.wechat.trim(),
+						email: this.userInfo.email.trim(),
+						sign: this.userInfo.sign.trim(),
+						occupation_label_id: this.careerId.toString() || '',
+						realm_label_id: this.checkedIdList,
+						city: this.region[1],
+						province: this.region[0],
+						country: '中国'
+					}
+					upDataUserInfoApi(data).then(res => {
+						console.log('成功了', res)
+						wx.navigateBack({
+							delta: 1
+						})
+					}).catch(e => {
+						wx.showToast({
+						  title: e.msg,
+						  icon: 'none',
+						  duration: 1000
+						})
+						console.log('错误了', e)
+					})
+	      }).catch((e, index) => {
+	        console.log(e, 2)
+	      })
 			},
 			closePop () {
 				this.showLablePop = false

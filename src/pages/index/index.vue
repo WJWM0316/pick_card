@@ -278,17 +278,19 @@ export default {
     } else {
       let occupation_label = [],
           realm_label = []
-      getChoiceLabel().then(res => {
-        res.data.forEach(item => {
-          if (item.oneLevel === 1) {
-            occupation_label.push(item.id)
-          } else {
-            realm_label.push(item.id)
-          }
+      if (this.$store.getters.userInfo.vkey) {
+        getChoiceLabel().then(res => {
+          res.data.forEach(item => {
+            if (item.oneLevel === 1) {
+              occupation_label.push(item.id)
+            } else {
+              realm_label.push(item.id)
+            }
+          })
+          this.getPage.occupation_label_id = occupation_label.join(',') || 0
+          this.getPage.realm_label_id = realm_label.join(',') || 0
         })
-        this.getPage.occupation_label_id = occupation_label.join(',') || 0
-        this.getPage.realm_label_id = realm_label.join(',') || 0
-      })
+      }
     }
   },
   onShow (res) {
@@ -686,7 +688,7 @@ export default {
       msg = {
         uid: usersInfo.id,
         name: usersInfo.nickname,
-        img: usersInfo.avatar_info.bigImgUrl,
+        img: usersInfo.avatar_info.smallImgUrl,
         occupation: usersInfo.occupation?usersInfo.occupation:'test',
         company: usersInfo.company,
         label: [],
