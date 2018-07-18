@@ -47,12 +47,12 @@
       toIndex(){
         let occupation_label_id = this.jobAry.join(',')
         let realm_label_id = this.liveAry.join(',')
-        console.log(occupation_label_id,realm_label_id)
-        if(this.jobAry.indexOf(0)>0){
+        let url
+        if(this.jobAry.indexOf(0) !== -1){
           occupation_label_id = 0
         }
 
-        if(this.liveAry.indexOf(0)>0){
+        if(this.liveAry.indexOf(0) !== -1){
           realm_label_id = 0
         }
 
@@ -64,8 +64,9 @@
           occupation_label_id: occupation_label_id,
           realm_label_id: realm_label_id
         }
+        console.log(data, 1111111111111)
         wx.setStorageSync('labelId', data)
-        let url =  `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
+        url =  `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
         wx.reLaunch({
           url:url
         })
@@ -120,7 +121,10 @@
       }
     },
     onLoad(){
-
+      this.jobData = []
+      this.jobAry = []
+      this.liveAry = []
+      this.liveData = []
       let that = this
       let data = {
         labelType: '1,3'
