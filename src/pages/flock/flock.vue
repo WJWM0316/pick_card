@@ -114,7 +114,6 @@ export default {
         id: res.id,
         vkey: res.vkey
       }
-      
       that.updateData()
       isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
         if(msg.code == 201){
@@ -181,7 +180,7 @@ export default {
       if(res.target.dataset.type=="flock"){
         title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 
         imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
-        path+='form=cardHolder&type=flock'
+        path='/pages/index/main?form=cardHolder&type=flock'
       }
       // 来自页面内转发按钮
     }
@@ -456,7 +455,7 @@ export default {
           background:rgba(255,255,255,1);
           box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
           border-radius:18rpx;
-          padding: 56rpx 30rpx 56rpx 120rpx;
+          padding: 50rpx 30rpx 50rpx 120rpx;
           box-sizing: border-box;
           text-align: left;
           position: relative;
@@ -486,7 +485,7 @@ export default {
             font-family:PingFangSC-Light;
             color:rgba(154,161,171,1);
             line-height:28rpx;
-            margin: 18rpx 0 10rpx 0;
+            margin: 26rpx 0 10rpx 0;
           }
           .msg_company {
             font-size:28rpx;
@@ -499,7 +498,7 @@ export default {
             height:66rpx;
             position: absolute;
             right: 32rpx;
-            top: 32rpx;
+            top: 30rpx;
             background:rgba(0,208,147,1);
             border-radius:33rpx;
             font-size:28rpx;
@@ -508,6 +507,8 @@ export default {
             line-height:66rpx;
             text-align: center;
             &.type_2 {
+              font-size:28px;
+              font-family:PingFangHK-Light;
               background:rgba(255,255,255,1);
               color:rgba(154,161,171,1);
             }

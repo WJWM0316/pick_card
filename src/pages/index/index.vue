@@ -118,7 +118,7 @@
 
     <authorize-pop :isIndex='true'></authorize-pop>
     <mptoast />
-    <footerTab :type=1 :adaptive=adaptive :isRed=swopRed></footerTab>
+    <footerTab :type=1 :adaptive=adaptive :isRed=mainRed></footerTab>
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -206,6 +206,7 @@ export default {
 
       systemInfo: {}, //
       beforeCreateStep: 0,
+      mainRed: 0,   //交换红点
       swopRed: 0,   //交换红点
       shareData: {},
 
@@ -318,7 +319,12 @@ export default {
           }
         }else if (that.usersInfo.step === 9) {
           redDot().then(res=>{
-            that.swopRed = res.data.main_show_red_dot
+            console.log(res)
+            that.mainRed = res.data.main_show_red_dot
+          })
+
+          redDotApplys().then(res=>{
+            that.swopRed = res.data.user_apply_show_red_dot
           })
           that.getShareImg()
         }
