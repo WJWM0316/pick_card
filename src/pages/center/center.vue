@@ -109,6 +109,7 @@
         	}
         }
       })
+      console.log('用户信息', this.userInfo)
 			if (this.userInfo) {
 				this.info = this.userInfo
 				this.info.other_info.realm_info.forEach(e => {
@@ -116,22 +117,22 @@
 				})
 			}
 			if (!this.isShareImg) {
-			      let data = {
-			      	uid: this.info.id,
-			      	name: this.info.nickname,
-			      	img: this.info.avatar_info.bigImgUrl,
-			      	occupation: this.info.occupation,
-			      	company: this.info.company,
-			      	label: [],
-			      }
-			      this.info.other_info.realm_info.forEach(item => {
-			      	data.label.push(`${item.name} | `)
-			      })
-			      data.label = data.label.join('')
-			      data.label = data.label.slice(0, data.label.length-3)
-			      getShareImg(data).then(res => {
-			      	this.isShareImg = res.data
-			      })
+	      let data = {
+	      	uid: this.info.id,
+	      	name: this.info.nickname,
+	      	img: this.info.avatar_info.bigImgUrl,
+	      	occupation: this.info.occupation,
+	      	company: this.info.company,
+	      	label: [],
+	      }
+	      this.info.other_info.realm_info.forEach(item => {
+	      	data.label.push(`${item.name} | `)
+	      })
+	      data.label = data.label.join('')
+	      data.label = data.label.slice(0, data.label.length-3)
+	      getShareImg(data).then(res => {
+	      	this.isShareImg = res.data
+	      })
 		  }
 		},
 		onShareAppMessage: function (res) {

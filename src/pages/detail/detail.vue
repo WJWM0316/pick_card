@@ -185,11 +185,9 @@
 				this.isSelf = false
 			}
 		},
-		onHide () {
-			this.stopShow = false
-		},
 		onShow () {
 			if (this.stopShow) {
+				this.stopShow = false
 				return
 			}
 			let that = this
@@ -429,6 +427,7 @@
 				  urls: list, // 需要预览的图片http链接列表
 				  complete: function () {
 				  	_this.stopShow = true
+				  	console.log(_this.stopShow, 2222222)
 				  }
 				})
 			}
