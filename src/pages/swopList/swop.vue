@@ -7,7 +7,7 @@
       </form>
     记录只保留14天，抓紧时间处理哦~
     </view>
-    <view class="swopList" v-if="listData.length>0">
+    <view class="swopList" v-if="!listData.length>0">
       <view class="swop_blo" v-for="(item, index) in listData" :key="key" @tap="toDetail(item)">
         <form report-submit="true" class="from-box" @submit="fromClick">
             <button formType="submit" class="from-mask  "></button>
@@ -28,15 +28,17 @@
           <text class="top_status" v-else>已交换</text>
         </view>
 
-        <view class="blo_bot ">
-          <image class="txt_img" src="/static/images/applylist_icon_like@3x.png"></image>
+        <view class="txt_img ">
+          <image class="none_img" src="/static/images/applylist_icon_like@3x.png"></image>
           <view class="txt ellipsis">{{item.remarks}}</view>
         </view>
       </view>
     </view>
     <view class="none_cont" v-else>
-        <view class="none_txt_1">暂时没有新的申请</view>
-        <button class="none_txt_2" data-type="me" open-type="share">推荐一下自己给你的朋友同事吧</button>
+        <image class="none_img" src="/static/images/interchanger_pic_dafulpage@3x.png"></image>
+
+        <view class="none_txt_1">与其被动等待，不如主动出击</view>
+        <button class="none_txt_2" data-type="me" open-type="share">向朋友同事推荐自己吧</button>
     </view>
 
     <mptoast />
@@ -45,11 +47,23 @@
 </template>
 <style lang="less" type="text/less" scoped>
   .none_cont {
-    height: 100vh;
+    height: 320rpx;
+    width: 400rpx;
     flex-direction: column;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 100rpx;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200rpx;
+    margin-top: -230rpx;
+    .none_img {
+      width:288rpx;
+      height:198rpx;
+      margin-bottom: 48rpx;
+    }
     .none_txt_1 {
       height:28rpx;
       font-size:28rpx;

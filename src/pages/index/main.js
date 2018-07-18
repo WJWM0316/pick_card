@@ -6,7 +6,7 @@ app.$mount();
 
 export default {
   config: {
-    navigationBarTitleText: 'Pick',
+    navigationBarTitleText: '趣名片',
     enablePullDownRefresh: false,
     disableScroll: true
   },

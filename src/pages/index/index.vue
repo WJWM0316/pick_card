@@ -291,6 +291,7 @@ export default {
     }
   },
   onShow (res) {
+    this.isNext = true;
     if (!this.$store.getters.userInfo.vkey) {
       authorizePop.methods.checkLogin().then(res => {
         if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
@@ -306,32 +307,37 @@ export default {
   methods: {
     dataList () {
       let that = this
-      getIndexUsers(that.getPage).then((res)=>{
-        that.usersList = res.data
+      getUserInfoApi().then(msg=>{
+        that.usersInfo = msg.data
         that.usersInfo = that.$store.getters.userInfo
+
         console.log(that.usersInfo, '用户信息')
-        if(that.usersInfo.step!=9){
-          if(res.data.length<1 && value){
-            that.isCreate()
-            return
+        getIndexUsers(that.getPage).then((res)=>{
+          that.usersList = res.data
+          if(that.usersInfo.step!=9){
+            if(res.data.length<1 && value){
+              that.isCreate()
+              return
+            }
+          }else if (that.usersInfo.step === 9) {
+            redDot().then(res=>{
+              that.swopRed = res.data.main_show_red_dot
+            })
+            that.getShareImg()
           }
-        }else if (that.usersInfo.step === 9) {
-          redDot().then(res=>{
-            that.swopRed = res.data.main_show_red_dot
-          })
-          that.getShareImg()
-        }
-        this.nowIndex = 0
-        if(res.data.length<1){
-          that.isEnd = true
-        }else {
-          that.isEnd = false
-        } 
-      },(res)=>{
-        if(res.http_status == 400 && res.code == 99){
-          that.intervalTime(res.data.rest_time)
-        }
-        that.$mptoast(res.msg)
+          this.nowIndex = 0
+          if(res.data.length<1){
+            that.isEnd = true
+          }else {
+            that.isEnd = false
+          } 
+        },(res)=>{
+          if(res.http_status == 400 && res.code == 99){
+            that.intervalTime(res.data.rest_time)
+          }else {
+            that.$mptoast(res.msg)
+          }
+        })
       })
     },
     fromClick (e) {
@@ -507,13 +513,16 @@ export default {
       let that = this;
       let step = this.usersInfo.step;
 
+      console.log('step=====>',this.usersInfo)
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
 
-          if(step!=9){
+          if(step!=9 && step){
             that.isCreate()
             return
+          }else {
+            console.log(step)
           }
           if(res.data.length<1){
             that.isEnd = true;
@@ -524,8 +533,9 @@ export default {
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
             that.intervalTime(res.data.rest_time)
+          }else {
+            this.$mptoast(res.msg);
           }
-          this.$mptoast(res.msg);
         })
       }else {
         that.isCooling = false
@@ -587,8 +597,9 @@ export default {
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
           that.intervalTime(res.data.rest_time)
+        }else {
+          that.$mptoast(res.msg)
         }
-        that.$mptoast(res.msg)
         that.isNext = true
       })
     },
@@ -635,8 +646,9 @@ export default {
 
         if(res.http_status == 400 && res.code == 99){
           that.intervalTime(res.data.rest_time)
+        }else {
+          that.$mptoast(res.msg)
         }
-        that.$mptoast(res.msg)
         that.isNext = true
       })
     },
@@ -1135,7 +1147,7 @@ export default {
           font-size:28rpx;
           font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
-          line-height:28rpx;
+          line-height:35rpx;
           margin-bottom: 14rpx;
           overflow: hidden;
         }
