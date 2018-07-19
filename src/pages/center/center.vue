@@ -54,8 +54,8 @@
 				</view>
 			</viwe>
 			<view class="bottomH5">
-				<navigator url="/pages/useHelp/index" open-type="navigate" hover-class="none" class="h5Txt"><text>使用帮助</text></navigator>
-				<navigator url="/pages/userProtocol/index" open-type="navigate" hover-class="none" class="h5Txt"><text>用户协议</text></navigator>
+				<navigator url="/pages/help/main" open-type="navigate" hover-class="none" class="h5Txt"><text>使用帮助</text></navigator>
+				<navigator url="/pages/pickProtocol/main" open-type="navigate" hover-class="none" class="h5Txt"><text>用户协议</text></navigator>
 				<text class="h5Txt noborder" @tap="service">联系客服</text>
 			</view>
 		</view>

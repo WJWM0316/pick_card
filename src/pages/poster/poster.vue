@@ -10,6 +10,7 @@
 	</view>
 </template>
 <script>
+	import {getShareCode} from '@/api/pages/cardcase'
 	export default {
 		data () {
 			return {
@@ -43,17 +44,26 @@
 			this.info.job = userInfo.occupation + ' | ' + userInfo.company
 			this.info.sign = userInfo.sign
 			this.info.label = userInfo.other_info.label_info
-			this.imgUrl = userInfo.avatar_info.middleImgUrl
+			this.imgUrl = userInfo.avatar_info.bigImgUrl
 			
 			wx.showLoading({
         title: '正在生成图片',
         mask: true
       })
-			this.create()
+
+			let data = {
+				page: 'pages/detail/main',
+				length: 150,
+				scene: userInfo.vkey,
+			}
+      getShareCode(data).then(res => {
+      	this.create(res.data)
+      })
+			
 			
 		},
 		methods: {
-			create () {
+			create (path) {
 				const that = this
 				wx.downloadFile({
 				  url: that.imgUrl,
@@ -216,7 +226,7 @@
 					    ctx.fillText('长按添加TA的趣名片', 30, 490)
 
 					    // 画二维码
-					    ctx.drawImage(that.imgUrl, 200, 430, 100, 100)
+					    ctx.drawImage(path, 200, 430, 100, 100)
 
 					    ctx.draw(true, () => {
 					    	console.log('画图成功')
