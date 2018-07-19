@@ -610,7 +610,7 @@ export default {
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
-        if(true){
+        if(res.code==101||res.code==102){
           that.isShowTrue = true
         }
         that.moveData={
@@ -748,13 +748,13 @@ export default {
         top: -66rpx;
         height: 736rpx;
         .peopList {
-          width: 530rpx;
+          //width: 530rpx;
           height: 736rpx;
           .peop_blo {
-            width: 530rpx;
+            //width: 530rpx;
             height: 736rpx;
             .top {
-              width: 530rpx;
+              //width: 530rpx;
               height: 489rpx;
             }
             .bottom {
@@ -771,7 +771,7 @@ export default {
           .blo_end {
             padding: none;
             .end_img {
-              width: 338rpx;
+              //width: 338rpx;
               margin-top: 60rpx;
               height: 454rpx;
             }
@@ -789,12 +789,11 @@ export default {
           }
           .blo_cooling {
             padding: none;
-            
             .cool_time {
               margin-top: 48rpx;
             }
             .cool_img {
-              width: 322rpx;
+              //width: 322rpx;
               height: 358rpx;
               margin-top: 49rpx;
             }
