@@ -29,13 +29,13 @@
                   </view>
                 </view>
               <view class="to_share" :class="{ten: adaptive == 'ten'}">
-                <button open-type="share" data-type="me">分享我的名片</button>，获取更多职场人脉
+                <button open-type="share" data-type="myDetail">分享我的名片</button>，获取更多职场人脉
               </view>
             </view>
             <block  v-else>
               <view class="none_blo">
                 <view class="none_txt">让名片替你说话，不动声色展现实力</view>
-                <button class="none_btn" data-type="me" open-type="share">去分享 </button>
+                <button class="none_btn" data-type="myDetail" open-type="share">去分享 </button>
               </view>
             </block>
           </block>
