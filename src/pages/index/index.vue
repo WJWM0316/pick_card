@@ -243,7 +243,7 @@ export default {
       // 来自页面内转发按钮
       if(res.target.dataset.type=="myDetail"){
         imageUrl = that.shareData.shareImg;
-        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.vkey}&shareType=${shareInfo.showCard.type}`;
+        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.showCard.type}`;
         
         title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片';
       }
@@ -251,7 +251,7 @@ export default {
       if(res.target.dataset.type=="index"){
         title = shareInfo.index?shareInfo.index.content:''
         imageUrl = shareInfo.index.path
-        path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.vkey}&shareType=${shareInfo.showCard.type}`
+        path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.showCard.type}`
       }
     }
 
@@ -1100,6 +1100,8 @@ export default {
           position: absolute;
           left: 0;
           top: 0;
+          background:url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/new_pic_defaulhead.jpg') no-repeat;
+          background-size: 100% 100%;
           //z-index: -1;
         }
         .location {
@@ -1139,7 +1141,6 @@ export default {
             font-size:48rpx;
             font-family:PingFang-SC-Medium;
             color:rgba(250,251,252,1);
-            line-height:48rpx;
             margin-bottom: 10rpx;
             padding-top: 30rpx;
           }
@@ -1148,7 +1149,6 @@ export default {
             font-size:32rpx;
             font-family:PingFangSC-Light;
             color:rgba(255,255,255,1);
-            line-height:32rpx;
           }
           .detail {
             width:50rpx;

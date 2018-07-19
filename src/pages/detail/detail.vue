@@ -161,7 +161,6 @@
 				showEducationNum: 2,
 				checkedTextList: [],
 				nowTime: '',
-				myCard: false,
 				isShareImg: '',
 				stopShow: false, // 阻止onShow的进行
 				showPop: false
@@ -170,6 +169,13 @@
 		computed: {
 			authorize () {
 				if (this.$store.getters.userInfo.vkey) {
+					return true
+				} else {
+					return false
+				}
+			},
+			myCard () {
+				if (this.$store.getters.userInfo.step !== 9) {
 					return true
 				} else {
 					return false
@@ -197,20 +203,23 @@
 			this.labelInfo = []
 			this.moreInfo = {}
 			this.checkedTextList = []
+			function list () {
+				if (that.isSelf) {
+		    	console.log('是本人')
+					that.getUserUnfo()
+		    } else {
+					console.log('非本人')
+					that.getOtherUserInfo()
+				}
+			}
 			if (!this.authorize) {
 	      authorizePop.methods.checkLogin().then(res => {
+	      	list()
 	      })
-	    }
-			if (that.isSelf) {
-	    	console.log('是本人')
-				that.getUserUnfo()
 	    } else {
-				console.log('非本人')
-				if (that.$store.getters.userInfo.step < 9) {
-					that.myCard = true
-				}
-				that.getOtherUserInfo()
-			}
+	    	list()
+	    }
+			
 		},
 		onShareAppMessage: function (res) {
 			let path = '/pages/index/main?';
@@ -224,7 +233,7 @@
 		      console.log(res.target)
 		      if (res.target.dataset.type == 'flaunt') {
 			      title = shareInfo.showCard.content,
-			      path = `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.vkey}&shareType=${shareInfo.showCard.type}`,
+			      path = `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.id}&shareType=${shareInfo.showCard.type}`,
 			      imageUrl = shareInfo.showCard.path
 		      }
 
@@ -236,7 +245,7 @@
 					shareType = shareInfo.otherCard.type
 				}
 			      title = shareInfo.otherCard.content,
-			      path = `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${shareType}`,
+			      path = `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.id}&shareType=${shareType}`,
 			      imageUrl = this.isShareImg
 		      }
 		    }
@@ -487,6 +496,8 @@
 			.headImg {
 				width: 670rpx;
 				height: 670rpx;
+				background:url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/new_pic_defaulhead.jpg') no-repeat;
+				background-size: 100% 100%;
 				border-radius: 18rpx 18rpx 0 0;
 			}
 			.positon {
@@ -540,7 +551,7 @@
 					height:88rpx;
 					background: #fff;
 					font-size: 28rpx;
-					line-height: 28rpx;
+					line-height: 1.3;
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -563,7 +574,7 @@
 					.name {
 						font-size: 48rpx;
 						color: #353943;
-						line-height: 48rpx;
+						line-height: 1.3;
 					}
 					.sex {
 						width: 32rpx;
@@ -584,14 +595,14 @@
 				}
 				.job {
 					font-size: 34rpx;
-					line-height: 34rpx;
+					line-height: 1.3;
 					color: #353943;
 					margin-top: 20rpx;
 					.setEllipsis();
 				}
 				.company {
 					font-size: 28rpx;
-					line-height: 28rpx;
+					line-height: 1.3;
 					color: #353943;
 					margin-top: 13rpx;
 					font-weight: light;
@@ -600,7 +611,7 @@
 				.signature {
 					color: #B2B6C2;
 					font-size: 28rpx;
-					line-height: 1.4;
+					line-height: 1.3;
 					margin: 40rpx 0 40rpx;
 					.setEllipsisLn(2);
 				}
@@ -617,7 +628,7 @@
 					}
 					.msg {
 						font-size: 28rpx;
-						line-height: 40rpx;
+						line-height: 1.3;
 						color: #353943;
 						margin-left: 26rpx;
 						&.isShow {
@@ -644,7 +655,7 @@
 				}
 				.title {
 					height: 40rpx;
-					line-height: 40rpx;
+					line-height: 1.3;
 					font-weight: Medium;
 					.icon {
 						width: 40rpx;
@@ -667,7 +678,7 @@
 						margin-top: 14rpx;
 						padding: 12rpx 26rpx;
 						font-size: 24rpx;
-						line-height: 24rpx;
+						line-height: 1.3;
 						color: #00D093;
 						border: 1rpx #00D093 solid;
 						margin-right: 10rpx;
@@ -681,7 +692,7 @@
 				.date, .job, .company, .school {
 					color: #9AA1AB;
 					font-size: 28rpx;
-					line-height: 28rpx;
+					line-height: 1.3;
 					font-weight: light;
 					margin-top: 30rpx;
 				}
@@ -695,7 +706,7 @@
 				.open {
 					width: 100%;
 					height: 70rpx;
-					line-height: 70rpx;
+					line-height: 1.3;
 					color: #9AA1AB;
 					font-size: 28rpx;
 					font-weight: light;
@@ -712,7 +723,7 @@
 					margin-top: 28rpx;
 					font-size: 32rpx;
 					color: #353943;
-					line-height: 1.4;
+					line-height: 1.3;
 					font-weight: light;
 					&.noWord {
 						font-size:28rpx;

@@ -170,7 +170,8 @@ page {
   font-size: 28rpx;
   color: #353943;
   height: 100%;
-  font-family: PingFangSC;
+  font-family: PingFangSC-light;
+  font-weight: light;
 }
 .ellipsis {
   overflow: hidden;
