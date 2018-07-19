@@ -59,8 +59,7 @@
       getShareCode(data).then(res => {
       	this.create(res.data)
       })
-			
-			
+
 		},
 		methods: {
 			create (path) {
@@ -74,13 +73,13 @@
 							const ctx = wx.createCanvasContext('shareCanvas')
 							ctx.width = 320
 							ctx.clearActions()
-							ctx.clearRect(0, 0, 320, 550)
+							ctx.clearRect(0, 0, 320, 580)
 							that.showImg = ''
 							// 画布圆角
-							roundRect (0,0,320,550,9)
+							roundRect (0,0,320,580,9)
 							function roundRect (x, y, w, h, r) {
 								ctx.beginPath();
-								ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5  )
+								ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
 								ctx.moveTo(x + r, y)
 								ctx.lineTo(x + w - r, y)
 								ctx.lineTo(x + w, y + r)
@@ -101,31 +100,31 @@
 
 							that.imgUrl = res.tempFilePath
 							// 画头像
-					    ctx.drawImage(that.imgUrl, 0, 0, 320, 295)
+					    ctx.drawImage(that.imgUrl, 0, 0, 320, 320)
 
 					    // 画文案
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
-					    ctx.fillText(that.info.nickname, 17, 250)
+					    ctx.fillText(that.info.nickname, 17, 280)
 
 					    ctx.setFontSize(16)
-					    ctx.fillText(that.info.job, 17, 270)
+					    ctx.fillText(that.info.job, 17, 300)
 
 					    ctx.setFontSize(14)
 					    ctx.setFillStyle('#9AA1AB')
 					    if (that.info.sign.length > 20) {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 319)
-					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, 339)
+					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 349)
+					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, 369)
 					    } else {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 319)
+					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 349)
 					    }
 					    
 					    ctx.setFontSize(12)
 					    ctx.setFillStyle('#00D093')
 					    let position = {
 					    	x: 17,
-					    	y: 355
+					    	y: 385
 					    }
 					    ctx.setStrokeStyle('#00D093')
 							ctx.setLineWidth(1)
@@ -191,8 +190,8 @@
 					    ctx.setStrokeStyle('#DCE3EE')
 					    ctx.setLineDash([5, 10], 0)
 							ctx.beginPath()
-							ctx.moveTo(17, 420)
-							ctx.lineTo(303, 420)
+							ctx.moveTo(17, 450)
+							ctx.lineTo(303, 450)
 							ctx.stroke()
 
 							// 清除圆镂空部分
@@ -223,10 +222,10 @@
 							ctx.setTextAlign('left')
 					    ctx.setFillStyle('#B2B6C2')
 					    ctx.setFontSize(14)
-					    ctx.fillText('长按添加TA的趣名片', 30, 490)
+					    ctx.fillText('长按添加TA的趣名片', 30, 520)
 
 					    // 画二维码
-					    ctx.drawImage(path, 200, 430, 100, 100)
+					    ctx.drawImage(path, 200, 460, 100, 100)
 
 					    ctx.draw(true, () => {
 					    	console.log('画图成功')
@@ -315,11 +314,11 @@
 		overflow-y:auto;
 		.wrap {
 			width: 320px;
-			height: 550px;
+			height: 580px;
 			margin: 0 auto;
 			#myCanvas {
 				width: 320px;
-				height: 550px;
+				height: 580px;
 				&.hidden {
 					width: 0;
 					height: 0;
@@ -327,7 +326,7 @@
 			}
 			.showImg {
 				width: 320px;
-				height: 550px;
+				height: 580px;
 			}
 		}
 		.save {
