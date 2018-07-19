@@ -546,6 +546,7 @@ export default {
         color:rgba(195,201,212,1);
         line-height:37rpx;
         text-align: center;
+        margin-top: 70rpx;
       }
     }
     .peoList {
