@@ -1081,6 +1081,8 @@ export default {
           position: absolute;
           left: 0;
           top: 0;
+          background:url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/new_pic_defaulhead.jpg') no-repeat;
+          background-size: 100% 100%;
           //z-index: -1;
         }
         .location {
@@ -1120,7 +1122,6 @@ export default {
             font-size:48rpx;
             font-family:PingFang-SC-Medium;
             color:rgba(250,251,252,1);
-            line-height:48rpx;
             margin-bottom: 10rpx;
             padding-top: 30rpx;
           }
@@ -1129,7 +1130,6 @@ export default {
             font-size:32rpx;
             font-family:PingFangSC-Light;
             color:rgba(255,255,255,1);
-            line-height:32rpx;
           }
           .detail {
             width:50rpx;

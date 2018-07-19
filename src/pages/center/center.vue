@@ -2,7 +2,7 @@
 	<view class="center">
 		<view class="header" @tap="toDetail" v-if="info.data_complete_score < 80">
 			完善资料信息，提高吸引力
-			<text class="toEdit">立即完善</text>
+			<view class="toEdit">立即完善<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></view>
 		</view>
 		<view class="content">
 			<view style="height: 28rpx;"></view>
@@ -230,6 +230,11 @@
 		.toEdit {
 			float: right;
 			color: rgba(255,162,0,1);
+			.icon {
+				width: 14rpx;
+				height: 24rpx;
+				margin-left: 16rpx;
+			}
 		}
 	}
 	.content {
@@ -253,7 +258,7 @@
 			.name {
 				color: #353943;
 				font-size: 56rpx;
-				line-height: 56rpx;
+				line-height: 1.3;
 				font-weight: 500;
 				.setEllipsis();
 			}
@@ -269,7 +274,7 @@
 				height: 160rpx;
 				width: 160rpx;
 				border-radius: 50%;
-				background: url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/new_pic_alert%403x.png') no-repeat;
+				background: url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/new_pic_defaulhead.jpg') no-repeat;
 				background-size: 100% 100%;
 			}
 		}
