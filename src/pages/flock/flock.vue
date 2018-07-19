@@ -70,8 +70,7 @@
       </block>
     </view>
     <mptoast />
-    <authorize-pop :showPop='showPop'></authorize-pop>
-    
+    <authorize-pop :showPop='showPop' :routerInfo="routerInfo"></authorize-pop>    
   </view>
 </template>
 <script>
@@ -100,6 +99,7 @@ export default {
       shareData: {},
       showPop: false,
       isFlockId: false,
+      routerInfo: {}
     }
   },
 
@@ -119,6 +119,10 @@ export default {
   },
 
   onLoad(res) {
+    this.routerInfo = {
+      path: 'pages/flock/main',
+      query: res
+    }
     console.log(res,'群详情页面')
     let that = this
     let adaptive = wx.setStorageSync('adaptive')

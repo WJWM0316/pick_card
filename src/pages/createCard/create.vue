@@ -81,8 +81,8 @@
       <view class="table_blo row_style_three" >
         <view class="tit">个性签名</view>
         <!--  -->
-        <textarea maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="用一句话介绍你自己吧～" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;"
-        v-if="!bindPhone.isPh" cursor-spacing="100" />
+        <input maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="用一句话介绍你自己吧～" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);"
+        v-if="!bindPhone.isPh" @input="changeTxt"/>
         <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
     </view>
@@ -127,7 +127,7 @@
           <button class="next type_2" v-else >完成创建</button>
         </block>
         <block v-else>
-          <button class="next toNext type_2"  v-if="thirdData.sign.length<=25&& thirdData.sign.length>0&&thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">完成创建</button>
+          <button class="next toNext type_2"  v-if="thirdData.sign.length <=25 && thirdData.sign.length>0 && thirdRule.job.length>0 && thirdRule.live.length>0 " open-type="getPhoneNumber" @getphonenumber="getPhone">完成创建</button>
           <button class="next type_2" v-else >完成创建</button>
         </block>
       </block>
@@ -364,7 +364,9 @@
           that.firstData.gender = res
         }
       },
-
+      changeTxt (e) {
+        this.thirdData.sign = e.target.value
+      },
       toNext (num) {
         
         console.log('toNext',num)
@@ -992,21 +994,21 @@
       .area {
         //border: 1rpx solid #cccccc;
         width: 100%;
-        height: 140rpx;
+        height: 40rpx;
         font-size:28rpx;
         font-family:PingFangSC-Regular;
         color:rgba(53,57,67,1);
-        line-height:28rpx;
+        line-height:40rpx;
+        margin-bottom: 20rpx;
       }
       .astrict {
-        position: absolute;
-        right: 0rpx;
-        bottom: 0rpx;
+        float: right;
         color: #B2B6C2;
         font-size:28rpx;
         font-family:SFUIDisplay-Light;
         display: flex;
         flex-direction: row;
+        margin-bottom: 70rpx;
         .ast {
           color: #B2B6C2;
           &.ts {

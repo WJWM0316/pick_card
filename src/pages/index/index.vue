@@ -116,7 +116,7 @@
       </view>
     </view>
 
-    <authorize-pop :isIndex='true'></authorize-pop>
+    <authorize-pop :isIndex='true' :routerInfo="routerInfo"></authorize-pop>
     <mptoast />
     <footerTab :type=1 :adaptive=adaptive :isRed=mainRed></footerTab>
     <!-- 分享弹窗 -->
@@ -226,6 +226,8 @@ export default {
 
       isShowTrue: false,  //同意
       consentForm: 'index',
+
+      routerInfo: {}
     }
   },
   onShareAppMessage: function (res) {
@@ -262,7 +264,10 @@ export default {
     }
   },
   onLoad(res) {
-    console.log('onLoad=======')
+    this.routerInfo = {
+      path: 'pages/index/main',
+      query: res
+    }
     console.log(res)
     let that = this
     let value = wx.getStorageSync('pickCardFirst')
