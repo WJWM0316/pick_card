@@ -477,6 +477,8 @@ export default {
       clearInterval(that.interval2)
       that.interval2 =  setInterval(function () {  
          that.time++;  
+
+
       }, 100);  
 
       that.moveData={
@@ -743,19 +745,15 @@ export default {
     flex-direction: column;
     justify-content: center;
     &.small{
-      //height: 1020rpx;
       .content {
-        top: -66rpx;
-        height: 736rpx;
+        //top: -66rpx;
+        height: 836rpx;
         .peopList {
-          //width: 530rpx;
-          height: 736rpx;
+          height: 836rpx;
           .peop_blo {
-            //width: 530rpx;
-            height: 736rpx;
+            height: 836rpx;
             .top {
-              //width: 530rpx;
-              height: 489rpx;
+              height: 580rpx;
             }
             .bottom {
               height: 247rpx;
@@ -1121,7 +1119,7 @@ export default {
           justify-content: center;
           align-items: center;
           font-size:24rpx;
-          font-family:PingFangHK-Regular;
+          font-family:PingFangSC-Regular;
           color:rgba(255,255,255,1);
           line-height: 50rpx;
           display: none;
@@ -1168,7 +1166,7 @@ export default {
         width:100%;
         height:340rpx;
         background: #ffffff;
-        padding: 24rpx 45rpx;
+        padding: 24rpx 34rpx;
         box-sizing: border-box;
         .signature {
           height: 70rpx;
@@ -1185,19 +1183,23 @@ export default {
           flex-wrap: wrap;
           height: 116rpx;
           overflow: hidden;
+          padding-left: 11rpx;
+          box-sizing: border-box;
           .label_blo {
             padding: 0 26rpx;
             box-sizing: border-box;
             font-size:24rpx;
-            font-family:PingFangHK-Regular;
+            font-family:PingFangSC-Regular;
             border-radius:24rpx;
             color:rgba(0,208,147,1);
-            line-height:48rpx;
+            //line-height:48rpx;
             text-align: center;
             border: 1rpx solid rgba(0,208,147,1);
             margin-right: 10rpx;
             margin-bottom: 14rpx;
             height: 48rpx;
+            display: flex;
+            align-items: center;
           }
         }
       }
@@ -1283,7 +1285,7 @@ export default {
       justify-content: space-around;
       align-items: center;
       font-size:32rpx;
-      font-family:PingFangHK-Light;
+      font-family:PingFangSC-Light;
       color:rgba(117,121,128,1);
       .name {
         &.cur {
