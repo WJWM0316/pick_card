@@ -266,9 +266,7 @@ export default {
     console.log(res)
     let that = this
     let value = wx.getStorageSync('pickCardFirst')
-    let beforeCreateStep =wx.getStorageSync('beforeCreateStep')&&wx.getStorageSync('beforeCreateStep').length>0?wx.getStorageSync('beforeCreateStep'):0;
-    that.beforeCreateStep = beforeCreateStep;
-
+    
     wx.getSystemInfo({
       success: function(res) {
         that.systemInfo = res
@@ -308,6 +306,10 @@ export default {
     }
   },
   onShow (res) {
+    let that = this
+    let beforeCreateStep =wx.getStorageSync('beforeCreateStep')?wx.getStorageSync('beforeCreateStep'):0;
+    that.beforeCreateStep = beforeCreateStep;
+    console.log(beforeCreateStep)
     this.isNext = true;
     this.toCreateSock = true;
     if (!this.$store.getters.userInfo.vkey) {
@@ -328,17 +330,20 @@ export default {
     },
     dataList () {
       let that = this;
-
       //that.usersInfo = that.$store.getters.userInfo
       getIndexUsers(that.getPage).then((res)=>{
+        that.usersInfo = that.$store.getters.userInfo
         console.log(that.usersInfo, '用户信息')
+        console.log(that.usersInfo.step, 'step')
         that.usersList = res.data
+        this.nowIndex = 0
+
         if(that.usersInfo.step!=9){
-          if(res.data.length<1 && value){
-            that.isCreate()
-            return
-          }
-        }else if (that.usersInfo.step === 9) {
+            if(res.data.length<1){
+              that.isCreate()
+            }
+          return
+        }else {
           redDot().then(res=>{
             console.log(res)
             that.mainRed = res.data.main_show_red_dot
@@ -349,7 +354,6 @@ export default {
           })
           that.getShareImg()
         }
-        this.nowIndex = 0
         if(res.data.length<1){
           that.isEnd = true
         }else {
@@ -519,13 +523,13 @@ export default {
 
       console.log('likeOp')
       if(status && status == 'right') {
-        if(beforeCreateStep<3&&step<9){
+        if(step<9){
           that.firstOp(status,msg);
         }else {
           that.like(msg);
         }
       }else if(status && status == 'left'){
-        if(beforeCreateStep<3&&step<9){
+        if(step<9){
           that.firstOp(status,msg);
         }else {
           that.unlike(msg);
@@ -570,13 +574,14 @@ export default {
           beforeCreateStep = this.beforeCreateStep;
 
       beforeCreateStep++;
-      if(beforeCreateStep == 3){
+      if(beforeCreateStep >= 3){
         console.log('firstOp==beforeCreateStep == 3')
-        wx.setStorageSync('beforeCreateStep', beforeCreateStep);
+        wx.setStorageSync('beforeCreateStep', 3);
         that.isNext = true;
         that.isCreate()
         return
       }else {
+        wx.setStorageSync('beforeCreateStep', beforeCreateStep);
         indexUnlike(msg)
       }
       console.log(beforeCreateStep)
