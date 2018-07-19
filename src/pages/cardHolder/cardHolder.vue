@@ -182,7 +182,7 @@ export default {
       if(res.target.dataset.type=="flock"){
         title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 
         imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
-        path+='form=cardHolder&type=flock'
+        path='/pages/test/main?form=cardHolder&type=flock'
       }
       if(res.target.dataset.type=="myDetail"){
         title = shareInfo.mycard?shareInfo.mycard.content:''

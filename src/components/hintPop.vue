@@ -50,26 +50,40 @@
 			}
 		},
 		watch: {
-			isShow () {
+			isShow (res) {
+			console.log(res)
+
 			},
 			type () {},
 			consentNowItem(){},
-			consentForm(){},
+			consentForm(){
+
+			},
 		},
 		onLoad () {
+			console.log(1)
 		},
 		methods: {
 			//跳转====
 			toDetail () {
-
-			  this.isShow = false
-			  wx.navigateTo({
-			    url: `/pages/detail/main?vkey=${this.consentNowItem.apply_user_info.vkey}`
-			  })
+				console.log(this.consentNowItem)
+				console.log(this.consentForm)
+				let url = '/pages/detail/main?vkey='
+				if(this.consentForm =='index'){
+					url += this.consentNowItem.vkey
+				}else {
+					url += this.consentNowItem.apply_user_info.vkey
+				}
+			  	this.isShow = false
+				this.$emit('changeshow', false)
+			  	
+			  	wx.navigateTo({
+				    url: url
+			  	})
 			},
 			cloPop () {
 				this.isShow = false
-				this.$emit('close')
+				this.$emit('changeshow', false)
 			},
 
 			preventEvevt (e) {

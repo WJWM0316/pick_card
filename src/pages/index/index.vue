@@ -152,25 +152,29 @@
     </view>
 
     <!-- 同意弹窗 -->
-    <hintPop :type='consent' :consentForm="index" :isShow=isShow :consentNowItem=nowItem @form-id.user="fromClick"></hintPop>
+    <hintPop :type='consent' :consentForm=consentForm :isShow=isShowTrue :consentNowItem=usersList[nowIndex-1] @changeshow="changeShow" @form-id="fromClick"></hintPop>
   </view>
 </template>
 <script>
   import mptoast from 'mptoast'
   import footerTab from '@/components/footerTab'
-  import App from '@/App'
-  import {loginApi,getShareImg,getChoiceLabel} from '@/api/pages/login'
+  import hintPop from '@/components/hintPop'
   import authorizePop from '@/components/authorize'
+
+  import App from '@/App'
+  import Vue from 'vue'
+
+  import {loginApi,getShareImg,getChoiceLabel} from '@/api/pages/login'
   import { getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
-  import Vue from 'vue'
 
 export default {
 
   components: {
     mptoast,
     footerTab,
-    authorizePop
+    authorizePop,
+    hintPop
   },
   data () {
     return { 
@@ -212,6 +216,9 @@ export default {
 
       onShowSock: true,
       toCreateSock: true,
+
+      isShowTrue: false,  //同意
+      consentForm: 'index',
     }
   },
   onShareAppMessage: function (res) {
@@ -308,6 +315,11 @@ export default {
     }
   },
   methods: {
+    changeShow(res){
+      console.log(1111)
+      console.log(res)
+      this.isShowTrue = false
+    },
     dataList () {
       let that = this
       getIndexUsers(that.getPage).then((res)=>{
@@ -586,8 +598,8 @@ export default {
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
-        if(res.code==101){
-          //
+        if(true){
+          that.isShowTrue = true
         }
         that.moveData={
           isMove: false,

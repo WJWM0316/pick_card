@@ -204,7 +204,7 @@ export default {
       if(res.target.dataset.type=="flock"){
         title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 
         imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
-        path='/pages/index/main?form=cardHolder&type=flock'
+        path='/pages/test/main?form=cardHolder&type=flock'
       }
       // 来自页面内转发按钮
     }
