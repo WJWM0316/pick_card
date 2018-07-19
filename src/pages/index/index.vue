@@ -236,7 +236,7 @@ export default {
       // 来自页面内转发按钮
       if(res.target.dataset.type=="myDetail"){
         imageUrl = that.shareData.shareImg;
-        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.vkey}&shareType=${shareInfo.showCard.type}`;
+        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.showCard.type}`;
         
         title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片';
       }
@@ -244,7 +244,7 @@ export default {
       if(res.target.dataset.type=="index"){
         title = shareInfo.index?shareInfo.index.content:''
         imageUrl = shareInfo.index.path
-        path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.vkey}&shareType=${shareInfo.showCard.type}`
+        path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.showCard.type}`
       }
     }
 

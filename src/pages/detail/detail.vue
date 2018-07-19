@@ -161,7 +161,6 @@
 				showEducationNum: 2,
 				checkedTextList: [],
 				nowTime: '',
-				myCard: false,
 				isShareImg: '',
 				stopShow: false, // 阻止onShow的进行
 				showPop: false
@@ -170,6 +169,13 @@
 		computed: {
 			authorize () {
 				if (this.$store.getters.userInfo.vkey) {
+					return true
+				} else {
+					return false
+				}
+			},
+			myCard () {
+				if (this.$store.getters.userInfo.step !== 9) {
 					return true
 				} else {
 					return false
@@ -202,11 +208,7 @@
 		    	console.log('是本人')
 					that.getUserUnfo()
 		    } else {
-					console.log('非本人', that.myCard)
-					that.myCard = false
-					if (that.$store.getters.userInfo.step !== 9) {
-						that.myCard = true
-					}
+					console.log('非本人')
 					that.getOtherUserInfo()
 				}
 			}
@@ -231,7 +233,7 @@
 		      console.log(res.target)
 		      if (res.target.dataset.type == 'flaunt') {
 			      title = shareInfo.showCard.content,
-			      path = `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.vkey}&shareType=${shareInfo.showCard.type}`,
+			      path = `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.id}&shareType=${shareInfo.showCard.type}`,
 			      imageUrl = shareInfo.showCard.path
 		      }
 
@@ -243,7 +245,7 @@
 					shareType = shareInfo.otherCard.type
 				}
 			      title = shareInfo.otherCard.content,
-			      path = `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.vkey}&shareType=${shareType}`,
+			      path = `pages/detail/main?vkey=${this.userInfo.vkey}&shareUid=${this.userInfo.id}&shareType=${shareType}`,
 			      imageUrl = this.isShareImg
 		      }
 		    }

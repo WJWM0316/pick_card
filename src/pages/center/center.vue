@@ -147,12 +147,12 @@
 	    	if(res.target.dataset.type=="index"){
 	    		title = shareInfo.index?shareInfo.index.content:''
 	    		imageUrl = shareInfo.index.path
-	    		path = `/pages/index/main?vkey=${that.info.vkey}&shareUid=${that.info.vkey}&shareType=${shareInfo.showCard.type}`
+	    		path = `/pages/index/main?vkey=${that.info.vkey}&shareUid=${that.info.id}&shareType=${shareInfo.showCard.type}`
 	    	} else if (res.target.dataset.type=='myDetail') {
 	      	// 来自页面内转发按钮
 	      	console.log(res.target)
 		      title = shareInfo.mycard.content,
-		      path= `pages/detail/main?vkey=${that.info.vkey}&shareUid=${that.info.vkey}&shareType=${shareInfo.mycard.type}`,
+		      path= `pages/detail/main?vkey=${that.info.vkey}&shareUid=${that.info.id}&shareType=${shareInfo.mycard.type}`,
 		      imageUrl= that.isShareImg
 	    	}		
     	}
