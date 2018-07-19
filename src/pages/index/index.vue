@@ -156,6 +156,7 @@
   </view>
 </template>
 <script>
+  import {mapState} from 'vuex'
   import mptoast from 'mptoast'
   import footerTab from '@/components/footerTab'
   import hintPop from '@/components/hintPop'
@@ -175,6 +176,12 @@ export default {
     footerTab,
     authorizePop,
     hintPop
+  },
+  computed: {
+    ...mapState({
+      usersInfo: state => state.global.userInfo,
+      shareInfo: state => state.global.shareInfo,
+    }),
   },
   data () {
     return { 
@@ -302,6 +309,7 @@ export default {
   },
   onShow (res) {
     this.isNext = true;
+    this.toCreateSock = true;
     if (!this.$store.getters.userInfo.vkey) {
       authorizePop.methods.checkLogin().then(res => {
         if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
@@ -316,14 +324,13 @@ export default {
   },
   methods: {
     changeShow(res){
-      console.log(1111)
-      console.log(res)
       this.isShowTrue = false
     },
     dataList () {
-      let that = this
+      let that = this;
+
+      //that.usersInfo = that.$store.getters.userInfo
       getIndexUsers(that.getPage).then((res)=>{
-        that.usersInfo = that.$store.getters.userInfo
         console.log(that.usersInfo, '用户信息')
         that.usersList = res.data
         if(that.usersInfo.step!=9){
