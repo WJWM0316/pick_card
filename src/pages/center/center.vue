@@ -311,6 +311,7 @@
 			border-radius: 50rpx;
 			font-size: 34rpx;
 			line-height: 90rpx;
+			text-align: center;
 			color: #fff;
 		}
 		.save {
@@ -339,7 +340,7 @@
 				line-height: 32rpx;
 		    .left {
 					color: #353943;
-					font-weight: light;
+					font-weight: 300;
 					position: relative;
 					.titleMsg {
 						font-size: 32rpx;
@@ -350,6 +351,7 @@
 		  	.right {
 					text-align: right;
 					overflow: hidden;
+					font-weight: 300;
 					.txt {
 						color: #9AA1AB;
 						font-size:28rpx;
@@ -361,7 +363,7 @@
 						vertical-align:-2rpx;
 					}
 					.hot {
-						width: 60rpx;
+						width: 68rpx;
 						height: 38rpx;
 						vertical-align: -9rpx;
 						margin: 0 7rpx 0 6rpx;
@@ -382,8 +384,9 @@
 		font-size: 28rpx;
 		line-height: 30rpx;
 		color: #9AA1AB;
+		font-weight: 300;
 		.h5Txt {
-			padding: 0 12rpx;
+			padding: 0 24rpx;
 			border-right: 1rpx solid #9AA1AB;
 			&.noborder {
 				border: none;

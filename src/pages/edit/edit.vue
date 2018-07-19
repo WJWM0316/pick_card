@@ -123,8 +123,10 @@
 			<view class="title">个人签名</view>
 			<view class="item sign">
 				<view class="itemCon">
+					<!-- @focus="isPos = true" @blur="isPos = false" -->
+					<input maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#C3C9D4" :value="userInfo.sign" @input="signText">
 					<!-- @focus="isPos = true" @blur="isPos = false" auto-height=true  -->
-					<input cursor-spacing="100" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#C3C9D4" :value="userInfo.sign" @input="signText"></input>
+					<input cursor-spacing="100" maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#C3C9D4" :value="userInfo.sign" @input="signText">
 					<text class="number">{{userInfo.sign ? userInfo.sign.length : 0}}/25</text>
 				</view>
 			</view>

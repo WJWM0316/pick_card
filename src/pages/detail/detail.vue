@@ -122,7 +122,7 @@
 					<text class="msg">更多介绍</text>
 					<image class="share more" v-if="isSelf" @tap="toEdit('more')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
-				<view class="article" :class="{'noWord' : moreInfo.content === ''}">{{moreInfo.content || '留下些文字或作品吧，让别人更加了解你～'}}</view>
+				<view class="article" v-if="moreInfo.content" :class="{'noWord' : moreInfo.content === ''}">{{moreInfo.content === '' && moreInfo.img_info.length === 0 ? '留下些文字或作品吧，让别人更加了解你～' : moreInfo.content}}</view>
 				<view class="imgBox" v-if="moreInfo.img_info && moreInfo.img_info.length > 0">
 					<image  v-for="(i, index) in moreInfo.img_info" mode="aspectFill" :key="index" class="img" :src="i.smallImgUrl" @tap.stop="previewImg(index)"></image>
 				</view>
@@ -135,7 +135,7 @@
 			<button class="btn applyed" @tap="applyFun('agree')" v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
 			<button class="btn remove" @tap="applyFun('remove')" v-if="userInfo .handle_status === 4">移除名片</button>
 		</view>
-		<authorize-pop :showPop='showPop'></authorize-pop>
+		<authorize-pop :showPop='showPop' :routerInfo="routerInfo"></authorize-pop>
 	</view>
 </template>
 <script>
@@ -163,7 +163,8 @@
 				nowTime: '',
 				isShareImg: '',
 				stopShow: false, // 阻止onShow的进行
-				showPop: false
+				showPop: false,
+				routerInfo: {}
 			}
 		},
 		computed: {
@@ -183,6 +184,10 @@
 			}
 		},
 		onLoad (option) {
+			this.routerInfo = {
+				path: 'pages/detail/main',
+				query: option
+			}
 			this.vkey = option.vkey
 			const vkey = this.vkey
 			if (vkey === wx.getStorageSync('vkey')) {
@@ -511,7 +516,7 @@
 				justify-content:center;
 				align-items:center;
 				position: fixed;
-				top: 54rpx;
+				top: 84rpx;
 				right: 0;
 				background:rgba(53,57,67,0.3);
 				border-radius:36rpx 0px 0px 36rpx;
@@ -542,7 +547,7 @@
 				margin-top: 70rpx;
 			}
 			.content {
-				padding: 40rpx 30rpx 40rpx 40rpx;
+				padding: 30rpx 30rpx 40rpx 40rpx;
 				position: relative;
 				.mycard {
 					position: absolute;
@@ -552,7 +557,7 @@
 					height:88rpx;
 					background: #fff;
 					font-size: 28rpx;
-					line-height: 1.3;
+					line-height: 1.4;
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -575,11 +580,11 @@
 					.name {
 						font-size: 48rpx;
 						color: #353943;
-						line-height: 1.3;
+						line-height: 1.4;
 					}
 					.sex {
-						width: 32rpx;
-						height: 32rpx;
+						width: 40rpx;
+						height: 40rpx;
 						display: inline-block;
 						margin-left: 10rpx;
 					}
@@ -588,7 +593,6 @@
 						height: 32rpx;
 						float: right;
 						display: block;
-						margin-top: 5rpx;
 					}
 					.more {
 						margin-top: 4rpx;
@@ -596,24 +600,23 @@
 				}
 				.job {
 					font-size: 34rpx;
-					line-height: 1.3;
+					line-height: 1.4;
+					margin: 2rpx 0 3rpx;
 					color: #353943;
-					margin-top: 20rpx;
 					.setEllipsis();
 				}
 				.company {
 					font-size: 28rpx;
-					line-height: 1.3;
+					line-height: 1.4;
 					color: #353943;
-					margin-top: 13rpx;
-					font-weight: light;
+					font-weight: 300;
 					.setEllipsis();
 				}
 				.signature {
 					color: #B2B6C2;
 					font-size: 28rpx;
-					line-height: 1.3;
-					margin: 40rpx 0 40rpx;
+					line-height: 1.4;
+					margin: 20rpx 0 39rpx;
 					.setEllipsisLn(2);
 				}
 				.itemMsg {
@@ -629,7 +632,7 @@
 					}
 					.msg {
 						font-size: 28rpx;
-						line-height: 1.3;
+						line-height: 1.4;
 						color: #353943;
 						margin-left: 26rpx;
 						&.isShow {
@@ -656,7 +659,7 @@
 				}
 				.title {
 					height: 40rpx;
-					line-height: 1.3;
+					line-height: 1.4;
 					font-weight: Medium;
 					.icon {
 						width: 40rpx;
@@ -677,9 +680,10 @@
 					overflow: hidden;
 					.label {
 						margin-top: 14rpx;
-						padding: 12rpx 26rpx;
+						padding: 0 26rpx;
 						font-size: 24rpx;
-						line-height: 1.3;
+						height: 48rpx;
+						line-height: 48rpx;
 						color: #00D093;
 						border: 1rpx #00D093 solid;
 						margin-right: 10rpx;
@@ -693,7 +697,7 @@
 				.date, .job, .company, .school {
 					color: #9AA1AB;
 					font-size: 28rpx;
-					line-height: 1.3;
+					line-height: 1.4;
 					font-weight: light;
 					margin-top: 30rpx;
 				}
@@ -707,7 +711,7 @@
 				.open {
 					width: 100%;
 					height: 70rpx;
-					line-height: 1.3;
+					line-height: 70rpx;
 					color: #9AA1AB;
 					font-size: 28rpx;
 					font-weight: light;
@@ -724,7 +728,7 @@
 					margin-top: 28rpx;
 					font-size: 32rpx;
 					color: #353943;
-					line-height: 1.3;
+					line-height: 1.4;
 					font-weight: light;
 					&.noWord {
 						font-size:28rpx;
