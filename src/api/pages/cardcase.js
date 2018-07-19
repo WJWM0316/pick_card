@@ -91,3 +91,15 @@ export const isJoinUserGroup = (data) => {
     isLoading: false
   })
 }
+
+// 获取小程序码
+export const getShareCode = (data) => {
+  console.log(data)
+  return request({
+    method: 'post',
+    url: `/share/getShareCode`,
+    data,
+    isLoading: false
+  })
+}
+
