@@ -8,7 +8,7 @@
       
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
           <view class="ops">
-            <button open-type="share" data-type="me" class="ops_blo shareMe" >
+            <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
               <image src="/static/images/cardcase_banner_left@3x.png"></image>
               分享我的名片
             </button>
@@ -68,7 +68,7 @@
       <!-- 分享弹窗 -->
       <view class="hint_cont" > 
         <view class="cont_tit" >小阔爱，sorry啦~</view>
-        <view class="cont_txt">因为微信平台有限制。你分享之后，需要 到对应的微信群聊里边，点击你分享的小 程序卡片才能成功创建群名片喔~</view>
+        <view class="cont_txt">因为微信平台有限制。你分享之后，需要到对应的微信群聊里边，点击你分享的小程序卡片才能成功创建群名片喔~</view>
         <view class="cont_line"></view>
 
         <view class="cont_tit2">步骤详解：</view>
@@ -184,7 +184,7 @@ export default {
         imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
         path+='form=cardHolder&type=flock'
       }
-      if(res.target.dataset.type=="me"){
+      if(res.target.dataset.type=="myDetail"){
         title = shareInfo.mycard?shareInfo.mycard.content:''
         imageUrl = that.shareData.shareImg
         path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`

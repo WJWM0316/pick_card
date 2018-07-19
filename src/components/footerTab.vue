@@ -30,7 +30,7 @@
         <view class="tit" @tap="toCardHolder">分享你的趣名片</view>
         <view class="txt">召唤你的朋友们一起来玩吧！</view>
         <view class="btns">
-          <button class="btn friend" open-type="share" data-type="index">
+          <button class="btn friend" open-type="share" data-type="myDetail">
             <image class="img_warp" src="/static/images/popup_btn_sharewechat@3x.png"></image>
             <view class="bt_txt">分享到微信</view>
           </button>
@@ -57,17 +57,29 @@
       isRed:{
         type: String,
         default: 0
-      }
-      
+      },
+      userInfo: {
+        type: Object,
+        default: {}
+      },
+      shareInfo: {
+        type: Object,
+        default: {}
+      },
     },
     data () {
       return {
         isPop: false,
         index: 0,
+        isShareImg: '',
+        info: {}
       }
     },
     mounted () {
       this.index = this.type
+    },
+    onLoad () {
+      this.info = this.$store.getters.userInfo
     },
     methods: {
       fromClick (e) {

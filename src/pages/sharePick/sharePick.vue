@@ -97,6 +97,7 @@
         color:rgba(0,208,147,1);
         line-height:100rpx;
         display: inline-block;
+        font-weight: 700;
       }
     }
     .title {

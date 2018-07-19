@@ -80,7 +80,6 @@
   import {  indexLike  } from '@/api/pages/user'
   import { deleteRedFlock } from '@/api/pages/red'
   import authorizePop from '@/components/authorize'
-  import { getUserInfoApi } from '@/api/pages/user'
   import {mapState} from 'vuex'
 export default {
   components: {
@@ -98,7 +97,6 @@ export default {
         id: '',
         vkey: ''
       },
-      needAuthorize: null,
       shareData: {},
       showPop: false,
       isFlockId: false,
@@ -138,6 +136,7 @@ export default {
         vkey: res.vkey
       }
 
+
       that.isFlockId = true
       isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
         if(msg.code == 201){
@@ -153,35 +152,33 @@ export default {
       return
     }
 
-    getUserInfoApi().then(data => {
-      that.userInfo = data.data
-      let msg = {
-        uid: that.userInfo.id,
-        name: that.userInfo.nickname,
-        img: that.userInfo.avatar_info.bigImgUrl,
-        occupation: that.userInfo.occupation,
-        company: that.userInfo.company,
-        label: [],
+      that.userInfo = that.$store.getters.userInfo
+      if (that.userInfo.vkey && that.userInfo.step === 9) {
+        let msg = {
+          uid: that.userInfo.id,
+          name: that.userInfo.nickname,
+          img: that.userInfo.avatar_info.bigImgUrl,
+          occupation: that.userInfo.occupation,
+          company: that.userInfo.company,
+          label: [],
+        }
+
+        that.userInfo.other_info.realm_info.forEach(item => {
+          msg.label.push(`${item.name} | `)
+        })
+
+        console.log(msg)
+        msg.label = msg.label.join('')
+        msg.label = msg.label.slice(0, msg.label.length-3)
+
+        getShareImg(msg).then(res => {
+          msg.shareImg = res.data
+          that.shareData = msg
+        })
       }
-
-      that.userInfo.other_info.realm_info.forEach(item => {
-        msg.label.push(`${item.name} | `)
-      })
-
-      console.log(msg)
-      msg.label = msg.label.join('')
-      msg.label = msg.label.slice(0, msg.label.length-3)
-
-      getShareImg(msg).then(res => {
-        msg.shareImg = res.data
-        that.shareData = msg
-      })
-    })
   },
 
   onShow(){
-    this.needAuthorize = this.$store.getters.needAuthorize
-
     if (!this.authorize) {
       authorizePop.methods.checkLogin().then(res => {
       })
@@ -373,7 +370,7 @@ export default {
         that.flockInfo = res.data
 
         if(res.http_status == 200){ 
-          if(that.isFirstFlock){
+          if(that.isFirstFlock && that.$store.getters.userInfo.step && that.$store.getters.userInfo.step === 9){
             deleteRedFlock(that.msg.vkey).then((res)=>{
               that.isFirstFlock = false
             })

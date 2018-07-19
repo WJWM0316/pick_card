@@ -31,7 +31,7 @@
           @touchmove="tMove" >
             <form report-submit="true" class="top" @submit="fromClick">
             <button class="top" @tap="toDetail(item)" formType="submit">
-              <image class="bage" :src="item.avatar_info.middleImgUrl" v-if="item.avatar_info.middleImgUrl"></image>
+              <image class="bage" :src="item.avatar_info.bigImgUrl" mode=widthFix v-if="item.avatar_info.bigImgUrl"></image>
               <image class="bage" src="/static/images/new_pic_defaulhead.jpg" v-else></image>
               <view class="location">
                 <image class="adr" src="/static/images/home_icon_location_nor@3x.png"></image>
@@ -86,7 +86,7 @@
 
         <view class="btns" >
           <form report-submit="true" class="btn type2" @submit="fromClick" v-if="isCooling || isEnd">
-            <button formType="submit" class="btn type2" data-type="me" open-type="share"  >
+            <button formType="submit" class="btn type2" data-type="myDetail" open-type="share"  >
               <image src="/static/images/dafulpage_btn_share@3x.png"></image>
             </button>
           </form>
@@ -227,7 +227,7 @@ export default {
     })
     if (res.from === 'button') {
       // 来自页面内转发按钮
-      if(res.target.dataset.type=="me"){
+      if(res.target.dataset.type=="myDetail"){
         imageUrl = that.shareData.shareImg;
         path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.vkey}&shareType=${shareInfo.showCard.type}`;
         
@@ -278,17 +278,19 @@ export default {
     } else {
       let occupation_label = [],
           realm_label = []
-      getChoiceLabel().then(res => {
-        res.data.forEach(item => {
-          if (item.oneLevel === 1) {
-            occupation_label.push(item.id)
-          } else {
-            realm_label.push(item.id)
-          }
+      if (this.$store.getters.userInfo.vkey) {
+        getChoiceLabel().then(res => {
+          res.data.forEach(item => {
+            if (item.oneLevel === 1) {
+              occupation_label.push(item.id)
+            } else {
+              realm_label.push(item.id)
+            }
+          })
+          this.getPage.occupation_label_id = occupation_label.join(',') || 0
+          this.getPage.realm_label_id = realm_label.join(',') || 0
         })
-        this.getPage.occupation_label_id = occupation_label.join(',') || 0
-        this.getPage.realm_label_id = realm_label.join(',') || 0
-      })
+      }
     }
   },
   onShow (res) {
@@ -686,7 +688,7 @@ export default {
       msg = {
         uid: usersInfo.id,
         name: usersInfo.nickname,
-        img: usersInfo.avatar_info.bigImgUrl,
+        img: usersInfo.avatar_info.smallImgUrl,
         occupation: usersInfo.occupation?usersInfo.occupation:'test',
         company: usersInfo.company,
         label: [],
@@ -1070,7 +1072,7 @@ export default {
       .top {
         width:100%;
         height:590rpx;
-        
+        overflow:hidden;
         border-radius:18rpx 18rpx 0rpx 0rpx;
         position: relative;
         .bage {

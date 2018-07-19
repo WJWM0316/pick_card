@@ -5,7 +5,7 @@
 			<view class="head item">
 				<view class="itemCon">
 					<view class="left requst">头像</view>
-					<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath || '/static/images/new_pic_defaulhead.jpg'"></image></view>
+					<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath"></image></view>
 				</view>
 			</view>
 			<view class="item">
@@ -218,26 +218,7 @@
 						size: info.size
 					}
 					this.filePath = info.path
-					wx.showLoading({
-					  title: '正在上传',
-					  duration: 1000,
-					  mask: true
-					})
-					uploadImage(data, {
-		        onItemSuccess: (resp, file, index) => {
-		        }
-		      }).then(res => {
-		      	wx.hideLoading()
-		        const cutImgInfo = {
-		          fileId: res.file.fileId,
-		          path: res.file.path,
-		          size: res.file.size
-		        }
-						this.userInfo.avatar_id = res.file.fileId
-						wx.removeStorageSync('cutImgInfo')
-		      }).catch((e, index) => {
-		        console.log(e, 2)
-		      })
+					
 				}
 			},
 			signText (e) {
@@ -260,6 +241,38 @@
 				})
 			},
 			saveUserInfo () {
+				const info = wx.getStorageSync('cutImgInfo')
+				let data1 = {}
+				if (info.path) {
+					data1 = {
+						path: info.path,
+						size: info.size
+					}
+					wx.showLoading({
+						title: '加载中...',
+						mask: true
+					})
+					uploadImage(data1, {
+		        onItemSuccess: (resp, file, index) => {
+		        }
+		      }).then(res => {
+		        const cutImgInfo = {
+		          fileId: res.file.fileId,
+		          path: res.file.path,
+		          size: res.file.size
+		        }
+		        wx.hideLoading()
+						this.userInfo.avatar_id = res.file.fileId
+						wx.removeStorageSync('cutImgInfo')
+						this.save()
+					}).catch((e, index) => {
+		        console.log(e, 2)
+		      })
+	      } else {
+	      	this.save()
+	      }
+			},
+			save () {
 				let title = ''
 				if (this.userInfo.avatar_id === '') {
 					wx.showToast({
@@ -344,7 +357,7 @@
 					return
 				}
 				let reg2 = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
-				if (this.userInfo.email !== '' && !reg2.test(this.userInfo.email)) {                                                                                    
+				if (this.userInfo.email !== '' && !reg2.test(this.userInfo.email)) {
 					wx.showToast({
 					  title: '邮箱地址格式不正确',
 					  icon: 'none',
@@ -383,6 +396,7 @@
 					})
 					console.log('错误了', e)
 				})
+	      
 			},
 			closePop () {
 				this.showLablePop = false

@@ -3,7 +3,7 @@
   <div class="container " :class="{'small': adaptive == 'small'}">
     <view class="hintJoined " v-if="relevance && nowNum == 0">
      <image class="hint_img" src="/static/images/new_pic_alert@3x.png"></image>
-      <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有 对应账号，已自动加载相关信息</view>
+      <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有对应账号，已自动加载相关信息</view>
     </view>
     <view class="op_one " v-if="nowNum === 0">
       <view class="one_txt">
