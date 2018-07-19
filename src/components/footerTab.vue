@@ -8,10 +8,10 @@
           <view class="name " :class="{'cur' : type === 3}" @tap="toTab(3)">我的名片</view>
         </view>
         <view class="right"> 
-          <view class="r_blo" @click="isShare">
+          <view class="r_blo" @tap="isShare">
             <image class="detail"  src="/static/images/home_tab_btn_share_nor@3x.png"></image>
           </view>
-          <view class="r_blo" >
+          <view class="r_blo" @tap="haoPlay">
             <form report-submit="true" class="from-box" @submit="fromClick">
                 <button formType="submit" class="from-mask  "></button>
             </form>
@@ -85,6 +85,11 @@
       fromClick (e) {
         console.log(e)
         this.$emit('form-id', e)
+      },
+      haoPlay () {
+        wx.navigateTo({
+          url: '/pages/haoPlay/main'
+        })
       },
       toTab (type) {
         if (this.$store.getters.userInfo.step !== 9) {

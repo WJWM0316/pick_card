@@ -249,6 +249,7 @@
 			      imageUrl = this.isShareImg
 		      }
 		    }
+		    console.log(path, 1111111111111111111111111111)
 		    return {
 		      title: title,
 		      path: path,
