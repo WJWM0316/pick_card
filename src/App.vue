@@ -145,9 +145,16 @@ export default {
       withShareTicket: true
     })
     
-    if(option && option.shareTicket &&option.query.type&&option.query.type=='flock'){
-      this.test = option.shareTicket
-      this.checkLogin()
+    if(option &&option.query.type&&option.query.type=='flock'){
+
+      if( option.shareTicket ){
+        this.test = option.shareTicket
+        this.checkLogin()
+      }else {
+        wx.reLaunch({
+          url: `/pages/index/main`
+        })
+      }
     }else {
       this.test = false
     }

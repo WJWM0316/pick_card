@@ -21,32 +21,40 @@
     </view>
     <view class="content">
       <view class="peoList" :style="{ height: spHeight+'rpx' }">
-        <view class="card_block" v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
-          <block v-if="!isJoin">
-            <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" v-if="index<10">
-              <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
-              <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
-              <view class="msg_name ellipsis">{{item.nickname}}</view>
-              <view class="msg_tit ellipsis">{{item.occupation}}</view>
-              <view class="msg_company ellipsis">{{item.company}}</view>
-              <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
-              <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
-              <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
-            </view>
-          </block>
-          <block v-else>
-            <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" >
-              <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
-              <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
-              <view class="msg_name ellipsis">{{item.nickname}}</view>
-              <view class="msg_tit ellipsis">{{item.occupation}}</view>
-              <view class="msg_company ellipsis">{{item.company}}</view>
-              <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
-              <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
-              <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
-            </view>
-          </block>
-        </view>
+
+        <block v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
+            <block v-if="!isJoin">
+              <view class="card_block" v-if="index<10">
+              <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" >
+                <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
+                <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
+                <view class="msg_name ellipsis">{{item.nickname}}</view>
+                <view class="msg_tit ellipsis">{{item.occupation}}</view>
+                <view class="msg_company ellipsis">{{item.company}}</view>
+                <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
+                <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+                <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
+              </view>
+              </view>
+            </block>
+
+            <block v-else>
+              <view class="card_block" >
+              <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" >
+                <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
+                <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
+                <view class="msg_name ellipsis">{{item.nickname}}</view>
+                <view class="msg_tit ellipsis">{{item.occupation}}</view>
+                <view class="msg_company ellipsis">{{item.company}}</view>
+                <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
+                <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+                <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
+              </view>
+              </view>
+            </block>
+        </block>
+
+        
         <view class="hintJoin" v-if="!isJoin">—— 加入后即可查看所有群成员的名片 ——</view>
       </view>
 
@@ -196,7 +204,7 @@ export default {
       if(res.target.dataset.type=="flock"){
         title = shareInfo.createGroupCard?shareInfo.createGroupCard.content:'' 
         imageUrl = shareInfo.createGroupCard.path?shareInfo.createGroupCard.path:''
-        path='/pages/index/main?form=cardHolder&type=flock'
+        path='/pages/test/main?form=cardHolder&type=flock'
       }
       // 来自页面内转发按钮
     }
