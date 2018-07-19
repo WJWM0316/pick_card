@@ -87,7 +87,7 @@ export default {
           setUserGroup(data).then((res)=>{
             console.log('============成功，跳转群详情',res)
 
-            wx.navigateTo({
+            wx.reLaunch({
               url: `/pages/flock/main?id=${res.data.openGId}&vkey=${res.data.userGroupId}`
             })
           },(res)=>{
