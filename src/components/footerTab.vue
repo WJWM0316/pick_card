@@ -219,7 +219,7 @@
         }
         .bt_txt {
           font-size:28rpx;
-          font-family:PingFangHK-Regular;
+          font-family:PingFangSC-Regular;
           color:rgba(178,182,194,1);
           line-height:26rpx;
         }
@@ -267,8 +267,8 @@
     justify-content: space-around;
     align-items: center;
     font-size:32rpx;
-    font-family:PingFangHK-Light;
-    color:rgba(117,121,128,1);
+    font-family:PingFangSC-Light;
+    color:#353943;
     margin: 0 48rpx;
     .name {
       &.cur {
