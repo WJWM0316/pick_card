@@ -39,7 +39,7 @@
               </view>
               <view class="text">
                 <view class="name ellipsis">{{item.nickname}}</view>
-                <view class="title ellipsis">{{item.occupation}}{{item.company}}</view>
+                <view class="title ellipsis">{{item.occupation}} | {{item.company}}</view>
                 <image class="detail" src="/static/images/hone_btn_more_nor@3x.png"></image>
               </view>
             </button>
@@ -1143,14 +1143,15 @@ export default {
           text-align: left;
           .name {
             font-size:48rpx;
+            line-height: 1.4;
             font-family:PingFang-SC-Medium;
             color:rgba(250,251,252,1);
-            margin-bottom: 10rpx;
             padding-top: 30rpx;
           }
           .title {
             width: 470rpx;
             font-size:32rpx;
+            line-height: 1.4;
             font-family:PingFangSC-Light;
             color:rgba(255,255,255,1);
           }
