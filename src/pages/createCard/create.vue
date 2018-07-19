@@ -20,7 +20,7 @@
         </view>
       </view>
       <!-- //focus="{{focus}}" -->
-      <input class="one_name" @blur="inputText" v-model.lazy="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangHK-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="10" />
+      <input class="one_name" @blur="inputText" v-model.lazy="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="100" cursor-spacing="100"/>
 
       <view class="one_gender">
         <view class="gender boy" @click.stop="gender(1)">
@@ -662,7 +662,7 @@
       border-radius:18rpx 18rpx 0rpx 0rpx;
       line-height:92rpx;
       font-size:32rpx;
-      font-family:PingFangHK-Medium;
+      font-family:PingFangSC-Medium;
       color:rgba(53,57,67,1);
       border-bottom: 1rpx solid #ededed;
       text-align: center;
@@ -808,7 +808,7 @@
       .tit1 {
         height:34rpx;
         font-size:34rpx;
-        font-family:PingFangHK-Medium;
+        font-family:PingFangSC-Medium;
         color:rgba(53,57,67,1);
         line-height:34rpx;
         margin-bottom: 16rpx;
@@ -895,12 +895,13 @@
     justify-content: center;
     align-items: center;
     padding: 18rpx 50rpx;
+    box-sizing: border-box;
     .hint_img {
       width:78rpx;
       height:78rpx;
       background:rgba(255,233,143,1);
       border-radius:37rpx;
-      opacity:0.2;
+      opacity:0.5;
       margin-right: 28rpx;
     }
     .hint_txt {
@@ -919,7 +920,7 @@
     .tit_small{
       height:34rpx;
       font-size:34rpx;
-      font-family:PingFangHK-Medium;
+      font-family:PingFangSC-Medium;
       color:rgba(53,57,67,1);
       line-height:34rpx;
       position: relative;
