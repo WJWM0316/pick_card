@@ -172,6 +172,7 @@ page {
   height: 100%;
   font-family: PingFangSC-light;
   font-weight: light;
+  line-height: 1.4;
 }
 .ellipsis {
   overflow: hidden;
