@@ -505,16 +505,15 @@ export default {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 40rpx;
-      overflow-y: scroll;
       
-      .blo_img {
+      .blo_img {  
         width:130rpx;
         height:130rpx;
         position: absolute;
         border-radius: 50%;
         left: -50rpx;
         top: 50rpx;
-        box-shadow: 0rpx 20rpx 40rpx 0rpx rgba(153,193,214,0.1);
+        box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
         border: 4rpx solid rgba(255,255,255,1);
         box-sizing: border-box;
         
@@ -531,16 +530,19 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        box-shadow: 0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
         &.one {
           &:after {
             content: '';
             width:20rpx;
             height:20rpx;
             border-radius: 50%;
-            background:rgba(255,102,102,1);
+            background: #ff5150;
             position: absolute; 
             top: 62rpx;
             left: 50rpx;
+            box-sizing: border-box;
+            border: 3rpx solid #ffffff;
           }
         }
         &.two {
@@ -549,10 +551,12 @@ export default {
             width:20rpx;
             height:20rpx;
             border-radius: 50%;
-            background:rgba(255,102,102,1);
+            background: #ff5150;
             position: absolute;
             top: 33rpx;
             left: 50rpx;
+            box-sizing: border-box;
+            border: 3rpx solid #ffffff;
           }
         }
         &.flock_blo {
@@ -576,7 +580,7 @@ export default {
         .new_msg {
           width:44rpx;
           height:44rpx;
-          background:rgba(255,102,102,1);
+          background: #ff5150;
           box-shadow:0rpx 2rpx 5rpx 0rpx rgba(255,102,102,0.2);
           border-radius: 50%;
           position: absolute;
@@ -592,7 +596,7 @@ export default {
           font-size:34rpx;
           font-family:PingFangSC-Medium;
           color:rgba(70,71,72,1);
-          line-height:34rpx;
+          line-height:38rpx;
           height: 38rpx;
 
         }

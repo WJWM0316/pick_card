@@ -80,6 +80,8 @@
   import { deleteRedFlock } from '@/api/pages/red'
   import authorizePop from '@/components/authorize'
   import {mapState} from 'vuex'
+  import { getShareImg } from '@/api/pages/login'
+
 export default {
   components: {
     mptoast,
@@ -526,7 +528,7 @@ export default {
             height:66rpx;
             position: absolute;
             right: 32rpx;
-            top: 30rpx;
+            top: 35rpx;
             background:rgba(0,208,147,1);
             border-radius:33rpx;
             font-size:28rpx;
