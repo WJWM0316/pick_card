@@ -1,5 +1,5 @@
 <template>
-	<view class="detail" :class="{'self' : isSelf}">
+	<view class="detail" :class="{'self' : isSelf, 'noFriend': !isSelf && userInfo.handle_status === 4}">
 		<!-- 主要展示 -->
 		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 10">
 			{{userInfo.apply_count}}人想得到你的名片
@@ -61,13 +61,13 @@
 				</view>
 				<view class="itemMsg" v-if="userInfo.email !== ''">
 					<image class="icon" src="/static/images/details_icon_email@3x.png"></image>
-					<text class="msg" :class="{'isShow' : userInfo.email === '需要交换后才可见'}">
+					<text class="msg" @tap="copy(userInfo.email)" :class="{'isShow' : userInfo.email === '需要交换后才可见'}">
 						{{userInfo.email}}
 					</text>
 				</view>
 				<view class="itemMsg" v-if="userInfo.wechat !== ''">
 					<image class="icon" src="/static/images/details_icon_wechat@3x.png"></image>
-					<text class="msg" :class="{'isShow' : userInfo.wechat === '需要交换后才可见'}">
+					<text class="msg" @tap="copy(userInfo.wechat)" :class="{'isShow' : userInfo.wechat === '需要交换后才可见'}">
 						{{userInfo.wechat}}
 					</text>
 				</view>
@@ -132,13 +132,13 @@
 				</view>
 			</view>
 		</view>
-
-		<form report-submit="true"  class="btnControl" v-if="!isSelf" @submit="fromClick">
+		<form report-submit="true"  class="btnControl" :class="{'double' : userInfo.handle_status === 1 && userInfo.friend_info.friend_id, 'static' : userInfo.handle_status === 4}" v-if="!isSelf" @submit="fromClick">
+				<button formType="submit" class="btn removeRecord" @tap="applyFun('removeRecord')" v-if="userInfo.handle_status === 1 && userInfo.friend_info.friend_id">移除名片</button>
 		    <button formType="submit" class="btn apply" @tap="applyFun('authorize')" v-if="userInfo.handle_status === 0">申请和TA交换名片</button>
-		    <button formType="submit" class="btn apply" @tap="applyFun('launch')" v-if="userInfo.handle_status === 1">申请和TA交换名片</button>
+		    <button formType="submit" class="btn apply" :class="{'rightBtn' : userInfo.handle_status === 1 && userInfo.friend_info.friend_id}" @tap="applyFun('launch')" v-if="userInfo.handle_status === 1">申请和TA交换名片</button>
 		    <button formType="submit" class="btn applying" v-if="userInfo.handle_status === 2" disabled=true>已申请和TA交换名片</button>
 		    <button formType="submit" class="btn applyed" @tap="applyFun('agree')" v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
-		    <button formType="submit" class="btn remove" @tap="applyFun('remove')" v-if="userInfo .handle_status === 4">移除名片</button>
+		    <button formType="submit" class="btn remove" @tap="applyFun('remove')" v-if="userInfo.handle_status === 4">移除名片</button>
 		</form>
 			
 		<authorize-pop :showPop='showPop' :routerInfo="routerInfo"></authorize-pop>
@@ -270,6 +270,20 @@
 		    }
 		 },
 		methods: {
+			copy (e) {
+				wx.setClipboardData({
+				  data: e,
+				  success: function(res) {
+		      	wx.showToast({
+						  title: '复制成功',
+						  icon: 'success',
+						  duration: 1000
+						})
+		      }
+				})
+			},
+
+
 			call (phoneNumber) {
 				if (phoneNumber.length === 11) {
 					console.log(phoneNumber, '拨打电话号码')
@@ -353,10 +367,30 @@
 						this.userInfo.handle_status = 3
 						this.getOtherUserInfo()
 					})
+				} else if (type === 'removeRecord') {
+					let that = this
+					wx.showModal({
+		        content: '确定要移除名片？',
+		        confirmColor: '#00D093',
+		        success: function(res) {
+		          if (res.confirm) {
+								data = {
+									friend_id : that.userInfo.friend_info.friend_id,
+									remarks: '约么'
+								}
+								delDetFriend(data).then(res => {
+									wx.navigateBack({
+									  delta: 1
+									})
+								})
+							}
+						}
+					})
 				} else {
 					let that = this
 					wx.showModal({
 		        content: '确定要移除名片？',
+		        confirmColor: '#00D093',
 		        success: function(res) {
 		          if (res.confirm) {
 								data = {
@@ -480,6 +514,9 @@
 	.detail {
 		background: #FAFBFC;
 		padding: 30rpx 40rpx 170rpx;
+		&.noFriend {
+			padding: 30rpx 40rpx 0;
+		}
 		&.self {
 			padding-bottom: 30rpx;
 		}
@@ -784,11 +821,28 @@
 			bottom: 0;
 			box-sizing: border-box;
 			background:rgba(255,255,255,0.8);
+			overflow: hidden;
+			display: block;
+			&.double {
+				padding: 30rpx 40rpx;
+			}
+			&.static {
+				position: static;
+			}
 			.btn {
 				font-size: 32rpx;
 				line-height: 98rpx;
 				border-radius:50px;
 				color: #fff;
+				&.removeRecord {
+					width:260rpx;
+					float: left;
+					background: #DCE3EE;
+				}
+				&.rightBtn {
+					width:380rpx;
+					float: right;
+				}
 				&.apply, &.applyed {
 					background: #00D093;	
 				}

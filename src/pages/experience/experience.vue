@@ -332,6 +332,7 @@
 				}
 				wx.showModal({
 					content: title,
+					confirmColor: '#00D093',
 					success: function (res) {
 						if (res.confirm) {
 				      function removeFun () {

@@ -169,7 +169,9 @@
 	    remove (item, index) {
 	    	let that = this
 	    	wx.showModal({
+
 				  content: '是否确定删除图片',
+				  confirmColor: '#00D093',
 				  success: function(res) {
 				    if (res.confirm) {
 				      that.files.splice(index, 1)

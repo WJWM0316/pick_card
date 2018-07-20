@@ -335,6 +335,7 @@ export default {
       }
       let that = this
       wx.showModal({
+        confirmColor: '#00D093',
         content: '群里面的大咖都勾搭完了吗',
         success: function(res) {
           if (res.confirm) {
