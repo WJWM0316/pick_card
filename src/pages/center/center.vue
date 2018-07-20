@@ -167,7 +167,7 @@
 		      imageUrl= that.isShareImg
 	    	}		
     	}
-
+    	console.log(path, '我是分享的链接')
     	return {
     	  title: title,
     	  path: path,
