@@ -159,12 +159,12 @@
 								let metrics = ctx.measureText(item).width // 文本宽度
 					    	// 判断是否超过两行切需要打点
 					    	if (lineNun === 2 && (newLabelWidth + position.x + metrics + 5) > (320-17)) {
-					    		metrics = ctx.measureText('....').width
-									ctx.fillText('....', position.x + r, position.y + r)
+					    		metrics = ctx.measureText('····').width
+									ctx.fillText('····', position.x + r, position.y + r + 4)
 									last = true
 					    	} else {
 					    		metrics = ctx.measureText(item).width
-									ctx.fillText(item, position.x + r, position.y + r + 4)
+									ctx.fillText(item, position.x + r, position.y + r + 5)
 					    	}
 				    	
 								ctx.beginPath()
@@ -197,7 +197,7 @@
 
 					    // 画虚线
 					    ctx.setStrokeStyle('#DCE3EE')
-					    ctx.setLineDash([5, 10], 0)
+					    ctx.setLineDash([4, 6], 0)
 							ctx.beginPath()
 							staticY = staticY + 48
 							ctx.moveTo(17, staticY)

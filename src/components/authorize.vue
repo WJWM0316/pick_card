@@ -133,7 +133,7 @@
 	        iv: e.mp.detail.iv,
 	        key: wx.getStorageSync('key'),
 	        shareUid: wx.getStorageSync('routeInfo').query.shareUid || '',
-	        shareType: wx.getStorageSync('routeInfo').query.type || ''
+	        shareType: wx.getStorageSync('routeInfo').query.shareType || ''
 	      }
 	      getShareConfig().then(res => {
         	this.$store.dispatch('shareInfo', res.data)
