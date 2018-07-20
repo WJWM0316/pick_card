@@ -116,9 +116,7 @@
       </view>
     </view>
 
-    <authorize-pop :isIndex='true' :routerInfo="routerInfo"></authorize-pop>
-    <mptoast />
-    <footerTab :type=1 :adaptive=adaptive :isRed=mainRed></footerTab>
+    
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
       <view class="guidance_pop" v-if="gdData.isGd" @tap.stop="firstGDClick">
@@ -153,6 +151,10 @@
 
     <!-- 同意弹窗 -->
     <hintPop :type='consent' :consentForm=consentForm :isShow=isShowTrue :consentNowItem=usersList[nowIndex-1] @changeshow="changeShow" @form-id="fromClick"></hintPop>
+
+    <authorize-pop :isIndex='true' :routerInfo="routerInfo"></authorize-pop>
+    <mptoast />
+    <footerTab :type=1 :adaptive=adaptive :isRed=mainRed ></footerTab>
   </view>
 </template>
 <script>
@@ -373,7 +375,6 @@ export default {
       })
     },
     fromClick (e) {
-      console.log(111)
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
         fromAddress: '/pages/index'
@@ -968,7 +969,8 @@ export default {
     //width: 100%;
     line-height: 94rpx;
     font-size:32rpx;
-    font-family:PingFangSC-Light;
+    //font-family:PingFangSC-Light;
+    font-weight: 300;
     color:rgba(53,57,67,1);
     display: flex;
     flex-direction: row;
@@ -1073,7 +1075,8 @@ export default {
         }
         .blo_hint_txt {
           font-size:28rpx;
-          font-family:PingFangSC-Light;
+          //font-family:PingFangSC-Light;
+          font-weight: 300;
           color: #9AA1AB;
           line-height:38rpx;
         }
@@ -1149,21 +1152,22 @@ export default {
             line-height: 1.4;
             font-family:PingFang-SC-Medium;
             color:rgba(250,251,252,1);
-            padding-top: 30rpx;
+            padding-top: 10rpx;
           }
           .title {
             width: 470rpx;
             font-size:32rpx;
             line-height: 1.4;
-            font-family:PingFangSC-Light;
+            //font-family:PingFangSC-Light;
+            font-weight: 300;
             color:rgba(255,255,255,1);
           }
           .detail {
             width:50rpx;
             height:50rpx;
             position: absolute;
-            right: 20rpx;
-            bottom: 20rpx;
+            right: 30rpx;
+            bottom: 28rpx;
           }
         }
       }
@@ -1176,7 +1180,8 @@ export default {
         .signature {
           height: 70rpx;
           font-size:28rpx;
-          font-family:PingFangSC-Light;
+          //font-family:PingFangSC-Light;
+          font-weight: 300;
           color:rgba(154,161,171,1);
           line-height:35rpx;
           margin-bottom: 14rpx;
@@ -1290,7 +1295,8 @@ export default {
       justify-content: space-around;
       align-items: center;
       font-size:32rpx;
-      font-family:PingFangSC-Light;
+      //font-family:PingFangSC-Light;
+      font-weight: 300;
       color:rgba(117,121,128,1);
       .name {
         &.cur {

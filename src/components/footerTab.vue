@@ -264,7 +264,7 @@
     flex: 1;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     font-size:32rpx;
     font-family:PingFangSC-Light;
@@ -294,12 +294,11 @@
           content: '';
           width:14rpx;
           height:14rpx;
-          background:rgba(255,81,80,1);
-          background:red;
+          background:#ff5150;
           border-radius:50%;
           position: absolute;
-          top: -10rpx;
-          right: -25rpx;
+          top: -8rpx;
+          right: -18rpx;
         }
       }
     }

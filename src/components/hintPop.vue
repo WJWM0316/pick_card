@@ -60,14 +60,10 @@
 
 			},
 		},
-		onLoad () {
-			console.log(1)
-		},
+		onLoad () {},
 		methods: {
 			//跳转====
 			toDetail () {
-				console.log(this.consentNowItem)
-				console.log(this.consentForm)
 				let url = '/pages/detail/main?vkey='
 				if(this.consentForm =='index'){
 					url += this.consentNowItem.vkey
