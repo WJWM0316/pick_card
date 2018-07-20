@@ -316,7 +316,7 @@ export default {
     let that = this
     let beforeCreateStep =wx.getStorageSync('beforeCreateStep')?wx.getStorageSync('beforeCreateStep'):0;
     that.beforeCreateStep = beforeCreateStep;
-    console.log(beforeCreateStep)
+    console.log('onshow-------beforeCreateStep',beforeCreateStep)
     this.isNext = true;
     this.toCreateSock = true;
     if (!this.$store.getters.userInfo.vkey) {
@@ -337,6 +337,9 @@ export default {
     },
     dataList () {
       let that = this;
+
+      console.log('dataList')
+
       //that.usersInfo = that.$store.getters.userInfo
       getIndexUsers(that.getPage).then((res)=>{
         that.usersInfo = that.$store.getters.userInfo
@@ -368,6 +371,7 @@ export default {
         } 
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
+          console.log('res.data.rest_time=====',res.data.rest_time)
           that.intervalTime(res.data.rest_time)
         }else {
           that.$mptoast(res.msg)
