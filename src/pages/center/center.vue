@@ -242,12 +242,12 @@
 		padding: 0 40rpx;
 		box-sizing: border-box;
 		font-size: 28rpx;
-		font-weight: light;
+		font-weight: lighter;
 		background:rgba(255,252,240,1);
 		color: RGBA(122, 125, 131, 1);
 		.toEdit {
 			float: right;
-			color: rgba(255,162,0,1);
+			color: #FFA200;
 			.icon {
 				width: 14rpx;
 				height: 24rpx;
@@ -302,6 +302,7 @@
 			color: #9AA1AB;
 			line-height:26rpx;
 			font-size: 26rpx;
+			font-weight: lighter;
 			.product {
 				.setEllipsis();
 			}
@@ -346,7 +347,8 @@
 			border-radius: 18rpx;
 		}
 		.item {
-	    height: 120rpx;
+	    	height: 120rpx;
+	    	position: relative;
 			.itemCon {
 				height: 100%;
 				border-bottom: 1rpx solid rgba(53,57,67,0.1);
