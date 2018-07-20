@@ -51,20 +51,20 @@
 				</view>
 				<view class="itemMsg">
 					<image class="icon" src="/static/images/details_icon_phone@3x.png"></image>
-					<text class="msg" :class="{'isShow' : !isSelf && userInfo.handle_status !== 4 && userInfo.privacy_mobile === 1}">
-						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_mobile === 1 ? userInfo.privacy_mobile_desc : userInfo.mobile}}
+					<text class="msg" @tap="call(userInfo.mobile)" :class="{'isShow' : !isSelf && userInfo.handle_status !== 4 && userInfo.privacy_mobile === 1}">
+						{{userInfo.mobile}}
 					</text>
 				</view>
-				<view class="itemMsg" v-if="userInfo.email !== ''">
+				<view class="itemMsg" v-if="userInfo.email !== '' || (!isSelf && userInfo.privacy_email !== 3)">
 					<image class="icon" src="/static/images/details_icon_email@3x.png"></image>
 					<text class="msg" :class="{'isShow' : !isSelf && userInfo.handle_status !== 4 && userInfo.privacy_email === 1 }">
-						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_email === 1 ?  userInfo.privacy_email_desc : userInfo.email}}
+						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_email === 1 ?  '需要交换后才可见' : userInfo.email}}
 					</text>
 				</view>
-				<view class="itemMsg" v-if="userInfo.wechat !== ''">
+				<view class="itemMsg" v-if="userInfo.wechat !== '' || (!isSelf && userInfo.privacy_wechat !== 3)">
 					<image class="icon" src="/static/images/details_icon_wechat@3x.png"></image>
-					<text class="msg" :class="{'isShow' :!isSelf &&  userInfo.handle_status !== 4 && userInfo.privacy_wechat === 1 }">
-						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_wechat === 1 ? userInfo.privacy_wechat_desc : userInfo.wechat}}
+					<text class="msg" :class="{'isShow' :!isSelf &&  userInfo.handle_status !== 4 && userInfo.privacy_wechat === 1}">
+						{{!isSelf && userInfo.handle_status !== 4 && userInfo.privacy_wechat === 1 ? '需要交换后才可见' : userInfo.wechat}}
 					</text>
 				</view>
 			</view>
@@ -262,6 +262,14 @@
 		    }
 		 },
 		methods: {
+			call (phoneNumber) {
+				if (phoneNumber.length === 11) {
+					console.log(phoneNumber, '拨打电话号码')
+					wx.makePhoneCall({
+					  phoneNumber: phoneNumber
+					})
+				}
+			},
 			getShareImg () {
 	      let data = {
 	      	uid: this.userInfo.id,
