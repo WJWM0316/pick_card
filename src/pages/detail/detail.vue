@@ -10,6 +10,10 @@
 				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.bigImgUrl"></image>
 				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 10}">
 					<view class="tapIndex"  @tap="toIndex">
+						<form report-submit="true" class="from-box" @submit="fromClick">
+						    <button formType="submit" class="from-mask  "></button>
+						</form>
+
 						<image class="icon toIndex" src="/static/images/float_btn_returnhome@3x.png"></image>
 					</view>
 					<button open-type="share" data-type="people" :data-self="isSelf" v-if="authorize" >
@@ -128,13 +132,15 @@
 				</view>
 			</view>
 		</view>
-		<view class="btnControl" v-if="!isSelf">
-			<button class="btn apply" @tap="applyFun('authorize')" v-if="userInfo.handle_status === 0">申请和TA交换名片</button>
-			<button class="btn apply" @tap="applyFun('launch')" v-if="userInfo.handle_status === 1">申请和TA交换名片</button>
-			<button class="btn applying" v-if="userInfo.handle_status === 2" disabled=true>已申请和TA交换名片</button>
-			<button class="btn applyed" @tap="applyFun('agree')" v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
-			<button class="btn remove" @tap="applyFun('remove')" v-if="userInfo .handle_status === 4">移除名片</button>
-		</view>
+
+		<form report-submit="true"  class="btnControl" v-if="!isSelf" @submit="fromClick">
+		    <button formType="submit" class="btn apply" @tap="applyFun('authorize')" v-if="userInfo.handle_status === 0">申请和TA交换名片</button>
+		    <button formType="submit" class="btn apply" @tap="applyFun('launch')" v-if="userInfo.handle_status === 1">申请和TA交换名片</button>
+		    <button formType="submit" class="btn applying" v-if="userInfo.handle_status === 2" disabled=true>已申请和TA交换名片</button>
+		    <button formType="submit" class="btn applyed" @tap="applyFun('agree')" v-if="userInfo.handle_status === 3">同意和TA交换名片</button>
+		    <button formType="submit" class="btn remove" @tap="applyFun('remove')" v-if="userInfo .handle_status === 4">移除名片</button>
+		</form>
+			
 		<authorize-pop :showPop='showPop' :routerInfo="routerInfo"></authorize-pop>
 	</view>
 </template>
@@ -143,6 +149,8 @@
 	import {formatTime} from '@/utils/index'
 	import authorizePop from '@/components/authorize'
 	import {getShareImg} from '@/api/pages/login'
+  	import App from '@/App'
+
 	export default {
 		components: {
 			authorizePop
@@ -262,23 +270,29 @@
 		    }
 		 },
 		methods: {
+			fromClick (e) {
+			  App.methods.sendFormId({
+			    fromId: e.mp.detail.formId,
+			    fromAddress: '/pages/index'
+			  })
+			},
 			getShareImg () {
-	      let data = {
-	      	uid: this.userInfo.id,
-	      	name: this.userInfo.nickname,
-	      	img: this.userInfo.avatar_info.smallImgUrl,
-	      	occupation: this.userInfo.occupation,
-	      	company: this.userInfo.company,
-	      	label: [],
-	      }
-	      this.userInfo.other_info.realm_info.forEach(item => {
-	      	data.label.push(`${item.name} | `)
-	      })
-	      data.label = data.label.join('')
-	      data.label = data.label.slice(0, data.label.length-3)
-	      getShareImg(data).then(res => {
-	      	this.isShareImg = res.data
-	      })
+		      let data = {
+		      	uid: this.userInfo.id,
+		      	name: this.userInfo.nickname,
+		      	img: this.userInfo.avatar_info.smallImgUrl,
+		      	occupation: this.userInfo.occupation,
+		      	company: this.userInfo.company,
+		      	label: [],
+		      }
+		      this.userInfo.other_info.realm_info.forEach(item => {
+		      	data.label.push(`${item.name} | `)
+		      })
+		      data.label = data.label.join('')
+		      data.label = data.label.slice(0, data.label.length-3)
+		      getShareImg(data).then(res => {
+		      	this.isShareImg = res.data
+		      })
 			},
 			open (type) {
 				if (type === 1) {
@@ -525,6 +539,7 @@
 					top: 100rpx;
 				}
 				.tapIndex {
+					position: relative;
 					padding: 20rpx 0 20rpx 20rpx;
 				}
 				.tapShare {

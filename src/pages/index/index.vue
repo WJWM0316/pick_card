@@ -1204,7 +1204,7 @@ export default {
             color:rgba(0,208,147,1);
             //line-height:48rpx;
             text-align: center;
-            border: 1rpx solid rgba(0,208,147,1);
+            border: 2rpx solid rgba(0,208,147,1);
             margin-right: 10rpx;
             margin-bottom: 14rpx;
             height: 48rpx;

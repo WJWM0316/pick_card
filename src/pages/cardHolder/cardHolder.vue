@@ -1,8 +1,19 @@
 <template>
   <view class="container" >
     <view class="tit">
-      <view class="item "  :class="{'cur':nowIndex==0,'red':topRed.user_card_count>0}" @click="select(0)" >个人名片</view>
-      <view class="item flock " :class="{'cur':nowIndex==1,'red':topRed.user_group_card_count>0}" @click="select(1)" >群名片</view>
+      
+      <view class="item "  :class="{'cur':nowIndex==0,'red':topRed.user_card_count>0}" @click="select(0)" >
+        个人名片
+        <form report-submit="true" class="from-box" @submit="fromClick">
+            <button formType="submit" class="from-mask  "></button>
+        </form>
+      </view>
+      <view class="item flock " :class="{'cur':nowIndex==1,'red':topRed.user_group_card_count>0}" @click="select(1)" >
+        群名片
+        <form report-submit="true" class="from-box" @submit="fromClick">
+            <button formType="submit" class="from-mask  "></button>
+        </form>
+      </view>
     </view>
     <view class="content">
       
@@ -18,15 +29,20 @@
           </view>
           <block v-if="nowIndex == 0">
             <view class="friendList" v-if="friendList.length>0">
+                
                 <view class="card_block"  v-for="(item, index) in friendList" :key="key">
-                  <view class="blo_msg " :class="{'one': item.has_red_dot == 1}" @tap="toDetail(item)">
-                    <image class="blo_img" :src="item.friend_user_info.avatar_info.smallImgUrl" v-if="item.friend_user_info.avatar_info"></image>
-                    <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
+                  <form report-submit="true" class="" @submit="fromClick">
+                      <button formType="submit" class="blo_msg" :class="{'one': item.has_red_dot == 1}" @tap="toDetail(item)">
+                          <image class="blo_img" :src="item.friend_user_info.avatar_info.smallImgUrl" v-if="item.friend_user_info.avatar_info"></image>
+                          <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
 
-                    <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
-                    <view class="msg_tit  ellipsis">{{item.friend_user_info.occupation}}</view>
-                    <view class="msg_company ellipsis">{{item.friend_user_info.company}}</view>
-                  </view>
+                          <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
+                          <view class="msg_tit  ellipsis">{{item.friend_user_info.occupation}}</view>
+                          <view class="msg_company ellipsis">{{item.friend_user_info.company}}</view>
+                      </button>
+                  </form>
+
+                  
                 </view>
               <view class="to_share" :class="{ten: adaptive == 'ten'}">
                 <button open-type="share" data-type="myDetail">分享我的名片</button>，获取更多职场人脉
@@ -42,8 +58,9 @@
 
           <block v-else>
             <view class="flockList" v-if="florkList && florkList.list&& florkList.list.length>0">
+              <form report-submit="true" class="" @submit="fromClick">
+                <button formType="submit" class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item,index)">
 
-              <view class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item,index)">
                 <view class="blo_msg flock_blo" >
                   <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
                   <image class="blo_img"  src="/static/images/pic_defaulhead@3x.png" v-else></image>
@@ -52,7 +69,8 @@
 
                   <view class="new_msg" v-if="item.newJoinMemberCount&&item.newJoinMemberCount>0">{{item.newJoinMemberCount}}</view>
                 </view>
-              </view>
+                </button>
+              </form>
             </view>
             <block  v-else>
               <view class="none_blo">
@@ -230,6 +248,13 @@ export default {
   },
 
   methods: {
+    fromClick (e) {
+      console.log(e)
+      App.methods.sendFormId({
+        fromId: e.mp.detail.formId,
+        fromAddress: '/pages/index'
+      })
+    },
     radioChange(e){
       this.isCheck = !this.isCheck
     },
