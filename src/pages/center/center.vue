@@ -27,13 +27,20 @@
 					</view>
 				</view>
 				<button open-type="share" data-type="myDetail" class="share">发名片</button>
-				<button class="save" @tap="toSaveImg">保存名片到相册</button>
+				<form report-submit="true" class="from-box" @submit="fromClick">
+					<button formType="submit" class="save" @tap="toSaveImg">保存名片到相册</button>
+				</form>
 			</view>
 			<viwe class="setting">
 				<view class="inner">
 					<view class="item" @tap.stop="toJump()">
+						<form report-submit="true" class="from-box" @submit="fromClick">
+						    <button formType="submit" class="from-mask  "></button>
+						</form>
 						<view class="itemCon">
-							<view class="left">隐私设置</view>
+							<view class="left">
+								隐私设置
+							</view>
 							<view class="right">
 								<image class="jumpIcon" src="/static/images/icon_chevron@2x.png"></image>
 							</view>
@@ -41,6 +48,9 @@
 					</view>
 					<navigator target="miniProgram" app-id="wxdf4966c8f6916d05" version="develop" url="pages/home/index" hover-class="none">
 					<view class="item">
+						<form report-submit="true" class="from-box" @submit="fromClick">
+						    <button formType="submit" class="from-mask  "></button>
+						</form>
 						<view class="itemCon">
 							<view class="left">职场学习社区</view>
 							<view class="right">
@@ -67,7 +77,8 @@
 	import footerTab from '@/components/footerTab'
 	import {putPrivacyApi, getUserInfoApi} from '@/api/pages/user'
 	import {getShareImg} from '@/api/pages/login'
-  import { redDotApplys } from '@/api/pages/red'
+  	import { redDotApplys } from '@/api/pages/red'
+  	import App from '@/App'
 
 	export default {
 		components: {
@@ -164,15 +175,22 @@
     	}
  	 	},
 		methods: {
+			fromClick (e) {
+				console.log(e)
+			  App.methods.sendFormId({
+			    fromId: e.mp.detail.formId,
+			    fromAddress: '/pages/index'
+			  })
+			},
 			toJump () {
 				wx.navigateTo({
-	        url: `/pages/privacy/main`
-	      })
+			        url: `/pages/privacy/main`
+		      	})
 			},
 			toDetail () {
 				wx.navigateTo({
-	        url: `/pages/detail/main?vkey=${this.userInfo.vkey}`
-	      })
+			        url: `/pages/detail/main?vkey=${this.userInfo.vkey}`
+		      	})
 			},
 			toSaveImg () {
 	      	wx.navigateTo({

@@ -25,31 +25,52 @@
         <block v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
             <block v-if="!isJoin">
               <view class="card_block" v-if="index<10">
-              <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" >
-                <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
-                <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
-                <view class="msg_name ellipsis">{{item.nickname}}</view>
-                <view class="msg_tit ellipsis">{{item.occupation}}</view>
-                <view class="msg_company ellipsis">{{item.company}}</view>
-                <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
-                <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
-                <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
-              </view>
+
+                  <view  class="blo_msg" @tap.stop="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" >
+
+                    <form report-submit="true" class="from-box" @submit="fromClick">
+                        <button formType="submit" class="from-mask  "></button>
+                    </form>
+                    <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
+                    <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
+                    <view class="msg_name ellipsis">{{item.nickname}}</view>
+                    <view class="msg_tit ellipsis">{{item.occupation}}</view>
+                    <view class="msg_company ellipsis">{{item.company}}</view>
+
+                    <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">
+                      交换名片
+                      <form report-submit="true" class="from-box" @submit="fromClick">
+                          <button formType="submit" class="from-mask  "></button>
+                      </form>
+                    </view>
+                    <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+                    <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
+                  </view>
+                
               </view>
             </block>
 
             <block v-else>
               <view class="card_block" >
-              <view class="blo_msg" @tap="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" >
-                <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
-                <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
-                <view class="msg_name ellipsis">{{item.nickname}}</view>
-                <view class="msg_tit ellipsis">{{item.occupation}}</view>
-                <view class="msg_company ellipsis">{{item.company}}</view>
-                <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">交换名片</view>
-                <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
-                <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
-              </view>
+                  <view  class="blo_msg" @tap.stop="toDetail(item)" :class="{'cur': item.id!=userInfo.id&&item.memberRedDot>0}" >
+                    <form report-submit="true" class="from-box" @submit="fromClick">
+                        <button formType="submit" class="from-mask  "></button>
+                    </form>
+                    <image class="blo_img" :src="item.avatar_info.smallImgUrl" v-if="item.avatar_info&&item.avatar_info.smallImgUrl"></image>
+                    <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
+                    <view class="msg_name ellipsis">{{item.nickname}}</view>
+                    <view class="msg_tit ellipsis">{{item.occupation}}</view>
+                    <view class="msg_company ellipsis">{{item.company}}</view>
+
+                    <view class="flock_style" @tap.stop="swopSlock(item.id,index)" v-if="item.id!=userInfo.id && item.handle_status == 1">
+                      交换名片
+                      <form report-submit="true" class="from-box" @submit="fromClick">
+                          <button formType="submit" class="from-mask  "></button>
+                      </form>
+                    </view>
+                    <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+                    <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
+                  </view>
               </view>
             </block>
         </block>
@@ -62,11 +83,17 @@
     </view>
     <view class="footer">
       <block v-if="isJoin">
-        <view class="quit" @tap="quit">退出该群</view>
-        <button open-type="share" data-type="flock" class="joinShare">邀请群里的成员加入</button>
+        <form report-submit="true" class="quit" @submit="fromClick">
+            <button formType="submit" class="quit" @tap="quit">退出该群</button>
+        </form>
+        <button open-type="share" data-type="flock" class="joinShare">
+          邀请群里的成员加入
+        </button>
       </block>
       <block v-if="!isJoin">
-        <button class="joinShare" @tap="join">加入该群名片</button>
+        <form report-submit="true" class="joinShare" @submit="fromClick">
+            <button formType="submit" class="joinShare" @tap="join">加入该群名片</button>
+        </form>
       </block>
     </view>
     <mptoast />
@@ -75,6 +102,7 @@
 </template>
 <script>
   import mptoast from 'mptoast'
+  import App from '@/App'
   import { joinUserGroup, isJoinUserGroup,getUserGroupInfo, getFriends, deleteFriends, getUserGroupList, setUserGroup, editGroupInfo, quitGroup } from '@/api/pages/cardcase'
   import {  indexLike  } from '@/api/pages/user'
   import { deleteRedFlock } from '@/api/pages/red'
@@ -225,6 +253,13 @@ export default {
 
 
   methods: {
+    fromClick (e) {
+      console.log(e)
+      App.methods.sendFormId({
+        fromId: e.mp.detail.formId,
+        fromAddress: '/pages/index'
+      })
+    },
     toShare () {
       if (!this.authorize) {
         this.showPop = true
