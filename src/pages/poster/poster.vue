@@ -54,16 +54,20 @@
 			let data = {
 				page: 'pages/detail/main',
 				length: 150,
-				scene: userInfo.vkey,
+				scene: `vkey=${userInfo.vkey}`,
 			}
       getShareCode(data).then(res => {
-      	this.create(res.data)
+      	wx.downloadFile({
+				  url: res.data,
+				  success: function(res1) {
+				  	that.create(res1.tempFilePath, that)
+				  }
+				})
       })
 
 		},
 		methods: {
-			create (path) {
-				const that = this
+			create (path, that) {
 				wx.downloadFile({
 				  url: that.imgUrl,
 				  success: function(res) {
@@ -76,7 +80,7 @@
 							ctx.clearRect(0, 0, 320, 580)
 							that.showImg = ''
 							// 画布圆角
-							roundRect (0,0,320,580,9)
+							// roundRect (0,0,320,580,9)
 							function roundRect (x, y, w, h, r) {
 								ctx.beginPath();
 								ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)

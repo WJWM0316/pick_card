@@ -149,7 +149,7 @@
 	import {formatTime} from '@/utils/index'
 	import authorizePop from '@/components/authorize'
 	import {getShareImg} from '@/api/pages/login'
-  	import App from '@/App'
+  import App from '@/App'
 
 	export default {
 		components: {
@@ -196,7 +196,16 @@
 				path: 'pages/detail/main',
 				query: option
 			}
-			this.vkey = option.vkey
+			let scene = decodeURIComponent(option.scene)
+			let params = App.methods.getSceneParams(scene)
+			
+			if (params.vkey) {
+				console.log(scene, params, 111111)
+				this.vkey = params.vkey
+			} else {
+				this.vkey = option.vkey
+			}
+			console.log(this.vkey, 22222)
 			const vkey = this.vkey
 			if (vkey === wx.getStorageSync('vkey')) {
 				this.isSelf = true
@@ -461,12 +470,31 @@
 			      break  
 				}
 			},
+			flterData (list) {
+				list.forEach(item => {
+					let start = item.start_time_desc.split('-')
+					if (start[1][0] === '0') {
+						start[1] = start[1][1]
+					}
+					item.start_time_desc = `${start[0]}年${start[1]}月`
+					let end = item.end_time_desc
+					if (end !== '至今') {
+						end = item.end_time_desc.split('-')
+						if (end[1][0] === '0') {
+							end[1] = end[1][1]
+						}
+						item.end_time_desc = `${end[0]}年${end[1]}月`
+					}
+				})
+			},
 			getUserUnfo () {
 				this.checkedTextList = []
 				return getUserInfoApi().then(res => {
 					this.userInfo = res.data
 					this.educationsInfo = res.data.other_info.education_info
+					this.flterData(this.educationsInfo)
 					this.workInfo = res.data.other_info.career_info
+					this.flterData(this.workInfo)
 					this.labelInfo = res.data.other_info.label_info
 					this.moreInfo = res.data.other_info.more_info
 					this.$store.dispatch('userInfo', this.userInfo)
@@ -481,8 +509,10 @@
 				this.checkedTextList = []
 				return getUserInfo2Api(this.vkey).then(res => {
 					this.userInfo = res.data
-					this.educationsInfo = res.data.other_info.education_info,
+					this.educationsInfo = res.data.other_info.education_info
+					this.flterData(this.educationsInfo)
 					this.workInfo = res.data.other_info.career_info
+					this.flterData(this.workInfo)
 					this.labelInfo = res.data.other_info.label_info
 					this.moreInfo = res.data.other_info.more_info
 					this.userInfo.other_info.realm_info.forEach(e => {

@@ -124,6 +124,22 @@ export default {
 
       fromIdArr = fromIdArr.join('-')
       wx.setStorageSync('fromIdArr', fromIdArr)
+    },
+
+    /**
+     * 获取二维码参数对象
+     */
+    getSceneParams (scene) {
+      scene = scene.indexOf('?') === 0 ? scene.substr(1) : scene
+      const params = scene.split('&')
+      const obj = {}
+      params.forEach(item => {
+        if (item) {
+          const param = item.split('=')
+          obj[param[0]] = param[1]
+        }
+      })
+      return obj
     }
   },
 
