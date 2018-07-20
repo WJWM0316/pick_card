@@ -6,7 +6,7 @@ app.$mount();
 
 export default {
   config: {
-    navigationBarTitleText: '隐私',
+    navigationBarTitleText: '隐私设置',
     enablePullDownRefresh: false,
   },
 };

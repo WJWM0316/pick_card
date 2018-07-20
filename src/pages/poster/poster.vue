@@ -106,25 +106,32 @@
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
+					    if (that.info.nickname.length > 20) {
+					    	that.info.nickname = that.info.nickname.slice(0, 17) + '...'
+					    }
 					    ctx.fillText(that.info.nickname, 17, 280)
 
 					    ctx.setFontSize(16)
+					    if (that.info.job.length > 20) {
+					    	that.info.job = that.info.job.slice(0, 17) + '...'
+					    }
 					    ctx.fillText(that.info.job, 17, 300)
-
+					    let staticY = 349
 					    ctx.setFontSize(14)
 					    ctx.setFillStyle('#9AA1AB')
 					    if (that.info.sign.length > 20) {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 349)
-					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, 369)
+					    	ctx.fillText(that.info.sign.slice(0, 19), 17, staticY)
+					    	staticY = staticY + 20
+					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, staticY)
 					    } else {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, 349)
+					    	ctx.fillText(that.info.sign.slice(0, 19), 17, staticY)
 					    }
-					    
 					    ctx.setFontSize(12)
 					    ctx.setFillStyle('#00D093')
+					    staticY = staticY + 16
 					    let position = {
 					    	x: 17,
-					    	y: 385
+					    	y: staticY
 					    }
 					    ctx.setStrokeStyle('#00D093')
 							ctx.setLineWidth(1)
@@ -178,10 +185,12 @@
 								// 下一个标签的横坐标
 								position.x = position.x + 2*r + metrics + 5
 								// 判断是否需要换行
-								if ((newLabelWidth + position.x) > (320-17)) {
+								if ((newLabelWidth + position.x) > (320-17) && lineNun !== 2) {
 									position.x = 17
+									staticY = staticY + 2*r + 7
 									position.y = position.y + 2*r + 7
 									lineNun ++
+									console.log(staticY, 2121212)
 								}
 					    }			    
 
@@ -190,8 +199,9 @@
 					    ctx.setStrokeStyle('#DCE3EE')
 					    ctx.setLineDash([5, 10], 0)
 							ctx.beginPath()
-							ctx.moveTo(17, 450)
-							ctx.lineTo(303, 450)
+							staticY = staticY + 48
+							ctx.moveTo(17, staticY)
+							ctx.lineTo(303, staticY)
 							ctx.stroke()
 
 							// 清除圆镂空部分
@@ -218,15 +228,18 @@
 							// stepClear = 1
 							// clearArc(320, position.y + 10, 10)
 
-							// 画指引文案
+
+
+					    // 画二维码
+					    staticY = staticY + 10
+					    ctx.drawImage(path, 200, staticY, 100, 100)
+
+					    // 画指引文案
 							ctx.setTextAlign('left')
 					    ctx.setFillStyle('#B2B6C2')
 					    ctx.setFontSize(14)
-					    ctx.fillText('长按添加TA的趣名片', 30, 520)
-
-					    // 画二维码
-					    ctx.drawImage(path, 200, 460, 100, 100)
-
+					    staticY = staticY + 50
+					    ctx.fillText('长按添加TA的趣名片', 30, staticY)
 					    ctx.draw(true, () => {
 					    	console.log('画图成功')
 					    	wx.hideLoading()
@@ -239,7 +252,6 @@
 								  	that.showImg = res.tempFilePath
 								  } 
 								})
-					      
 					    })
 					  }
 					}
