@@ -629,14 +629,14 @@ export default {
           font-size:28rpx;
           font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
-          line-height:28rpx;
-          margin: 18rpx 0 10rpx 0;
+          line-height:40rpx;
+          margin: 18rpx 0 0 0;
         }
         .msg_company {
           font-size:28rpx;
           font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
-          line-height:28rpx;
+          line-height:40rpx;
         }
       }
     }
