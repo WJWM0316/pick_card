@@ -1,12 +1,13 @@
 <template>
 	<view class="poster" v-if="imgUrl">
 		<image class="showImg" :src="showImg" v-if="showImg"></image>
-		<view class="wrap" v-if="oneStep || !twoStep">
+		<canvas canvas-id="endCanvas" id="endCanvas" v-if="!twoStep">
+		</canvas>
+		<view class="wrap" v-if="oneStep">
 			<canvas canvas-id="shareCanvas" id="myCanvas" v-if="oneStep" width="320" height="580">
 			</canvas>
-			<canvas canvas-id="endCanvas" id="endCanvas" v-if="!twoStep">
-			</canvas>
 		</view>
+		<view style="height: 100rpx"></view>
 		<button class="save" open-type="openSetting" v-if="openSet"><image class="icon" src="/static/images/share_btn_savepic@3x.png"></image>保存图片</button>
 		<button @tap.stop="save" class="save" v-else><image class="icon" src="/static/images/share_btn_savepic@3x.png"></image>保存图片</button>
 	</view>
@@ -204,31 +205,6 @@
 							ctx.lineTo(303, staticY)
 							ctx.stroke()
 
-							// 清除圆镂空部分
-							function clearArc(x,y,radius){ //圆心(x,y)，半径radius
-								var calcWidth = radius - stepClear;
-								var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
-								
-								var posX = x - calcWidth
-								var posY = y - calcHeight
-								
-								var widthX = 2 * calcWidth
-								var heightY = 2 * calcHeight
-								
-								if(stepClear <= radius){
-									ctx.clearRect(posX, posY, widthX, heightY)
-									stepClear += 1
-									clearArc(x, y, radius)
-								}
-							}
-							let stepClear = 1;//别忘记这一步
-							ctx.beginPath();
-							clearArc(0, staticY, 10)
-							ctx.save() 
-							stepClear = 1
-							clearArc(320, staticY, 10)
-
-
 
 					    // 画二维码
 					    staticY = staticY + 10
@@ -248,7 +224,7 @@
 								  width: 320,
 								  height: staticY + 60,
 								  destWidth: 320*2,
-								  destHeight: (staticY + 60)*2,
+								  destHeight: (staticY + 60) * 2,
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
 								  	// console.log('导出图片成功')
@@ -262,57 +238,85 @@
 								  	new_ctx.height = that.height
 
 								  // 	// 设置画布宽高
-								  	new_ctx.setFillStyle('#00c489')
+								  	new_ctx.setFillStyle('#F2FCF9')
 										new_ctx.fillRect(0, 0, that.width, that.height)
-								  	staticY = staticY + 60
-										let new_pos = {
-											x: (that.width - 320) / 2,
-											y: (that.height - staticY) / 2,
-										}
-										console.log(111, new_pos, that.width, that.height)
-										// new_ctx.rect(new_pos.x, new_pos.y, 320, staticY)
 										// 画布圆角
-										// roundRect (new_pos.x, new_pos.y, 320, staticY)
-										// function roundRect (x, y, w, h, r) {
-										// 	new_ctx.beginPath();
-										// 	new_ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
-										// 	new_ctx.moveTo(x + r, y)
-										// 	new_ctx.lineTo(x + w - r, y)
-										// 	new_ctx.lineTo(x + w, y + r)
-										// 	new_ctx.arc(x + w - r, y + r, r, Math.PI *  1.5  , Math.PI *  2  )
-										// 	new_ctx.lineTo(x + w, y + h - r)
-										// 	new_ctx.lineTo(x + w - r, y + h)
-										// 	new_ctx.arc(x + w - r, y + h - r, r,  0  , Math.PI *  0.5  )
-										// 	new_ctx.lineTo(x + r, y + h)
-										// 	new_ctx.lineTo(x, y + h - r)
-										// 	new_ctx.arc(x + r, y + h - r, r, Math.PI *  0.5  , Math.PI)
-										// 	new_ctx.lineTo(x, y + r)
-										// 	new_ctx.lineTo(x + r, y)
-										// 	new_ctx.setFillStyle('#ffffff')
-										// 	new_ctx.fill()
-										// 	console.log('画图成功', res.tempFilePath)
-										// 	// new_ctx.drawImage(res.tempFilePath, new_pos.x, new_pos.y, 320, staticY)
-										// 	new_ctx.closePath()
-										// 	new_ctx.clip()
-										// }
-										new_ctx.drawImage(res.tempFilePath, new_pos.x, new_pos.y, 320, staticY)
-										new_ctx.draw(true, () => {
-								    	wx.hideLoading()
-								    	wx.canvasToTempFilePath({
-											  x: 0,
-											  y: 0,
-											  width: that.width,
-											  height: that.height,
-											  destWidth: that.width * 2,
-											  destHeight: that.height * 2,
-											  canvasId: 'endCanvas',
-											  success: function(res) {
-											  	console.log(res, 111111111111111)
-											  	that.twoStep = true
-											  	that.showImg = res.tempFilePath
-											  } 
-											})
-								    })
+										// 
+										wx.getImageInfo({
+											src: res.tempFilePath,
+											success: function(e) {
+												let new_pos = {
+													x: (that.width - e.width/2) / 2,
+													y: (that.height - e.height/2) / 2,
+												}
+												function roundRect (x, y, w, h, r) {
+													new_ctx.beginPath();
+													new_ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
+													new_ctx.moveTo(x + r, y)
+													new_ctx.lineTo(x + w - r, y)
+													new_ctx.lineTo(x + w, y + r)
+													new_ctx.arc(x + w - r, y + r, r, Math.PI *  1.5  , Math.PI *  2  )
+													new_ctx.lineTo(x + w, y + h - r)
+													new_ctx.lineTo(x + w - r, y + h)
+													new_ctx.arc(x + w - r, y + h - r, r,  0  , Math.PI *  0.5  )
+													new_ctx.lineTo(x + r, y + h)
+													new_ctx.lineTo(x, y + h - r)
+													new_ctx.arc(x + r, y + h - r, r, Math.PI *  0.5  , Math.PI)
+													new_ctx.lineTo(x, y + r)
+													new_ctx.lineTo(x + r, y)
+													new_ctx.setFillStyle('#ffffff')
+													new_ctx.fill()
+													console.log('画图成功', res.tempFilePath, res.tempFilePath, new_pos.x, new_pos.y, 320, staticY)
+													new_ctx.closePath()
+													new_ctx.drawImage(res.tempFilePath, x, y, w, h)
+													new_ctx.clip()
+												}
+												console.log(e, new_pos.x, new_pos.y, e.width/2, e.height/2, 1111111111111111111111)
+												roundRect (new_pos.x, new_pos.y, e.width/2, e.height/2, 9)
+
+												// 清除圆镂空部分
+												function clearArc(x,y,radius){ //圆心(x,y)，半径radius
+													var calcWidth = radius - stepClear;
+													var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
+													
+													var posX = x - calcWidth
+													var posY = y - calcHeight
+													
+													var widthX = 2 * calcWidth
+													var heightY = 2 * calcHeight
+													
+													if(stepClear <= radius){
+														new_ctx.clearRect(posX, posY, widthX, heightY)
+														stepClear += 1
+														clearArc(x, y, radius)
+													}
+												}
+												let stepClear = 1;//别忘记这一步
+												ctx.beginPath();
+												clearArc(0, staticY - 70, 10)
+												ctx.save() 
+												stepClear = 1
+												clearArc(320, staticY - 70, 10)
+
+												new_ctx.draw(true, () => {
+										    	wx.hideLoading()
+										    	wx.canvasToTempFilePath({
+													  x: 0,
+													  y: 0,
+													  width: that.width,
+													  height: that.height,
+													  destWidth: that.width*2,
+													  destHeight: that.height*2,
+													  canvasId: 'endCanvas',
+													  success: function(res) {
+													  	console.log(res, 111111111111111)
+													  	that.twoStep = true
+													  	that.showImg = res.tempFilePath
+													  } 
+													})
+										    })
+											}
+										})
 					  			}
 					  		})
 					  	})
@@ -390,10 +394,9 @@
 		height: 100%;
 		background: #FAFBFC;
 		box-sizing: border-box;
-		padding: 20rpx 0 100rpx;
 		box-shadow:0px 17px 28px 0px rgba(52,62,59,0.03);
 		overflow-y:auto;
-		.showImg {
+		.showImg, #endCanvas {
 			width: 100%;
 			height: 100%;
 		}
