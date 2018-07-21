@@ -274,6 +274,31 @@
 			},
 			save () {
 				let title = ''
+				this.userInfo.nickname = this.userInfo.nickname.trim()
+				this.userInfo.occupation = this.userInfo.occupation.trim()
+				this.userInfo.company = this.userInfo.company.trim()
+				this.userInfo.company_location = this.userInfo.company_location.trim()
+				this.userInfo.wechat = this.userInfo.wechat.trim()
+				this.userInfo.email = this.userInfo.email.trim()
+				this.userInfo.sign = this.userInfo.sign.trim()
+				let data = {
+					avatar_id: this.userInfo.avatar_id,
+					nickname: this.userInfo.nickname,
+					gender: this.userInfo.gender,
+					user_location: this.region[1],
+					occupation: this.userInfo.occupation,
+					company: this.userInfo.company,
+					company_location: this.userInfo.company_location,
+					// mobile: this.userInfo.mobile,
+					wechat: this.userInfo.wechat,
+					email: this.userInfo.email,
+					sign: this.userInfo.sign,
+					occupation_label_id: this.careerId.toString() || '',
+					realm_label_id: this.checkedIdList,
+					city: this.region[1],
+					province: this.region[0],
+					country: '中国'
+				}
 				if (this.userInfo.avatar_id === '') {
 					wx.showToast({
 					  title: '请选择头像',
@@ -365,24 +390,7 @@
 					})
 					return
 				}
-				let data = {
-					avatar_id: this.userInfo.avatar_id,
-					nickname: this.userInfo.nickname.trim(),
-					gender: this.userInfo.gender,
-					user_location: this.region[1],
-					occupation: this.userInfo.occupation.trim(),
-					company: this.userInfo.company.trim(),
-					company_location: this.userInfo.company_location.trim(),
-					// mobile: this.userInfo.mobile,
-					wechat: this.userInfo.wechat.trim(),
-					email: this.userInfo.email.trim(),
-					sign: this.userInfo.sign.trim(),
-					occupation_label_id: this.careerId.toString() || '',
-					realm_label_id: this.checkedIdList,
-					city: this.region[1],
-					province: this.region[0],
-					country: '中国'
-				}
+				
 				upDataUserInfoApi(data).then(res => {
 					console.log('成功了', res)
 					wx.navigateBack({
@@ -436,6 +444,7 @@
 	}
 </script>
 <style lang="less" type="text/less" scoped>
+	@import url('~@/assets/css/mixins.less');
 	.edit {
 		background: #FAFBFC;
 		padding-bottom: 198rpx;
@@ -505,10 +514,13 @@
 						display:flex;
 						align-items:center;
 						overflow: hidden;
+						width: 400rpx;
+						justify-content:flex-end;
 						input {
 							width: 400rpx;
 							height: 120rpx;
 							line-height: 120rpx;
+							font-family: inherit;
 						}
 						.placeholder {
 							color: #C3C9D4;
@@ -552,6 +564,7 @@
 						}
 						.fieldBox {
 							white-space: nowrap;
+							.setEllipsis();
 						}
 			  	}
 				}

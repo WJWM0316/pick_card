@@ -415,6 +415,7 @@ export default {
     height: 100vh;
     //height: 930rpx;
     position: relative;
+    padding-bottom: 96rpx;
     background: rgba(250,251,253,1)
   }
   .tit {

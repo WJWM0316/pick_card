@@ -8,9 +8,9 @@
         <view class="list_selct">
           <view class="blo" v-for="(item, index) in jobData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'job')">
           {{item.name}}
-            <form report-submit="true" class="from-box" @submit="fromClick">
+            <!-- <form report-submit="true" class="from-box" @submit="fromClick">
                 <button formType="submit" class="from-mask  "></button>
-            </form>
+            </form> -->
           </view>
         </view>
       </view>
@@ -20,9 +20,9 @@
         <view class="list_selct">
           <view class="blo" v-for="(item, index) in liveData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'live')">
             {{item.name}}
-            <form report-submit="true" class="from-box" @submit="fromClick">
+            <!-- <form report-submit="true" class="from-box" @submit="fromClick">
                 <button formType="submit" class="from-mask  "></button>
-            </form>
+            </form> -->
           </view>
         </view>
       </view>
@@ -127,6 +127,16 @@
         }else if(style == 'live'){
           str = 'liveData'
           str2 = 'liveAry'
+        }
+        if (that[str2].indexOf(0) !== -1 && that[str][index].id !== 0) {
+          return
+        }
+        if (that[str][index].id === 0 && !that[str][index].isCur) {
+          that[str].forEach(e => {
+            if (e.id !== 0) {
+              e.isCur = false
+            }
+          })
         }
         id = that[str][index].id
         if(that[str][index].isCur){

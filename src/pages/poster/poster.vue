@@ -1,7 +1,7 @@
 <template>
-	<view class="poster">
+	<view class="poster" v-if="imgUrl">
 		<view class="wrap">
-			<canvas canvas-id="shareCanvas" id="myCanvas" :class="{'hidden' : showImg !== ''}">
+			<canvas canvas-id="shareCanvas" id="myCanvas" :class="{'hidden' : showImg !== ''}" width="320" height="580">
 			</canvas>
 			<image class="showImg" :src="showImg"></image>
 		</view>
@@ -18,6 +18,9 @@
 				imgW: 0,
 				showImg: '',
 				openSet: false,
+				width: 0,
+				height: 0,
+				pixelRatio: 0,
 				info: {
 					nickname: '',
 					job: '',
@@ -28,6 +31,7 @@
 			}
 		},
 		onShow (option) {
+			this.imgUrl = ''
 			let that = this
 			wx.getSetting({
         success(res) {
@@ -50,7 +54,13 @@
         title: '正在生成图片',
         mask: true
       })
-
+			// wx.getSystemInfo({
+			// 	success： function(res) {
+			// 		that.width = res.windowWidth()
+			//     that.height = res.windowHeight()
+			//     that.pixelRatio = res.pixelRatio()
+			// 	}
+			// })
 			let data = {
 				page: 'pages/detail/main',
 				length: 150,
@@ -79,28 +89,31 @@
 							ctx.clearActions()
 							ctx.clearRect(0, 0, 320, 580)
 							that.showImg = ''
+
+							ctx.setFillStyle('ffffff')
+							ctx.fillRect(0, 0, 320, 580)
 							// 画布圆角
 							// roundRect (0,0,320,580,9)
-							function roundRect (x, y, w, h, r) {
-								ctx.beginPath();
-								ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
-								ctx.moveTo(x + r, y)
-								ctx.lineTo(x + w - r, y)
-								ctx.lineTo(x + w, y + r)
-								ctx.arc(x + w - r, y + r, r, Math.PI *  1.5  , Math.PI *  2  )
-								ctx.lineTo(x + w, y + h - r)
-								ctx.lineTo(x + w - r, y + h)
-								ctx.arc(x + w - r, y + h - r, r,  0  , Math.PI *  0.5  )
-								ctx.lineTo(x + r, y + h)
-								ctx.lineTo(x, y + h - r)
-								ctx.arc(x + r, y + h - r, r, Math.PI *  0.5  , Math.PI)
-								ctx.lineTo(x, y + r)
-								ctx.lineTo(x + r, y)
-								ctx.setFillStyle('#ffffff')
-								ctx.fill()
-								ctx.closePath()
-								ctx.clip()
-							}
+							// function roundRect (x, y, w, h, r) {
+							// 	ctx.beginPath();
+							// 	ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
+							// 	ctx.moveTo(x + r, y)
+							// 	ctx.lineTo(x + w - r, y)
+							// 	ctx.lineTo(x + w, y + r)
+							// 	ctx.arc(x + w - r, y + r, r, Math.PI *  1.5  , Math.PI *  2  )
+							// 	ctx.lineTo(x + w, y + h - r)
+							// 	ctx.lineTo(x + w - r, y + h)
+							// 	ctx.arc(x + w - r, y + h - r, r,  0  , Math.PI *  0.5  )
+							// 	ctx.lineTo(x + r, y + h)
+							// 	ctx.lineTo(x, y + h - r)
+							// 	ctx.arc(x + r, y + h - r, r, Math.PI *  0.5  , Math.PI)
+							// 	ctx.lineTo(x, y + r)
+							// 	ctx.lineTo(x + r, y)
+							// 	ctx.setFillStyle('#ffffff')
+							// 	ctx.fill()
+							// 	ctx.closePath()
+							// 	// ctx.clip()
+							// }
 
 							that.imgUrl = res.tempFilePath
 							// 画头像
@@ -162,7 +175,7 @@
 								
 								let metrics = ctx.measureText(item).width // 文本宽度
 					    	// 判断是否超过两行切需要打点
-					    	if (lineNun === 2 && (newLabelWidth + position.x + metrics + 5) > (320-17)) {
+					    	if (lineNun === 2 && (newLabelWidth + position.x + metrics + 5) > (320-20)) {
 					    		metrics = ctx.measureText('····').width
 									ctx.fillText('····', position.x + r, position.y + r + 4)
 									last = true
@@ -189,7 +202,7 @@
 								// 下一个标签的横坐标
 								position.x = position.x + 2*r + metrics + 5
 								// 判断是否需要换行
-								if ((newLabelWidth + position.x) > (320-17) && lineNun !== 2) {
+								if ((newLabelWidth + position.x) > (320-20) && lineNun !== 2) {
 									position.x = 17
 									staticY = staticY + 2*r + 7
 									position.y = position.y + 2*r + 7
@@ -209,28 +222,28 @@
 							ctx.stroke()
 
 							// 清除圆镂空部分
-							// function clearArc(x,y,radius){ //圆心(x,y)，半径radius
-							// 	var calcWidth = radius - stepClear;
-							// 	var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
+							function clearArc(x,y,radius){ //圆心(x,y)，半径radius
+								var calcWidth = radius - stepClear;
+								var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
 								
-							// 	var posX = x - calcWidth
-							// 	var posY = y - calcHeight
+								var posX = x - calcWidth
+								var posY = y - calcHeight
 								
-							// 	var widthX = 2 * calcWidth
-							// 	var heightY = 2 * calcHeight
+								var widthX = 2 * calcWidth
+								var heightY = 2 * calcHeight
 								
-							// 	if(stepClear <= radius){
-							// 		ctx.clearRect(posX, posY, widthX, heightY)
-							// 		stepClear += 1
-							// 		clearArc(x, y, radius)
-							// 	}
-							// }
-							// let stepClear = 1;//别忘记这一步
-							// ctx.beginPath();
-							// clearArc(0, position.y + 10, 10)
-							// ctx.save() 
-							// stepClear = 1
-							// clearArc(320, position.y + 10, 10)
+								if(stepClear <= radius){
+									ctx.clearRect(posX, posY, widthX, heightY)
+									stepClear += 1
+									clearArc(x, y, radius)
+								}
+							}
+							let stepClear = 1;//别忘记这一步
+							ctx.beginPath();
+							clearArc(0, staticY, 10)
+							ctx.save() 
+							stepClear = 1
+							clearArc(320, staticY, 10)
 
 
 
@@ -250,9 +263,13 @@
 					    	wx.canvasToTempFilePath({
 								  x: 0,
 								  y: 0,
+								  width: 320,
+								  height: staticY + 60,
+								  destWidth: 320*2,
+								  destHeight: (staticY + 60)*2,
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
-								  	console.log('导出图片成功')
+								  	// console.log('导出图片成功')
 								  	that.showImg = res.tempFilePath
 								  } 
 								})

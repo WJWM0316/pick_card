@@ -55,7 +55,7 @@
 				</view>
 				<view class="itemMsg" v-if="userInfo.mobile !== ''">
 					<image class="icon" src="/static/images/details_icon_phone@3x.png"></image>
-					<text class="msg" @tap="call(userInfo.mobile)">
+					<text class="msg" @tap="call(userInfo.mobile)" :class="{'isShow' : userInfo.mobile === '需要交换后才可见'}">
 						{{userInfo.mobile}}
 					</text>
 				</view>
@@ -280,6 +280,9 @@
 		 },
 		methods: {
 			copy (e) {
+				if (e === '需要交换后才可见') {
+					return
+				}
 				wx.setClipboardData({
 				  data: e,
 				  success: function(res) {
@@ -557,7 +560,7 @@
 			padding: 0 40rpx;
 			box-sizing: border-box;
 			font-size: 28rpx;
-			font-weight: light;
+			font-weight: 300;
 			background:rgba(255,252,240,1);
 			position: absolute;
 			top: 0;
@@ -669,6 +672,7 @@
 					.setEllipsis();
 					.name {
 						font-size: 48rpx;
+						font-weight: 700;
 						color: #353943;
 						line-height: 1.4;
 					}
@@ -713,18 +717,24 @@
 					margin-bottom: 30rpx;
 					display: flex;
 					align-items: center;
-					.setEllipsis();
+					padding-left: 30rpx;
+					box-sizing: border-box;
+					position: relative;
 					.icon {
 						width: 30rpx;
 						height: 30rpx;
-						display: inline-block;
-						vertical-align: top;
+						position: absolute;
+						top: 50%;
+						margin-top: -15rpx;
+						left: 0;
+						display: block;
 					}
 					.msg {
 						font-size: 28rpx;
 						line-height: 1.4;
 						color: #353943;
 						margin-left: 26rpx;
+						.setEllipsis();
 						&.isShow {
 							color: #B2B6C2;
 						}
@@ -750,7 +760,7 @@
 				.title {
 					height: 40rpx;
 					line-height: 1.4;
-					font-weight: Medium;
+					font-weight: 700;
 					.icon {
 						width: 40rpx;
 						height: 40rpx;
@@ -761,7 +771,7 @@
 						color: #353943;
 						font-size: 34rpx;
 						height: 40rpx;
-						font-weight: 500;
+						font-weight: 700;
 						display: inline-block;
 					}
 				}
@@ -788,7 +798,7 @@
 					color: #9AA1AB;
 					font-size: 28rpx;
 					line-height: 1.4;
-					font-weight: light;
+					font-weight: 300;
 					margin-top: 30rpx;
 				}
 				.job, .company, .school {
@@ -804,7 +814,7 @@
 					line-height: 70rpx;
 					color: #9AA1AB;
 					font-size: 28rpx;
-					font-weight: light;
+					font-weight: 300;
 					border-radius:50px;
 					border:1rpx solid rgba(220,227,238,1);
 					margin-top: 40rpx;
@@ -819,7 +829,7 @@
 					font-size: 32rpx;
 					color: #353943;
 					line-height: 1.4;
-					font-weight: light;
+					font-weight: 300;
 					&.noWord {
 						font-size:28rpx;
 						color:#9AA1AB;

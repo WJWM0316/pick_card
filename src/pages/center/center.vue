@@ -16,13 +16,18 @@
 						<image class="headImg" :src="info.avatar_info.middleImgUrl"></image>
 					</view>
 					<view class="con">
-						<view class="product"><image class="icon" src="/static/images/me_icon_company@2x.png"></image>{{info.company}}</view>
+						<view class="product">
+							<image class="icon" src="/static/images/me_icon_company@2x.png"></image>
+							<view class="ovTxt">{{info.company}}</view>
+						</view>
 						<view class="position">
 							<image class="icon" src="/static/images/me_icon_territory@2x.png"></image>
-							<block  v-for="(item, index) in checkedTextList" :key="index">
-								<text class="field">{{item}}</text>
-								<text v-if="index !== checkedTextList.length - 1"> | </text>
-							</block>
+							<view class="ovTxt">
+								<block  v-for="(item, index) in checkedTextList" :key="index">
+									<text class="field">{{item}}</text>
+									<text v-if="index !== checkedTextList.length - 1"> | </text>
+								</block>
+							</view>
 							<image class="san" src="/static/images/me_icon_edit_chevron@2x.png"></image></view>
 					</view>
 				</view>
@@ -279,14 +284,14 @@
 				color: #353943;
 				font-size: 56rpx;
 				line-height: 1.3;
-				font-weight: 500;
+				font-weight: 700;
 				.setEllipsis();
 			}
 			.job {
 				color: #353943;
 				font-size: 32rpx;
 				line-height: 32rpx;
-				font-weight: light;
+				font-weight: 300;
 				margin-top: 10rpx;
 				.setEllipsis();
 			}
@@ -304,25 +309,43 @@
 			color: #9AA1AB;
 			line-height:26rpx;
 			font-size: 26rpx;
-			font-weight: lighter;
+			font-weight: 300;
 			.product {
-				.setEllipsis();
+				position: relative;
+				padding: 0 70rpx 0 41rpx;
+				.ovTxt {
+					width: 470rpx;
+					.setEllipsis();
+				}
 			}
 			.position {
-				.setEllipsis();
+				padding: 0 70rpx 0 41rpx;
 				margin-top: 16rpx;
+				position: relative;
+				.ovTxt {
+					width: 470rpx;
+					.setEllipsis();
+				}
 			}
 			.icon {
 				width: 30rpx;
 				height: 30rpx;
 				vertical-align:sub;
 				padding-right: 11rpx;
+				position: absolute;
+				top: 50%;
+				margin-top: -15rpx;
+				left: 0;
 			}
 			.san {
 				width: 14rpx;
 				height: 23rpx;
 				float: right;
-				margin-top:4rpx
+				margin-top:4rpx;
+				position: absolute;
+				top: 50%;
+				margin-top: -7rpx;
+				right: 0;
 			}
 		}
 		.share, .save {
