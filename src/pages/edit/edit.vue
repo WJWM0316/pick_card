@@ -256,17 +256,37 @@
 		        onItemSuccess: (resp, file, index) => {
 		        }
 		      }).then(res => {
-		        const cutImgInfo = {
+		      	console.log(e, '上传成功')
+	      		const cutImgInfo = {
 		          fileId: res.file.fileId,
 		          path: res.file.path,
 		          size: res.file.size
 		        }
+		        this.userInfo.avatar_id = res.file.fileId
+		        this.save()
 		        wx.hideLoading()
-						this.userInfo.avatar_id = res.file.fileId
-						wx.removeStorageSync('cutImgInfo')
-						this.save()
+						wx.removeStorageSync('cutImgInfo')						
 					}).catch((e, index) => {
-		        console.log(e, 2)
+						console.log(e, '上传异常')
+						this.userInfo.avatar_id = ''
+						this.filePath = ''
+						wx.hideLoading()
+						wx.removeStorageSync('cutImgInfo')		
+		        if (e.statusCode === 405) {
+		      		wx.showToast({
+							  title: e.message,
+							  icon: 'none',
+							  duration: 2000
+							})
+							return
+		      	} else if (e.statusCode === 400) {
+		      		wx.showToast({
+							  title: e.message,
+							  icon: 'none',
+							  duration: 2000
+							})
+							return
+		      	}
 		      })
 	      } else {
 	      	this.save()
@@ -605,6 +625,8 @@
 					height: 140rpx;
 					display: block;
 					border-radius: 50%;
+					background: url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/new_pic_defaulhead.jpg') no-repeat;
+					background-size: 100% 100%;
 				}
 			}
 			.occupation {

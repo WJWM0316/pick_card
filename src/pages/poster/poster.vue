@@ -3,6 +3,8 @@
 		<view class="wrap">
 			<canvas canvas-id="shareCanvas" id="myCanvas" :class="{'hidden' : showImg !== ''}" width="320" height="580">
 			</canvas>
+			<canvas canvas-id="endCanvas" id="endCanvas" :class="{'hidden' : showImg !== ''}" width="320" height="580">
+			</canvas>
 			<image class="showImg" :src="showImg"></image>
 		</view>
 		<button class="save" open-type="openSetting" v-if="openSet"><image class="icon" src="/static/images/share_btn_savepic@3x.png"></image>保存图片</button>
@@ -90,7 +92,7 @@
 							ctx.clearRect(0, 0, 320, 580)
 							that.showImg = ''
 
-							ctx.setFillStyle('ffffff')
+							ctx.setFillStyle('#fff')
 							ctx.fillRect(0, 0, 320, 580)
 							// 画布圆角
 							// roundRect (0,0,320,580,9)
