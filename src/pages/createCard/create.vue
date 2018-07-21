@@ -403,12 +403,12 @@
               console.log(resp)
             }
           }).then(res0 => {
-
-            console.log(res0)
+            console.log(res0, 1111111)
             that.firstData.avatar_id = res0.file.fileId
             data = that.firstData
             data.nickname = data.nickname.trim()
             wx.hideLoading()
+            wx.removeStorageSync('cutImgInfo')
             firstSignApi(data).then((res)=>{
               if(res.http_status == 200){
                 that.nowNum = 1;
@@ -418,9 +418,26 @@
               this.$mptoast(res.msg)
             })
           }).catch((e, index) => {
-            console.log(e, 2)
+            console.log(e, '上传异常')
+            this.userInfo.avatar_id = ''
+            this.filePath = ''
+            wx.hideLoading()
+            if (e.statusCode === 405) {
+              wx.showToast({
+                title: e.message,
+                icon: 'none',
+                duration: 2000
+              })
+              return
+            } else if (e.statusCode === 400) {
+              wx.showToast({
+                title: e.message,
+                icon: 'none',
+                duration: 2000
+              })
+              return
+            }
           })
- 
         }else if(that.nowNum == 1){
           let rli = this.secondRule.rli,
               oliData = listData[2].son,
