@@ -64,6 +64,7 @@
 		methods: {
 			//跳转====
 			toDetail () {
+				console.log('跳转toDetail',this.consentNowItem)
 				let url = '/pages/detail/main?vkey='
 				if(this.consentForm =='index'){
 					url += this.consentNowItem.vkey
