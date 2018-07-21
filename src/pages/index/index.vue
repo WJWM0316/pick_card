@@ -571,7 +571,7 @@ export default {
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
-          console.log(res.data[0].id,res.data[1].id)
+          console.log(res)
           if(step!=9 && step){
             that.isCreate()
             return
