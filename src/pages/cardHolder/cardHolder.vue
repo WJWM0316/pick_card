@@ -32,7 +32,7 @@
                 
                   <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in friendList" :key="key">
                       <button formType="submit" @tap="toDetail(item)">
-                        <view class="blo_msg" :class="{'one': item.has_red_dot == 1}" >
+                        <view class="blo_msg listone" :class="{'one': item.has_red_dot == 1}" >
                           <image class="blo_img" :src="item.friend_user_info.avatar_info.smallImgUrl" v-if="item.friend_user_info.avatar_info"></image>
                           <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
 
@@ -560,6 +560,9 @@ export default {
         flex-direction: column;
         justify-content: center;
         box-shadow: 0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
+        &.listone {
+          padding: 50rpx 30rpx 56rpx 120rpx;
+        }
         &.one {
           &:after {
             content: '';
@@ -622,8 +625,8 @@ export default {
           font-size:34rpx;
           font-family:PingFangSC-Medium;
           color:rgba(70,71,72,1);
-          line-height:50rpx;
-          height: 50rpx;
+          line-height:55rpx;
+          height: 55rpx;
 
         }
         .msg_tit {
@@ -632,7 +635,7 @@ export default {
           color:rgba(154,161,171,1);
           line-height:40rpx;
           height: 40rpx;
-          margin: 6rpx 0 0 0;
+          margin: 10rpx 0 0 0;
         }
         .msg_company {
           font-size:28rpx;
