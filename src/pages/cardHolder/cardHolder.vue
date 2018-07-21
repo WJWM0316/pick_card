@@ -622,7 +622,7 @@ export default {
           font-size:34rpx;
           font-family:PingFangSC-Medium;
           color:rgba(70,71,72,1);
-          line-height:38rpx;
+          line-height:42rpx;
           height: 42rpx;
 
         }
@@ -631,6 +631,7 @@ export default {
           font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:40rpx;
+          height: 40rpx;
           margin: 14rpx 0 0 0;
         }
         .msg_company {
@@ -638,6 +639,7 @@ export default {
           font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:40rpx;
+          height: 40rpx;
         }
       }
     }

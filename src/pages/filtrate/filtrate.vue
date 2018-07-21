@@ -49,9 +49,11 @@
       return {
         show: false,
         jobData: [],
+        jobData2: [],
         jobAry:[],
         liveAry:[],
         liveData: [],
+        liveData2: [],
       }
     },
     methods: {
@@ -83,7 +85,7 @@
         }
         console.log(data, 1111111111111)
         wx.setStorageSync('labelId', data)
-        url =  `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
+        url = `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
         wx.reLaunch({
           url:url
         })
@@ -120,6 +122,8 @@
         let str = ''
         let str2 = ''
         let id = ''
+
+        let a 
         if(style == 'job'){
           str = 'jobData'
           str2 = 'jobAry'
@@ -127,9 +131,21 @@
           str = 'liveData'
           str2 = 'liveAry'
         }
-        if (that[str2].indexOf(0) !== -1 && that[str][index].id !== 0) {
+
+        if(that[str][index].id!=0){
+
+          that[str][0].isCur = false
+          if(that[str2].indexOf(0) > -1){
+            that[str2].splice(that[str2].indexOf(0),1)
+          }
+        }else {
+          a = JSON.stringify(that[str+2])
+          a = JSON.parse(a.concat())
+          that[str] = a
+          that[str2] = [0]
           return
         }
+
         if (that[str][index].id === 0 && !that[str][index].isCur) {
           that[str].forEach(e => {
             if (e.id !== 0) {
@@ -138,14 +154,6 @@
           })
         }
         id = that[str][index].id
-
-        /*console.log(index,style)
-        if(index == 0){
-          let data = {}
-          for(let i = 0;data[str2].length>i;i++){
-            data[str2][i]
-          }
-        }*/
 
         if(that[str][index].isCur){
           that[str][index].isCur = false
@@ -165,6 +173,10 @@
       let data = {
         labelType: '1,3'
       }
+
+      let one
+      let two
+
       postGetLabelByIds(data).then((res)=>{
         res.data.forEach((value,index,array)=>{
           value.son.forEach((item,idx,ary)=>{
@@ -173,25 +185,38 @@
       　 });
         that.jobData = [{id:0,name:'不限',isCur:false},...res.data[1].son]
         that.liveData = [{id:0,name:'不限',isCur:false},...res.data[0].son]
-
         getChoiceLabel().then(res => {
           let list = res.data
           that.show = true
+
           list.forEach(item => {
+            console.log(item.oneLevel)
             if (item.oneLevel === 3) {
-              that.jobAry.push(item.id)
+
+              that.jobAry.push(0)
               that.jobData.forEach((e,index) => {
                 if (item.id == e.id) {
                   that.jobData[index].isCur = true
                 }
               })
+
+              one = JSON.stringify(that.jobData)
+              that.jobData2 = JSON.parse(one.concat())
+              that.jobData2[0].isCur = true
+
             } else if (item.oneLevel === 1) {
-              that.liveAry.push(item.id)
+
+              that.liveAry.push(0)
               that.liveData.forEach((e,index) => {
                 if (item.id == e.id) {
                   that.liveData[index].isCur = true
                 }
               })
+
+              two = JSON.stringify(that.liveData)
+              that.liveData2 = JSON.parse(two.concat())
+              that.liveData2[0].isCur = true
+
             }
           })
         })
