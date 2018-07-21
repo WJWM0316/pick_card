@@ -748,7 +748,7 @@ export default {
       let msg = {
         uid: usersInfo.id,
         name: usersInfo.nickname,
-        img: usersInfo.avatar_info.smallImgUrl,
+        img: usersInfo.avatar_info.bigImgUrl,
         occupation: usersInfo.occupation?usersInfo.occupation:'test',
         company: usersInfo.company,
         label: [],

@@ -1,11 +1,11 @@
 <template>
 	<view class="poster" v-if="imgUrl">
+		<image class="showImg" :src="showImg"></image>
 		<view class="wrap">
-			<canvas canvas-id="shareCanvas" id="myCanvas" :class="{'hidden' : showImg !== ''}" width="320" height="580">
+			<canvas canvas-id="shareCanvas" id="myCanvas" v-if="oneStep" width="320" height="580">
 			</canvas>
-			<canvas canvas-id="endCanvas" id="endCanvas" :class="{'hidden' : showImg !== ''}" width="320" height="580">
+			<canvas canvas-id="endCanvas" id="endCanvas" v-if="twoStep">
 			</canvas>
-			<image class="showImg" :src="showImg"></image>
 		</view>
 		<button class="save" open-type="openSetting" v-if="openSet"><image class="icon" src="/static/images/share_btn_savepic@3x.png"></image>保存图片</button>
 		<button @tap.stop="save" class="save" v-else><image class="icon" src="/static/images/share_btn_savepic@3x.png"></image>保存图片</button>
@@ -23,13 +23,15 @@
 				width: 0,
 				height: 0,
 				pixelRatio: 0,
+				oneStep: true,
+				twoStep: false,
 				info: {
 					nickname: '',
 					job: '',
 					sign: '',
 					label: []
 				},
-				imgUrl: ''
+				imgUrl: '',
 			}
 		},
 		onShow (option) {
@@ -56,13 +58,14 @@
         title: '正在生成图片',
         mask: true
       })
-			// wx.getSystemInfo({
-			// 	success： function(res) {
-			// 		that.width = res.windowWidth()
-			//     that.height = res.windowHeight()
-			//     that.pixelRatio = res.pixelRatio()
-			// 	}
-			// })
+			wx.getSystemInfo({
+				success: function(res) {
+					console.log(res, '设备信息')
+					that.width = res.windowWidth
+			    that.height = res.windowHeight
+			    that.pixelRatio = res.pixelRatio
+				}
+			})
 			let data = {
 				page: 'pages/detail/main',
 				length: 150,
@@ -94,28 +97,6 @@
 
 							ctx.setFillStyle('#fff')
 							ctx.fillRect(0, 0, 320, 580)
-							// 画布圆角
-							// roundRect (0,0,320,580,9)
-							// function roundRect (x, y, w, h, r) {
-							// 	ctx.beginPath();
-							// 	ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
-							// 	ctx.moveTo(x + r, y)
-							// 	ctx.lineTo(x + w - r, y)
-							// 	ctx.lineTo(x + w, y + r)
-							// 	ctx.arc(x + w - r, y + r, r, Math.PI *  1.5  , Math.PI *  2  )
-							// 	ctx.lineTo(x + w, y + h - r)
-							// 	ctx.lineTo(x + w - r, y + h)
-							// 	ctx.arc(x + w - r, y + h - r, r,  0  , Math.PI *  0.5  )
-							// 	ctx.lineTo(x + r, y + h)
-							// 	ctx.lineTo(x, y + h - r)
-							// 	ctx.arc(x + r, y + h - r, r, Math.PI *  0.5  , Math.PI)
-							// 	ctx.lineTo(x, y + r)
-							// 	ctx.lineTo(x + r, y)
-							// 	ctx.setFillStyle('#ffffff')
-							// 	ctx.fill()
-							// 	ctx.closePath()
-							// 	// ctx.clip()
-							// }
 
 							that.imgUrl = res.tempFilePath
 							// 画头像
@@ -259,9 +240,8 @@
 					    ctx.setFontSize(14)
 					    staticY = staticY + 50
 					    ctx.fillText('长按添加TA的趣名片', 30, staticY)
+					    
 					    ctx.draw(true, () => {
-					    	console.log('画图成功')
-					    	wx.hideLoading()
 					    	wx.canvasToTempFilePath({
 								  x: 0,
 								  y: 0,
@@ -272,11 +252,78 @@
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
 								  	// console.log('导出图片成功')
-								  	that.showImg = res.tempFilePath
-								  } 
-								})
-					    })
+								  	// that.showImg = res.tempFilePath
+								  	that.oneStep = false
+								  	that.twoStep = true
+								  	
+								  	// 定义一个新画布
+								  	const new_ctx = wx.createCanvasContext('endCanvas')
+								  	new_ctx.width = that.width
+								  	new_ctx.height = that.height
+
+								  // 	// 设置画布宽高
+								  	new_ctx.setFillStyle('#00c489')
+										new_ctx.fillRect(0, 0, that.width, that.height)
+								  	staticY = staticY + 60
+										let new_pos = {
+											x: (that.width - 320) / 2,
+											y: (that.height - staticY) / 2,
+										}
+
+										// new_ctx.rect(new_pos.x, new_pos.y, 320, staticY)
+										// 画布圆角
+										roundRect (new_pos.x, new_pos.y, 320, staticY)
+										function roundRect (x, y, w, h, r) {
+											new_ctx.beginPath();
+											new_ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
+											new_ctx.moveTo(x + r, y)
+											new_ctx.lineTo(x + w - r, y)
+											new_ctx.lineTo(x + w, y + r)
+											new_ctx.arc(x + w - r, y + r, r, Math.PI *  1.5  , Math.PI *  2  )
+											new_ctx.lineTo(x + w, y + h - r)
+											new_ctx.lineTo(x + w - r, y + h)
+											new_ctx.arc(x + w - r, y + h - r, r,  0  , Math.PI *  0.5  )
+											new_ctx.lineTo(x + r, y + h)
+											new_ctx.lineTo(x, y + h - r)
+											new_ctx.arc(x + r, y + h - r, r, Math.PI *  0.5  , Math.PI)
+											new_ctx.lineTo(x, y + r)
+											new_ctx.lineTo(x + r, y)
+											new_ctx.setFillStyle('#ffffff')
+											new_ctx.fill()
+											console.log('画图成功', res.tempFilePath)
+											new_ctx.drawImage(res.tempFilePath, new_pos.x, new_pos.y, 320, staticY)
+											new_ctx.closePath()
+											new_ctx.clip()
+										}
+
+										new_ctx.draw(true, () => {
+								    	wx.hideLoading()
+								    	wx.canvasToTempFilePath({
+											  x: 0,
+											  y: 0,
+											  width: that.width,
+											  height: that.height,
+											  destWidth: that.width * 2,
+											  destHeight: that.height * 2,
+											  canvasId: 'endCanvas',
+											  success: function(res) {
+											  	console.log(res, 111111111111111)
+											  	that.twoStep = false
+											  	that.showImg = res.tempFilePath
+											  } 
+											})
+								    })
+					  			}
+					  		})
+					  	})
 					  }
+					},
+					fail: function(e) {
+						wx.showToast({
+              title: '图片加载失败，请刷新页面',
+              icon: 'none',
+              mask: true
+            })
 					}
 				})
 			},
@@ -318,7 +365,6 @@
 	          }
 	        })
 	      }
-				
 			}
 		},
 		onShareAppMessage: function (res) {
@@ -347,6 +393,10 @@
 		padding: 20rpx 0 100rpx;
 		box-shadow:0px 17px 28px 0px rgba(52,62,59,0.03);
 		overflow-y:auto;
+		.showImg {
+			width: 100%;
+			height: 100%;
+		}
 		.wrap {
 			width: 320px;
 			height: 580px;
@@ -358,10 +408,6 @@
 					width: 0;
 					height: 0;
 				}
-			}
-			.showImg {
-				width: 320px;
-				height: 580px;
 			}
 		}
 		.save {

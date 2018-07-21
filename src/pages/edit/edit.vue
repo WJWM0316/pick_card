@@ -256,7 +256,7 @@
 		        onItemSuccess: (resp, file, index) => {
 		        }
 		      }).then(res => {
-		      	console.log(e, '上传成功')
+		      	console.log(res, '上传成功')
 	      		const cutImgInfo = {
 		          fileId: res.file.fileId,
 		          path: res.file.path,
