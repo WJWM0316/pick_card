@@ -264,7 +264,11 @@ export default {
     return {
       title: title,
       path: path,
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
+      success(){
+        that.isShowTrue = false
+        console.log(that.isCheck)
+      }
     }
   },
   onLoad(res) {
