@@ -120,7 +120,7 @@
             font-size:32rpx;
             font-family:PingFangSC-Regular;
             color:rgba(53,57,67,1);
-            line-height:32rpx;
+            line-height: 40rpx;
             margin-bottom: 14rpx;
             margin-right: 30rpx;
           }
@@ -215,9 +215,22 @@
         shareData: {}
       }
     },
+    onPullDownRefresh(res){
+      let that = this;
+
+      //doing some thing
+      console.log('下拉刷新执行完毕要停止当前页面下拉刷新',res)
+      that.getList()
+      setTimeout(function(){
+          wx.stopPullDownRefresh()
+      },2000)
+    },
+
+    onReachBottom(res){
+      let that = this;
+    },
     methods: {
       fromClick (e) {
-        console.log(e,22222)
         App.methods.sendFormId({
           fromId: e.mp.detail.formId,
           fromAddress: '/pages/index'
@@ -231,16 +244,6 @@
           url: `/pages/detail/main?vkey=${data.apply_user_info.vkey}`
         })
       },
-      /*toShare(){
-        console.log('to share me')
-        let that = this
-        if(that.listData[0].apply_user_info.vkey){
-          wx.navigateTo({
-            url: `/pages/sharePick/main?vkey=${that.listData[0].apply_user_info.vkey}?type=me`
-          })
-        }
-      },*/
-
       putApply (id,index) {
         if(!id){return}
         let data = {
@@ -258,22 +261,24 @@
         },(res)=>{
           that.$mptoast(res.msg,'error',2000)
         })
-      }
+      },
+      getList(){
+        let that = this;
+        getLikeList().then((res)=>{
+          console.log('=====',res)
+          that.listData = res.data
+
+          if(res.http_status==200){
+            deleteRedDot()
+          }
+        },(res)=>{
+          that.$mptoast(res.msg)
+        })
+      },
     },
 
     onLoad () {
       let that = this;
-      getLikeList().then((res)=>{
-        console.log('=====',res)
-        that.listData = res.data
-
-        if(res.http_status==200){
-          deleteRedDot()
-        }
-      },(res)=>{
-        that.$mptoast(res.msg)
-      })
-
       getUserInfoApi().then( data => {
         let usersInfo = data.data
 
@@ -336,6 +341,9 @@
 
     onShow(){
       this.isShow = false
+      let that = this;
+      that.getList()
+      
     },
 
     created () {

@@ -72,7 +72,7 @@
             <view class="cool_cont">
               <view class="blo_hint_txt">你已经看了很多新朋友了，休息一下吧~</view>
               <view class="blo_hint_txt">你也可以分享自己的名片给好友，</view>
-              <view class="blo_hint_txt">分享邀请3位新朋友，即可立刻刷新冷却时间哦～</view>
+              <view class="blo_hint_txt">邀请3位新朋友，立马刷新冷却时间哦～</view>
             </view>
         </view>
         <!-- 到底 -->
@@ -240,6 +240,7 @@ export default {
     let title = shareInfo.index.content
     let imageUrl = shareInfo.index.path
 
+
     wx.showShareMenu({
       withShareTicket: true
     })
@@ -258,6 +259,7 @@ export default {
         path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.showCard.type}`
       }
     }
+
 
     return {
       title: title,
@@ -295,8 +297,8 @@ export default {
       this.getPage.occupation_label_id = res.occupation_label_id || 0
       this.getPage.realm_label_id = res.realm_label_id || 0
     } else {
-      let occupation_label = [],
-          realm_label = []
+      let occupation_label = []
+      let realm_label = []
       if (this.$store.getters.userInfo.vkey) {
         getChoiceLabel().then(res => {
           res.data.forEach(item => {
@@ -341,8 +343,10 @@ export default {
       console.log('dataList')
 
       //that.usersInfo = that.$store.getters.userInfo
+
       getIndexUsers(that.getPage).then((res)=>{
         that.usersInfo = that.$store.getters.userInfo
+        console.log(res)
         console.log(that.usersInfo, '用户信息')
         console.log(that.usersInfo.step, 'step')
         that.usersList = res.data
@@ -368,12 +372,19 @@ export default {
           that.isEnd = true
         }else {
           that.isEnd = false
+          that.isCooling = false;
         } 
       },(res)=>{
+        console.log(res)
+        that.usersInfo = that.$store.getters.userInfo
+        that.getShareImg()
+        console.log(that.usersInfo )
         if(res.http_status == 400 && res.code == 99){
           console.log('res.data.rest_time=====',res.data.rest_time)
           that.intervalTime(res.data.rest_time)
         }else {
+          that.isCooling = false;
+
           that.$mptoast(res.msg)
         }
       })
@@ -556,7 +567,7 @@ export default {
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
-
+          console.log(res.data[0].id,res.data[1].id)
           if(step!=9 && step){
             that.isCreate()
             return
@@ -565,9 +576,18 @@ export default {
           }
           if(res.data.length<1){
             that.isEnd = true;
+          }else {
+            console.log(res.data[0].id,this.usersList[this.nowIndex].id)
+
+            if(res.data[0].id == this.usersList[this.nowIndex].id){
+              res.data.splice(0,1);
+            }
           }
+
           that.isCooling = false;
           that.usersList = [...this.usersList,...res.data];
+
+
           //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
@@ -582,8 +602,8 @@ export default {
     },
 
     firstOp(type,msg){
-      let that = this,
-          beforeCreateStep = this.beforeCreateStep;
+      let that = this
+      let beforeCreateStep = this.beforeCreateStep;
 
       beforeCreateStep++;
       if(beforeCreateStep >= 3){
@@ -659,7 +679,7 @@ export default {
 
           that.isGetUers()
           clearInterval(that.interval)
-          this.coolTime = 0;  
+          this.coolTime = '00:00:00';  
         }
       },1000);
     },
@@ -719,9 +739,9 @@ export default {
       //return t;
     },
     getShareImg(){
-      let that = this,
-      usersInfo = that.usersInfo,
-      msg = {
+      let that = this;
+      let usersInfo = that.usersInfo;
+      let msg = {
         uid: usersInfo.id,
         name: usersInfo.nickname,
         img: usersInfo.avatar_info.smallImgUrl,
@@ -1142,7 +1162,7 @@ export default {
           }
         }
         .text {
-          height: 150rpx;
+          height: 200rpx;
           position: absolute;
           background:linear-gradient(180deg,rgba(255,255,255,0),rgba(0,0,0,0.4));
           bottom: 0;
@@ -1156,7 +1176,7 @@ export default {
             line-height: 1.4;
             font-family:PingFang-SC-Medium;
             color:rgba(250,251,252,1);
-            padding-top: 10rpx;
+            padding-top: 60rpx;
           }
           .title {
             width: 470rpx;
@@ -1208,7 +1228,7 @@ export default {
             color:rgba(0,208,147,1);
             //line-height:48rpx;
             text-align: center;
-            border: 2rpx solid rgba(0,208,147,1);
+            border: 2rpx solid #66E3BF;
             margin-right: 10rpx;
             margin-bottom: 14rpx;
             height: 48rpx;

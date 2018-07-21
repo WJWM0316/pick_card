@@ -10,6 +10,7 @@ var baseHost = 'https://applet-test.card.ziwork.com'
 
 
 
+
 // 内嵌h5基本路径测试服
 var staticHost = 'https://stg.ziwork.com'
 

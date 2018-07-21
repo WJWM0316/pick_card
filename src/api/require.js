@@ -38,7 +38,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       method: method,
       success(res) {
         util.unloading(isLoading)
-        //console.log('请求成功后 response', res)
+        console.log('请求成功后 response', res)
         if (typeof res.data === 'string') { // 转换返回json
           res.data = JSON.parse(res.data)
         }

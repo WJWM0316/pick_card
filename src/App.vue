@@ -111,7 +111,7 @@ export default {
 
       console.log(`发送formId: ${fromId} 来源: ${fromAddress}->个数:${fromIdArr.length}`)
       if(fromIdArr.length>0 && fromIdArr[fromIdArr.length-1] == fromId ){
-        console.log('fromid 重复')
+        //console.log('fromid 重复')
         return
       }
       
