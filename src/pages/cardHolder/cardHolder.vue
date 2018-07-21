@@ -561,7 +561,7 @@ export default {
         justify-content: center;
         box-shadow: 0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
         &.listone {
-          padding: 50rpx 30rpx 56rpx 120rpx;
+          padding: 55rpx 30rpx 56rpx 120rpx;
         }
         &.one {
           &:after {
@@ -625,8 +625,8 @@ export default {
           font-size:34rpx;
           font-family:PingFangSC-Medium;
           color:rgba(70,71,72,1);
-          line-height:55rpx;
-          height: 55rpx;
+          line-height:60rpx;
+          height: 60rpx;
 
         }
         .msg_tit {
