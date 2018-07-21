@@ -363,7 +363,6 @@ export default {
           return
         }else {
           redDot().then(res=>{
-            console.log(res)
             that.mainRed = res.data.main_show_red_dot
           })
 
@@ -374,6 +373,7 @@ export default {
         }
         if(res.data.length<1){
           that.isEnd = true
+          console.log('没有数据了。冷却===》',that.isEnd)
         }else {
           that.isEnd = false
           that.isCooling = false;
@@ -571,7 +571,7 @@ export default {
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(this.getPage).then((res)=>{
-          console.log(res.data[0].id,res.data[1].id)
+          console.log(res)
           if(step!=9 && step){
             that.isCreate()
             return
@@ -580,18 +580,17 @@ export default {
           }
           if(res.data.length<1){
             that.isEnd = true;
+            console.log('没有数据了。冷却===》',that.isEnd)
+
           }else {
             console.log(res.data[0].id,this.usersList[this.nowIndex].id)
-
+            that.isEnd = false;
             if(res.data[0].id == this.usersList[this.nowIndex].id){
               res.data.splice(0,1);
             }
+            that.usersList = [...this.usersList,...res.data];
           }
-
           that.isCooling = false;
-          that.usersList = [...this.usersList,...res.data];
-
-
           //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
