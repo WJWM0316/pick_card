@@ -51,7 +51,7 @@
 							</view>
 						</view>
 					</view>
-					<navigator target="miniProgram" app-id="wxdf4966c8f6916d05" version="develop" url="pages/home/index" hover-class="none">
+					<navigator target="miniProgram" app-id="wxc3523caab5f5b865" version="develop" url="pages/home/index" hover-class="none">
 					<view class="item">
 						<form report-submit="true" class="from-box" @submit="fromClick">
 						    <button formType="submit" class="from-mask  "></button>
