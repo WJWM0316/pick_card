@@ -68,7 +68,7 @@
         <!-- 冷却 -->
         <view class="peop_blo blo_type2 blo_cooling" v-if="isCooling">
             <image class="cool_img" src="/static/images/home_dafulpage_pic_time@3x.png"></image>
-            <view class="cool_time">{{coolTime}}</view>
+            <view class="cool_time" v-if="coolTime!=0">{{coolTime}}</view>
             <view class="cool_cont">
               <view class="blo_hint_txt">你已经看了很多新朋友了，休息一下吧~</view>
               <view class="blo_hint_txt">你也可以分享自己的名片给好友，</view>
@@ -213,7 +213,7 @@ export default {
       isPop: false,     //遮罩
       isCooling: false, //冷却
       isShare: false,    //分享弹窗
-      coolTime: '00:00:00',//冷却倒计时
+      coolTime: '0',//冷却倒计时
       isEnd: false,   //翻完
       isNext: true,  //翻页
 
@@ -380,17 +380,17 @@ export default {
         } 
       },(res)=>{
         console.log(res)
-        that.usersInfo = that.$store.getters.userInfo
-        that.getShareImg()
+        
         console.log(that.usersInfo )
         if(res.http_status == 400 && res.code == 99){
           console.log('res.data.rest_time=====',res.data.rest_time)
           that.intervalTime(res.data.rest_time)
         }else {
           that.isCooling = false;
-
           that.$mptoast(res.msg)
         }
+        that.usersInfo = that.$store.getters.userInfo
+        that.getShareImg()
       })
     },
     fromClick (e) {
@@ -682,7 +682,7 @@ export default {
 
           that.isGetUers()
           clearInterval(that.interval)
-          this.coolTime = '00:00:00';  
+          this.coolTime = '0';  
         }
       },1000);
     },
@@ -719,7 +719,7 @@ export default {
     //转换时分秒
     transformTime(s){
       if(!s){
-        this.coolTime = '00:00:00'
+        this.coolTime = '0'
         return 0
       }
       let t;
