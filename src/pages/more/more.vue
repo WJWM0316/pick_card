@@ -107,16 +107,33 @@
 			        }
 			      }).then(res => {
 			      	_this.filesId = _this.filesId.concat(res || [])
-			      	 _this.loading = false
-			      	 console.log(_this.loading, 11111)
-			         console.log('全部上传成功',_this.filesId, res)
+			      	_this.loading = false
+			         console.log('全部上传成功', _this.filesId, res)
 			      }).catch((e, index) => {
-			      	wx.showToast({
-						  title: '图片上传失败，请重新上传',
-						  icon: 'none',
-						  duration: 1000
-						})
-			        console.log(`第${index}张上传失败`, e)
+			      	_this.loading = false
+			      	console.log(e, '上传异常')
+			        if (e.statusCode === 405) {
+			      		wx.showToast({
+								  title: e.message,
+								  icon: 'none',
+								  duration: 2000
+								})
+								return
+			      	} else if (e.statusCode === 400) {
+			      		wx.showToast({
+								  title: e.message,
+								  icon: 'none',
+								  duration: 2000
+								})
+								return
+			      	} else {
+			      		wx.showToast({
+								  title: '图片上传失败，请重新上传',
+								  icon: 'none',
+								  duration: 1000
+								})
+				        console.log(`第${index}张上传失败`, e)
+			      	}
 			      })
 	        },
 	        fail: function () {
@@ -169,7 +186,6 @@
 	    remove (item, index) {
 	    	let that = this
 	    	wx.showModal({
-
 				  content: '是否确定删除图片',
 				  confirmColor: '#00D093',
 				  success: function(res) {
