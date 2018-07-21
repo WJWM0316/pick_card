@@ -108,9 +108,12 @@ export default {
             icon: 'success',
             duration: 1000
           })
-          wx.navigateBack({
-            delta: 1
-          })
+          setTimeout(function() {
+            wx.navigateBack({
+              delta: 1
+            })
+          }, 2000)
+          
         })
         .catch(e => {
           console.error('获取图片失败')
