@@ -273,7 +273,7 @@
     .name {
       &.cur {
         font-size:32rpx;
-        font-weight: 500;
+        font-weight: 700;
         color:rgba(53,64,72,1);
         position: relative;
         &:after {

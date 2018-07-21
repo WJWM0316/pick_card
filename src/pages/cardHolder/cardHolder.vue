@@ -30,20 +30,18 @@
           <block v-if="nowIndex == 0">
             <view class="friendList" v-if="friendList.length>0">
                 
-                <view class="card_block"  v-for="(item, index) in friendList" :key="key">
-                  <form report-submit="true" class="" @submit="fromClick">
-                      <button formType="submit" class="blo_msg" :class="{'one': item.has_red_dot == 1}" @tap="toDetail(item)">
+                  <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in friendList" :key="key">
+                      <button formType="submit" @tap="toDetail(item)">
+                        <view class="blo_msg" :class="{'one': item.has_red_dot == 1}" >
                           <image class="blo_img" :src="item.friend_user_info.avatar_info.smallImgUrl" v-if="item.friend_user_info.avatar_info"></image>
                           <image class="blo_img" src="/static/images/pic_defaulhead@3x.png" v-else></image>
 
                           <view class="msg_name ellipsis" >{{item.friend_user_info.nickname}}</view>
                           <view class="msg_tit  ellipsis">{{item.friend_user_info.occupation}}</view>
                           <view class="msg_company ellipsis">{{item.friend_user_info.company}}</view>
+                        </view>
                       </button>
                   </form>
-
-                  
-                </view>
               <view class="to_share" :class="{ten: adaptive == 'ten'}">
                 <button open-type="share" data-type="myDetail">分享我的名片</button>，获取更多职场人脉
               </view>
@@ -219,12 +217,17 @@ export default {
       title: title,
       path: path,
       imageUrl: imageUrl,
-      complete(){
-      console.log(that.isCheck)
+      success(){
+        console.log(that.isCheck)
 
         if(res.target.dataset.type=="flock" && !that.isCheck){
           that.isShow = true;
         }
+      },
+      fail(){
+      },
+      complete(){
+        
       }
     }
   },
@@ -559,8 +562,8 @@ export default {
         &.one {
           &:after {
             content: '';
-            width:20rpx;
-            height:20rpx;
+            width: 20rpx;
+            height: 20rpx;
             border-radius: 50%;
             background: #ff5150;
             position: absolute; 
@@ -586,9 +589,6 @@ export default {
         }
         &.flock_blo {
           height: 180rpx;
-          .new_msg {
-
-          }
           .msg_tit {
             font-size: 28rpx;
             font-family: PingFangSC-Light;

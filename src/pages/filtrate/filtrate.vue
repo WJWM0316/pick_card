@@ -56,7 +56,6 @@
     },
     methods: {
       fromClick (e) {
-        console.log(111)
         App.methods.sendFormId({
           fromId: e.mp.detail.formId,
           fromAddress: '/pages/index'
@@ -129,6 +128,15 @@
           str2 = 'liveAry'
         }
         id = that[str][index].id
+
+        /*console.log(index,style)
+        if(index == 0){
+          let data = {}
+          for(let i = 0;data[str2].length>i;i++){
+            data[str2][i]
+          }
+        }*/
+
         if(that[str][index].isCur){
           that[str][index].isCur = false
           that[str2].splice(that[str2].indexOf(id), 1)
