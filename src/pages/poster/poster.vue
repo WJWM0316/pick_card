@@ -225,8 +225,8 @@
 								  y: 0,
 								  width: 320,
 								  height: staticY + 60,
-								  destWidth: 320*2,
-								  destHeight: (staticY + 60) * 2,
+								  destWidth: 320*6,
+								  destHeight: (staticY + 60) * 6,
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
 								  	// console.log('导出图片成功')
@@ -247,16 +247,16 @@
 										wx.getImageInfo({
 											src: res.tempFilePath,
 											success: function(e) {
-												let dpr = that.pixelRatio/2 - 0.4
-												if (dpr > 1) {
-													dpr = that.pixelRatio/2 - 0.4
-												} else {
-													dpr = 1
-												}
-												console.log(dpr, 22222222222222)
+												// let dpr = that.pixelRatio/2 - 0.4
+												// if (dpr > 1) {
+												// 	dpr = that.pixelRatio/2 - 0.4
+												// } else {
+												// 	dpr = 1
+												// }
+												// console.log(dpr, 22222222222222)
 												let new_pos = {
-													x: (that.width - e.width/2*dpr) / 2,
-													y: (that.height - e.height/2*dpr) / 2,
+													x: (that.width - e.width/6) / 2,
+													y: (that.height - e.height/6) / 2,
 												}
 												function roundRect (x, y, w, h, r) {
 													new_ctx.beginPath();
@@ -280,8 +280,8 @@
 													new_ctx.drawImage(res.tempFilePath, x, y, w, h)
 													new_ctx.clip()
 												}
-												console.log(e, new_pos.x, new_pos.y, e.width/2, e.height/2, 1111111111111111111111)
-												roundRect (new_pos.x, new_pos.y, e.width/2*dpr, e.height/2*dpr, 9)
+												console.log(e, new_pos.x, new_pos.y, e.width/6, e.height/6, 1111111111111111111111)
+												roundRect (new_pos.x, new_pos.y, e.width/6, e.height/6, 9)
 
 												// 清除圆镂空部分
 												// function clearArc(x,y,radius){ //圆心(x,y)，半径radius
@@ -314,8 +314,8 @@
 													  y: 0,
 													  width: that.width,
 													  height: that.height,
-													  destWidth: that.width*2,
-													  destHeight: that.height*2,
+													  destWidth: that.width*6,
+													  destHeight: that.height*6,
 													  canvasId: 'endCanvas',
 													  success: function(res) {
 													  	console.log(res, 111111111111111)
