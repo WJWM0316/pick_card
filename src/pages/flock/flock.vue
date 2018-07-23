@@ -127,7 +127,7 @@ export default {
 
       getListData: {
         page: 1,
-        count: 3,
+        count: 20,
         id:''
       },
       getNext: true,
@@ -220,7 +220,7 @@ export default {
 
     if (this.isFlockId){
         this.getListData.page=1;
-        this.getListData.count=3;
+        this.getListData.count=20;
         this.getNext= true;
         this.isNext=true;
         this.updateData('first')
