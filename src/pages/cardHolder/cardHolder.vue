@@ -152,11 +152,11 @@ export default {
 
       getFrd: {
         id: '',
-        count: 3
+        count: 20
       },
       getFlk: {
         page: 1,
-        count: 3
+        count: 20
       },
       flockNext: {
         getNext: true,
@@ -368,11 +368,11 @@ export default {
       let that = this;
       this.getFrd = {
         id: '',
-        count: 3
+        count: 20
       }
       this.getFlk = {
         page: 1,
-        count: 3
+        count: 20
       }
       this.flockNext = {
         getNext: true,

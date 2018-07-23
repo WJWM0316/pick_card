@@ -215,7 +215,7 @@
         shareData: {},
 
         getListData: {
-          count: 3,
+          count: 20,
           id:''
         },
         getNext: true,
@@ -375,7 +375,7 @@
       that.isShow = false
 
       that.getListData = {
-        count: 3,
+        count: 20,
         id:''
       },
       that.getNext =true,
