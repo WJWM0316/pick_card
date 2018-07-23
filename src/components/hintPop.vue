@@ -61,6 +61,21 @@
 			},
 		},
 		onLoad () {},
+		onPullDownRefresh(res){
+		  let that = this;
+
+		  //doing some thing
+		  console.log('下拉刷新执行完毕要停止当前页面下拉刷新',res)
+		  //that.getList()
+		  setTimeout(function(){
+		      wx.stopPullDownRefresh()
+		  },2000)
+		},
+
+		onReachBottom(res){
+			console.log(res)
+		  let that = this;
+		},
 		methods: {
 			//跳转====
 			toDetail () {

@@ -8,5 +8,7 @@ export default {
   config: {
     navigationBarTitleText: '群组',
     enablePullDownRefresh: false,
+    backgroundTextStyle:"dark",//下拉背景字体、loading 图的样式，仅支持 dark/light，默认light不可见
+    onReachBottomDistance: 50
   },
 };

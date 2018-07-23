@@ -28,7 +28,7 @@
             </button>
           </view>
           <block v-if="nowIndex == 0">
-            <view class="friendList" v-if="friendList.length>0">
+            <scroll-view @scrolltolower="loadNext" scroll-y=true class="friendList" v-if="friendList.length>0">
                 
                   <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in friendList" :key="key">
                       <button formType="submit" @tap="toDetail(item)">
@@ -45,12 +45,12 @@
               <view class="to_share" :class="{ten: adaptive == 'ten'}">
                 <button open-type="share" data-type="myDetail">分享我的名片</button>，获取更多职场人脉
               </view>
-            </view>
+            </scroll-view>
             <block  v-else>
-              <view class="none_blo">
+              <scroll-view @scrolltolower="loadNext" scroll-y=true class="none_blo">
                 <view class="none_txt">让名片替你说话，不动声色展现实力</view>
                 <button class="none_btn" data-type="myDetail" open-type="share">去分享 </button>
-              </view>
+              </scroll-view>
             </block>
           </block>
 
@@ -136,6 +136,24 @@ export default {
       isShow: false,   //创建群提示
       onShowSock: true,
       isCheck: false,
+
+      getFriends: {
+        id: '',
+        count: 2
+      },
+      getFlock: {
+        id: '',
+        count: 2
+      },
+      flockNext: {
+        load: true,
+        isNext: true,
+      },
+
+      friendNext: {
+        load: true,
+        isNext: true,
+      },
     }
   },
   onLoad() {
@@ -251,26 +269,56 @@ export default {
   },
 
   methods: {
-    fromClick (e) {
-      console.log(e)
-      App.methods.sendFormId({
-        fromId: e.mp.detail.formId,
-        fromAddress: '/pages/index'
+    loadNext(){
+
+      console.log(111)
+      let that = this
+      let flockNext = this.flockNext
+      let friendNext = this.friendNext
+
+      if(that.nowIndex==0){
+        if(friendNext.getNext && friendNext.isNext ){
+          this.getFriends.id = this.getFriends[this.getFriends.length-1]
+          that.getFriends()
+          return
+        }
+
+      }else {
+        if(flockNext.getNext && flockNext.isNext ){
+          this.page++
+          that.getFlock()
+          return
+        }
+      }
+    },
+    getFriends(){
+      let that = this
+      getUserGroupInfo(that.getFriends).then((res)=>{
+        console.log('更新',res)
+        that.friendList = res.data
+        that.getNext = true
+        if(res.data.length<that.getFriends.count){
+          that.isNext = false
+        }
+
       })
     },
-    radioChange(e){
-      this.isCheck = !this.isCheck
-    },
-    cloShow(){
-      this.isShow = false
-
-      if(this.isCheck){
-        wx.setStorageSync('isCheck', 1)
-      }
+    getFlock(){
+      let that = this
+      getUserGroupList(that.getListData).then((res)=>{
+        console.log('更新',res)
+        that.flockNext.getNext = true
+        if(res.data.length<that.getFlock.count){
+          that.flockNext.isNext = false
+        }
+        
+        console.log(res)
+        that.florkList = res.data
+      })
     },
     getList(num){
       let that = this;
-      getFriends().then((res)=>{
+      getFriends(that.getFriends).then((res)=>{
         console.log(res)
         that.friendList = res.data
 
@@ -289,6 +337,25 @@ export default {
         that.swopRed = res.data.main_show_red_dot
       })
     },
+
+    fromClick (e) {
+      console.log(e)
+      App.methods.sendFormId({
+        fromId: e.mp.detail.formId,
+        fromAddress: '/pages/index'
+      })
+    },
+    radioChange(e){
+      this.isCheck = !this.isCheck
+    },
+    cloShow(){
+      this.isShow = false
+
+      if(this.isCheck){
+        wx.setStorageSync('isCheck', 1)
+      }
+    },
+    
     toDetail (item) {
       console.log(item)
       wx.navigateTo({
@@ -552,7 +619,7 @@ export default {
         height:230rpx;
         background:rgba(255,255,255,1);
         border-radius:18rpx;
-        padding: 56rpx 30rpx 56rpx 120rpx;
+        padding: 0rpx 30rpx 0rpx 120rpx;
         box-sizing: border-box;
         text-align: left;
         position: relative;
@@ -561,7 +628,7 @@ export default {
         justify-content: center;
         box-shadow: 0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
         &.listone {
-          padding: 55rpx 30rpx 56rpx 120rpx;
+          padding: 0 30rpx 0 120rpx;
         }
         &.one {
           &:after {

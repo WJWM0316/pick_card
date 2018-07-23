@@ -40,7 +40,7 @@
               <view class="text">
                 <view class="name ellipsis">{{item.nickname}}</view>
                 <view class="title ellipsis">{{item.occupation}} | {{item.company}}</view>
-                <image class="detail" src="/static/images/hone_btn_more_nor@3x.png"></image>
+                <image class="detail" src="/static/images/hone_btn_more_nor@3x.png" v-if="item.other_info.more_info.img_info.length>1||item.other_info.more_info.content.length>1"></image>
               </view>
             </button>
             </form>
@@ -381,7 +381,6 @@ export default {
       },(res)=>{
         console.log(res)
         
-        console.log(that.usersInfo )
         if(res.http_status == 400 && res.code == 99){
           console.log('res.data.rest_time=====',res.data.rest_time)
           that.intervalTime(res.data.rest_time)
@@ -391,6 +390,8 @@ export default {
         }
         that.usersInfo = that.$store.getters.userInfo
         that.getShareImg()
+        console.log(that.usersInfo )
+        
       })
     },
     fromClick (e) {
@@ -777,6 +778,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    box-sizing: border-box;
     &.small{
       .content {
         //top: -66rpx;

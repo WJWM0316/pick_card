@@ -19,8 +19,8 @@
         </button>
       </view>
     </view>
-    <view class="content">
-      <view class="peoList" :style="{ height: spHeight+'rpx' }">
+    <view class="content" :style="{ height: spHeight+'rpx' }">
+      <scroll-view scroll-y=true class="peoList" @scrolltolower="loadNext" :style="{ height: spHeight+'rpx' }">
 
         <block v-for="(item, index) in flockInfo.groupMemberList"  :key="key">
             <block v-if="!isJoin">
@@ -70,12 +70,10 @@
               </view>
             </block>
         </block>
-
         
         <view class="hintJoin" v-if="!isJoin">—— 加入后即可查看所有群成员的名片 ——</view>
-      </view>
-
-      
+        <view class="hintJoin" v-if="!getNext">加载中</view>
+      </scroll-view>
     </view>
     <view class="footer">
       <block v-if="isJoin">
@@ -125,16 +123,22 @@ export default {
       shareData: {},
       showPop: false,
       isFlockId: false,
-      routerInfo: {}
+      routerInfo: {},
+
+      getListData: {
+        page: 1,
+        count: 6,
+        id:''
+      },
+      getNext: true,
+      isNext: true,
     }
   },
 
   computed: {
     ...mapState({
       userInfo: state => state.global.userInfo,
-    })
-  },
-  computed: {
+    }),
     authorize () {
       if (this.$store.getters.userInfo.vkey) {
         return true
@@ -166,7 +170,7 @@ export default {
         vkey: res.vkey
       }
 
-
+      that.getListData.id = res.vkey
       that.isFlockId = true
       isJoinUserGroup({userGroupId: res.vkey}).then((msg)=>{
         if(msg.code == 201){
@@ -215,7 +219,7 @@ export default {
     }
 
     if (this.isFlockId){
-       this.updateData()
+       this.updateData('first')
     }
   },
 
@@ -249,6 +253,16 @@ export default {
 
 
   methods: {
+    loadNext(res) {
+
+      if(this.getNext && this.isNext && this.isJoin){
+        console.log(111111)
+        this.getNext = false
+        this.getListData.page++
+        this.updateData()
+      }
+      
+    },
     fromClick (e) {
       console.log(e)
       App.methods.sendFormId({
@@ -306,8 +320,8 @@ export default {
         if(res.http_status == 200){
           that.$mptoast('成功加入')
           that.isJoin = true
-          that.updateData()
-          
+
+          that.updateData('first')
         }
         console.log(1111,res)
       },(res)=>{
@@ -315,7 +329,6 @@ export default {
         console.log('error1111',res)
       })
     },
-
     quit () {
       if (!this.authorize) {
         this.showPop = true
@@ -356,7 +369,6 @@ export default {
         }
       })
     },
-
     swopSlock (id,index) {
       if (!this.authorize) {
         this.showPop = true
@@ -394,19 +406,27 @@ export default {
         }
       })
     },
-
     toCreate () {
       wx.navigateTo({
         url: `/pages/createCard/main`
       })
     },
-
-    updateData(){
+    updateData(isFirst){
       let that = this
-      getUserGroupInfo(that.msg.vkey).then((res)=>{
-        console.log('更新',res)
-        that.flockInfo = res.data
+      getUserGroupInfo(that.getListData).then((res)=>{
+        console.log('更新',isFirst,res)
 
+        if(isFirst=='first'){
+          that.flockInfo = res.data
+        }else {
+          that.flockInfo.groupMemberList = [...that.flockInfo.groupMemberList,...res.data.groupMemberList]
+        }
+
+        that.getNext = true
+        if(res.data.groupMemberList.length<that.getListData.count){
+          that.isNext = false
+        }
+        
         if(res.http_status == 200){ 
           if(that.isFirstFlock && that.$store.getters.userInfo.step && that.$store.getters.userInfo.step === 9){
             deleteRedFlock(that.msg.vkey).then((res)=>{
@@ -494,6 +514,7 @@ export default {
     }
     .content {
       background:rgba(250,251,253,1);
+      padding-bottom: 60rpx;
       .card_block {
         position: relative;
         margin: 0 50rpx;
@@ -588,7 +609,7 @@ export default {
       }
     }
     .peoList {
-      padding-bottom: 60rpx;
+      //padding-bottom: 60rpx;
       overflow-y:scroll;
       -webkit-overflow-scrolling: touch;
       box-sizing: border-box;
