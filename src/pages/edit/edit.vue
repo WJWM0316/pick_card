@@ -642,6 +642,7 @@
 			background: #fff;
 			padding: 30rpx 40rpx;
 			box-sizing: border-box;
+			z-index: 3;
 			.light {
 				width: 100%;
 				height: 98rpx;

@@ -16,14 +16,6 @@ export default {
   },
   
   methods:{
-    getUserInfo () {
-      getUserInfoApi().then(res => {
-        this.$store.dispatch('userInfo', res.data)
-        console.log('已将个人信息存入store', this.$store.getters.userInfo)
-      }).catch(e => {
-        console.log(e)
-      })
-    },
     checkLogin () {
       let that = this
       return new Promise((resolve, reject) => {
@@ -156,6 +148,7 @@ export default {
   },
 
   onShow (option) {
+    console.log(option, )
     wx.setStorageSync('routeInfo', option)
     wx.showShareMenu({
       withShareTicket: true
@@ -173,6 +166,11 @@ export default {
       }
     }else {
       this.test = false
+    }
+
+
+    if (!wx.getStorageSync('token') && (option.path !== 'pages/index/main' || option.path !== 'pages/detail/main' || option.path !== 'pages/flock/main')) {
+      this.checkLogin()
     }
   },
    // 捕获 app error
