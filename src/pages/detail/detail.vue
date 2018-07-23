@@ -572,11 +572,14 @@
 				.xuyao {
 					font-size: 28rpx;
 					color: #FFA200;
+					height: 80rpx;
+					line-height: 80rpx;
 				}
 				.icon {
 					width: 14rpx;
 					height: 24rpx;
 					margin-left: 16rpx;
+					vertical-align:-2rpx;
 				}
 			}
 		}
@@ -687,6 +690,8 @@
 						height: 32rpx;
 						float: right;
 						display: block;
+						padding:20rpx 0 20rpx 20rpx;
+						vertical-align:sub;
 					}
 					.more {
 						margin-top: 4rpx;
@@ -754,7 +759,7 @@
 					width: 32rpx;
 					height: 32rpx;
 					float: right;
-					margin-top: 5rpx;
+					padding:4rpx 0 4rpx 30rpx;
 					display: block;
 				}
 				.title {

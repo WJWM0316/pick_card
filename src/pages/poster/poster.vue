@@ -38,6 +38,7 @@
 		},
 		onShow (option) {
 			this.imgUrl = ''
+			this.showImg = ''
 			this.oneStep = true
 			this.twoStep = true
 			let that = this
@@ -107,11 +108,16 @@
 
 							// 画头像
 					    ctx.drawImage(that.imgUrl, 0, 0, 320, 320)
+					    const  grd = ctx.createLinearGradient(0, 200, 0, 330)
+					    grd.addColorStop(0, 'rgba(255, 255, 255, 0)')
+							grd.addColorStop(1, 'rgba(0,0,0, 0.4)')
+							ctx.setFillStyle(grd)
+					    ctx.fillRect(0, 200, 320, 130)
 
 					    // 画文案
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
-					    ctx.setFontSize(24)
+					    ctx.font = 'normal bold 24px sans-serif'
 					    if (that.info.nickname.length > 20) {
 					    	that.info.nickname = that.info.nickname.slice(0, 17) + '...'
 					    }
@@ -123,7 +129,7 @@
 					    }
 					    ctx.fillText(that.info.job, 17, 300)
 					    let staticY = 349
-					    ctx.setFontSize(14)
+					    ctx.font = 'normal normal 14px sans-serif'
 					    ctx.setFillStyle('#9AA1AB')
 					    if (that.info.sign.length > 20) {
 					    	ctx.fillText(that.info.sign.slice(0, 19), 17, staticY)
@@ -190,7 +196,7 @@
 								// 下一个标签的横坐标
 								position.x = position.x + 2*r + metrics + 5
 								// 判断是否需要换行
-								if ((newLabelWidth + position.x) > (320-20) && lineNun !== 2) {
+								if (newLabelWidth> (320-17-position.x) && lineNun !== 2) {
 									position.x = 17
 									staticY = staticY + 2*r + 7
 									position.y = position.y + 2*r + 7
@@ -225,8 +231,6 @@
 								  y: 0,
 								  width: 320,
 								  height: staticY + 60,
-								  destWidth: 320*6,
-								  destHeight: (staticY + 60) * 6,
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
 								  	// console.log('导出图片成功')
@@ -247,16 +251,13 @@
 										wx.getImageInfo({
 											src: res.tempFilePath,
 											success: function(e) {
-												// let dpr = that.pixelRatio/2 - 0.4
-												// if (dpr > 1) {
-												// 	dpr = that.pixelRatio/2 - 0.4
-												// } else {
-												// 	dpr = 1
-												// }
-												// console.log(dpr, 22222222222222)
+												let img = {
+													width: that.width*0.85,
+													height: that.width*0.85/(e.width/e.height)
+												}
 												let new_pos = {
-													x: (that.width - e.width/6) / 2,
-													y: (that.height - e.height/6) / 2,
+													x: (that.width - img.width) / 2,
+													y: (that.height - img.height) / 2,
 												}
 												function roundRect (x, y, w, h, r) {
 													new_ctx.beginPath();
@@ -275,37 +276,37 @@
 													new_ctx.lineTo(x + r, y)
 													new_ctx.setFillStyle('#ffffff')
 													new_ctx.fill()
-													console.log('画图成功', res.tempFilePath, res.tempFilePath, new_pos.x, new_pos.y, 320, staticY)
 													new_ctx.closePath()
-													new_ctx.drawImage(res.tempFilePath, x, y, w, h)
+													//
 													new_ctx.clip()
+													new_ctx.drawImage(res.tempFilePath, x, y, w, h)
 												}
-												console.log(e, new_pos.x, new_pos.y, e.width/6, e.height/6, 1111111111111111111111)
-												roundRect (new_pos.x, new_pos.y, e.width/6, e.height/6, 9)
+												console.log(e, new_pos.x, new_pos.y, img.width, img.height, '第二步画图')
+												roundRect (new_pos.x, new_pos.y, img.width, img.height, 9)
 
 												// 清除圆镂空部分
-												// function clearArc(x,y,radius){ //圆心(x,y)，半径radius
-												// 	var calcWidth = radius - stepClear;
-												// 	var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
+												function clearArc(x,y,radius){ //圆心(x,y)，半径radius
+													var calcWidth = radius - stepClear;
+													var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
 													
-												// 	var posX = x - calcWidth
-												// 	var posY = y - calcHeight
+													var posX = x - calcWidth
+													var posY = y - calcHeight
 													
-												// 	var widthX = 2 * calcWidth
-												// 	var heightY = 2 * calcHeight
+													var widthX = 2 * calcWidth
+													var heightY = 2 * calcHeight
 													
-												// 	if(stepClear <= radius){
-												// 		new_ctx.clearRect(posX, posY, widthX, heightY)
-												// 		stepClear += 1
-												// 		clearArc(x, y, radius)
-												// 	}
-												// }
-												// let stepClear = 1;//别忘记这一步
-												// ctx.beginPath();
-												// clearArc(0, staticY - 70, 10)
-												// ctx.save() 
-												// stepClear = 1
-												// clearArc(320, staticY - 70, 10)
+													if(stepClear <= radius){
+														new_ctx.clearRect(posX, posY, widthX, heightY)
+														stepClear += 1
+														clearArc(x, y, radius)
+													}
+												}
+												let stepClear = 1;//别忘记这一步
+												ctx.beginPath();
+												clearArc(new_pos.x, new_pos.y + 5 + img.height*0.78, 10)
+												ctx.save() 
+												stepClear = 1
+												clearArc(new_pos.x + img.width, new_pos.y + 5 + img.height*0.78, 10)
 
 												new_ctx.draw(true, () => {
 										    	wx.hideLoading()
@@ -314,11 +315,9 @@
 													  y: 0,
 													  width: that.width,
 													  height: that.height,
-													  destWidth: that.width*6,
-													  destHeight: that.height*6,
 													  canvasId: 'endCanvas',
 													  success: function(res) {
-													  	console.log(res, 111111111111111)
+													  	console.log(res, '最终画图成功')
 													  	that.twoStep = true
 													  	that.showImg = res.tempFilePath
 													  } 
@@ -407,6 +406,9 @@
 			width: 100%;
 			height: 100%;
 		}
+		#endCanvas {
+			opacity: 0;
+		}
 		.wrap {
 			width: 320px;
 			height: 580px;
@@ -414,6 +416,7 @@
 			#myCanvas {
 				width: 320px;
 				height: 580px;
+				opacity: 0;
 				&.hidden {
 					width: 0;
 					height: 0;
