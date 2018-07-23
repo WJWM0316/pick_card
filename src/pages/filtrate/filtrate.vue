@@ -67,13 +67,6 @@
         let occupation_label_id = this.jobAry.join(',')
         let realm_label_id = this.liveAry.join(',')
         let url
-        if(this.jobAry.indexOf(0) !== -1){
-          occupation_label_id = 0
-        }
-
-        if(this.liveAry.indexOf(0) !== -1){
-          realm_label_id = 0
-        }
 
         if(occupation_label_id == 0 && realm_label_id == 0){
           url = '/pages/index/main'
@@ -193,7 +186,7 @@
             console.log(item.oneLevel)
             if (item.oneLevel === 3) {
 
-              that.jobAry.push(0)
+              that.jobAry.push(item.id)
               that.jobData.forEach((e,index) => {
                 if (item.id == e.id) {
                   that.jobData[index].isCur = true
@@ -206,7 +199,7 @@
 
             } else if (item.oneLevel === 1) {
 
-              that.liveAry.push(0)
+              that.liveAry.push(item.id)
               that.liveData.forEach((e,index) => {
                 if (item.id == e.id) {
                   that.liveData[index].isCur = true

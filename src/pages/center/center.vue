@@ -204,14 +204,14 @@
 				},
 				service () {
 					wx.showModal({
-					  title: '欢迎添加“Pick趣名片”公众号',
-					  content: '了解更多，有疑问请添加客服微信： Pick官方客服',
+					  title: '趣名片PickMe',
+					  content: '了解更多，有疑问请添加客服微信：zike03',
 					  confirmText: '复制微信',
 					  confirmColor: '#00D093',
 					  success: function(res) {
 					    if (res.confirm) {
 					      wx.setClipboardData({
-								  data: 'Pick官方客服',
+								  data: 'zike03',
 
 								  success: function(res) {
 								    wx.getClipboardData({

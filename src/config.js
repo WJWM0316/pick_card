@@ -6,7 +6,7 @@
 var baseHost = 'https://applet-test.card.ziwork.com'
 
 // 正式服接口 -- 当前使用
-//var baseHost = 'https://wxapp.card.zike.com'
+// var baseHost = 'https://wxapp.card.zike.com'
 
 
 

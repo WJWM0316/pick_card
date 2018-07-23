@@ -1,11 +1,12 @@
 
 <template>
-  <view class="container">
-    <view class="bg">
+  <view class="container" :class="{'bg1' : !test}">
+    <view :class="{'bg' : !test}">
     <view class="state_1" v-if="test">
       <image  class="one_bg" src="/static/images/share_match_pic_share@3x.png"></image>
       <view class="cont_tit">哇，一张名片就勾搭到一位大咖！ 你也来试</view>
-      <view class="cont_txt">Pick！趣名片，职场新人脉勾搭平台 有趣社交，从这里开始</view>
+      <view class="cont_txt" style="text-align: center">趣名片PickMe，职场新人脉勾搭平台</view>
+      <view class="cont_txt" style="text-align: center">有趣社交，从这里开始</view>
     </view>
     <view class="state_2" v-else>
       <view class="head_msg">
@@ -36,10 +37,13 @@
   </view>
 </template>
 <style lang="less" type="text/less" scoped>
+  @import url('~@/assets/css/mixins.less');
   .container {
     height: 100vh;
-    background: rgba(250,251,252,1) url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/share_bg1%402x.png') no-repeat top left;
-    background-size: 100% auto;
+    .bg1 {
+      background: rgba(250,251,252,1) url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/share_bg1%402x.png') no-repeat top left;
+      background-size: 100% auto;
+    }
     .bg {
       background: url('https://card-uploads-test.oss-cn-shenzhen.aliyuncs.com/Uploads/static/share_bg2%402x.png') no-repeat 0 474rpx;
       background-size: 100% auto;
@@ -49,12 +53,14 @@
     margin: 0 70rpx;
     padding-top: 70rpx;
     .head_msg {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
+      overflow: hidden;
       .msg_left {
-        flex: 1;
-        margin-right: 36rpx;
+        width: 394rpx;
+        float: left;
+        height: 190rpx;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
         .cont_txt {
           height:28rpx;
           font-size:28rpx;
@@ -62,10 +68,12 @@
           color:rgba(53,57,67,1);
           line-height:28rpx;
           margin-bottom: 10rpx;
+          .setEllipsis();
         }
         .cont_tit {
+          width: 100%;
           font-size:56rpx;
-          font-family:PingFangHK-Light;
+          font-weight: bold;
           color:rgba(53,57,67,1);
           line-height:56rpx;
           margin-bottom: 20rpx;
@@ -74,6 +82,7 @@
       .msg_right {
         width:190rpx;
         height:190rpx;
+        float: right;
         border-radius:100rpx;
         border:4rpx solid rgba(0,208,147,1);
         display: block;
@@ -86,8 +95,6 @@
     }
     .peaple {
       height:100rpx;
-      
-
       font-size:38rpx;
       font-family:PingFangHK-Regular;
       color:rgba(53,57,67,1);
@@ -140,6 +147,7 @@
       font-family:SFUIDisplay-Heavy;
       color:rgba(53,57,67,0.81);
       text-align: center;
+      .setEllipsis();
     }
   }
   .footer {

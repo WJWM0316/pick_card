@@ -99,6 +99,7 @@
 	          console.log(11111, _this.files)
 	          _this.loading = true
 	          _this.count += res.tempFiles.length
+	          res.tempFiles.type = 'img'
 	          uploadImages(res.tempFiles, {
 			        onItemSuccess: (resp, file, index) => {
 			        	_this.filesId.push(resp)

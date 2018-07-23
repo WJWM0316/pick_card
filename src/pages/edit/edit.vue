@@ -246,7 +246,8 @@
 				if (info.path) {
 					data1 = {
 						path: info.path,
-						size: info.size
+						size: info.size,
+						type: 'avatar'
 					}
 					wx.showLoading({
 						title: '加载中...',

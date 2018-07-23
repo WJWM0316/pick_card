@@ -5,7 +5,7 @@
      <image class="hint_img" src="/static/images/new_pic_alert@3x.png"></image>
       <view class="hint_txt">系统检测到你在自客或小灯塔旗下相关产品有对应账号，已自动加载相关信息</view>
     </view>
-    <view class="op_one " v-if="nowNum === 0">
+    <view class="op_one" v-if="nowNum === 0">
       <view class="one_txt">
         <view class="tit1">创建名片，开启有趣的职场社交</view>
         <view class="tit2">真实可靠的职场形象总能碰到机遇</view>
@@ -108,10 +108,9 @@
     
     <view class="footer" :class="{'type2':nowNum>0}">
       <block v-if="nowNum === 0">
-        <button class="next toNext" @click.stop="toNext(nowNum)" v-if="firstData.gender!==0&&firstData.nickname.length>1&&firstData.nickname.length<11">
+        <button class="next toNext" @click.stop="toNext(nowNum)">
         下一步
         </button>
-        <button class="next" v-else >下一步</button>
       </block>
 
       <block v-if="nowNum === 1">
@@ -272,6 +271,7 @@
             that.bindPhone.isPh = false
             getUserInfoApi().then(res0 => {     
               that.$store.dispatch('userInfo', res0.data)
+              wx.removeStorageSync('cutImgInfo')
               console.log('已更新个人信息', that.$store.getters.userInfo)
               setTimeout(function () {
                 that.nowNum = 0
@@ -392,7 +392,8 @@
           const info = wx.getStorageSync('cutImgInfo')
           const parmas = {
             path: info.path,
-            size: info.size
+            size: info.size,
+            type: 'avatar'
           }
           wx.showLoading({
             title: '正在提交',
@@ -408,7 +409,6 @@
             data = that.firstData
             data.nickname = data.nickname.trim()
             wx.hideLoading()
-            wx.removeStorageSync('cutImgInfo')
             firstSignApi(data).then((res)=>{
               if(res.http_status == 200){
                 that.nowNum = 1;
