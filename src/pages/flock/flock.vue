@@ -70,7 +70,7 @@
               </view>
             </block>
         </block>
-        
+        <view class="hint2" ></view>
         <view class="hintJoin" v-if="!isJoin">—— 加入后即可查看所有群成员的名片 ——</view>
         <view class="hintJoin" v-if="!getNext">加载中</view>
       </scroll-view>
@@ -127,7 +127,7 @@ export default {
 
       getListData: {
         page: 1,
-        count: 6,
+        count: 20,
         id:''
       },
       getNext: true,
@@ -219,7 +219,11 @@ export default {
     }
 
     if (this.isFlockId){
-       this.updateData('first')
+        this.getListData.page=1;
+        this.getListData.count=20;
+        this.getNext= true;
+        this.isNext=true;
+        this.updateData('first')
     }
   },
 
@@ -353,7 +357,7 @@ export default {
               if(res.http_status == 200){
                 that.$mptoast('成功退出')
                 that.isJoin = false
-                that.updateData()
+                that.updateData('first')
               }else {
                 that.$mptoast(res.msg)
               }
@@ -538,10 +542,13 @@ export default {
           background:rgba(255,255,255,1);
           box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
           border-radius:18rpx;
-          padding: 50rpx 30rpx 50rpx 120rpx;
+          padding: 0rpx 30rpx 0rpx 120rpx;
           box-sizing: border-box;
           text-align: left;
           position: relative;
+          display:flex;
+          flex-direction: column;
+          justify-content: center;
           &.cur {
             &:after {
               content: '';
@@ -558,7 +565,7 @@ export default {
             font-size:34rpx;
             font-family:PingFangSC-Medium;
             color:rgba(70,71,72,1);
-            line-height:34rpx;
+            line-height:38rpx;
             width: 180rpx;
             margin-right: 20rpx;
             height: 38rpx;
@@ -567,14 +574,16 @@ export default {
             font-size:28rpx;
             font-family:PingFangSC-Light;
             color:rgba(154,161,171,1);
-            line-height:28rpx;
-            margin: 26rpx 0 10rpx 0;
+            line-height:40rpx;
+            height:40rpx;
+            margin: 18rpx 0 0rpx 0;
           }
           .msg_company {
             font-size:28rpx;
             font-family:PingFangSC-Light;
             color:rgba(154,161,171,1);
-            line-height:28rpx;
+            height:40rpx;
+            line-height:40rpx;
           }
           .flock_style {
             width:170rpx;
@@ -598,21 +607,26 @@ export default {
           }
         }
       }
-      .hintJoin {
-        height:37rpx;
-        font-size:26rpx;
-        font-family:PingFangSC-Regular;
-        color:rgba(195,201,212,1);
-        line-height:37rpx;
-        text-align: center;
-        margin-top: 70rpx;
-      }
+      
+
     }
     .peoList {
-      //padding-bottom: 60rpx;
       overflow-y:scroll;
       -webkit-overflow-scrolling: touch;
       box-sizing: border-box;
+    }
+    .hint2 {
+      height:60rpx;
+      width: 100%;
+    }
+    .hintJoin {
+      height:37rpx;
+      font-size:26rpx;
+      font-family:PingFangSC-Regular;
+      color:rgba(195,201,212,1);
+      line-height:37rpx;
+      text-align: center;
+      margin-top: 70rpx;
     }
   }
   .footer {
