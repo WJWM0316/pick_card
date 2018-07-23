@@ -5,7 +5,7 @@
 			<image class="head" src="/static/images/sou.png"></image>
 			<view class="title">欢迎来到趣名片PickMe<br>使用名片功能需要获取你的授权</view>
 			<view class="msg">趣名片PickMe向你保证不会将你的信息泄露给第三方，仅用于读取名片夹的信息和名片信息的展示。</view>
-			<button class="btn" @getuserinfo="onGetUserinfo" open-type="getUserInfo" type="primary">授权</button>
+			<button class="btn" @getuserinfo="onGetUserinfo" open-type="getUserInfo" type="primary" lang="zh_CN">授权</button>
 		</view>
 	</view>
 </template>

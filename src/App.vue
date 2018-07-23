@@ -145,7 +145,7 @@ export default {
 
   // 只有 app 才会有 onLaunch 的生命周期
   onLaunch (res) {
-    // this.checkLogin()
+    //this.checkLogin()
     let that = this
     /*wx.getSystemInfo({
       success: function(res) {

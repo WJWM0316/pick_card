@@ -114,16 +114,16 @@
 			      }).catch((e, index) => {
 			      	_this.loading = false
 			      	console.log(e, '上传异常')
-			      	_this.files.forEach((item,index) => {
-			      		if (item.fileId === e.file_id) {
-			      			_this.files.splice(index, 1)
-			      		}
-			      	})
-			      	_this.filesId.forEach((item,index) => {
-			      		if (item === e.file_id) {
-			      			_this.filesId.splice(index, 1)
-			      		}
-			      	})
+			      	// _this.files.forEach((item,index) => {
+			      	// 	if (item.fileId === e.file_id) {
+			      	// 		_this.files.splice(index, 1)
+			      	// 	}
+			      	// })
+			      	// _this.filesId.forEach((item,index) => {
+			      	// 	if (item === e.file_id) {
+			      	// 		_this.filesId.splice(index, 1)
+			      	// 	}
+			      	// })
 			        if (e.statusCode === 405) {
 			      		wx.showToast({
 								  title: e.message,
