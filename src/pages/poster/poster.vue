@@ -3,6 +3,7 @@
 		<image class="showImg" :src="showImg" v-if="showImg"></image>
 		<canvas canvas-id="endCanvas" id="endCanvas" v-if="!twoStep">
 		</canvas>
+
 		<view class="wrap" v-if="oneStep">
 			<canvas canvas-id="shareCanvas" id="myCanvas" v-if="oneStep" width="320" height="580">
 			</canvas>
@@ -25,7 +26,7 @@
 				height: 0,
 				pixelRatio: 0,
 				oneStep: true,
-				twoStep: false,
+				twoStep: true,
 				info: {
 					nickname: '',
 					job: '',
@@ -37,6 +38,8 @@
 		},
 		onShow (option) {
 			this.imgUrl = ''
+			this.oneStep = true
+			this.twoStep = true
 			let that = this
 			wx.getSetting({
         success(res) {
@@ -49,7 +52,6 @@
 			if (that.openSet) { return }
 			let userInfo = this.$store.getters.userInfo
 			this.info.nickname = userInfo.nickname
-			console.log(userInfo, 1111111)
 			this.info.job = userInfo.occupation + ' | ' + userInfo.company
 			this.info.sign = userInfo.sign
 			this.info.label = userInfo.other_info.label_info
@@ -59,6 +61,7 @@
         title: '正在生成图片',
         mask: true
       })
+
 			wx.getSystemInfo({
 				success: function(res) {
 					console.log(res, '设备信息')
@@ -67,11 +70,13 @@
 			    that.pixelRatio = res.pixelRatio
 				}
 			})
+
 			let data = {
 				page: 'pages/detail/main',
 				length: 150,
 				scene: `vkey=${userInfo.vkey}`,
 			}
+
       getShareCode(data).then(res => {
       	wx.downloadFile({
 				  url: res.data,
@@ -80,7 +85,6 @@
 				  }
 				})
       })
-
 		},
 		methods: {
 			create (path, that) {
@@ -100,6 +104,7 @@
 							ctx.fillRect(0, 0, 320, 580)
 
 							that.imgUrl = res.tempFilePath
+
 							// 画头像
 					    ctx.drawImage(that.imgUrl, 0, 0, 320, 320)
 
@@ -142,7 +147,6 @@
 					    that.info.label.forEach((item, index) => {
 					    	addLabel(item.name, index)
 					    })
-
 
 					    // 画标签
 					    let last = false
@@ -195,7 +199,6 @@
 								}
 					    }			    
 
-
 					    // 画虚线
 					    ctx.setStrokeStyle('#DCE3EE')
 					    ctx.setLineDash([4, 6], 0)
@@ -204,7 +207,6 @@
 							ctx.moveTo(17, staticY)
 							ctx.lineTo(303, staticY)
 							ctx.stroke()
-
 
 					    // 画二维码
 					    staticY = staticY + 10
@@ -223,8 +225,8 @@
 								  y: 0,
 								  width: 320,
 								  height: staticY + 60,
-								  destWidth: 320*2,
-								  destHeight: (staticY + 60) * 2,
+								  destWidth: 320*6,
+								  destHeight: (staticY + 60) * 6,
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
 								  	// console.log('导出图片成功')
@@ -245,9 +247,16 @@
 										wx.getImageInfo({
 											src: res.tempFilePath,
 											success: function(e) {
+												// let dpr = that.pixelRatio/2 - 0.4
+												// if (dpr > 1) {
+												// 	dpr = that.pixelRatio/2 - 0.4
+												// } else {
+												// 	dpr = 1
+												// }
+												// console.log(dpr, 22222222222222)
 												let new_pos = {
-													x: (that.width - e.width/2) / 2,
-													y: (that.height - e.height/2) / 2,
+													x: (that.width - e.width/6) / 2,
+													y: (that.height - e.height/6) / 2,
 												}
 												function roundRect (x, y, w, h, r) {
 													new_ctx.beginPath();
@@ -271,32 +280,32 @@
 													new_ctx.drawImage(res.tempFilePath, x, y, w, h)
 													new_ctx.clip()
 												}
-												console.log(e, new_pos.x, new_pos.y, e.width/2, e.height/2, 1111111111111111111111)
-												roundRect (new_pos.x, new_pos.y, e.width/2, e.height/2, 9)
+												console.log(e, new_pos.x, new_pos.y, e.width/6, e.height/6, 1111111111111111111111)
+												roundRect (new_pos.x, new_pos.y, e.width/6, e.height/6, 9)
 
 												// 清除圆镂空部分
-												function clearArc(x,y,radius){ //圆心(x,y)，半径radius
-													var calcWidth = radius - stepClear;
-													var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
+												// function clearArc(x,y,radius){ //圆心(x,y)，半径radius
+												// 	var calcWidth = radius - stepClear;
+												// 	var calcHeight = Math.sqrt(radius * radius - calcWidth * calcWidth)
 													
-													var posX = x - calcWidth
-													var posY = y - calcHeight
+												// 	var posX = x - calcWidth
+												// 	var posY = y - calcHeight
 													
-													var widthX = 2 * calcWidth
-													var heightY = 2 * calcHeight
+												// 	var widthX = 2 * calcWidth
+												// 	var heightY = 2 * calcHeight
 													
-													if(stepClear <= radius){
-														new_ctx.clearRect(posX, posY, widthX, heightY)
-														stepClear += 1
-														clearArc(x, y, radius)
-													}
-												}
-												let stepClear = 1;//别忘记这一步
-												ctx.beginPath();
-												clearArc(0, staticY - 70, 10)
-												ctx.save() 
-												stepClear = 1
-												clearArc(320, staticY - 70, 10)
+												// 	if(stepClear <= radius){
+												// 		new_ctx.clearRect(posX, posY, widthX, heightY)
+												// 		stepClear += 1
+												// 		clearArc(x, y, radius)
+												// 	}
+												// }
+												// let stepClear = 1;//别忘记这一步
+												// ctx.beginPath();
+												// clearArc(0, staticY - 70, 10)
+												// ctx.save() 
+												// stepClear = 1
+												// clearArc(320, staticY - 70, 10)
 
 												new_ctx.draw(true, () => {
 										    	wx.hideLoading()
@@ -305,8 +314,8 @@
 													  y: 0,
 													  width: that.width,
 													  height: that.height,
-													  destWidth: that.width*2,
-													  destHeight: that.height*2,
+													  destWidth: that.width*6,
+													  destHeight: that.height*6,
 													  canvasId: 'endCanvas',
 													  success: function(res) {
 													  	console.log(res, 111111111111111)
@@ -378,18 +387,16 @@
 		  let that = this
 		  let title = shareInfo.index.content
 		  let imageUrl = shareInfo.index.path
-
 		  return {
 		    title: title,
 		    path: path,
 		    imageUrl: imageUrl,
 		  }
-		},
-
+		}
 	}
 </script>
 <style lang="less" type="text/less" scoped>
-	.poster {
+.poster {
 		width: 100%;
 		height: 100%;
 		background: #FAFBFC;

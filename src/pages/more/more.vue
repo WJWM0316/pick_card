@@ -96,27 +96,53 @@
 	          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
 	          const curIndex = _this.files.length
 	          _this.files = _this.files.concat(res.tempFiles || [])
+	          console.log(11111, _this.files)
 	          _this.loading = true
 	          _this.count += res.tempFiles.length
-	          console.log(_this.count, res.tempFiles, 111111111)
 	          uploadImages(res.tempFiles, {
 			        onItemSuccess: (resp, file, index) => {
+			        	_this.filesId.push(resp)
+			        	console.log('上传成功的图片', resp, _this.filesId)
 			        },
 			        onItemProgress: (resp, file, index) => {
 			        	_this.$set(_this.files[curIndex+index], 'progress', (100 - resp.progress) + '%')
 			        }
 			      }).then(res => {
-			      	_this.filesId = _this.filesId.concat(res || [])
-			      	 _this.loading = false
-			      	 console.log(_this.loading, 11111)
-			         console.log('全部上传成功',_this.filesId, res)
+			      	_this.loading = false
+			         console.log('全部上传成功', _this.filesId, res)
 			      }).catch((e, index) => {
-			      	wx.showToast({
-						  title: '图片上传失败，请重新上传',
-						  icon: 'none',
-						  duration: 1000
-						})
-			        console.log(`第${index}张上传失败`, e)
+			      	_this.loading = false
+			      	console.log(e, '上传异常')
+			      	_this.files.forEach((item,index) => {
+			      		if (item.fileId === e.file_id) {
+			      			_this.files.splice(index, 1)
+			      		}
+			      	})
+			      	_this.filesId.forEach((item,index) => {
+			      		if (item === e.file_id) {
+			      			_this.filesId.splice(index, 1)
+			      		}
+			      	})
+			        if (e.statusCode === 405) {
+			      		wx.showToast({
+								  title: e.message,
+								  icon: 'none',
+								  duration: 2000
+								})
+			      	} else if (e.statusCode === 400) {
+			      		wx.showToast({
+								  title: e.message,
+								  icon: 'none',
+								  duration: 2000
+								})
+			      	} else {
+			      		wx.showToast({
+								  title: '图片上传失败，请重新上传',
+								  icon: 'none',
+								  duration: 1000
+								})
+				        console.log(`第${index}张上传失败`, e)
+			      	}
 			      })
 	        },
 	        fail: function () {
@@ -169,7 +195,6 @@
 	    remove (item, index) {
 	    	let that = this
 	    	wx.showModal({
-
 				  content: '是否确定删除图片',
 				  confirmColor: '#00D093',
 				  success: function(res) {

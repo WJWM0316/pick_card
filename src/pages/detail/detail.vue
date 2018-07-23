@@ -126,7 +126,7 @@
 					<text class="msg">更多介绍</text>
 					<image class="share more" v-if="isSelf" @tap="toEdit('more')" src="/static/images/deta_btn_edit@3x.png"></image>
 				</view>
-				<view class="article" v-if="moreInfo.content" :class="{'noWord' : moreInfo.content === ''}">{{moreInfo.content === '' && moreInfo.img_info.length === 0 ? '留下些文字或作品吧，让别人更加了解你～' : moreInfo.content}}</view>
+				<view class="article" v-if="moreInfo.content || (moreInfo.content === '' && moreInfo.img_info.length === 0)" :class="{'noWord' : moreInfo.content === ''}">{{moreInfo.content === '' && moreInfo.img_info.length === 0 ? '留下些文字或作品吧，让别人更加了解你～' : moreInfo.content}}</view>
 				<view class="imgBox" v-if="moreInfo.img_info && moreInfo.img_info.length > 0">
 					<image  v-for="(i, index) in moreInfo.img_info" mode="aspectFill" :key="index" class="img" :src="i.smallImgUrl" @tap.stop="previewImg(index)"></image>
 				</view>
