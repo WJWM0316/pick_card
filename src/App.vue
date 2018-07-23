@@ -169,9 +169,9 @@ export default {
     }
 
 
-    if (!wx.getStorageSync('token') && (option.path !== 'pages/index/main' || option.path !== 'pages/detail/main' || option.path !== 'pages/flock/main')) {
-      this.checkLogin()
-    }
+    // if (!wx.getStorageSync('token') && (option.path !== 'pages/index/main' || option.path !== 'pages/detail/main' || option.path !== 'pages/flock/main')) {
+    //   this.checkLogin()
+    // }
   },
    // 捕获 app error
   onError (err) {
