@@ -215,7 +215,7 @@
         shareData: {},
 
         getListData: {
-          count: 3,
+          count: 2,
           id:''
         },
         getNext: true,
@@ -285,7 +285,7 @@
       getList(isFirst){
         let that = this;
         console.log(isFirst)
-        getLikeList().then((res)=>{
+        getLikeList(that.getListData).then((res)=>{
           console.log('=====',res)
           if(isFirst == 'first'){
             that.listData = res.data
@@ -371,9 +371,16 @@
     },
 
     onShow(){
-      this.isShow = false
       let that = this;
-      that.getList()
+      that.isShow = false
+
+      that.getListData = {
+        count: 2,
+        id:''
+      },
+      that.getNext =true,
+      that.isNext =true,
+      that.getList('first')
     },
 
     created () {

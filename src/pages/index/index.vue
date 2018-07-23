@@ -584,12 +584,17 @@ export default {
             console.log('没有数据了。冷却===》',that.isEnd)
 
           }else {
-            console.log(res.data[0].id,this.usersList[this.nowIndex].id)
+            
             that.isEnd = false;
             if(res.data[0].id == this.usersList[this.nowIndex].id){
               res.data.splice(0,1);
             }
+
+
             that.usersList = [...this.usersList,...res.data];
+
+            console.log(res.data[0].id)
+            console.log(this.usersList[this.nowIndex].id)
           }
           that.isCooling = false;
           //this.nowIndex = 0;

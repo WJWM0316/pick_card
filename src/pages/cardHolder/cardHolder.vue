@@ -20,7 +20,7 @@
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
           
           <block v-if="nowIndex == 0">
-            <scroll-view @scrolltolower="loadNext" scroll-y=true class="friendList" v-if="friendList.length>0" :style="{ height: spHeight+'rpx' }">
+            <scroll-view @scrolltolower="loadNext" @scrolltoupper="refresh" scroll-y=true class="friendList" v-if="friendList.length>0" :style="{ height: spHeight+'rpx' }">
                   <view class="ops">
                     <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
                       <image src="/static/images/cardcase_banner_left@3x.png"></image>
@@ -45,17 +45,22 @@
               <view class="to_share" :class="{ten: adaptive == 'ten'}">
                 <button open-type="share" data-type="myDetail">分享我的名片</button>，获取更多职场人脉
               </view>
+
+              <view class="hint2" v-if="friendList.length>0"></view>
+
             </scroll-view>
             <block  v-else>
-              <scroll-view  scroll-y=true class="none_blo">
+              <view  scroll-y=true class="none_blo">
                 <view class="none_txt">让名片替你说话，不动声色展现实力</view>
                 <button class="none_btn" data-type="myDetail" open-type="share">去分享 </button>
-              </scroll-view>
+
+
+              </view>
             </block>
           </block>
 
           <block v-else>
-            <scroll-view class="flockList" @scrolltolower="loadNext" scroll-y=true v-if="florkList && florkList.list&& florkList.list.length>0" :style="{ height: spHeight+'rpx' }">
+            <scroll-view class="flockList" @scrolltolower="loadNext" @scrolltoupper="refresh" scroll-y=true v-if="florkList && florkList.list&& florkList.list.length>0" :style="{ height: spHeight+'rpx' }">
               <view class="ops">
                 <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
                   <image src="/static/images/cardcase_banner_left@3x.png"></image>
@@ -78,6 +83,8 @@
                 </view>
                 </button>
               </form>
+              <view class="hint2" v-if="florkList.list.length>0" ></view>
+
             </scroll-view>
             <block  v-else>
               <view class="none_blo">
@@ -92,8 +99,8 @@
     <view class="hintPop" v-if="isShow">
       <!-- 分享弹窗 -->
       <view class="hint_cont" > 
-        <view class="cont_tit" >小阔爱，sorry啦~</view>
-        <view class="cont_txt">因为微信平台有限制。你分享之后，需要到对应的微信群聊里边，点击你分享的小程序卡片才能成功创建群名片喔~</view>
+        <view class="cont_tit" >小阔爱，还差一步就可以啦~~</view>
+        <view class="cont_txt">因微信平台对群分享限制，分享到群后，到对应微信群点开你分享的小程序卡片，就可以成功创建群名片哦~</view>
         <view class="cont_line"></view>
 
         <view class="cont_tit2">步骤详解：</view>
@@ -279,8 +286,6 @@ export default {
 
   methods: {
     loadNext(){
-
-      console.log(111)
       let that = this
       let flockNext = this.flockNext
       let friendNext = this.friendNext
@@ -300,6 +305,33 @@ export default {
         }
       }
     },
+
+    /*refresh (){
+      console.log(111111)
+      let that = this
+      let flockNext = this.flockNext
+      let friendNext = this.friendNext
+
+      if(that.nowIndex==0){
+          this.getFrd.id = ''
+          this.friendNext = {
+            getNext: true,
+            isNext: true,
+          }
+          that.getFriend('first')
+          return
+
+      }else {
+          this.getFlk.page = 1
+          this.flockNext = {
+            getNext: true,
+            isNext: true,
+          }
+          that.getFlock('first')
+          return
+      }
+    },*/
+
     getFriend(isFirst){
       let that = this
       getFriends(that.getFrd).then((res)=>{
@@ -615,6 +647,10 @@ export default {
       text-align: center;
       //overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
+      .hint2 {
+        height:60rpx;
+        width: 100%;
+      }
     }
     .friendList,.flockList {
       
@@ -689,7 +725,7 @@ export default {
             font-family: PingFangSC-Light;
             color: rgba(154,161,171,1);
             line-height: 28rpx;
-            margin: 18rpx 0 0rpx 0;
+            margin: 0rpx 0 0rpx 0;
           }
           .blo_img {
             top: 28rpx;
@@ -752,7 +788,7 @@ export default {
     text-align: center;
     color: #9AA1AB;
     &.ten {
-      margin-bottom: 158rpx;
+      //margin-bottom: 158rpx;
     }
     button {
       color: #00D093;
