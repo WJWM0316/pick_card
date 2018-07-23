@@ -42,23 +42,21 @@
                         </view>
                       </button>
                   </form>
+
               <view class="to_share" :class="{ten: adaptive == 'ten'}">
                 <button open-type="share" data-type="myDetail">分享我的名片</button>，获取更多职场人脉
               </view>
-
               <view class="hint2" v-if="friendList.length>0"></view>
+
 
             </scroll-view>
             <block  v-else>
               <view  scroll-y=true class="none_blo">
                 <view class="none_txt">让名片替你说话，不动声色展现实力</view>
                 <button class="none_btn" data-type="myDetail" open-type="share">去分享 </button>
-
-
               </view>
             </block>
           </block>
-
           <block v-else>
             <scroll-view class="flockList" @scrolltolower="loadNext" @scrolltoupper="refresh" scroll-y=true v-if="florkList && florkList.list&& florkList.list.length>0" :style="{ height: spHeight+'rpx' }">
               <view class="ops">
@@ -84,7 +82,6 @@
                 </button>
               </form>
               <view class="hint2" v-if="florkList.list.length>0" ></view>
-
             </scroll-view>
             <block  v-else>
               <view class="none_blo">
@@ -155,11 +152,11 @@ export default {
 
       getFrd: {
         id: '',
-        count: 3
+        count: 20
       },
       getFlk: {
         page: 1,
-        count: 3
+        count: 20
       },
       flockNext: {
         getNext: true,
@@ -371,11 +368,11 @@ export default {
       let that = this;
       this.getFrd = {
         id: '',
-        count: 3
+        count: 20
       }
       this.getFlk = {
         page: 1,
-        count: 3
+        count: 20
       }
       this.flockNext = {
         getNext: true,
@@ -784,11 +781,10 @@ export default {
     justify-content: center;
     align-items: center;
     margin-top: 78rpx;
-    margin-bottom: 78rpx;
+    margin-bottom: 68rpx;
     text-align: center;
     color: #9AA1AB;
     &.ten {
-      //margin-bottom: 158rpx;
     }
     button {
       color: #00D093;
