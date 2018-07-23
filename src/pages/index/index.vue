@@ -40,7 +40,7 @@
               <view class="text">
                 <view class="name ellipsis">{{item.nickname}}</view>
                 <view class="title ellipsis">{{item.occupation}} | {{item.company}}</view>
-                <image class="detail" src="/static/images/hone_btn_more_nor@3x.png" v-if="item.other_info.more_info.img_info.length>1||item.other_info.more_info.content.length>1"></image>
+                <image class="detail" src="/static/images/hone_btn_more_nor@3x.png" v-if="item.other_info&&item.other_info.more_info&&(item.other_info.more_info.img_info.length>1||item.other_info.more_info.content.length>1)"></image>
               </view>
             </button>
             </form>

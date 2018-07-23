@@ -61,10 +61,10 @@
                     <view class="msg_name ellipsis">{{item.nickname}}</view>
                     <view class="msg_tit ellipsis">{{item.occupation}}</view>
                     <view class="msg_company ellipsis">{{item.company}}</view>
-                    <form report-submit="true" class="from-box" @submit="fromClick" v-if="item.id!=userInfo.id && item.handle_status == 1">
+                    <form report-submit="true" class="from-box" @submit="fromClick" v-if="item.id!=userInfo.id && (item.handle_status == 1||item.handle_status == 3)">
                         <button formType="submit" class="flock_style" @tap.stop="swopSlock(item.id,index)">交换名片</button>
                     </form>
-                    <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 ||item.handle_status == 3)">已申请</view>
+                    <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && (item.handle_status == 2 )">已申请</view>
                     <view class="flock_style type_2" v-else-if="item.id!=userInfo.id && item.handle_status == 4">已交换</view>
                   </view>
               </view>

@@ -215,7 +215,7 @@
         shareData: {},
 
         getListData: {
-          count: 6,
+          count: 3,
           id:''
         },
         getNext: true,
@@ -233,7 +233,7 @@
       that.getList('first')
       setTimeout(function(){
           wx.stopPullDownRefresh()
-      },2000)
+      },1500)
     },
 
     onReachBottom(res){
