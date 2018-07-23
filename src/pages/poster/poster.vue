@@ -440,7 +440,7 @@
 			width: 100%;
 			padding: 0 40rpx;
 			color: #7a7d83;
-			font-size: 24rpx;
+			font-size: 28rpx;
 			box-sizing:border-box;
 			background:rgba(255,252,240,1);
 			height: 80rpx;

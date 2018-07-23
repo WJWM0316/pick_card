@@ -186,7 +186,7 @@
             console.log(item.oneLevel)
             if (item.oneLevel === 3) {
 
-              that.jobAry.push(0)
+              that.jobAry.push(item.id)
               that.jobData.forEach((e,index) => {
                 if (item.id == e.id) {
                   that.jobData[index].isCur = true
@@ -199,7 +199,7 @@
 
             } else if (item.oneLevel === 1) {
 
-              that.liveAry.push(0)
+              that.liveAry.push(item.id)
               that.liveData.forEach((e,index) => {
                 if (item.id == e.id) {
                   that.liveData[index].isCur = true
