@@ -419,7 +419,6 @@ export default {
       let that = this
       getUserGroupInfo(that.getListData).then((res)=>{
         console.log('更新',isFirst,res)
-
         if(isFirst=='first'){
           that.flockInfo = res.data
         }else {
@@ -443,10 +442,8 @@ export default {
       })
     },
   },
-
 }
 </script>
-
 <style lang="less" type="text/less" scoped>
 @import url("~@/styles/animate.less");
   .container {
@@ -476,7 +473,6 @@ export default {
           margin: 32rpx 0 16rpx 0;
         }
       }
-
       .right {
         width:174rpx;
         height:72rpx;
