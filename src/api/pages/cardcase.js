@@ -38,7 +38,7 @@ export const getUserGroupList = (data) => {
 export const getUserGroupInfo = (data) => {
   return request({
   	method: 'get',
-    url: `/group/${data}`,
+    url: `/group/${data.id}?page=${data.page}&count=${data.count}`,
   })
 }
 

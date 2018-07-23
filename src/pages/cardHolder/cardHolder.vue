@@ -18,18 +18,18 @@
     <view class="content">
       
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
-          <view class="ops">
-            <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
-              <image src="/static/images/cardcase_banner_left@3x.png"></image>
-              分享我的名片
-            </button>
-            <button class="ops_blo createFlock" open-type="share" data-type="flock" >
-              <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
-            </button>
-          </view>
+          
           <block v-if="nowIndex == 0">
-            <view class="friendList" v-if="friendList.length>0">
-                
+            <scroll-view @scrolltolower="loadNext" scroll-y=true class="friendList" v-if="friendList.length>0" :style="{ height: spHeight+'rpx' }">
+                  <view class="ops">
+                    <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
+                      <image src="/static/images/cardcase_banner_left@3x.png"></image>
+                      分享我的名片
+                    </button>
+                    <button class="ops_blo createFlock" open-type="share" data-type="flock" >
+                      <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
+                    </button>
+                  </view>
                   <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in friendList" :key="key">
                       <button formType="submit" @tap="toDetail(item)">
                         <view class="blo_msg listone" :class="{'one': item.has_red_dot == 1}" >
@@ -45,19 +45,28 @@
               <view class="to_share" :class="{ten: adaptive == 'ten'}">
                 <button open-type="share" data-type="myDetail">分享我的名片</button>，获取更多职场人脉
               </view>
-            </view>
+            </scroll-view>
             <block  v-else>
-              <view class="none_blo">
+              <scroll-view  scroll-y=true class="none_blo">
                 <view class="none_txt">让名片替你说话，不动声色展现实力</view>
                 <button class="none_btn" data-type="myDetail" open-type="share">去分享 </button>
-              </view>
+              </scroll-view>
             </block>
           </block>
 
           <block v-else>
-            <view class="flockList" v-if="florkList && florkList.list&& florkList.list.length>0">
-              <form report-submit="true" class="" @submit="fromClick">
-                <button formType="submit" class="card_block"  v-for="(item, index) in florkList.list" :key="key" @tap="toFlock(item,index)">
+            <scroll-view class="flockList" @scrolltolower="loadNext" scroll-y=true v-if="florkList && florkList.list&& florkList.list.length>0" :style="{ height: spHeight+'rpx' }">
+              <view class="ops">
+                <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
+                  <image src="/static/images/cardcase_banner_left@3x.png"></image>
+                  分享我的名片
+                </button>
+                <button class="ops_blo createFlock" open-type="share" data-type="flock" >
+                  <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
+                </button>
+              </view>
+              <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in florkList.list" :key="key">
+                <button formType="submit" class=""   @tap="toFlock(item,index)">
 
                 <view class="blo_msg flock_blo" >
                   <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
@@ -69,7 +78,7 @@
                 </view>
                 </button>
               </form>
-            </view>
+            </scroll-view>
             <block  v-else>
               <view class="none_blo">
                 <view class="none_txt">创建群名片，把微信群友变成你的职场人脉</view>
@@ -136,6 +145,24 @@ export default {
       isShow: false,   //创建群提示
       onShowSock: true,
       isCheck: false,
+
+      getFrd: {
+        id: '',
+        count: 5
+      },
+      getFlk: {
+        page: 1,
+        count: 3
+      },
+      flockNext: {
+        getNext: true,
+        isNext: true,
+      },
+
+      friendNext: {
+        getNext: true,
+        isNext: true,
+      },
     }
   },
   onLoad() {
@@ -251,6 +278,91 @@ export default {
   },
 
   methods: {
+    loadNext(){
+
+      console.log(111)
+      let that = this
+      let flockNext = this.flockNext
+      let friendNext = this.friendNext
+
+      if(that.nowIndex==0){
+        if(friendNext.getNext && friendNext.isNext ){
+          this.getFrd.id = this.friendList[this.friendList.length-1].id
+          that.getFriend()
+          return
+        }
+
+      }else {
+        if(flockNext.getNext && flockNext.isNext ){
+          this.getFlk.page++
+          that.getFlock()
+          return
+        }
+      }
+    },
+    getFriend(isFirst){
+      let that = this
+      getFriends(that.getFrd).then((res)=>{
+        console.log('更新',res)
+        if(isFirst=='first'){
+          that.friendList = res.data
+        }else {
+          that.friendList =[...that.friendList,...res.data]
+        }
+        that.friendNext.getNext = true
+        if(res.data.length<that.getFrd.count){
+          that.friendNext.isNext = false
+        }
+      })
+    },
+
+    getFlock(isFirst){
+      let that = this
+      getUserGroupList(that.getFlk).then((res)=>{
+        console.log('更新',res)
+
+        if(isFirst=='first'){
+          if(res.http_status==200){
+            deleteRedFriends()
+          }
+          that.florkList = res.data
+        }else {
+          that.florkList.list =[...that.florkList.list,...res.data.list]
+        }
+        that.flockNext.getNext = true
+        if(res.data.list.length<that.getFlk.count){
+          that.flockNext.isNext = false
+        }
+      })
+    },
+    getList(num){
+      let that = this;
+      this.getFrd = {
+        id: '',
+        count: 6
+      }
+      this.getFlk = {
+        page: 1,
+        count: 3
+      }
+      this.flockNext = {
+        getNext: true,
+        isNext: true,
+      }
+
+      this.friendNext = {
+        getNext: true,
+        isNext: true,
+      }
+      that.getFlock('first')
+      that.getFriend('first')
+
+      redDot().then(res=>{
+        that.topRed = res.data
+        that.swopRed = res.data.main_show_red_dot
+      })
+    },
+
     fromClick (e) {
       console.log(e)
       App.methods.sendFormId({
@@ -268,27 +380,7 @@ export default {
         wx.setStorageSync('isCheck', 1)
       }
     },
-    getList(num){
-      let that = this;
-      getFriends().then((res)=>{
-        console.log(res)
-        that.friendList = res.data
-
-        if(res.http_status==200){
-          deleteRedFriends()
-        }
-      },(res)=>{})
-
-      getUserGroupList().then((res)=>{
-        console.log(res)
-        that.florkList = res.data
-      },(res)=>{})
-
-      redDot().then(res=>{
-        that.topRed = res.data
-        that.swopRed = res.data.main_show_red_dot
-      })
-    },
+    
     toDetail (item) {
       console.log(item)
       wx.navigateTo({
@@ -418,7 +510,6 @@ export default {
     height: 100vh;
     //height: 930rpx;
     position: relative;
-    padding-bottom: 96rpx;
     background: rgba(250,251,253,1)
   }
   .tit {
@@ -522,7 +613,7 @@ export default {
     .swip {
       height: 100%;
       text-align: center;
-      overflow-y: scroll;
+      //overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
     }
     .friendList,.flockList {
@@ -552,7 +643,7 @@ export default {
         height:230rpx;
         background:rgba(255,255,255,1);
         border-radius:18rpx;
-        padding: 56rpx 30rpx 56rpx 120rpx;
+        padding: 0rpx 30rpx 0rpx 120rpx;
         box-sizing: border-box;
         text-align: left;
         position: relative;
@@ -561,7 +652,7 @@ export default {
         justify-content: center;
         box-shadow: 0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
         &.listone {
-          padding: 55rpx 30rpx 56rpx 120rpx;
+          padding: 0 30rpx 0 120rpx;
         }
         &.one {
           &:after {

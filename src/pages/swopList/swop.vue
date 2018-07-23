@@ -212,7 +212,14 @@
         listData: [],
         isShow: false,
         nowItem: {},
-        shareData: {}
+        shareData: {},
+
+        getListData: {
+          count: 3,
+          id:''
+        },
+        getNext: true,
+        isNext: true,
       }
     },
     onPullDownRefresh(res){
@@ -220,15 +227,27 @@
 
       //doing some thing
       console.log('下拉刷新执行完毕要停止当前页面下拉刷新',res)
-      that.getList()
+      this.getListData.id = ''
+      this.getNext = true
+      this.isNext = true
+      that.getList('first')
       setTimeout(function(){
           wx.stopPullDownRefresh()
-      },2000)
+      },1500)
     },
 
     onReachBottom(res){
+      console.log(111)
       let that = this;
+
+      if(this.getNext && this.isNext ){
+        this.getNext = false
+        this.getListData.id = this.listData[this.listData.length-1].id
+        this.getList()
+      }
+      
     },
+
     methods: {
       fromClick (e) {
         App.methods.sendFormId({
@@ -263,11 +282,21 @@
           that.$mptoast(res.msg,'error',2000)
         })
       },
-      getList(){
+      getList(isFirst){
         let that = this;
+        console.log(isFirst)
         getLikeList().then((res)=>{
           console.log('=====',res)
-          that.listData = res.data
+          if(isFirst == 'first'){
+            that.listData = res.data
+          }else {
+            that.listData = [...that.listData,...res.data]
+          }
+
+          that.getNext = true
+          if(res.data.length<that.getListData.count){
+            that.isNext = false
+          }
 
           if(res.http_status==200){
             deleteRedDot()
@@ -345,7 +374,6 @@
       this.isShow = false
       let that = this;
       that.getList()
-      
     },
 
     created () {
