@@ -556,6 +556,8 @@ export default {
               height:20rpx;
               border-radius: 50%;
               background:rgba(255,102,102,1);
+              border: 3rpx solid #ffffff;
+              box-sizing: border-box;
               position: absolute; 
               top: 62rpx;
               left: 50rpx;
