@@ -67,13 +67,6 @@
         let occupation_label_id = this.jobAry.join(',')
         let realm_label_id = this.liveAry.join(',')
         let url
-        if(this.jobAry.indexOf(0) !== -1){
-          occupation_label_id = 0
-        }
-
-        if(this.liveAry.indexOf(0) !== -1){
-          realm_label_id = 0
-        }
 
         if(occupation_label_id == 0 && realm_label_id == 0){
           url = '/pages/index/main'

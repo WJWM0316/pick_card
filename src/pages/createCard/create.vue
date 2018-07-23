@@ -392,7 +392,8 @@
           const info = wx.getStorageSync('cutImgInfo')
           const parmas = {
             path: info.path,
-            size: info.size
+            size: info.size,
+            type: 'avatar'
           }
           wx.showLoading({
             title: '正在提交',

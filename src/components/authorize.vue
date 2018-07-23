@@ -97,7 +97,7 @@
 	                  console.log('已将分享信息存入store1', Vue.prototype.$store.getters.shareInfo)
 	                })
 	              }
-	              if (res.code === 201) {
+	              if (res.code === 201) {    
 	                Vue.prototype.$store.dispatch('needAuthorize', true) // 需要授权框
 	              }
 	              resolve(res)
@@ -216,6 +216,7 @@
 				margin-top: 54rpx;
 				width:100%;
 				height:98rpx;
+				line-height: 98rpx;
 				background:rgba(0,208,147,1);
 				border-radius:49rpx;
 			}

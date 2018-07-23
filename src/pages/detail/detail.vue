@@ -872,7 +872,9 @@
 				padding: 30rpx 40rpx;
 			}
 			&.static {
+				padding: 30rpx 0;
 				position: static;
+				background: none;
 			}
 			.btn {
 				font-size: 32rpx;
@@ -895,6 +897,7 @@
 					background: rgba(178, 240, 222, 1);
 				}
 				&.remove {
+					width: 100%;
 					background: #DCE3EE;
 				}
 			}
