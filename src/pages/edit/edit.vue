@@ -392,9 +392,8 @@
 					return
 				}
 
-				let reg1 = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/
-				let regPhone = /^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/
-				if (this.userInfo.wechat !== '' && !reg1.test(this.userInfo.wechat) && !regPhone.test(this.userInfo.wechat)) { 
+				let reg1 = /^[-_a-zA-Z0-9]{6,20}$/
+				if (this.userInfo.wechat !== '' && !reg1.test(this.userInfo.wechat)) { 
 					wx.showToast({
 					  title: '微信号格式不正确',
 					  icon: 'none',
