@@ -130,9 +130,9 @@
 			</view>
 		</section>
 
-		<cover-view class="btn">
-			<cover-view @tap.stop="saveUserInfo" class="light">保存资料</cover-view>
-		</cover-view>
+		<view class="btn">
+			<view @tap.stop="saveUserInfo" class="light">保存资料</view>
+		</view>
 		<labelPop :isShow="showLablePop" :type="labelBox" :choseList="checkedIdList" @getLabel="getLabel" @close="closePop"></labelPop>
 	</view>
 </template>
