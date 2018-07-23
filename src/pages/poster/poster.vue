@@ -1,6 +1,6 @@
 <template>
 	<view class="poster" v-if="imgUrl">
-		<button open-type="share" data-type="myDetail" v-if="showImg" class="share"><view class="header">因小程序限制，如图片出错，可点击发名片给好友<image class="icon1" src="/static/images/deta_icon_chevron@3x.png"></image></view></button>
+		<button open-type="share" data-type="myDetail" v-if="showImg && system === 'Android'" class="share"><view class="header">因小程序限制，如图片出错，可点击发名片给好友<image class="icon1" src="/static/images/deta_icon_chevron@3x.png"></image></view></button>
 		<image class="showImg" :src="showImg" v-if="showImg"></image>
 		<canvas canvas-id="endCanvas" id="endCanvas" v-if="!twoStep">
 		</canvas>
@@ -42,7 +42,8 @@
 					company: '',
 				},
 				imgUrl: '',
-				isShareImg: ''
+				isShareImg: '',
+				system: ''
 			}
 		},
 		onShow (option) {
@@ -78,10 +79,14 @@
 					console.log(res, '设备信息')
 					that.width = res.windowWidth
 			    that.height = res.windowHeight
+			    that.system = res.system
 			    that.pixelRatio = res.pixelRatio
 				}
 			})
 
+			if (that.system.indexOf('Android') !== -1) {
+				that.system = 'Android'
+			}
 			
 			let params = {
       	uid: this.info.id,
