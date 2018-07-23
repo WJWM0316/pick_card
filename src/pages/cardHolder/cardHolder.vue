@@ -155,7 +155,7 @@ export default {
 
       getFrd: {
         id: '',
-        count: 5
+        count: 3
       },
       getFlk: {
         page: 1,
@@ -371,7 +371,7 @@ export default {
       let that = this;
       this.getFrd = {
         id: '',
-        count: 6
+        count: 3
       }
       this.getFlk = {
         page: 1,
