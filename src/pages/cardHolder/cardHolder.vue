@@ -654,6 +654,7 @@ export default {
         box-shadow:0rpx 10rpx 30rpx 0rpx rgba(153,193,214,0.1),0rpx -5rpx 40rpx 0rpx rgba(153,193,214,0.08);
         border: 4rpx solid rgba(255,255,255,1);
         box-sizing: border-box;
+        background: #FAFBFC;
         
       }
       .blo_msg {
