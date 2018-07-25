@@ -306,12 +306,9 @@ export default {
       saveData.realm_label_id = res.realm_label_id
     }
 
-    //保存筛选
-    saveUserIdByLabelSelect(saveData)
 
-    this.getPage.occupation_label_id = '0'
-    this.getPage.realm_label_id = '0'
     if(res.from && res.from == 'filtrate'){
+      saveUserIdByLabelSelect(saveData)
       this.getPage.occupation_label_id = res.occupation_label_id || 0
       this.getPage.realm_label_id = res.realm_label_id || 0
     } else {
@@ -337,8 +334,8 @@ export default {
   },
   onShow (res) {
     let that = this
-    let beforeCreateStep =wx.getStorageSync('beforeCreateStep')?wx.getStorageSync('beforeCreateStep'):0;
-    that.beforeCreateStep = beforeCreateStep;
+    let beforeCreateStep = wx.getStorageSync('beforeCreateStep') ? wx.getStorageSync('beforeCreateStep') : 0
+    that.beforeCreateStep = beforeCreateStep
     console.log('onshow-------beforeCreateStep',beforeCreateStep)
     this.isNext = true;
     this.toCreateSock = true;
@@ -359,7 +356,7 @@ export default {
       this.isShowTrue = false
     },
     dataList () {
-      let that = this;
+      let that = this
 
       console.log('dataList')
 
@@ -402,7 +399,7 @@ export default {
           console.log('res.data.rest_time=====',res.data.rest_time)
           that.intervalTime(res.data.rest_time)
         }else {
-          that.isCooling = false;
+          that.isCooling = false
           that.$mptoast(res.msg)
         }
         that.usersInfo = that.$store.getters.userInfo
@@ -519,9 +516,7 @@ export default {
 
       clearInterval(that.interval2)
       that.interval2 =  setInterval(function () {  
-         that.time++;  
-
-
+         that.time++; 
       }, 100);  
 
       that.moveData={
@@ -533,7 +528,7 @@ export default {
       let touchMove = e.touches[0].pageX
       let touchDot = this.touchDot
       let status = false
-      console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));
+      console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot))
       // 向左滑动    
       if (touchMove - touchDot <= -80 && this.time < 10) {  
         status = 'left'
@@ -549,8 +544,8 @@ export default {
     },
     tEnd (e) {
       console.log('tend')
-      clearInterval(this.interval2); // 清除setInterval  
-      this.time = 0;  
+      clearInterval(this.interval2) // 清除setInterval  
+      this.time = 0
     },
     
     //左右划操作
@@ -558,32 +553,32 @@ export default {
       console.log(this.nowIndex,this.usersList.length,status,this.isNext)
       if(!this.isNext){return}
       this.isNext = false
-      let  that = this;
-      let  data = this.usersList[this.nowIndex];
-      let  beforeCreateStep = this.beforeCreateStep;
-      let  step = this.usersInfo.step;
-      let  msg = {
+      let that = this
+      let data = this.usersList[this.nowIndex]
+      let beforeCreateStep = this.beforeCreateStep
+      let step = this.usersInfo.step
+      let msg = {
             to_uid: data.id, //data.unionid
           };
 
       console.log('likeOp')
       if(status && status == 'right') {
         if(step<9){
-          that.firstOp(status,msg);
+          that.firstOp(status,msg)
         }else {
-          that.like(msg);
+          that.like(msg)
         }
       }else if(status && status == 'left'){
         if(step<9){
-          that.firstOp(status,msg);
+          that.firstOp(status,msg)
         }else {
-          that.unlike(msg);
+          that.unlike(msg)
         }
       } 
     },
     isGetUers(){
-      let that = this;
-      let step = this.usersInfo.step;
+      let that = this
+      let step = this.usersInfo.step
 
       console.log('step=====>',this.usersInfo)
       if(this.usersList.length-this.nowIndex <= 1){
@@ -602,24 +597,24 @@ export default {
 
           }else {
             
-            that.isEnd = false;
+            that.isEnd = false
             if(res.data[0].id == this.usersList[this.nowIndex].id){
-              res.data.splice(0,1);
+              res.data.splice(0,1)
             }
 
 
-            that.usersList = [...this.usersList,...res.data];
+            that.usersList = [...this.usersList,...res.data]
 
             console.log(res.data[0].id)
             console.log(this.usersList[this.nowIndex].id)
           }
-          that.isCooling = false;
+          that.isCooling = false
           //this.nowIndex = 0;
         },(res)=>{
           if(res.http_status == 400 && res.code == 99){
             that.intervalTime(res.data.rest_time)
           }else {
-            this.$mptoast(res.msg);
+            this.$mptoast(res.msg)
           }
         })
       }else {
@@ -631,15 +626,15 @@ export default {
       let that = this
       let beforeCreateStep = this.beforeCreateStep;
 
-      beforeCreateStep++;
+      beforeCreateStep++
       if(beforeCreateStep >= 3){
         console.log('firstOp==beforeCreateStep == 3')
-        wx.setStorageSync('beforeCreateStep', 3);
-        that.isNext = true;
+        wx.setStorageSync('beforeCreateStep', 3)
+        that.isNext = true
         that.isCreate()
         return
       }else {
-        wx.setStorageSync('beforeCreateStep', beforeCreateStep);
+        wx.setStorageSync('beforeCreateStep', beforeCreateStep)
         indexUnlike(msg)
       }
       console.log(beforeCreateStep)
@@ -658,8 +653,8 @@ export default {
       this.beforeCreateStep = beforeCreateStep;
 
       setTimeout(()=>{
-        that.moveData.style = '';
-        that.isNext = true;
+        that.moveData.style = ''
+        that.isNext = true
         that.isGetUers()
       },800)
     },
@@ -693,19 +688,19 @@ export default {
     intervalTime(time){
       let that = this
       let num = time
-      that.isCooling = true;
+      that.isCooling = true
 
       clearInterval(that.interval)
       that.interval = setInterval(()=>{
         console.log(num)
-        that.transformTime(num);
+        that.transformTime(num)
         num--;
         if(num<0){
           console.log('========',num)
 
           that.isGetUers()
           clearInterval(that.interval)
-          this.coolTime = '0';  
+          this.coolTime = '0'
         }
       },1000);
     },
@@ -747,26 +742,26 @@ export default {
       }
       let t;
       if(s > -1){
-          let hour = Math.floor(s/3600);
-          let min = Math.floor(s/60) % 60;
+          let hour = Math.floor(s/3600)
+          let min = Math.floor(s/60) % 60
           let sec = s % 60;
           if(hour < 10) {
-              t = '0'+ hour + ":";
+              t = '0'+ hour + ":"
           } else {
-              t = hour + ":";
+              t = hour + ":"
           }
 
-          if(min < 10){t += "0";}
-          t += min + ":";
-          if(sec < 10){t += "0";}
+          if(min < 10){t += "0"}
+          t += min + ":"
+          if(sec < 10){t += "0"}
           t += sec;
       }
       this.coolTime = t
       //return t;
     },
     getShareImg(){
-      let that = this;
-      let usersInfo = that.usersInfo;
+      let that = this
+      let usersInfo = that.usersInfo
       let msg = {
         uid: usersInfo.id,
         name: usersInfo.nickname,
