@@ -2,18 +2,12 @@
   <view class="container" >
     <view class="tit">
       
-      <view class="item "  :class="{'cur':nowIndex==0,'red':topRed.user_card_count>0}" @click="select(0)" >
-        个人名片
-        <form report-submit="true" class="from-box" @submit="fromClick">
-            <button formType="submit" class="from-mask  "></button>
+        <form report-submit="true" class="item" @submit="fromClick" :class="{'cur':nowIndex==0,'red':topRed.user_card_count>0}"  >
+            <button formType="submit" class="from-mask  " @click="select(0)">个人名片</button>
         </form>
-      </view>
-      <view class="item flock " :class="{'cur':nowIndex==1,'red':topRed.user_group_card_count>0}" @click="select(1)" >
-        群名片
-        <form report-submit="true" class="from-box" @submit="fromClick">
-            <button formType="submit" class="from-mask  "></button>
+        <form report-submit="true" class="item flock " @submit="fromClick" :class="{'cur':nowIndex==1,'red':topRed.user_group_card_count>0}">
+            <button formType="submit" class="from-mask  "  @click="select(1)">群名片</button>
         </form>
-      </view>
     </view>
     <view class="content">
       
@@ -74,7 +68,7 @@
                 <view class="blo_msg flock_blo" >
                   <image class="blo_img"  :src="item.listImg" v-if="item.listImg"></image>
                   <image class="blo_img"  src="/static/images/pic_defaulhead@3x.png" v-else></image>
-                  <open-data class="msg_name" type="groupName" :open-gid="item.openGid"></open-data>
+                  <open-data class="msg_name ellipsis" type="groupName" :open-gid="item.openGid"></open-data>
                   <view class="msg_tit">已有{{item.memberCount}}张群成员名片</view>
 
                   <view class="new_msg" v-if="item.newJoinMemberCount&&item.newJoinMemberCount>0">{{item.newJoinMemberCount}}</view>
@@ -751,7 +745,7 @@ export default {
           color:rgba(70,71,72,1);
           line-height:60rpx;
           height: 60rpx;
-
+          width: 400rpx;
         }
         .msg_tit {
           font-size:28rpx;

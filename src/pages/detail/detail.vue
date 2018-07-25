@@ -30,12 +30,15 @@
 					<text>我的名片</text>
 				</view>
 				<view class="nameBox">
-					<view>
-						<text class="name">{{userInfo.nickname}}</text>
-						<image class="sex" src="/static/images/details_icon_female@3x.png" v-if="userInfo.gender === 2"></image>
-						<image class="sex" src="/static/images/details_icon_man@3x.png" v-if="userInfo.gender === 1"></image>
-					</view>
-					<image class="share" v-if="isSelf" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')"></image>
+						<view class="name ellipsis">{{userInfo.nickname}}</view>
+						<view class="gendor_warp">
+							<image class="sex" src="/static/images/details_icon_female@3x.png" v-if="userInfo.gender === 2"></image>
+							<image class="sex" src="/static/images/details_icon_man@3x.png" v-if="userInfo.gender === 1"></image>
+
+							<image class="share" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')"></image>
+
+						</view>
+						
 				</view>
 				<view class="job">{{userInfo.occupation}}</view>
 				<view class="company">{{userInfo.company}}</view>
@@ -679,19 +682,29 @@
 						color: #353943;
 						line-height: 1.4;
 					}
+					.gendor_warp {
+						min-width: 80rpx;
+						position: relative;
+						flex: 1;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
+					}
 					.sex {
 						width: 40rpx;
 						height: 40rpx;
-						display: inline-block;
+						//float: left;
 						margin-left: 10rpx;
+						margin-right: 10rpx;
 					}
 					.share {
 						width: 32rpx;
 						height: 32rpx;
-						float: right;
+						//float: right;
 						display: block;
-						padding:20rpx 0 20rpx 20rpx;
-						vertical-align:sub;
+						//padding:20rpx 0 20rpx 20rpx;
+						//vertical-align:sub;
 					}
 					.more {
 						margin-top: 4rpx;

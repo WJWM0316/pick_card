@@ -83,7 +83,6 @@ export const saveLable = (data) => {
   })
 }
 
-
 // 获取创建第三步人设标签与生活标签
 export const postGetCreatedThreeLable = (data) => {
   return request({
@@ -94,6 +93,15 @@ export const postGetCreatedThreeLable = (data) => {
   })
 }
 
+// 保存筛选结果接口
+export const saveUserIdByLabelSelect = (data) => {
+  return request({
+    method: 'post',
+    url: '/label/saveUserIdByLabelSelect',
+    data,
+    isLoading: false
+  })
+}
 
 // 用户允许授权后需返回数据给该接口
 export const grantInformationApi = (data) => {

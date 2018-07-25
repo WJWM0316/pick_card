@@ -359,9 +359,9 @@
             imageUrl = shareInfo.otherCard.path
             path = `/pages/sharePick/main?vkey=${this.nowItem.apply_user_info.vkey}?type=other`
         }
-
         // 来自页面内转发按钮
       }
+      
       return {
         title: title,
         path: path,

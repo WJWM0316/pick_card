@@ -167,7 +167,7 @@
   import App from '@/App'
   import Vue from 'vue'
 
-  import {loginApi,getShareImg,getChoiceLabel} from '@/api/pages/login'
+  import {loginApi, getShareImg, getChoiceLabel, saveUserIdByLabelSelect} from '@/api/pages/login'
   import { getIndexUsers, indexLike, indexUnlike } from '@/api/pages/user'
   import { redDotApplys, deleteRedDot, redDot } from '@/api/pages/red'
 
@@ -279,6 +279,10 @@ export default {
     console.log(res)
     let that = this
     let value = wx.getStorageSync('pickCardFirst')
+    let saveData = {
+      occupation_label_id: 0,
+      realm_label_id: 0
+    }
     
     wx.getSystemInfo({
       success: function(res) {
@@ -294,7 +298,17 @@ export default {
       }
     })
 
-    //筛选
+    if(res.occupation_label_id){
+      saveData.occupation_label_id = res.occupation_label_id
+    }
+
+    if(res.realm_label_id){
+      saveData.realm_label_id = res.realm_label_id
+    }
+
+    //保存筛选
+    saveUserIdByLabelSelect(saveData)
+
     this.getPage.occupation_label_id = '0'
     this.getPage.realm_label_id = '0'
     if(res.from && res.from == 'filtrate'){
@@ -317,6 +331,9 @@ export default {
         })
       }
     }
+
+
+
   },
   onShow (res) {
     let that = this
@@ -1006,6 +1023,8 @@ export default {
     //font-family:PingFangSC-Light;
     font-weight: 300;
     color:rgba(53,57,67,1);
+    background:rgba(250,251,252,1);
+    z-index: 20;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

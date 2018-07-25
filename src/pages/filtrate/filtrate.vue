@@ -112,48 +112,60 @@
 
       clickOp(index,style){
         let that = this
-        let str = ''
-        let str2 = ''
+        let listData = []
+        let selAry =[]
+        let reset = null
         let id = ''
-
         let a 
         if(style == 'job'){
-          str = 'jobData'
-          str2 = 'jobAry'
+          listData = that.jobData
+          selAry = that.jobAry
+          reset = that.jobData2
         }else if(style == 'live'){
-          str = 'liveData'
-          str2 = 'liveAry'
+          listData = that.liveData
+          selAry = that.liveAry
+          reset = that.liveData2
         }
 
-        if(that[str][index].id!=0){
-
-          that[str][0].isCur = false
-          if(that[str2].indexOf(0) > -1){
-            that[str2].splice(that[str2].indexOf(0),1)
+        if(listData[index].id!=0){
+          listData[0].isCur = false
+          if(selAry.indexOf(0) > -1){
+            selAry.splice(selAry.indexOf(0),1)
           }
         }else {
-          a = JSON.stringify(that[str+2])
+
+          console.log(selAry)
+          a = JSON.stringify(reset)
           a = JSON.parse(a.concat())
-          that[str] = a
-          that[str2] = [0]
+
+          if(style == 'job'){
+            that.jobData = a
+            that.jobAry = [0]
+          }else {
+            that.liveAry = [0]
+            that.liveData = a
+          }
+          /*listData = a
+          selAry = [0]*/
           return
         }
 
-        if (that[str][index].id === 0 && !that[str][index].isCur) {
-          that[str].forEach(e => {
+        if (listData[index].id === 0 && !listData[index].isCur) {
+          listData.forEach(e => {
             if (e.id !== 0) {
               e.isCur = false
             }
           })
         }
-        id = that[str][index].id
 
-        if(that[str][index].isCur){
-          that[str][index].isCur = false
-          that[str2].splice(that[str2].indexOf(id), 1)
+        id = listData[index].id
+
+        if(listData[index].isCur){
+          listData[index].isCur = false
+          selAry.splice(selAry.indexOf(id), 1)
         }else {
-          that[str][index].isCur = true
-          that[str2].push(id)
+          listData[index].isCur = true
+          selAry.push(id)
         }
       }
     },
@@ -178,6 +190,16 @@
       　 });
         that.jobData = [{id:0,name:'不限',isCur:false},...res.data[1].son]
         that.liveData = [{id:0,name:'不限',isCur:false},...res.data[0].son]
+
+        one = JSON.stringify(that.jobData)
+        that.jobData2 = JSON.parse(one.concat())
+        that.jobData2[0].isCur = true
+
+        two = JSON.stringify(that.liveData)
+        that.liveData2 = JSON.parse(two.concat())
+        that.liveData2[0].isCur = true
+
+        //获取上一次筛选
         getChoiceLabel().then(res => {
           let list = res.data
           that.show = true
@@ -185,31 +207,19 @@
           list.forEach(item => {
             console.log(item.oneLevel)
             if (item.oneLevel === 3) {
-
               that.jobAry.push(item.id)
               that.jobData.forEach((e,index) => {
                 if (item.id == e.id) {
                   that.jobData[index].isCur = true
                 }
               })
-
-              one = JSON.stringify(that.jobData)
-              that.jobData2 = JSON.parse(one.concat())
-              that.jobData2[0].isCur = true
-
             } else if (item.oneLevel === 1) {
-
               that.liveAry.push(item.id)
               that.liveData.forEach((e,index) => {
                 if (item.id == e.id) {
                   that.liveData[index].isCur = true
                 }
               })
-
-              two = JSON.stringify(that.liveData)
-              that.liveData2 = JSON.parse(two.concat())
-              that.liveData2[0].isCur = true
-
             }
           })
         })
