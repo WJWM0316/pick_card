@@ -135,19 +135,19 @@
 	        shareUid: wx.getStorageSync('routeInfo').query.shareUid || '',
 	        shareType: wx.getStorageSync('routeInfo').query.shareType || ''
 	      }
-	      getShareConfig().then(res => {
-        	this.$store.dispatch('shareInfo', res.data)
-          console.log('已将分享信息存入store2', this.$store.getters.shareInfo)
-        })
-
+	      
       	grantInformationApi(data).then(res => {
 	        console.log('获取用户授权成功并交换userinfo成功', res)
 	        wx.setStorageSync('token', res.data.token) // 更新token状态
-          	wx.setStorageSync('key', res.data.key)
+          wx.setStorageSync('key', res.data.key)
 	        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
 	        this.$store.dispatch('userInfo', res.data)
 	        console.log('已将个人信息存入store', res.data)
 	        this.$store.dispatch('needAuthorize', false)
+	        getShareConfig().then(res => {
+	        	this.$store.dispatch('shareInfo', res.data)
+	          console.log('已将分享信息存入store2', this.$store.getters.shareInfo)
+	        })
 
 	        wx.reLaunch({
 					  url: url
@@ -163,7 +163,7 @@
 				e.preventDefault()
 				e.stopPropagation()
 			}
-    	}
+    }
 	}
 
 </script>

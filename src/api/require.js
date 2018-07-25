@@ -1,4 +1,5 @@
 import config from '../config.js'
+
 /* eslint-disable no-undef */
 const util = {
   loading: (isLoading, content) => {
@@ -61,6 +62,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
               })
               util.unloading(isLoading)
               resolve(msg)
+              wx.removeStorageSync('token')
               break
             default:
               util.unloading(isLoading)
@@ -285,6 +287,7 @@ export const upload = ({ url, filePath, data = {}, setting = {}, isLoading = fal
   })
 }
 
+
 /**
  * 获取session_key
  */
@@ -315,6 +318,7 @@ export function getSessionKey ({ isLoading = false } = {}) {
     })
   })
 }
+
 
 /**
  * 获取用户信息
