@@ -928,7 +928,7 @@
       font-family:PingFangSC-Light;
       color:rgba(154,161,171,1);
       line-height:30rpx;
-      margin-left: 28rpx;
+      //margin-left: 28rpx;
       flex: 1;
     }
   }
