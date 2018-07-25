@@ -154,7 +154,7 @@
 
     <authorize-pop :isIndex='true' :routerInfo="routerInfo"></authorize-pop>
     <mptoast />
-    <footerTab :type=1 :adaptive=adaptive :isRed=mainRed ></footerTab>
+    <footerTab :type=1 :adaptive=adaptive :isRed=mainRed :isPop=isShowFt></footerTab>
   </view>
 </template>
 <script>
@@ -228,6 +228,7 @@ export default {
 
       isShowTrue: false,  //同意
       consentForm: 'index',
+      isShowFt: false,   
 
       routerInfo: {}
     }
@@ -267,6 +268,7 @@ export default {
       imageUrl: imageUrl,
       success(){
         that.isShowTrue = false
+        that.isShowFt = false
         console.log(that.isCheck)
       }
     }
@@ -353,6 +355,7 @@ export default {
   },
   methods: {
     changeShow(res){
+      console.log(11111)
       this.isShowTrue = false
     },
     dataList () {
