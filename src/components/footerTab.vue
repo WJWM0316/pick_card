@@ -50,6 +50,10 @@
         type: Number,
         default: null
       },
+      isPop: {
+        type: Boolean,
+        default: false
+      },
       adaptive:{
         type: String,
         default: 1
@@ -69,7 +73,6 @@
     },
     data () {
       return {
-        isPop: false,
         index: 0,
         isShareImg: '',
         info: {}
@@ -118,6 +121,7 @@
         }
       },
       toPic () {
+        this.isPop = false
         wx.navigateTo({
           url: '/pages/poster/main'
         })

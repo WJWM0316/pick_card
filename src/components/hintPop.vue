@@ -94,6 +94,7 @@
 			  	})
 			},
 			cloPop () {
+				console.log('clopop')
 				this.isShow = false
 				this.$emit('changeshow', false)
 			},
