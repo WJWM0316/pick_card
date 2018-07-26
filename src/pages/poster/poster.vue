@@ -183,14 +183,13 @@
 						    	} else {
 						    		length += 1
 						    	}
-					    		if (length < num) { // 判断是否超过 是否需要打点
-							    	result =  false
-							    	return
-							    } else {
-							    	result =  true
-							    	return
-							    }
 						    }
+						    if (length < num) { // 判断是否超过 是否需要打点
+						    	result =  false
+						    } else {
+						    	result =  true
+						    }
+						    console.log(111, result)
 						    return result
 					    }
 
@@ -198,7 +197,7 @@
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
-					    if (pointOut(that.info.nickname, 30)) {
+					    if (pointOut(that.info.nickname, 40)) {
 					    	that.info.nickname = that.info.nickname.slice(0, 17) + '...'
 					    }
 					    ctx.fillText(that.info.nickname, 17, 280)
@@ -206,6 +205,7 @@
 
 					    ctx.setFontSize(16)
 					    if (pointOut(that.info.job, 40)) {
+					    	console.log()
 					    	that.info.job = that.info.job.slice(0, 17) + '...'
 					    }
 					    ctx.fillText(that.info.job, 17, 300)
@@ -301,7 +301,6 @@
 									staticY = staticY + 2*r + 7
 									position.y = position.y + 2*r + 7
 									lineNun ++
-									console.log(staticY, 2121212)
 								}
 					    }			    
 
@@ -387,16 +386,13 @@
 												console.log(e, new_pos.x, new_pos.y, img.width, img.height, '第二步画图')
 												roundRect (new_pos.x, new_pos.y, img.width, img.height, 9)
 												//new_ctx.save()
-												console.log(111)
 												new_ctx.beginPath()
 												new_ctx.arc(new_pos.x, new_pos.y + img.height*0.78, 10, 0, 2 * Math.PI)
 												new_ctx.arc(new_pos.x + img.width, new_pos.y + img.height*0.78, 10, 0, 2 * Math.PI)
 												new_ctx.setFillStyle('#F2FCF9')
 												new_ctx.fill()
-												console.log(222)
 												new_ctx.draw(true, () => {
 										    	wx.hideLoading()
-										    	console.log(333)
 										    	wx.canvasToTempFilePath({
 													  x: 0,
 													  y: 0,
