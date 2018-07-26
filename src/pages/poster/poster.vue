@@ -174,22 +174,21 @@
 
 					    // 计算文字打点
 					    function pointOut (string, num) {
-					    	let result = false
+					    	let result = 0
 					    	let length = 0
-						    for (var i=0; i<string.length; i++) {
+						    for (var i=0; i<string.length-1; i++) {
 						    	// 检查双字节
 						    	if (string[i].match(/[^\x00-\xff]/)) {
 						    		length += 2
 						    	} else {
 						    		length += 1
 						    	}
+						    	if (length < num) { // 判断是否超过 是否需要打点
+							    	result =  string.length - 1
+							    } else {
+							    	result =  i
+							    }
 						    }
-						    if (length < num) { // 判断是否超过 是否需要打点
-						    	result =  false
-						    } else {
-						    	result =  true
-						    }
-						    console.log(111, result)
 						    return result
 					    }
 
@@ -197,16 +196,17 @@
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
-					    if (pointOut(that.info.nickname, 40)) {
-					    	that.info.nickname = that.info.nickname.slice(0, 17) + '...'
+					    let lineNum1 = pointOut(that.info.nickname, 30)
+					    if (lineNum !== that.info.nickname.length - 1) {
+					    	that.info.nickname = that.info.nickname.slice(0, lineNum) + '...'
 					    }
 					    ctx.fillText(that.info.nickname, 17, 280)
 					    ctx.save()
 
 					    ctx.setFontSize(16)
-					    if (pointOut(that.info.job, 40)) {
-					    	console.log()
-					    	that.info.job = that.info.job.slice(0, 17) + '...'
+					    let lineNum2 = pointOut(that.info.job, 30)
+					    if (lineNum2 !== that.info.job.length - 1) {
+					    	that.info.job = that.info.job.slice(0, lineNum2) + '...'
 					    }
 					    ctx.fillText(that.info.job, 17, 300)
 					    ctx.save()
@@ -218,7 +218,7 @@
 					    let signNum = 0
 					    let signTxt = that.info.sign
 					    let chatIndex = signTxt.length - 1
-					    for (var i=0; i<signTxt.length; i++) {
+					    for (var i=0; i<signTxt.length-1; i++) {
 					    	// 检查双字节
 					    	if (signTxt[i].match(/[^\x00-\xff]/)) {
 					    		signNum += 2
