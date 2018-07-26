@@ -12,18 +12,18 @@
     <view class="content">
       
       <view :style="{ height: spHeight+'rpx' }" class="swip" >
-          <view class="ops">
-            <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
-              <image src="/static/images/cardcase_banner_left@3x.png"></image>
-              分享我的名片
-            </button>
-            <button class="ops_blo createFlock" open-type="share" data-type="flock" >
-              <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
-            </button>
-          </view>
+          
           <block v-if="nowIndex == 0">
             <scroll-view @scrolltolower="loadNext" @scrolltoupper="refresh" scroll-y=true class="friendList" v-if="friendList.length>0" :style="{ height: spHeight+'rpx' }">
-                  
+                  <view class="ops">
+                    <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
+                      <image src="/static/images/cardcase_banner_left@3x.png"></image>
+                      分享我的名片
+                    </button>
+                    <button class="ops_blo createFlock" open-type="share" data-type="flock" >
+                      <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
+                    </button>
+                  </view>
                   <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in friendList" :key="key">
                       <button formType="submit" @tap="toDetail(item)">
                         <view class="blo_msg listone" :class="{'one': item.has_red_dot == 1}" >
@@ -45,6 +45,15 @@
 
             </scroll-view>
             <block  v-else>
+              <view class="ops">
+                <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
+                  <image src="/static/images/cardcase_banner_left@3x.png"></image>
+                  分享我的名片
+                </button>
+                <button class="ops_blo createFlock" open-type="share" data-type="flock" >
+                  <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
+                </button>
+              </view>
               <view  scroll-y=true class="none_blo">
                 <view class="none_txt">让名片替你说话，不动声色展现实力</view>
                 <button class="none_btn" data-type="myDetail" open-type="share">去分享 </button>
@@ -53,6 +62,15 @@
           </block>
           <block v-else>
             <scroll-view class="flockList" @scrolltolower="loadNext" @scrolltoupper="refresh" scroll-y=true v-if="florkList && florkList.list&& florkList.list.length>0" :style="{ height: spHeight+'rpx' }">
+              <view class="ops">
+                <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
+                  <image src="/static/images/cardcase_banner_left@3x.png"></image>
+                  分享我的名片
+                </button>
+                <button class="ops_blo createFlock" open-type="share" data-type="flock" >
+                  <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
+                </button>
+              </view>
               <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in florkList.list" :key="key">
                 <button formType="submit" class=""   @tap="toFlock(item,index)">
 
@@ -69,6 +87,15 @@
               <view class="hint2" v-if="florkList.list.length>0" ></view>
             </scroll-view>
             <block  v-else>
+              <view class="ops">
+                <button open-type="share" data-type="myDetail" class="ops_blo shareMe" >
+                  <image src="/static/images/cardcase_banner_left@3x.png"></image>
+                  分享我的名片
+                </button>
+                <button class="ops_blo createFlock" open-type="share" data-type="flock" >
+                  <image src="/static/images/cardcase_banner_right@3x.png"></image>创建群名片
+                </button>
+              </view>
               <view class="none_blo">
                 <view class="none_txt">创建群名片，把微信群友变成你的职场人脉</view>
                 <button class="none_btn" data-type="flock" open-type="share" >去创建 </button>
@@ -194,7 +221,7 @@ export default {
       success: function(res) {
         that.systemInfo = res;
         console.log(res)
-        that.spHeight = (res.windowHeight-40-50-100)*2;
+        that.spHeight = (res.windowHeight-40-50)*2;
       }
     })
   },

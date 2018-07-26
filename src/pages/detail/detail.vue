@@ -172,7 +172,8 @@
 				isShareImg: '',
 				stopShow: false, // 阻止onShow的进行
 				showPop: false,
-				routerInfo: {}
+				routerInfo: {},
+
 			}
 		},
 		computed: {
@@ -192,6 +193,7 @@
 			}
 		},
 		onLoad (option) {
+
 			this.routerInfo = {
 				path: 'pages/detail/main',
 				query: option
@@ -212,6 +214,8 @@
 			} else {
 				this.isSelf = false
 			}
+
+
 		},
 		onShow () {
 			if (this.stopShow) {
@@ -367,6 +371,10 @@
 				}
 				if (type === 'launch') {
 					indexLike(data).then(res => {
+
+						//首页不刷新
+						wx.setStorageSync('isDetail','2')
+						
 						this.userInfo.handle_status = 2
 					})
 				} else if (type === 'agree') {
