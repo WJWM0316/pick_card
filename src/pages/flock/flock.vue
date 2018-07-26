@@ -460,13 +460,11 @@ export default {
       position: relative;
       .name {
         font-size:48rpx;
-        font-family:PingFangSC-Semibold;
         color:rgba(53,57,67,1);
         line-height:48rpx;
       }
       .txt {
         font-size:28rpx;
-        font-family:PingFangSC-Light;
         color:rgba(154,161,171,1);
         line-height:28rpx;
         &.one {
@@ -561,7 +559,6 @@ export default {
           }
           .msg_name {
             font-size:34rpx;
-            font-family:PingFangSC-Medium;
             color:rgba(70,71,72,1);
             line-height:38rpx;
             width: 180rpx;
@@ -570,7 +567,6 @@ export default {
           }
           .msg_tit {
             font-size:28rpx;
-            font-family:PingFangSC-Light;
             color:rgba(154,161,171,1);
             line-height:40rpx;
             height:40rpx;
@@ -578,7 +574,6 @@ export default {
           }
           .msg_company {
             font-size:28rpx;
-            font-family:PingFangSC-Light;
             color:rgba(154,161,171,1);
             height:40rpx;
             line-height:40rpx;
@@ -592,13 +587,11 @@ export default {
             background:rgba(0,208,147,1);
             border-radius:33rpx;
             font-size:28rpx;
-            font-family:PingFangSC-Regular;
             color:rgba(255,255,255,1);
             line-height:66rpx;
             text-align: center;
             &.type_2 {
               font-size:28rpx;
-              font-family:PingFangHK-Light;
               background:rgba(255,255,255,1);
               color:rgba(154,161,171,1);
             }
@@ -620,7 +613,6 @@ export default {
     .hintJoin {
       height:37rpx;
       font-size:26rpx;
-      font-family:PingFangSC-Regular;
       color:rgba(195,201,212,1);
       line-height:37rpx;
       text-align: center;
@@ -638,7 +630,6 @@ export default {
     flex-direction: row;
     align-items: center;
     text-align: center;
-    font-family:PingFangSC-Regular;
     line-height: 96rpx;
     .quit {
       height: 100%;
@@ -651,7 +642,6 @@ export default {
     .joinShare {
       flex: 1;
       background:rgba(0,208,147,1);
-      font-family:PingFangSC-Regular;
       color:rgba(255,255,255,1);
       height: 96rpx;
       font-size:32rpx;

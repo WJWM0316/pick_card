@@ -20,7 +20,7 @@
         </view>
       </view>
       <!-- //focus="{{focus}}" -->
-      <input class="one_name" @blur="inputText" v-model.lazy="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="100" cursor-spacing="100"/>
+      <input class="one_name" @blur="inputText" v-model.lazy="firstData.nickname" placeholder-style="text-align:center;font-size:32rpx;color:rgba(195,201,212,1);" placeholder="请输入姓名" maxlength="100" cursor-spacing="100"/>
 
       <view class="one_gender">
         <view class="gender boy" @click.stop="gender(1)">
@@ -38,11 +38,11 @@
     <view class="op_blo op_two " v-if="nowNum === 1 && listData.length>0">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
-        <input class="one_ipt" v-model.lazy="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="请填写你当前任职的公司名，简称亦可" maxlength="100" />
+        <input class="one_ipt" v-model.lazy="secondData.company" placeholder-style="font-size:32rpx;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="请填写你当前任职的公司名，简称亦可" maxlength="100" />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt"  v-model.lazy="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="请填写你的职业"  maxlength="40" />
+        <input class="one_ipt"  v-model.lazy="secondData.occupation"  placeholder-style="font-size:32rpx;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="请填写你的职业"  maxlength="40" />
       </view>
 
       <view class="table_blo row_style_two">
@@ -81,7 +81,7 @@
       <view class="table_blo row_style_three" >
         <view class="tit">个性签名</view>
         <!--  -->
-        <input maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="用一句话介绍你自己吧～" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);"
+        <input maxlength="25" class="area" v-model.lazy="thirdData.sign" placeholder="用一句话介绍你自己吧～" placeholder-style="font-size:32rpx;color:rgba(195,201,212,1);"
         v-if="!bindPhone.isPh" @input="changeTxt"/>
         <text class="astrict"><text class="ast" :class="{'ts': thirdData.sign.length == 25}">{{thirdData.sign.length}}</text>/25</text>
       </view>
@@ -681,7 +681,6 @@
       border-radius:18rpx 18rpx 0rpx 0rpx;
       line-height:92rpx;
       font-size:32rpx;
-      font-family:PingFangSC-Medium;
       color:rgba(53,57,67,1);
       border-bottom: 1rpx solid #ededed;
       text-align: center;
@@ -700,7 +699,6 @@
       .hint_1 {
         height:24rpx;
         font-size:24rpx;
-        font-family:PingFangSC-Light;
         color:rgba(255,102,102,1);
         line-height:24rpx;
         text-align: center;
@@ -710,7 +708,6 @@
       .hint_2 {
         height:28rpx;
         font-size:28rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(0,208,147,1);
         line-height:28rpx;
         text-align: center;
@@ -723,7 +720,6 @@
         background:rgba(0,208,147,1);
         border-radius:49rpx;
         font-size:32rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(255,255,255,1);
         line-height:98rpx;
         margin-top: 60rpx;
@@ -740,7 +736,6 @@
           height:90rpx;
           border-radius:44rpx;
           font-size:32rpx;
-          font-family:SFUIDisplay-Regular;
           color:rgba(53,57,67,1);
           line-height:90rpx;
           box-sizing: border-box;
@@ -753,7 +748,6 @@
           height: 94rpx;
           width: 160rpx;
           font-size:28rpx;
-          font-family:PingFangSC-Regular;
           color:rgba(0,208,147,1);
           line-height:94rpx;
           position: absolute;
@@ -794,7 +788,6 @@
       border-radius: 49rpx;
       color:rgba(255,255,255,1);
       font-size: 32rpx;
-      font-family:PingFangSC-Regular;
       &.toNext {
         background:rgba(0,208,147,1);
       }
@@ -827,14 +820,12 @@
       .tit1 {
         height:34rpx;
         font-size:34rpx;
-        font-family:PingFangSC-Medium;
         color:rgba(53,57,67,1);
         line-height:34rpx;
         margin-bottom: 16rpx;
       }
       .tit2 {
         font-size:28rpx;
-        font-family:PingFangSC-Light;
         color:rgba(154,161,171,1);
         line-height:28rpx;
       }
@@ -925,7 +916,6 @@
     }
     .hint_txt {
       font-size:26rpx;
-      font-family:PingFangSC-Light;
       color:rgba(154,161,171,1);
       line-height:30rpx;
       //margin-left: 28rpx;
@@ -939,14 +929,12 @@
     .tit_small{
       height:34rpx;
       font-size:34rpx;
-      font-family:PingFangSC-Medium;
       color:rgba(53,57,67,1);
       line-height:34rpx;
       position: relative;
       margin-bottom: 32rpx;
       text {
         font-size:26rpx;
-        font-family:PingFangSC-Light;
         color:rgba(178,182,194,1);
         margin-left: 30rpx;
       }
@@ -974,7 +962,6 @@
       }
       .tit_small {
         font-size:26rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(53,57,67,1);
         line-height:26rpx;
       }
@@ -995,7 +982,6 @@
           border:1rpx solid rgba(220,227,238,1);
           margin: 0 20rpx 20rpx 0;
           font-size:28rpx;
-          font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:60rpx;
           text-align: center;
@@ -1003,7 +989,6 @@
           &.cur {
             background:rgba(0,208,147,0.05);
             border:1px solid rgba(0,208,147,1);
-            font-family:SFUIDisplay-Regular;
             color:rgba(0,208,147,1);
           }
         }
@@ -1013,7 +998,6 @@
         width: 100%;
         height: 40rpx;
         font-size:28rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(53,57,67,1);
         line-height:40rpx;
         margin-bottom: 20rpx;
@@ -1022,7 +1006,6 @@
         float: right;
         color: #B2B6C2;
         font-size:28rpx;
-        font-family:SFUIDisplay-Light;
         display: flex;
         flex-direction: row;
         margin-bottom: 70rpx;
@@ -1039,7 +1022,6 @@
   }
   .pclass {
     font-size:22rpx;
-    font-family:PingFangSC-Light;
     color:rgba(195,201,212,1);
     line-height:60rpx;
     text-align: center;

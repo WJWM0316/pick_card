@@ -67,7 +67,6 @@
     .none_txt_1 {
       height:28rpx;
       font-size:28rpx;
-      font-family:PingFangSC-Light;
       color:#9AA1AB;
       line-height:28rpx;
       margin-bottom: 14rpx;
@@ -75,7 +74,6 @@
     .none_txt_2 {
       height:28rpx;
       font-size:28rpx;
-      font-family:PingFang-SC-Regular;
       color:#00D093;
       line-height:28rpx;
     } 
@@ -84,7 +82,6 @@
   .hint {
     //display: none;
     font-size:28rpx;
-    font-family:PingFangSC-Light;
     color:rgba(154,161,171,1);
     line-height:140rpx;
     height:140rpx;
@@ -118,7 +115,6 @@
           justify-content: center;
           .msg_name {
             font-size:32rpx;
-            font-family:PingFangSC-Regular;
             color:rgba(53,57,67,1);
             line-height: 40rpx;
             margin-bottom: 14rpx;
@@ -126,7 +122,6 @@
           }
           .msg_form {
             font-size:28rpx;
-            font-family:PingFangSC-Light;
             color:rgba(154,161,171,1);
             line-height:28rpx;
           }
@@ -138,7 +133,6 @@
           border-radius:33rpx;
           text-align: center;
           font-size:28rpx;
-          font-family:PingFangSC-Regular;
           color:rgba(255,255,255,1);
           line-height:60rpx;
           position: relative;
@@ -147,7 +141,6 @@
           width:140rpx;
           text-align: center;
           font-size:28rpx;
-          font-family:PingFangSC-Regular;
           color:rgba(195,201,212,1);
           line-height:40rpx;
         }
@@ -169,7 +162,6 @@
         }
         .txt {
           font-size:26rpx;
-          font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:37rpx;
           flex: 1;

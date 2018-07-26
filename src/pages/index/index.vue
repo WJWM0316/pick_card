@@ -847,7 +847,6 @@ export default {
             .end_cont {
               margin-top: 47rpx;
               .blo_hint_txt {
-                font-family: PingFangSC-Light;
                 font-size: 26rpx;
                 color: #9AA1AB;
                 letter-spacing: 0;
@@ -869,7 +868,6 @@ export default {
             .cool_cont {
               padding: 0 13rpx;
               .blo_hint_txt {
-                font-family: PingFangSC-Light;
                 font-size: 26rpx;
                 color: #9AA1AB;
                 letter-spacing: 0;
@@ -1001,7 +999,6 @@ export default {
       .txt {
         height:30rpx;
         font-size:30rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(255,255,255,1);
         line-height:30rpx;
         text-align: center;
@@ -1034,7 +1031,6 @@ export default {
     //width: 100%;
     line-height: 94rpx;
     font-size:32rpx;
-    //font-family:PingFangSC-Light;
     font-weight: 300;
     color:rgba(53,57,67,1);
     background:rgba(250,251,252,1);
@@ -1062,7 +1058,6 @@ export default {
         border:2rpx solid rgba(255,255,255,1);
         margin-left: 8rpx;
         font-size:16rpx;
-        font-family:HelveticaNeue-Medium;
         color:rgba(255,255,255,1);
         line-height:30rpx;
         text-align: center;
@@ -1142,14 +1137,12 @@ export default {
         }
         .blo_hint_txt {
           font-size:28rpx;
-          //font-family:PingFangSC-Light;
           font-weight: 300;
           color: #9AA1AB;
           line-height:38rpx;
         }
         .cool_time {
           font-size:48rpx;
-          font-family:SFUIDisplay-Medium;
           color:rgba(53,57,67,1);
           line-height:48rpx;
           margin: 60rpx 0 20rpx 0;
@@ -1194,7 +1187,6 @@ export default {
           justify-content: center;
           align-items: center;
           font-size:24rpx;
-          font-family:PingFangSC-Regular;
           color:rgba(255,255,255,1);
           line-height: 50rpx;
           display: none;
@@ -1217,7 +1209,6 @@ export default {
           .name {
             font-size:48rpx;
             line-height: 1.4;
-            font-family:PingFang-SC-Medium;
             color:rgba(250,251,252,1);
             padding-top: 60rpx;
           }
@@ -1225,7 +1216,6 @@ export default {
             width: 470rpx;
             font-size:32rpx;
             line-height: 1.4;
-            //font-family:PingFangSC-Light;
             font-weight: 300;
             color:rgba(255,255,255,1);
           }
@@ -1247,7 +1237,6 @@ export default {
         .signature {
           height: 70rpx;
           font-size:28rpx;
-          //font-family:PingFangSC-Light;
           font-weight: 300;
           color:rgba(154,161,171,1);
           line-height:35rpx;
@@ -1266,7 +1255,6 @@ export default {
             padding: 0 26rpx;
             box-sizing: border-box;
             font-size:24rpx;
-            font-family:PingFangSC-Regular;
             border-radius:24rpx;
             color:rgba(0,208,147,1);
             //line-height:48rpx;
@@ -1362,13 +1350,11 @@ export default {
       justify-content: space-around;
       align-items: center;
       font-size:32rpx;
-      //font-family:PingFangSC-Light;
       font-weight: 300;
       color:rgba(117,121,128,1);
       .name {
         &.cur {
           font-size:32rpx;
-          font-family:SFUIDisplay-Semibold;
           color:rgba(53,64,72,1);
           position: relative;
           &:after {
