@@ -309,7 +309,7 @@
 											e.son[this.selectList[0].index].check = false
 										}
 									})
-								} else {
+								} else if (this.selectList[0].first_level === 4) {
 									this.list[3].son.forEach(e => {
 										if (e.id=== this.selectList[0].two_level) {
 											e.son[this.selectList[0].index].check = false
