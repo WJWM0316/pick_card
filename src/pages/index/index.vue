@@ -209,6 +209,7 @@ export default {
         count: 10,
         occupation_label_id: 0,
         realm_label_id: 0,
+        exclude_uid: ''
       },                
       isPop: false,     //遮罩
       isCooling: false, //冷却
@@ -369,9 +370,19 @@ export default {
         that.usersInfo = that.$store.getters.userInfo
         console.log(res)
         console.log(that.usersInfo, '用户信息')
-        console.log(that.usersInfo.step, 'step')
+        //排除uid
+        let exclude_uid = []
+        if(res.data.length > 0){
+          for(let i = 0;res.data.length>i;i++){
+            exclude_uid[i] = res.data[i].id
+          }
+          exclude_uid = exclude_uid.join(',')
+          that.getPage.exclude_uid = exclude_uid
+        }
+
         that.usersList = res.data
         this.nowIndex = 0
+
 
         if(that.usersInfo.step!=9){
             if(res.data.length<1){
@@ -600,6 +611,16 @@ export default {
             that.isEnd = true;
             console.log('没有数据了。冷却===》',that.isEnd)
           }else {
+            //排除uid
+            let exclude_uid = []
+            if(res.data.length > 0){
+              for(let i = 0;res.data.length>i;i++){
+                exclude_uid[i] = res.data[i].id
+              }
+              exclude_uid = exclude_uid.join(',')
+              that.getPage.exclude_uid = exclude_uid
+            }
+            
             that.isEnd = false
             if(that.usersList.length>0 && res.data[0].id == that.usersList[that.nowIndex].id){
               res.data.splice(0,1)
