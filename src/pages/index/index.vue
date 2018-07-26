@@ -377,8 +377,8 @@ export default {
             exclude_uid[i] = res.data[i].id
           }
           exclude_uid = exclude_uid.join(',')
-          that.getPage.exclude_uid = exclude_uid
         }
+        that.getPage.exclude_uid = exclude_uid
 
         that.usersList = res.data
         this.nowIndex = 0
@@ -618,9 +618,9 @@ export default {
                 exclude_uid[i] = res.data[i].id
               }
               exclude_uid = exclude_uid.join(',')
-              that.getPage.exclude_uid = exclude_uid
             }
-            
+            that.getPage.exclude_uid = exclude_uid
+
             that.isEnd = false
             if(that.usersList.length>0 && res.data[0].id == that.usersList[that.nowIndex].id){
               res.data.splice(0,1)
