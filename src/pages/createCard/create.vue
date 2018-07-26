@@ -42,7 +42,7 @@
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt"  v-model.lazy="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="职位字段文案：请填写你的职业"  maxlength="40" />
+        <input class="one_ipt"  v-model.lazy="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="请填写你的职业"  maxlength="40" />
       </view>
 
       <view class="table_blo row_style_two">
