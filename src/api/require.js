@@ -30,7 +30,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
     util.loading(isLoading)
     const addHttpHead = {
       token: wx.getStorageSync('token') || '',
-      cv: 105
+      cv: 106
     }
     wx.request({
       url: config.baseHost+url,

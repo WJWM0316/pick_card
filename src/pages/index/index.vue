@@ -481,7 +481,7 @@ export default {
     },
     toFiltrate () {
       if (this.$store.getters.userInfo.step !== 9) {
-        wx.redirectTo({
+        wx.navigateTo({
           url: `/pages/createCard/main`
         })
         return
@@ -492,7 +492,7 @@ export default {
     },
     toSwop () {
       if (this.$store.getters.userInfo.step !== 9) {
-        wx.redirectTo({
+        wx.navigateTo({
           url: `/pages/createCard/main`
         })
         return
@@ -519,7 +519,7 @@ export default {
         setTimeout(()=>{
           this.canNav = true 
         },1000)
-        wx.redirectTo({
+        wx.navigateTo({
           url: `/pages/createCard/main`
         })
       }

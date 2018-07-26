@@ -174,7 +174,7 @@
 
 					    // 计算文字打点
 					    function pointOut (string, num) {
-					    	let result = 0
+					    	let result = string.length
 					    	let length = 0
 						    for (var i=0; i<string.length-1; i++) {
 						    	// 检查双字节
@@ -183,10 +183,10 @@
 						    	} else {
 						    		length += 1
 						    	}
-						    	if (length < num) { // 判断是否超过 是否需要打点
-							    	result =  string.length - 1
-							    } else {
+						    	//console.log(length, string)
+						    	if (length > num) { // 判断是否超过 是否需要打点
 							    	result =  i
+							    	return result
 							    }
 						    }
 						    return result
@@ -197,8 +197,8 @@
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
 					    let lineNum1 = pointOut(that.info.nickname, 30)
-					    if (lineNum !== that.info.nickname.length - 1) {
-					    	that.info.nickname = that.info.nickname.slice(0, lineNum) + '...'
+					    if (lineNum1 !== that.info.nickname.length) {
+					    	that.info.nickname = that.info.nickname.slice(0, lineNum1) + '...'
 					    }
 					    ctx.fillText(that.info.nickname, 17, 280)
 					    ctx.save()
@@ -215,27 +215,13 @@
 					    let staticY = 349
 					    ctx.setFontSize(14)
 					    ctx.setFillStyle('#9AA1AB')
-					    let signNum = 0
-					    let signTxt = that.info.sign
-					    let chatIndex = signTxt.length - 1
-					    for (var i=0; i<signTxt.length-1; i++) {
-					    	// 检查双字节
-					    	if (signTxt[i].match(/[^\x00-\xff]/)) {
-					    		signNum += 2
-					    	} else {
-					    		signNum += 1
-					    	}
-					    	if (signNum > 40) {
-					    		chatIndex = i
-					    		return
-					    	}
-					    }
-					    if (chatIndex !== signTxt.length - 1) {
-					    	ctx.fillText(that.info.sign.slice(0, chatIndex), 17, staticY)
+					    let lineNum3 = pointOut(that.info.sign, 40)
+					    if (lineNum3 < that.info.sign.length) {
+					    	ctx.fillText(that.info.sign.slice(0, lineNum3), 17, staticY)
 					    	staticY = staticY + 20
-					    	ctx.fillText(that.info.sign.slice(chatIndex + 1, (that.info.sign.length-1)-(chatIndex+1)), 17, staticY)
+					    	ctx.fillText(that.info.sign.slice(lineNum3 + 1, that.info.sign.length-1), 17, staticY)
 					    } else {
-					    	ctx.fillText(that.info.sign.slice(0, chatIndex), 17, staticY)
+					    	ctx.fillText(that.info.sign.slice(0, lineNum3), 17, staticY)
 					    }
 					    ctx.setFontSize(12)
 					    ctx.setFillStyle('#00D093')
