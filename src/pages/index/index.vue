@@ -372,7 +372,7 @@ export default {
         console.log(that.usersInfo, '用户信息')
         //排除uid
         let exclude_uid = []
-        if(res.data.length > 0){
+        if(res.data.length > 0 && that.usersInfo == 9){
           for(let i = 0;res.data.length>i;i++){
             exclude_uid[i] = res.data[i].id
           }
@@ -613,7 +613,7 @@ export default {
           }else {
             //排除uid
             let exclude_uid = []
-            if(res.data.length > 0){
+            if(res.data.length > 0 && that.usersInfo.step == 9){
               for(let i = 0;res.data.length>i;i++){
                 exclude_uid[i] = res.data[i].id
               }
