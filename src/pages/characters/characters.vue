@@ -303,14 +303,35 @@
 							if (this.pageOneNum < 5) {
 								this.pageOneNum ++
 							} else {
+								if (this.selectList[0].first_level === 3) {
+									this.list[2].son.forEach(e => {
+										if (e.id=== this.selectList[0].two_level) {
+											e.son[this.selectList[0].index].check = false
+										}
+									})
+								} else {
+									this.list[3].son.forEach(e => {
+										if (e.id=== this.selectList[0].two_level) {
+											e.son[this.selectList[0].index].check = false
+										}
+									})
+								}
 								this.selectList.splice(0, 1)
+
 							}
 							this.selectList.splice(this.pageOneNum-1, 0, data)
 						} else if (this.pageIndex === 1) {
 							if (this.pageTwoNum < 5) {
 								this.pageTwoNum ++
 							} else {
-								this.selectList.splice(this.pageOneNum, 1)
+								if (this.selectList[this.pageOneNum].first_level === 2) {
+									this.list[1].son.forEach(e => {
+										if (e.id === this.selectList[this.pageOneNum].two_level) {
+											e.son[this.selectList[this.pageOneNum].index].check = false
+										}
+									})
+									this.selectList.splice(this.pageOneNum, 1)
+								}
 							}
 							this.selectList.push(data)
 						}
@@ -344,13 +365,13 @@
 				} else {
 					switch (item.first_level) {
 						case 2:
-								this.list[1].son.forEach(e => {
-									if (e.id=== item.two_level) {
-										e.son[item.index].check = false
-									}
-								})
-								this.pageTwoNum --
-								break
+							this.list[1].son.forEach(e => {
+								if (e.id=== item.two_level) {
+									e.son[item.index].check = false
+								}
+							})
+							this.pageTwoNum --
+							break
 						case 3:
 							this.list[2].son.forEach(e => {
 								if (e.id=== item.two_level) {

@@ -38,11 +38,11 @@
     <view class="op_blo op_two " v-if="nowNum === 1 && listData.length>0">
       <view class="table_blo row_style_one">
         <view class="tit">最近任职公司</view>
-        <input class="one_ipt" v-model.lazy="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：老虎科技" maxlength="100" />
+        <input class="one_ipt" v-model.lazy="secondData.company" placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="请填写你当前任职的公司名，简称亦可" maxlength="100" />
       </view>
       <view class="table_blo row_style_one">
         <view class="tit">职位</view>
-        <input class="one_ipt"  v-model.lazy="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="例如：产品经理"  maxlength="40" />
+        <input class="one_ipt"  v-model.lazy="secondData.occupation"  placeholder-style="font-size:32rpx;font-family:PingFangSC-Light;color:rgba(195,201,212,1);line-height:60rpx;" placeholder="职位字段文案：请填写你的职业"  maxlength="40" />
       </view>
 
       <view class="table_blo row_style_two">

@@ -34,8 +34,7 @@
 						<view class="gendor_warp">
 							<image class="sex" src="/static/images/details_icon_female@3x.png" v-if="userInfo.gender === 2"></image>
 							<image class="sex" src="/static/images/details_icon_man@3x.png" v-if="userInfo.gender === 1"></image>
-
-							<image class="share" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')" v-if="" ></image>
+							<image class="share" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')" v-if="isSelf"></image>
 						</view>
 				</view>
 				<view class="job">{{userInfo.occupation}}</view>
@@ -208,7 +207,7 @@
 			} else {
 				this.vkey = option.vkey
 			}
-			console.log(this.vkey, 22222)
+			console.log(this.vkey, '22222111111111111')
 			const vkey = this.vkey
 			if (vkey === wx.getStorageSync('vkey')) {
 				this.isSelf = true
@@ -484,18 +483,22 @@
 			},
 			flterData (list) {
 				list.forEach(item => {
-					let start = item.start_time_desc.split('-')
-					if (start[1][0] === '0') {
-						start[1] = start[1][1]
-					}
-					item.start_time_desc = `${start[0]}年${start[1]}月`
-					let end = item.end_time_desc
-					if (end !== '至今') {
-						end = item.end_time_desc.split('-')
-						if (end[1][0] === '0') {
-							end[1] = end[1][1]
+					if (item.start_time_desc.indexOf('-') !== -1) {
+						let start = item.start_time_desc.split('-')
+						if (start[1][0] === '0') {
+							start[1] = start[1][1]
 						}
-						item.end_time_desc = `${end[0]}年${end[1]}月`
+						item.start_time_desc = `${start[0]}年${start[1]}月`
+					}
+					if (item.end_time_desc.indexOf('-') !== -1) {
+						let end = item.end_time_desc
+						if (end !== '至今') {
+							end = item.end_time_desc.split('-')
+							if (end[1][0] === '0') {
+								end[1] = end[1][1]
+							}
+							item.end_time_desc = `${end[0]}年${end[1]}月`
+						}
 					}
 				})
 			},
@@ -530,6 +533,7 @@
 					this.userInfo.other_info.realm_info.forEach(e => {
 						this.checkedTextList.push(e.name)
 					})
+					console.log(this.checkedTextList, '测试')
 					this.getShareImg()
 				})
 			},

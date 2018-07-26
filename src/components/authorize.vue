@@ -112,10 +112,10 @@
 	        })
 	      })
 	    },
-			onGetUserinfo (e) {
-    		console.log('用户手动同意微信授权', e.mp.detail)
-    		// 授权完毕 重新调回原页面刷新当前数据
-	  		let params = ''
+		onGetUserinfo (e) {
+    	console.log('用户手动同意微信授权', e.mp.detail)
+    	// 授权完毕 重新调回原页面刷新当前数据
+	  	let params = ''
         let url = ''
         for (var i in this.routerInfo.query) {
         	params += `${i}=${this.routerInfo.query[i]}&`

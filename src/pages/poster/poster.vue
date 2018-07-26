@@ -171,32 +171,71 @@
 					    ctx.fillRect(0, 200, 320, 120)
 					    ctx.save()
 
+
+					    // 计算文字打点
+					    function pointOut (string, num) {
+					    	let result = false
+					    	let length = 0
+						    for (var i=0; i<string.length; i++) {
+						    	// 检查双字节
+						    	if (string[i].match(/[^\x00-\xff]/)) {
+						    		length += 2
+						    	} else {
+						    		length += 1
+						    	}
+					    		if (length < num) { // 判断是否超过 是否需要打点
+							    	result =  false
+							    	return
+							    } else {
+							    	result =  true
+							    	return
+							    }
+						    }
+						    return result
+					    }
+
 					    // 画文案
 					    ctx.setTextAlign('left')
 					    ctx.setFillStyle('#ffffff')
 					    ctx.setFontSize(24)
-					    if (that.info.nickname.length > 20) {
+					    if (pointOut(that.info.nickname, 30)) {
 					    	that.info.nickname = that.info.nickname.slice(0, 17) + '...'
 					    }
 					    ctx.fillText(that.info.nickname, 17, 280)
 					    ctx.save()
 
 					    ctx.setFontSize(16)
-					    if (that.info.job.length > 20) {
+					    if (pointOut(that.info.job, 40)) {
 					    	that.info.job = that.info.job.slice(0, 17) + '...'
 					    }
 					    ctx.fillText(that.info.job, 17, 300)
 					    ctx.save()
 
+					    // 画签名
 					    let staticY = 349
 					    ctx.setFontSize(14)
 					    ctx.setFillStyle('#9AA1AB')
-					    if (that.info.sign.length > 20) {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, staticY)
+					    let signNum = 0
+					    let signTxt = that.info.sign
+					    let chatIndex = signTxt.length - 1
+					    for (var i=0; i<signTxt.length; i++) {
+					    	// 检查双字节
+					    	if (signTxt[i].match(/[^\x00-\xff]/)) {
+					    		signNum += 2
+					    	} else {
+					    		signNum += 1
+					    	}
+					    	if (signNum > 40) {
+					    		chatIndex = i
+					    		return
+					    	}
+					    }
+					    if (chatIndex !== signTxt.length - 1) {
+					    	ctx.fillText(that.info.sign.slice(0, chatIndex), 17, staticY)
 					    	staticY = staticY + 20
-					    	ctx.fillText(that.info.sign.slice(20, that.info.sign.length-1), 17, staticY)
+					    	ctx.fillText(that.info.sign.slice(chatIndex + 1, (that.info.sign.length-1)-(chatIndex+1)), 17, staticY)
 					    } else {
-					    	ctx.fillText(that.info.sign.slice(0, 19), 17, staticY)
+					    	ctx.fillText(that.info.sign.slice(0, chatIndex), 17, staticY)
 					    }
 					    ctx.setFontSize(12)
 					    ctx.setFillStyle('#00D093')
