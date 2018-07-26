@@ -35,10 +35,8 @@
 							<image class="sex" src="/static/images/details_icon_female@3x.png" v-if="userInfo.gender === 2"></image>
 							<image class="sex" src="/static/images/details_icon_man@3x.png" v-if="userInfo.gender === 1"></image>
 
-							<image class="share" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')"></image>
-
+							<image class="share" src="/static/images/deta_btn_edit@3x.png" @tap.stop="toEdit('edit')" v-if="" ></image>
 						</view>
-						
 				</view>
 				<view class="job">{{userInfo.occupation}}</view>
 				<view class="company">{{userInfo.company}}</view>
@@ -175,7 +173,8 @@
 				isShareImg: '',
 				stopShow: false, // 阻止onShow的进行
 				showPop: false,
-				routerInfo: {}
+				routerInfo: {},
+
 			}
 		},
 		computed: {
@@ -195,6 +194,7 @@
 			}
 		},
 		onLoad (option) {
+
 			this.routerInfo = {
 				path: 'pages/detail/main',
 				query: option
@@ -215,6 +215,8 @@
 			} else {
 				this.isSelf = false
 			}
+
+
 		},
 		onShow () {
 			if (this.stopShow) {
@@ -370,6 +372,10 @@
 				}
 				if (type === 'launch') {
 					indexLike(data).then(res => {
+
+						//首页不刷新
+						wx.setStorageSync('isDetail','2')
+						
 						this.userInfo.handle_status = 2
 					})
 				} else if (type === 'agree') {

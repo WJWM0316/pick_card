@@ -330,9 +330,6 @@ export default {
         })
       }
     }
-
-
-
   },
   onShow (res) {
     let that = this
@@ -350,21 +347,24 @@ export default {
       })
     } else {
       this.isFirst()
-      this.dataList()
+
+      let isDetail = wx.getStorageSync('isDetail')
+      if(isDetail != 1){
+        wx.setStorageSync('isDetail','2')
+        this.dataList()
+      }else {
+        wx.setStorageSync('isDetail','2')
+      }
     }
   },
   methods: {
     changeShow(res){
-      console.log(11111)
       this.isShowTrue = false
     },
     dataList () {
       let that = this
-
       console.log('dataList')
-
       //that.usersInfo = that.$store.getters.userInfo
-
       getIndexUsers(that.getPage).then((res)=>{
         that.usersInfo = that.$store.getters.userInfo
         console.log(res)
@@ -454,7 +454,7 @@ export default {
     },
     cloSahre(){
       this.isPop = false
-      this.isShare=false
+      this.isShare = false
     },
     isShare2 () {
       this.isPop = true
@@ -462,6 +462,8 @@ export default {
     },
     //跳转====
     toDetail (item) {
+
+      wx.setStorageSync('isDetail', '1')
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
       })
@@ -586,7 +588,7 @@ export default {
       console.log('step=====>',this.usersInfo)
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
-        getIndexUsers(this.getPage).then((res)=>{
+        getIndexUsers(that.getPage).then((res)=>{
           console.log(res)
           if(step!=9 && step){
             that.isCreate()
@@ -597,19 +599,12 @@ export default {
           if(res.data.length<1){
             that.isEnd = true;
             console.log('没有数据了。冷却===》',that.isEnd)
-
           }else {
-            
             that.isEnd = false
-            if(res.data[0].id == this.usersList[this.nowIndex].id){
+            if(that.usersList.length>0 && res.data[0].id == that.usersList[that.nowIndex].id){
               res.data.splice(0,1)
             }
-
-
-            that.usersList = [...this.usersList,...res.data]
-
-            console.log(res.data[0].id)
-            console.log(this.usersList[this.nowIndex].id)
+            that.usersList = [...that.usersList,...res.data]
           }
           that.isCooling = false
           //this.nowIndex = 0;
@@ -617,7 +612,7 @@ export default {
           if(res.http_status == 400 && res.code == 99){
             that.intervalTime(res.data.rest_time)
           }else {
-            this.$mptoast(res.msg)
+            that.$mptoast(res.msg)
           }
         })
       }else {
@@ -659,7 +654,7 @@ export default {
         that.moveData.style = ''
         that.isNext = true
         that.isGetUers()
-      },800)
+      },700)
     },
     like(msg){
       let that = this;
@@ -677,7 +672,7 @@ export default {
         setTimeout(()=>{
           that.moveData.style = ''
           that.isNext = true
-        },800)
+        },700)
       },(res)=>{
         if(res.http_status == 400 && res.code == 99){
           that.intervalTime(res.data.rest_time)
@@ -724,7 +719,7 @@ export default {
         setTimeout(()=>{
           that.moveData.style = ''
           that.isNext = true
-        },800)
+        },700)
       },(res)=>{
         console.log(res)
 
