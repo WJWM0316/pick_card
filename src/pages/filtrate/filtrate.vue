@@ -253,7 +253,6 @@
   .hint {
     height:120rpx;
     font-size:26rpx;
-    font-family:PingFangSC-Light;
     color:rgba(154,161,171,1);
     line-height:120rpx;
   }
@@ -272,7 +271,6 @@
       border-radius: 49rpx;
       text-align: center;
       font-size: 32rpx;
-      font-family:PingFangSC-Regular;
       color:rgba(255,255,255,1);
       line-height: 98rpx;
       &.toNext {
@@ -288,14 +286,12 @@
       .tit1 {
         height:34rpx;
         font-size:34rpx;
-        font-family:PingFangHK-Medium;
         color:rgba(53,57,67,1);
         line-height:34rpx;
         margin-bottom: 16rpx;
       }
       .tit2 {
         font-size:28rpx;
-        font-family:PingFangSC-Light;
         color:rgba(154,161,171,1);
         line-height:28rpx;
       }
@@ -385,7 +381,6 @@
     }
     .hint_txt {
       font-size:26rpx;
-      font-family:PingFangSC-Light;
       color:rgba(154,161,171,1);
       line-height:26rpx;
       margin-left: 28rpx;
@@ -398,14 +393,12 @@
       .tit {
         height:34rpx;
         font-size:34rpx;
-        font-family:PingFangHK-Medium;
         color:rgba(53,57,67,1);
         line-height:34rpx;
         position: relative;
         margin-bottom: 32rpx;
         text {
           font-size:26rpx;
-          font-family:PingFangSC-Light;
           color:rgba(178,182,194,1);
           margin-left: 30rpx;
         }
@@ -425,7 +418,6 @@
           border:1rpx solid rgba(220,227,238,1);
           margin: 0 20rpx 20rpx 0;
           font-size:28rpx;
-          font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:60rpx;
           text-align: center;
@@ -434,7 +426,6 @@
           &.cur {
             background:rgba(0,208,147,0.05);
             border:1rpx solid rgba(0,208,147,1);
-            font-family:SFUIDisplay-Regular;
             color:rgba(0,208,147,1);
           }
         }
@@ -454,7 +445,6 @@
   }
   .pclass {
     font-size:22rpx;
-    font-family:PingFangSC-Light;
     color:rgba(195,201,212,1);
     line-height:60rpx;
     text-align: center;

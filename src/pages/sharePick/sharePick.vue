@@ -64,7 +64,6 @@
         .cont_txt {
           height:28rpx;
           font-size:28rpx;
-          font-family:PingFangHK-Light;
           color:rgba(53,57,67,1);
           line-height:28rpx;
           margin-bottom: 10rpx;
@@ -96,11 +95,9 @@
     .peaple {
       height:100rpx;
       font-size:38rpx;
-      font-family:PingFangHK-Regular;
       color:rgba(53,57,67,1);
       .ple_num {
         font-size:150rpx;
-        font-family:SFUIDisplay-Heavy;
         color:rgba(0,208,147,1);
         line-height:100rpx;
         display: inline-block;
@@ -110,7 +107,6 @@
     .title {
       height:60rpx;
       font-size:62rpx;
-      font-family:PingFangHK-Medium;
       color:rgba(53,57,67,1);
       line-height:60rpx;
       text-align: left;
@@ -135,7 +131,6 @@
       width: 480rpx;
       line-height:39rpx;
       font-size:32rpx;
-      font-family:PingFangSC-Semibold;
       padding-bottom: 66rpx;
       text-align: center;
 
@@ -144,7 +139,6 @@
       width: 480rpx;
       line-height:34rpx;
       font-size:27rpx;
-      font-family:SFUIDisplay-Heavy;
       color:rgba(53,57,67,0.81);
       text-align: center;
       .setEllipsis();
@@ -159,7 +153,6 @@
       background:rgba(0,208,147,1);
       border-radius:49rpx;
       font-size:32rpx;
-      font-family:PingFangHK-Regular;
       color:rgba(255,255,255,1);
       text-align: center;
       box-sizing: border-box;

@@ -468,7 +468,6 @@ export default {
   .radio-group {
     text-align: center;
     font-size:30fpx;
-    font-family:PingFangSC-Regular;
     color:rgba(154,161,171,1);
     margin-top: 40rpx;
     display: flex;
@@ -502,7 +501,6 @@ export default {
       text-align: left;
       .cont_tit {
         font-size:36rpx;
-        font-family:PingFangSC-Semibold;
         color:rgba(53,57,67,1);
         line-height:34rpx;
         margin-bottom: 40rpx;
@@ -510,20 +508,17 @@ export default {
       }
       .cont_txt {
         font-size:28rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(154,161,171,1);
         line-height:36rpx;
       }
       .cont_tit2 {
         font-size:28rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(53,57,67,1);
         line-height:40rpx;
         margin-bottom: 14rpx;
       }
       .cont_txt2 {
         font-size:28rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(154,161,171,1);
         line-height:50rpx;
       }
@@ -539,7 +534,6 @@ export default {
         border-radius:49rpx;
         margin: 0 auto;
         font-size:32rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(255,255,255,1);
         line-height:98rpx;
         text-align: center;
@@ -566,7 +560,6 @@ export default {
     .item {
       width: 150rpx;
       font-size:34rpx;
-      font-family:PingFangSC-Light;
       color:rgba(53,57,67,1);
       text-align: center;
       position: relative;
@@ -603,7 +596,6 @@ export default {
       }
       &.cur {
         font-size:34rpx;
-        font-family:PingFangSC-Medium;
         color:rgba(53,57,67,1);
         position: relative;
         &:after {
@@ -634,7 +626,6 @@ export default {
         height:160rpx;
         border-radius:16rpx;
         font-size:26rpx;
-        font-family:PingFangSC-Regular;
         color:rgba(255,255,255,1);
         line-height:120rpx;
         position: relative;
@@ -732,7 +723,6 @@ export default {
           height: 180rpx;
           .msg_tit {
             font-size: 28rpx;
-            font-family: PingFangSC-Light;
             color: rgba(154,161,171,1);
             line-height: 28rpx;
             margin: 0rpx 0 0rpx 0;
@@ -755,12 +745,10 @@ export default {
           text-align: center;
           line-height: 44rpx;
           font-size:26rpx;
-          font-family:PingFangSC-Medium;
           color:rgba(255,255,255,1);
         }
         .msg_name {
           font-size:34rpx;
-          font-family:PingFangSC-Medium;
           color:rgba(70,71,72,1);
           line-height:60rpx;
           height: 60rpx;
@@ -768,7 +756,6 @@ export default {
         }
         .msg_tit {
           font-size:28rpx;
-          font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:40rpx;
           height: 40rpx;
@@ -776,7 +763,6 @@ export default {
         }
         .msg_company {
           font-size:28rpx;
-          font-family:PingFangSC-Light;
           color:rgba(154,161,171,1);
           line-height:40rpx;
           height: 40rpx;
@@ -787,7 +773,6 @@ export default {
   .to_share {
     height:26rpx;
     font-size:26rpx;
-    font-family:PingFangSC-Regular;
     line-height:26rpx;
     display: flex;
     flex-direction: row;
@@ -812,7 +797,6 @@ export default {
   .none_txt {
     height:28rpx;
     font-size:28rpx;
-    font-family:PingFangSC-Light;
     line-height:28rpx;
     margin-bottom: 46rpx;
     color: #9AA1AB;
@@ -823,7 +807,6 @@ export default {
     background:rgba(0,208,147,1);
     border-radius:50rpx;
     font-size:32rpx;
-    font-family:PingFangSC-Regular;
     color:rgba(255,255,255,1);
     line-height:100rpx;
     margin: 0 auto;
