@@ -89,7 +89,11 @@
 
     <view class="pop_warp"  :class="{'hidden':!bindPhone.isPh}">
       <view class="sign_iphone" >
-        <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap.stop="clo"></image></view>
+        <view class="ip_top">绑定手机号完善联系方式
+          <view class="clo_warp" @tap.stop="clo">
+            <image src="/static/images/popup_btn_close_nor@3x.png" ></image>
+          </view>
+        </view>
         <view class="ip_cont">
           <view class="ipt_blo">
             <button class="getcode" @tap.stop="sms" v-if="bindPhone.smsCli">获取验证码</button>
@@ -675,22 +679,29 @@
     top: 204rpx;
     transform: translate(-50%, 0);
     .ip_top {
-      width:670rpx;
-      height:92rpx;
-      box-shadow:0rpx 1rpx 0rpx 0rpx rgba(53,57,67,0.1);
+      width: 670rpx;
+      height: 92rpx;
+      box-shadow: 0rpx 1rpx 0rpx 0rpx rgba(53,57,67,0.1);
       border-radius:18rpx 18rpx 0rpx 0rpx;
-      line-height:92rpx;
-      font-size:32rpx;
-      color:rgba(53,57,67,1);
+      line-height: 92rpx;
+      font-size: 32rpx;
+      color: rgba(53,57,67,1);
       border-bottom: 1rpx solid #ededed;
       text-align: center;
       position: relative;
+      .clo_warp {
+        width: 92rpx;
+        height: 92rpx;
+        position: absolute;
+        right: 0rpx;
+        top: 0rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       image {
         width:28rpx;
         height:28rpx;
-        position: absolute;
-        right: 33rpx;
-        top: 33rpx;
       }
     }
     .ip_cont {
