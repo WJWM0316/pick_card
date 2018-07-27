@@ -237,10 +237,19 @@
           that.bindPhone.isPh = true
         }else {
           let key = wx.getStorageSync('key')
+          console.log(key)
           that.thirdData.iv = e.mp.detail.iv
           that.thirdData.encryptedData = e.mp.detail.encryptedData
 
-          if(key.length<1){
+          App.methods.checkLogin().then((res)=>{
+            console.log('===checkLogin===',res)
+            if(res.http_status == 200){
+              that.thirdData.key = res.data.key
+              that.thirdPost(1)
+            }
+          })
+          
+          /*if(key.length<1){
             App.methods.checkLogin().then((res)=>{
               console.log('===checkLogin===',res)
               if(res.http_status == 200){
@@ -251,11 +260,15 @@
             return
           }
           wx.checkSession({
-            success: function(){
+            success: function(res){
+              console.log(res)
+
               that.thirdData.key = key
               that.thirdPost(1)
             },
-            fail: function(){
+            fail: function(res){
+              console.log(res)
+
               App.methods.checkLogin().then((res)=>{
                 console.log('===checkLogin===',res)
                 if(res.http_status == 200){
@@ -264,7 +277,7 @@
                 }
               })
             }
-          })
+          })*/
         }
       },
       thirdPost(type){
