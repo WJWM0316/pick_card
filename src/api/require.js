@@ -40,9 +40,9 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       success(res) {
         util.unloading(isLoading)
         console.log('请求成功后 response', res)
-        console.log('url',config.baseHost+url)
-        console.log('data',data)
-        console.log('header',addHttpHead)
+        // console.log('url',config.baseHost+url)
+        // console.log('data',data)
+        // console.log('header',addHttpHead)
         if (typeof res.data === 'string') { // 转换返回json
           res.data = JSON.parse(res.data)
         }
@@ -65,6 +65,14 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
               util.unloading(isLoading)
               resolve(msg)
               wx.removeStorageSync('token')
+              break
+            case 500:
+              util.unloading(isLoading)
+              wx.showToast({
+                title: '网络不可用，请检查网络设置。',
+                icon: 'none',
+                duration: 2000
+              })
               break
             default:
               util.unloading(isLoading)
