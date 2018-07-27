@@ -566,7 +566,7 @@ export default {
             line-height:38rpx;
             width: 180rpx;
             margin-right: 20rpx;
-            height: 38rpx;
+            height: 50rpx;
             font-weight: 700;
           }
           .msg_tit {
@@ -574,7 +574,7 @@ export default {
             color:rgba(154,161,171,1);
             line-height:40rpx;
             height:40rpx;
-            margin: 18rpx 0 0rpx 0;
+            margin: 6rpx 0 0rpx 0;
             font-weight: 300;
 
           }
@@ -598,12 +598,11 @@ export default {
             color:rgba(255,255,255,1);
             line-height:66rpx;
             text-align: center;
-            font-weight: 300;
+            font-weight: 500;
             &.type_2 {
               font-size:28rpx;
               background:rgba(255,255,255,1);
               color:rgba(154,161,171,1);
-              font-weight: 500;
             }
           }
         }

@@ -1056,13 +1056,14 @@ export default {
         height:30rpx;
         background:rgba(255,81,80,1);
         box-shadow:0rpx 2rpx 4rpx 0rpx rgba(0,0,0,0.1);
-        border-radius:87rpx;
+        border-radius: 120rpx;
         border:2rpx solid rgba(255,255,255,1);
         margin-left: 8rpx;
         font-size:16rpx;
         color:rgba(255,255,255,1);
         line-height:30rpx;
         text-align: center;
+        font-weight: 700;
       }
     }
     .left {
