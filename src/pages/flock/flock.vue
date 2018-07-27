@@ -462,6 +462,7 @@ export default {
         font-size:48rpx;
         color:rgba(53,57,67,1);
         line-height:48rpx;
+        font-weight: 700;
       }
       .txt {
         font-size:28rpx;
@@ -566,6 +567,7 @@ export default {
             width: 180rpx;
             margin-right: 20rpx;
             height: 38rpx;
+            font-weight: 700;
           }
           .msg_tit {
             font-size:28rpx;
@@ -596,14 +598,12 @@ export default {
             color:rgba(255,255,255,1);
             line-height:66rpx;
             text-align: center;
-            font-weight: 700;
-
+            font-weight: 300;
             &.type_2 {
               font-size:28rpx;
               background:rgba(255,255,255,1);
               color:rgba(154,161,171,1);
-              font-weight: 300;
-
+              font-weight: 500;
             }
           }
         }
@@ -643,7 +643,6 @@ export default {
     align-items: center;
     text-align: center;
     line-height: 96rpx;
-    font-weight: 700;
     .quit {
       height: 100%;
       width:222rpx;
@@ -658,7 +657,6 @@ export default {
       color:rgba(255,255,255,1);
       height: 96rpx;
       font-size:32rpx;
-      font-weight: 700;
       line-height: 96rpx;
     }
   }

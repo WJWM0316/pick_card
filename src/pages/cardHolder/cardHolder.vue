@@ -108,7 +108,7 @@
     <view class="hintPop" v-if="isShow">
       <!-- 分享弹窗 -->
       <view class="hint_cont" > 
-        <view class="cont_tit" >小阔爱，还差一步就可以啦~~</view>
+        <view class="cont_tit" >小阔爱，还差一步就可以啦~</view>
         <view class="cont_txt">因微信平台对群分享限制，分享到群后，到对应微信群点开你分享的小程序卡片，就可以成功创建群名片哦~</view>
         <view class="cont_line"></view>
 
@@ -473,7 +473,6 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    font-weight: 700;
     image {
       width: 40rpx;
       height: 40rpx;
@@ -506,12 +505,13 @@ export default {
         line-height:34rpx;
         margin-bottom: 40rpx;
         text-align: center;
+        font-weight: 700;
+
       }
       .cont_txt {
         font-size:28rpx;
         color:rgba(154,161,171,1);
         line-height:36rpx;
-        font-weight: 700;
 
       }
       .cont_tit2 {
@@ -519,15 +519,13 @@ export default {
         color:rgba(53,57,67,1);
         line-height:40rpx;
         margin-bottom: 14rpx;
-        font-weight: 700;
-
+        font-weight: 300;
       }
       .cont_txt2 {
         font-size:28rpx;
         color:rgba(154,161,171,1);
         line-height:50rpx;
-        font-weight: 700;
-
+        font-weight: 300;
       }
       .cont_line {
         width: 100%;
@@ -545,7 +543,6 @@ export default {
         line-height:98rpx;
         text-align: center;
         margin-top: 20rpx;
-        font-weight: 700;
 
       }
     }
@@ -609,6 +606,7 @@ export default {
         font-size:34rpx;
         color:rgba(53,57,67,1);
         position: relative;
+        font-weight: 700;
         &:after {
           content: '';
           width:20rpx;
@@ -767,6 +765,7 @@ export default {
           line-height:60rpx;
           height: 60rpx;
           width: 400rpx;
+          font-weight: 700;
         }
         .msg_tit {
           font-size:28rpx;
@@ -798,7 +797,6 @@ export default {
     margin-bottom: 68rpx;
     text-align: center;
     color: #9AA1AB;
-    font-weight: 700;
     &.ten {
     }
     button {
@@ -826,7 +824,6 @@ export default {
     background:rgba(0,208,147,1);
     border-radius:50rpx;
     font-size:32rpx;
-    font-weight: 700;
     color:rgba(255,255,255,1);
     line-height:100rpx;
     margin: 0 auto;

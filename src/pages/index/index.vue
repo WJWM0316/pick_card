@@ -1005,8 +1005,6 @@ export default {
         line-height:30rpx;
         text-align: center;
         margin-bottom: 14rpx;
-        font-weight: 700;
-
       }
       .bot_cont {
         width: 350rpx;
@@ -1194,7 +1192,6 @@ export default {
           color:rgba(255,255,255,1);
           line-height: 50rpx;
           display: none;
-          font-weight: 700;
           .adr {
             width:20rpx;
             height:24rpx;
@@ -1216,12 +1213,12 @@ export default {
             line-height: 1.4;
             color:rgba(250,251,252,1);
             padding-top: 60rpx;
+            font-weight: 700;
           }
           .title {
             width: 470rpx;
             font-size:32rpx;
             line-height: 1.4;
-            font-weight: 300;
             color:rgba(255,255,255,1);
           }
           .detail {
@@ -1260,7 +1257,6 @@ export default {
             padding: 0 26rpx;
             box-sizing: border-box;
             font-size:24rpx;
-            font-weight: 700;
             border-radius:24rpx;
             color:rgba(0,208,147,1);
             //line-height:48rpx;

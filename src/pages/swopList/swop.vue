@@ -77,7 +77,6 @@
       font-size:28rpx;
       color:#00D093;
       line-height:28rpx;
-      font-weight: 700;
     } 
   }
   
@@ -123,7 +122,6 @@
             line-height: 40rpx;
             margin-bottom: 14rpx;
             margin-right: 30rpx;
-            font-weight: 700;
           }
           .msg_form {
             font-size:28rpx;
@@ -142,8 +140,6 @@
           color:rgba(255,255,255,1);
           line-height:60rpx;
           position: relative;
-          font-weight: 700;
-
         }
         .top_status {
           width:140rpx;
@@ -151,7 +147,7 @@
           font-size:28rpx;
           color:rgba(195,201,212,1);
           line-height:40rpx;
-          font-weight: 700;
+          font-weight: 300;
 
         }
       }

@@ -146,7 +146,6 @@
       font-size:27rpx;
       color:rgba(53,57,67,0.81);
       text-align: center;
-      font-weight: 700;
       .setEllipsis();
     }
   }
@@ -159,7 +158,6 @@
       background:rgba(0,208,147,1);
       border-radius:49rpx;
       font-size:32rpx;
-      font-weight: 700;
       color:rgba(255,255,255,1);
       text-align: center;
       box-sizing: border-box;
