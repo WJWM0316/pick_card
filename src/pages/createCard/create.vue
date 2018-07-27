@@ -89,7 +89,11 @@
 
     <view class="pop_warp"  :class="{'hidden':!bindPhone.isPh}">
       <view class="sign_iphone" >
-        <view class="ip_top">绑定手机号完善联系方式<image src="/static/images/popup_btn_close_nor@3x.png" @tap.stop="clo"></image></view>
+        <view class="ip_top">绑定手机号完善联系方式
+          <view class="clo_warp" @tap.stop="clo">
+            <image src="/static/images/popup_btn_close_nor@3x.png" ></image>
+          </view>
+        </view>
         <view class="ip_cont">
           <view class="ipt_blo">
             <button class="getcode" @tap.stop="sms" v-if="bindPhone.smsCli">获取验证码</button>
@@ -225,23 +229,32 @@
       },
       getPhone(e){
         //bindgetphonenumber 从1.2.0 开始支持，但是在1.5.3以下版本中无法使用wx.canIUse进行检测，建议使用基础库版本进行判断。
-        this.bindPhone.isPh = false
+
+        let that = this
+        that.bindPhone.isPh = false
 
         if(!e.mp.detail.iv){
-          this.bindPhone.isPh = true
+          that.bindPhone.isPh = true
         }else {
-          App.methods.checkLogin().then((res)=>{
-            console.log('===checkLogin===',res)
-            if(res.http_status==200){
-              this.thirdData.key = res.data.key
-              this.thirdData.iv = e.mp.detail.iv
-              this.thirdData.encryptedData = e.mp.detail.encryptedData
-              this.thirdPost(1)
+          let key = wx.getStorageSync('key')
+          that.thirdData.iv = e.mp.detail.iv
+          that.thirdData.encryptedData = e.mp.detail.encryptedData
+
+          wx.checkSession({
+            success: function(){
+              that.thirdData.key = key
+              that.thirdPost(1)
+            },
+            fail: function(){
+              App.methods.checkLogin().then((res)=>{
+                console.log('===checkLogin===',res)
+                if(res.http_status == 200){
+                  that.thirdData.key = res.data.key
+                  that.thirdPost(1)
+                }
+              })
             }
-          }).catch((e) => {
-            console.log(e)
           })
-          
         }
       },
       thirdPost(type){
@@ -675,22 +688,29 @@
     top: 204rpx;
     transform: translate(-50%, 0);
     .ip_top {
-      width:670rpx;
-      height:92rpx;
-      box-shadow:0rpx 1rpx 0rpx 0rpx rgba(53,57,67,0.1);
+      width: 670rpx;
+      height: 92rpx;
+      box-shadow: 0rpx 1rpx 0rpx 0rpx rgba(53,57,67,0.1);
       border-radius:18rpx 18rpx 0rpx 0rpx;
-      line-height:92rpx;
-      font-size:32rpx;
-      color:rgba(53,57,67,1);
+      line-height: 92rpx;
+      font-size: 32rpx;
+      color: rgba(53,57,67,1);
       border-bottom: 1rpx solid #ededed;
       text-align: center;
       position: relative;
+      .clo_warp {
+        width: 92rpx;
+        height: 92rpx;
+        position: absolute;
+        right: 0rpx;
+        top: 0rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       image {
         width:28rpx;
         height:28rpx;
-        position: absolute;
-        right: 33rpx;
-        top: 33rpx;
       }
     }
     .ip_cont {
@@ -703,7 +723,8 @@
         line-height:24rpx;
         text-align: center;
         margin-bottom: 28rpx;
-        display:none;
+        display: none;
+        font-weight: 300;
       }
       .hint_2 {
         height:28rpx;
@@ -712,6 +733,7 @@
         line-height:28rpx;
         text-align: center;
         margin-top: 45rpx;
+        font-weight: 700;
 
       }
       .ip_btn {
@@ -723,6 +745,8 @@
         color:rgba(255,255,255,1);
         line-height:98rpx;
         margin-top: 60rpx;
+        font-weight: 700;
+
       }
       .ipt_blo {
         width:550rpx;
@@ -740,6 +764,8 @@
           line-height:90rpx;
           box-sizing: border-box;
           padding-left: 40rpx;
+          font-weight: 700;
+
           &.input_1 {
             width:350rpx;
           }
@@ -754,6 +780,8 @@
           top: 2rpx;
           right: 40rpx;
           z-index: 10;
+          font-weight: 700;
+
           &.type2 {
             color: #B2F0DE;
           }
@@ -788,6 +816,8 @@
       border-radius: 49rpx;
       color:rgba(255,255,255,1);
       font-size: 32rpx;
+      font-weight: 700;
+
       &.toNext {
         background:rgba(0,208,147,1);
       }
@@ -828,6 +858,8 @@
         font-size:28rpx;
         color:rgba(154,161,171,1);
         line-height:28rpx;
+        font-weight: 300;
+
       }
     }
     .one_pic {
@@ -920,6 +952,8 @@
       line-height:30rpx;
       //margin-left: 28rpx;
       flex: 1;
+      font-weight: 300;
+
     }
   }
   .op_blo {
@@ -937,6 +971,8 @@
         font-size:26rpx;
         color:rgba(178,182,194,1);
         margin-left: 30rpx;
+        font-weight: 300;
+
       }
       
     }
@@ -964,6 +1000,8 @@
         font-size:26rpx;
         color:rgba(53,57,67,1);
         line-height:26rpx;
+        font-weight: 700;
+
       }
       .one_ipt {
         border-bottom:1rpx solid #cccccc;
@@ -986,10 +1024,14 @@
           line-height:60rpx;
           text-align: center;
           box-sizing: border-box;
+          font-weight: 300;
+
           &.cur {
             background:rgba(0,208,147,0.05);
             border:1px solid rgba(0,208,147,1);
             color:rgba(0,208,147,1);
+            font-weight: 700;
+
           }
         }
       }
@@ -1001,11 +1043,14 @@
         color:rgba(53,57,67,1);
         line-height:40rpx;
         margin-bottom: 20rpx;
+        font-weight: 700;
+
       }
       .astrict {
         float: right;
         color: #B2B6C2;
         font-size:28rpx;
+        font-weight: 300;
         display: flex;
         flex-direction: row;
         margin-bottom: 70rpx;
@@ -1025,7 +1070,7 @@
     color:rgba(195,201,212,1);
     line-height:60rpx;
     text-align: center;
-
+    font-weight: 300;
   }
   .hidden {
     display: none;

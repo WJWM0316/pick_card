@@ -35,6 +35,7 @@ export default {
               // 为了获取用户信息
               if (res.data.key) {
                 if(that.test){that.testShare(res.data.key)}
+                  wx.setStorageSync('key', res.data.key)
               }
               if (res.data.vkey) {
                 wx.setStorageSync('vkey', res.data.vkey)

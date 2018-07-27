@@ -70,12 +70,14 @@
       color:#9AA1AB;
       line-height:28rpx;
       margin-bottom: 14rpx;
+      font-weight: 300;
     }
     .none_txt_2 {
       height:28rpx;
       font-size:28rpx;
       color:#00D093;
       line-height:28rpx;
+      font-weight: 700;
     } 
   }
   
@@ -88,6 +90,8 @@
     background:rgba(250,251,252,1);
     text-align: center;
     position: relative;
+    font-weight: 300;
+
   }
   .swopList {
     background: #ffffff;
@@ -119,11 +123,13 @@
             line-height: 40rpx;
             margin-bottom: 14rpx;
             margin-right: 30rpx;
+            font-weight: 700;
           }
           .msg_form {
             font-size:28rpx;
             color:rgba(154,161,171,1);
             line-height:28rpx;
+            font-weight: 300;
           }
         }
         .top_btn {
@@ -136,6 +142,8 @@
           color:rgba(255,255,255,1);
           line-height:60rpx;
           position: relative;
+          font-weight: 700;
+
         }
         .top_status {
           width:140rpx;
@@ -143,6 +151,8 @@
           font-size:28rpx;
           color:rgba(195,201,212,1);
           line-height:40rpx;
+          font-weight: 700;
+
         }
       }
       .blo_bot {
@@ -165,6 +175,7 @@
           color:rgba(154,161,171,1);
           line-height:37rpx;
           flex: 1;
+          font-weight: 300;
         }
       }
     }

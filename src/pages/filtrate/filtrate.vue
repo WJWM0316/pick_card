@@ -255,6 +255,7 @@
     font-size:26rpx;
     color:rgba(154,161,171,1);
     line-height:120rpx;
+    font-weight: 300;
   }
   .footer {
     position: fixed;
@@ -273,6 +274,8 @@
       font-size: 32rpx;
       color:rgba(255,255,255,1);
       line-height: 98rpx;
+      font-weight: 700;
+
       &.toNext {
         background:rgba(0,208,147,1);
       }
@@ -294,6 +297,8 @@
         font-size:28rpx;
         color:rgba(154,161,171,1);
         line-height:28rpx;
+        font-weight: 300;
+
       }
     }
     .one_pic {
@@ -384,6 +389,8 @@
       color:rgba(154,161,171,1);
       line-height:26rpx;
       margin-left: 28rpx;
+      font-weight: 300;
+
     }
   }
   .op_two {
@@ -401,6 +408,8 @@
           font-size:26rpx;
           color:rgba(178,182,194,1);
           margin-left: 30rpx;
+          font-weight: 300;
+
         }
       }
       .one_ipt {
@@ -423,10 +432,14 @@
           text-align: center;
           box-sizing: border-box;
           position: relative;
+          font-weight: 300;
+
           &.cur {
             background:rgba(0,208,147,0.05);
             border:1rpx solid rgba(0,208,147,1);
             color:rgba(0,208,147,1);
+            font-weight: 700;
+
           }
         }
       }
@@ -448,6 +461,8 @@
     color:rgba(195,201,212,1);
     line-height:60rpx;
     text-align: center;
+    font-weight: 300;
+
   }
   .hidden {
     display: none;

@@ -473,6 +473,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    font-weight: 700;
     image {
       width: 40rpx;
       height: 40rpx;
@@ -510,17 +511,23 @@ export default {
         font-size:28rpx;
         color:rgba(154,161,171,1);
         line-height:36rpx;
+        font-weight: 700;
+
       }
       .cont_tit2 {
         font-size:28rpx;
         color:rgba(53,57,67,1);
         line-height:40rpx;
         margin-bottom: 14rpx;
+        font-weight: 700;
+
       }
       .cont_txt2 {
         font-size:28rpx;
         color:rgba(154,161,171,1);
         line-height:50rpx;
+        font-weight: 700;
+
       }
       .cont_line {
         width: 100%;
@@ -538,6 +545,8 @@ export default {
         line-height:98rpx;
         text-align: center;
         margin-top: 20rpx;
+        font-weight: 700;
+
       }
     }
   }
@@ -563,6 +572,8 @@ export default {
       color:rgba(53,57,67,1);
       text-align: center;
       position: relative;
+      font-weight: 300;
+
       &.red {
         &:before {
           content: '';
@@ -626,6 +637,7 @@ export default {
         height:160rpx;
         border-radius:16rpx;
         font-size:26rpx;
+        font-weight: 700;
         color:rgba(255,255,255,1);
         line-height:120rpx;
         position: relative;
@@ -726,6 +738,8 @@ export default {
             color: rgba(154,161,171,1);
             line-height: 28rpx;
             margin: 0rpx 0 0rpx 0;
+            font-weight: 300;
+
           }
           .blo_img {
             top: 28rpx;
@@ -760,12 +774,14 @@ export default {
           line-height:40rpx;
           height: 40rpx;
           margin: 10rpx 0 0 0;
+          font-weight: 300;
         }
         .msg_company {
           font-size:28rpx;
           color:rgba(154,161,171,1);
           line-height:40rpx;
           height: 40rpx;
+          font-weight: 300;
         }
       }
     }
@@ -782,6 +798,7 @@ export default {
     margin-bottom: 68rpx;
     text-align: center;
     color: #9AA1AB;
+    font-weight: 700;
     &.ten {
     }
     button {
@@ -800,6 +817,8 @@ export default {
     line-height:28rpx;
     margin-bottom: 46rpx;
     color: #9AA1AB;
+    font-weight: 300;
+
   }
   .none_btn {
     width:570rpx;
@@ -807,6 +826,7 @@ export default {
     background:rgba(0,208,147,1);
     border-radius:50rpx;
     font-size:32rpx;
+    font-weight: 700;
     color:rgba(255,255,255,1);
     line-height:100rpx;
     margin: 0 auto;

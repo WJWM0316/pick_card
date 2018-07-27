@@ -852,6 +852,7 @@ export default {
                 letter-spacing: 0;
                 text-align: center;
                 line-height: 37rpx;
+                font-weight: 300;
               }
             }
           }
@@ -872,6 +873,7 @@ export default {
                 color: #9AA1AB;
                 letter-spacing: 0;
                 text-align: center;
+                font-weight: 300;
                 line-height: 37rpx;
               }
             }
@@ -1003,6 +1005,8 @@ export default {
         line-height:30rpx;
         text-align: center;
         margin-bottom: 14rpx;
+        font-weight: 700;
+
       }
       .bot_cont {
         width: 350rpx;
@@ -1190,6 +1194,7 @@ export default {
           color:rgba(255,255,255,1);
           line-height: 50rpx;
           display: none;
+          font-weight: 700;
           .adr {
             width:20rpx;
             height:24rpx;
@@ -1255,6 +1260,7 @@ export default {
             padding: 0 26rpx;
             box-sizing: border-box;
             font-size:24rpx;
+            font-weight: 700;
             border-radius:24rpx;
             color:rgba(0,208,147,1);
             //line-height:48rpx;
