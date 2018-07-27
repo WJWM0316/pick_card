@@ -505,6 +505,7 @@
 						color: #9AA1AB;
 						border-radius:35px;
 						padding: 0 30rpx;
+						FONT-WEIGHT: 300;
 						border: 1rpx solid rgba(178,182,194,0.4);
 						display:inline-block;
 						box-sizing: border-box;

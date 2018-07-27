@@ -467,6 +467,8 @@ export default {
         font-size:28rpx;
         color:rgba(154,161,171,1);
         line-height:28rpx;
+        font-weight: 300;
+
         &.one {
           margin: 32rpx 0 16rpx 0;
         }
@@ -571,12 +573,16 @@ export default {
             line-height:40rpx;
             height:40rpx;
             margin: 18rpx 0 0rpx 0;
+            font-weight: 300;
+
           }
           .msg_company {
             font-size:28rpx;
             color:rgba(154,161,171,1);
             height:40rpx;
             line-height:40rpx;
+            font-weight: 300;
+
           }
           .flock_style {
             width:170rpx;
@@ -590,10 +596,14 @@ export default {
             color:rgba(255,255,255,1);
             line-height:66rpx;
             text-align: center;
+            font-weight: 700;
+
             &.type_2 {
               font-size:28rpx;
               background:rgba(255,255,255,1);
               color:rgba(154,161,171,1);
+              font-weight: 300;
+
             }
           }
         }
@@ -617,6 +627,8 @@ export default {
       line-height:37rpx;
       text-align: center;
       margin-top: 70rpx;
+      font-weight: 700;
+
     }
   }
   .footer {
@@ -631,6 +643,7 @@ export default {
     align-items: center;
     text-align: center;
     line-height: 96rpx;
+    font-weight: 700;
     .quit {
       height: 100%;
       width:222rpx;
@@ -645,6 +658,7 @@ export default {
       color:rgba(255,255,255,1);
       height: 96rpx;
       font-size:32rpx;
+      font-weight: 700;
       line-height: 96rpx;
     }
   }

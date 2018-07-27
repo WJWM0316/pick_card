@@ -75,8 +75,10 @@
 	              if (res.data.token) {
 	                wx.setStorageSync('token', res.data.token)
 	              }
+	              console.log('=-=-=-=-====')
 	              // 为了获取用户信息
 	              if (res.data.key) {
+	              	console.log('=111111111')
 	              	wx.setStorageSync('key', res.data.key)
 	              }
 	              if (res.data.vkey) {

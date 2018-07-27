@@ -67,6 +67,7 @@
           color:rgba(53,57,67,1);
           line-height:28rpx;
           margin-bottom: 10rpx;
+          font-weight: 300;
           .setEllipsis();
         }
         .cont_tit {
@@ -96,6 +97,8 @@
       height:100rpx;
       font-size:38rpx;
       color:rgba(53,57,67,1);
+      font-weight: 700;
+
       .ple_num {
         font-size:150rpx;
         color:rgba(0,208,147,1);
@@ -111,6 +114,7 @@
       line-height:60rpx;
       text-align: left;
       margin: 34rpx 0 110rpx 0;
+      font-weight: 700;
     }
     .two_pic {
       height:82rpx;
@@ -131,6 +135,7 @@
       width: 480rpx;
       line-height:39rpx;
       font-size:32rpx;
+      font-weight: 700;
       padding-bottom: 66rpx;
       text-align: center;
 
@@ -141,6 +146,7 @@
       font-size:27rpx;
       color:rgba(53,57,67,0.81);
       text-align: center;
+      font-weight: 700;
       .setEllipsis();
     }
   }
@@ -153,6 +159,7 @@
       background:rgba(0,208,147,1);
       border-radius:49rpx;
       font-size:32rpx;
+      font-weight: 700;
       color:rgba(255,255,255,1);
       text-align: center;
       box-sizing: border-box;
