@@ -77,7 +77,6 @@
 	              }
 	              // 为了获取用户信息
 	              if (res.data.key) {
-	              	console.log('=111111111', res.data.key)
 	              	wx.setStorageSync('key', res.data.key)
 	              }
 	              if (res.data.vkey) {
@@ -145,7 +144,7 @@
       	grantInformationApi(data).then(res => {
 	        console.log('获取用户授权成功并交换userinfo成功', res)
 	        wx.setStorageSync('token', res.data.token) // 更新token状态
-          	/*wx.setStorageSync('key', res.data.key)*/
+          	wx.setStorageSync('key', res.data.key)
 	        wx.setStorageSync('vkey', res.data.vkey) // 保存用户vkey用来识别是否本人
 	        this.$store.dispatch('userInfo', res.data)
 	        console.log('已将个人信息存入store', res.data)
