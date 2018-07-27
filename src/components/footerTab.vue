@@ -274,7 +274,9 @@
     font-family:PingFangSC-Light;
     color:#353943;
     margin: 0 48rpx;
+    height: 100%;
     .name {
+      line-height: 96rpx;
       &.cur {
         font-size:32rpx;
         font-weight: 700;
@@ -287,7 +289,7 @@
           background:rgba(0,208,147,1);
           border-radius:4rpx;
           position: absolute;
-          bottom: -8rpx;
+          bottom: 15rpx;
           left: 50%;
           margin-left: -10rpx;
         }

@@ -54,7 +54,6 @@
 			let that = this
 			wx.getSetting({
         success(res) {
-          console.log(res, res.authSetting['scope.writePhotosAlbum'])
           if (res.authSetting['scope.writePhotosAlbum']) {
           	that.openSet = false
         	}
@@ -120,7 +119,6 @@
       })
 		},
 		onShareAppMessage: function (res) {
-			console.log(res)
 			let path = '/pages/index/main?';
 			let shareInfo = this.$store.getters.shareInfo
 			let that = this
@@ -131,7 +129,6 @@
 			//footer 弹框分享
 				if (res.target.dataset.type=='myDetail') {
 	      	// 来自页面内转发按钮
-	      	console.log(res.target)
 		      title = shareInfo.mycard.content,
 		      path= `pages/detail/main?vkey=${that.info.vkey}&shareUid=${that.info.id}&shareType=${shareInfo.mycard.type}`,
 		      imageUrl= that.isShareImg
@@ -150,7 +147,6 @@
 				  success: function(res) {
 				    // 只要服务器有响应数据，就会把响应内容写入文件并进入 success 回调，业务需要自行判断是否下载到了想要的内容
 				    if (res.statusCode === 200) {
-				    	console.log(res, '下载成功')
 							const ctx = wx.createCanvasContext('shareCanvas')
 							ctx.width = 320
 							ctx.clearActions()
@@ -183,7 +179,6 @@
 						    	} else {
 						    		length += 1
 						    	}
-						    	//console.log(length, string)
 						    	if (length > num) { // 判断是否超过 是否需要打点
 							    	result =  i
 							    	return result
@@ -321,8 +316,6 @@
 								  height: staticY + 60,
 								  canvasId: 'shareCanvas',
 								  success: function(res) {
-								  	// console.log('导出图片成功')
-								  	// that.showImg = res.tempFilePath
 								  	that.oneStep = false
 								  	that.twoStep = false
 								  	
@@ -369,7 +362,6 @@
 													new_ctx.clip()
 													new_ctx.drawImage(res.tempFilePath, x, y, w, h)
 												}
-												console.log(e, new_pos.x, new_pos.y, img.width, img.height, '第二步画图')
 												roundRect (new_pos.x, new_pos.y, img.width, img.height, 9)
 												//new_ctx.save()
 												new_ctx.beginPath()
@@ -386,7 +378,7 @@
 													  height: that.height,
 													  canvasId: 'endCanvas',
 													  success: function(res) {
-													  	console.log(res, '最终画图成功')
+													  	console.log('最终画图成功')
 													  	that.twoStep = true
 													  	that.showImg = res.tempFilePath
 													  } 
@@ -416,7 +408,6 @@
 				let that = this
 				wx.getSetting({
 	        success(res) {
-	          console.log(res, res.authSetting['scope.writePhotosAlbum'])
 	          if (!res.authSetting['scope.writePhotosAlbum']) {
 	            wx.authorize({
 	              scope: 'scope.writePhotosAlbum',
