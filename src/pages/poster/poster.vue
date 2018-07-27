@@ -200,7 +200,7 @@
 
 					    ctx.setFontSize(16)
 					    let lineNum2 = pointOut(that.info.job, 30)
-					    if (lineNum2 !== that.info.job.length - 1) {
+					    if (lineNum2 !== that.info.job.length) {
 					    	that.info.job = that.info.job.slice(0, lineNum2) + '...'
 					    }
 					    ctx.fillText(that.info.job, 17, 300)
