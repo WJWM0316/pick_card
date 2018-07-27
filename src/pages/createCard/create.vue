@@ -733,8 +733,6 @@
         line-height:28rpx;
         text-align: center;
         margin-top: 45rpx;
-        font-weight: 700;
-
       }
       .ip_btn {
         width:570rpx;
@@ -745,8 +743,6 @@
         color:rgba(255,255,255,1);
         line-height:98rpx;
         margin-top: 60rpx;
-        font-weight: 700;
-
       }
       .ipt_blo {
         width:550rpx;
@@ -764,8 +760,6 @@
           line-height:90rpx;
           box-sizing: border-box;
           padding-left: 40rpx;
-          font-weight: 700;
-
           &.input_1 {
             width:350rpx;
           }
@@ -780,8 +774,6 @@
           top: 2rpx;
           right: 40rpx;
           z-index: 10;
-          font-weight: 700;
-
           &.type2 {
             color: #B2F0DE;
           }
@@ -816,8 +808,6 @@
       border-radius: 49rpx;
       color:rgba(255,255,255,1);
       font-size: 32rpx;
-      font-weight: 700;
-
       &.toNext {
         background:rgba(0,208,147,1);
       }
@@ -853,6 +843,8 @@
         color:rgba(53,57,67,1);
         line-height:34rpx;
         margin-bottom: 16rpx;
+        font-weight: 700;
+
       }
       .tit2 {
         font-size:28rpx;
@@ -1001,7 +993,6 @@
         color:rgba(53,57,67,1);
         line-height:26rpx;
         font-weight: 700;
-
       }
       .one_ipt {
         border-bottom:1rpx solid #cccccc;
@@ -1030,8 +1021,7 @@
             background:rgba(0,208,147,0.05);
             border:1px solid rgba(0,208,147,1);
             color:rgba(0,208,147,1);
-            font-weight: 700;
-
+            font-weight: 500;
           }
         }
       }
@@ -1043,8 +1033,6 @@
         color:rgba(53,57,67,1);
         line-height:40rpx;
         margin-bottom: 20rpx;
-        font-weight: 700;
-
       }
       .astrict {
         float: right;

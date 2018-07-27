@@ -274,7 +274,6 @@
       font-size: 32rpx;
       color:rgba(255,255,255,1);
       line-height: 98rpx;
-      font-weight: 700;
 
       &.toNext {
         background:rgba(0,208,147,1);
@@ -404,6 +403,8 @@
         line-height:34rpx;
         position: relative;
         margin-bottom: 32rpx;
+        font-weight: 700;
+
         text {
           font-size:26rpx;
           color:rgba(178,182,194,1);
@@ -438,8 +439,7 @@
             background:rgba(0,208,147,0.05);
             border:1rpx solid rgba(0,208,147,1);
             color:rgba(0,208,147,1);
-            font-weight: 700;
-
+            font-weight: 500;
           }
         }
       }
