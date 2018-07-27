@@ -240,6 +240,16 @@
           that.thirdData.iv = e.mp.detail.iv
           that.thirdData.encryptedData = e.mp.detail.encryptedData
 
+          if(key.length<1){
+            App.methods.checkLogin().then((res)=>{
+              console.log('===checkLogin===',res)
+              if(res.http_status == 200){
+                that.thirdData.key = res.data.key
+                that.thirdPost(1)
+              }
+            })
+            return
+          }
           wx.checkSession({
             success: function(){
               that.thirdData.key = key
