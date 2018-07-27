@@ -532,7 +532,8 @@ export default {
 
       clearInterval(that.interval2)
       that.interval2 =  setInterval(function () {  
-         that.time++; 
+        that.time++; 
+        console.log(that.time, 1111111111111)
       }, 100);  
 
       that.moveData={

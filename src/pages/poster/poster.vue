@@ -165,7 +165,7 @@
 							grd.addColorStop(1, 'rgba(0,0,0, 0.4)')
 							ctx.setFillStyle(grd)
 					    ctx.fillRect(0, 200, 320, 120)
-					    ctx.save()
+					    
 
 
 					    // 计算文字打点
@@ -196,15 +196,14 @@
 					    	that.info.nickname = that.info.nickname.slice(0, lineNum1) + '...'
 					    }
 					    ctx.fillText(that.info.nickname, 17, 280)
-					    ctx.save()
 
 					    ctx.setFontSize(16)
+					    ctx.setFillStyle('#ffffff')
 					    let lineNum2 = pointOut(that.info.job, 30)
 					    if (lineNum2 !== that.info.job.length) {
 					    	that.info.job = that.info.job.slice(0, lineNum2) + '...'
 					    }
 					    ctx.fillText(that.info.job, 17, 300)
-					    ctx.save()
 
 					    // 画签名
 					    let staticY = 349
@@ -218,30 +217,33 @@
 					    } else {
 					    	ctx.fillText(that.info.sign.slice(0, lineNum3), 17, staticY)
 					    }
-					    ctx.setFontSize(12)
-					    ctx.setFillStyle('#00D093')
+
+
+					    
 					    staticY = staticY + 16
 					    let position = {
 					    	x: 17,
 					    	y: staticY
 					    }
-					    ctx.setStrokeStyle('#00D093')
-							ctx.setLineWidth(1)
+							
 					    let r = 12
 					    let lineNun = 1
 					    let nextLabel = true
 					    that.info.label.forEach((item, index) => {
+					    	ctx.setFontSize(12)
+					    	ctx.setFillStyle('#00D093')
+					    	ctx.setLineWidth(1)
+					    	ctx.setLineDash([1000])
 					    	addLabel(item.name.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""), index)
 					    })
-					    ctx.save()
-
+ 
 					    // 画标签
 					    let last = false
 					    function addLabel (item, index) {
 					    	if (lineNun > 2 || last) {
 					    		return
 					    	}
-					    	ctx.setLineDash([1000]);
+					    	
 					    	// 下个标签的宽度
 					    	let newLabelWidth = 0
 					    	if (index < that.info.label.length-1) {
@@ -273,7 +275,6 @@
 								ctx.beginPath()
 								ctx.arc(position.x + r + metrics, position.y + r, r, 1.5*Math.PI, 0.5*Math.PI)
 								ctx.stroke()
-
 								// 下一个标签的横坐标
 								position.x = position.x + 2*r + metrics + 5
 								// 判断是否需要换行
@@ -286,19 +287,17 @@
 					    }			    
 
 					    // 画虚线
+					    ctx.beginPath()
 					    ctx.setStrokeStyle('#DCE3EE')
 					    ctx.setLineDash([4, 6], 0)
-							ctx.beginPath()
 							staticY = staticY + 48
 							ctx.moveTo(17, staticY)
 							ctx.lineTo(303, staticY)
 							ctx.stroke()
-							ctx.save()
 
 					    // 画二维码
 					    staticY = staticY + 10
 					    ctx.drawImage(path, 200, staticY, 100, 100)
-					    ctx.save()
 
 					    // 画指引文案
 							ctx.setTextAlign('left')
@@ -306,7 +305,6 @@
 					    ctx.setFontSize(14)
 					    staticY = staticY + 50
 					    ctx.fillText('长按添加TA的趣名片', 30, staticY)
-					    ctx.save()
 
 					    ctx.draw(true, () => {
 					    	wx.canvasToTempFilePath({
