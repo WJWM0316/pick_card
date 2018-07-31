@@ -713,6 +713,7 @@
 						height: 32rpx;
 						//float: right;
 						display: block;
+						padding:4rpx 0 4rpx 30rpx;
 						//padding:20rpx 0 20rpx 20rpx;
 						//vertical-align:sub;
 					}

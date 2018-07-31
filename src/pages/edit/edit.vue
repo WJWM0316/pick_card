@@ -33,7 +33,7 @@
 				<view class="itemCon">
 					<view class="left">所在地</view>
 					<view class="right">
-						<picker mode='region' @change="regionChange" :value="region">
+						<picker class="pickBox" mode='region' @change="regionChange" :value="region">
 							<view class="picker">
 					      <text class="placeholder" v-show="region[1] === ''">请选择所在地</text>{{region[1]}}
 					    </view>
@@ -45,7 +45,7 @@
 				<view class="itemCon">
 					<view class="left requst">职业方向</view>
 					<view class="right">
-						<picker mode='selector' :range="careerList" @change="careerChange" :value="career">
+						<picker class="pickBox" mode='selector' :range="careerList" @change="careerChange" :value="career">
 							<view class="picker">
 					      <text class="placeholder" v-show='career === null'>请选择职业方向</text><text></text>{{careerList[career]}}
 					    </view>
@@ -192,6 +192,8 @@
 			}
 		},
 		onShow () {
+			this.careerList = []
+			this.careerId = ''
 			this.upLoad()
 			this.getJobList()
 		},
@@ -533,6 +535,9 @@
 						overflow: hidden;
 						width: 400rpx;
 						justify-content:flex-end;
+						.pickBox {
+							width: 100%;
+						}
 						input {
 							width: 400rpx;
 							height: 120rpx;
