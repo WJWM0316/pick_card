@@ -1083,7 +1083,7 @@ export default {
   .content {
     height: 930rpx;
     position: relative;
-    top: -45rpx;
+    top: -38rpx;
 
     .peopList {
       width:640rpx;

@@ -82,8 +82,8 @@
 	import footerTab from '@/components/footerTab'
 	import {putPrivacyApi, getUserInfoApi} from '@/api/pages/user'
 	import {getShareImg} from '@/api/pages/login'
-  	import { redDotApplys } from '@/api/pages/red'
-  	import App from '@/App'
+	import { redDotApplys } from '@/api/pages/red'
+	import App from '@/App'
 
 	export default {
 		components: {
@@ -238,7 +238,7 @@
 <style lang="less" type="text/less" scoped>
 @import url('~@/assets/css/mixins.less');
 .center {
-	padding: 0 0 28rpx;
+	padding: 0 0 96rpx;
 	min-height: 100%;
 	box-sizing: border-box;
 	background: #F5F7FA;

@@ -551,7 +551,9 @@ export default {
     height: 100vh;
     //height: 930rpx;
     position: relative;
-    background: rgba(250,251,253,1)
+    background: rgba(250,251,253,1);
+    padding: 0 0 96rpx;
+    box-sizing: border-box;
   }
   .tit {
     width: 100%;

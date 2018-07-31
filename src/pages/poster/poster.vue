@@ -1,7 +1,8 @@
 <template>
 	<view class="poster" v-if="imgUrl">
-		<button open-type="share" data-type="myDetail" v-if="showImg && system === 'Android'" class="share"><view class="header">因小程序限制，如图片出错，可点击发名片给好友<image class="icon1" src="/static/images/deta_icon_chevron@3x.png"></image></view></button>
-		<image class="showImg" :src="showImg" v-if="showImg"></image>
+<!-- 		<button open-type="share" data-type="myDetail" v-if="showImg && system === 'Android'" class="share"><view class="header">因小程序限制，如图片出错，可点击发名片给好友<image class="icon1" src="/static/images/deta_icon_chevron@3x.png"></image></view></button>
+ -->		
+ 		<image class="showImg" :src="showImg" v-if="showImg"></image>
 		<canvas canvas-id="endCanvas" id="endCanvas" v-if="!twoStep">
 		</canvas>
 
@@ -43,7 +44,7 @@
 				},
 				imgUrl: '',
 				isShareImg: '',
-				system: ''
+				// system: ''
 			}
 		},
 		onShow (option) {
@@ -78,14 +79,14 @@
 					console.log(res, '设备信息')
 					that.width = res.windowWidth
 			    that.height = res.windowHeight
-			    that.system = res.system
+			    //that.system = res.system
 			    that.pixelRatio = res.pixelRatio
 				}
 			})
 
-			if (that.system.indexOf('Android') !== -1) {
-				that.system = 'Android'
-			}
+			// if (that.system.indexOf('Android') !== -1) {
+			// 	that.system = 'Android'
+			// }
 			
 			let params = {
       	uid: this.info.id,
@@ -149,8 +150,7 @@
 				    if (res.statusCode === 200) {
 							const ctx = wx.createCanvasContext('shareCanvas')
 							ctx.width = 320
-							ctx.clearActions()
-							ctx.clearRect(0, 0, 320, 580)
+							
 							that.showImg = ''
 
 							ctx.setFillStyle('#fff')
@@ -204,9 +204,9 @@
 					    	that.info.job = that.info.job.slice(0, lineNum2) + '...'
 					    }
 					    ctx.fillText(that.info.job, 17, 300)
+					    let staticY = 349
 
 					    // 画签名
-					    let staticY = 349
 					    ctx.setFontSize(14)
 					    ctx.setFillStyle('#9AA1AB')
 					    let lineNum3 = pointOut(that.info.sign, 40)
@@ -218,32 +218,32 @@
 					    	ctx.fillText(that.info.sign.slice(0, lineNum3), 17, staticY)
 					    }
 
-
-					    
-					    staticY = staticY + 16
-					    let position = {
-					    	x: 17,
-					    	y: staticY
-					    }
-							
 					    let r = 12
 					    let lineNun = 1
 					    let nextLabel = true
+					    let position = {}
+
+					    staticY = staticY + 16
+					    position = {
+					    	x: 17,
+					    	y: staticY
+					    }
 					    that.info.label.forEach((item, index) => {
-					    	ctx.setFontSize(12)
-					    	ctx.setFillStyle('#00D093')
-					    	ctx.setLineWidth(1)
-					    	ctx.setLineDash([1000])
 					    	addLabel(item.name.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""), index)
+
 					    })
- 
+
 					    // 画标签
 					    let last = false
 					    function addLabel (item, index) {
+					    	ctx.setFontSize(12)
+					    	ctx.setFillStyle('#00D093')
+					    	ctx.setStrokeStyle('#00D093')
+					    	ctx.setLineWidth(1)
+					    	ctx.setLineDash([1000])
 					    	if (lineNun > 2 || last) {
 					    		return
 					    	}
-					    	
 					    	// 下个标签的宽度
 					    	let newLabelWidth = 0
 					    	if (index < that.info.label.length-1) {
@@ -284,6 +284,7 @@
 									position.y = position.y + 2*r + 7
 									lineNun ++
 								}
+								// ctx.draw(true)
 					    }			    
 
 					    // 画虚线
@@ -294,11 +295,9 @@
 							ctx.moveTo(17, staticY)
 							ctx.lineTo(303, staticY)
 							ctx.stroke()
-
-					    // 画二维码
+				    // 画二维码
 					    staticY = staticY + 10
 					    ctx.drawImage(path, 200, staticY, 100, 100)
-
 					    // 画指引文案
 							ctx.setTextAlign('left')
 					    ctx.setFillStyle('#B2B6C2')
@@ -307,89 +306,93 @@
 					    ctx.fillText('长按添加TA的趣名片', 30, staticY)
 
 					    ctx.draw(true, () => {
-					    	wx.canvasToTempFilePath({
-								  x: 0,
-								  y: 0,
-								  width: 320,
-								  height: staticY + 60,
-								  canvasId: 'shareCanvas',
-								  success: function(res) {
-								  	that.oneStep = false
-								  	that.twoStep = false
-								  	
-								  	// 定义一个新画布
-								  	const new_ctx = wx.createCanvasContext('endCanvas')
-								  	new_ctx.width = that.width
-								  	new_ctx.height = that.height
+					    	setTimeout(function (){
+						    	wx.canvasToTempFilePath({
+									  x: 0,
+									  y: 0,
+									  width: 320,
+									  height: staticY + 60,
+									  canvasId: 'shareCanvas',
+									  success: function(res) {
+									  	that.oneStep = false
+									  	that.twoStep = false
+									  	
+									  	// 定义一个新画布
+									  	const new_ctx = wx.createCanvasContext('endCanvas')
+									  	new_ctx.width = that.width
+									  	new_ctx.height = that.height
 
-								  	// 设置画布宽高
-								  	new_ctx.setFillStyle('#F2FCF9')
-										new_ctx.fillRect(0, 0, that.width, that.height)
-										// 画布圆角
-										// 
-										wx.getImageInfo({
-											src: res.tempFilePath,
-											success: function(e) {
-												try {
-												let img = {
-													width: that.width*0.85,
-													height: that.width*0.85/(e.width/e.height)
-												}
-												let new_pos = {
-													x: (that.width - img.width) / 2,
-													y: (that.height - img.height) / 2,
-												}
-												function roundRect (x, y, w, h, r) {
-													new_ctx.beginPath();
-													new_ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
-													new_ctx.moveTo(x + r, y)
-													new_ctx.lineTo(x + w - r, y)
-													new_ctx.lineTo(x + w, y + r)
-													new_ctx.arc(x + w - r, y + r, r, Math.PI *  1.5  , Math.PI *  2  )
-													new_ctx.lineTo(x + w, y + h - r)
-													new_ctx.lineTo(x + w - r, y + h)
-													new_ctx.arc(x + w - r, y + h - r, r,  0  , Math.PI *  0.5  )
-													new_ctx.lineTo(x + r, y + h)
-													new_ctx.lineTo(x, y + h - r)
-													new_ctx.arc(x + r, y + h - r, r, Math.PI *  0.5  , Math.PI)
-													new_ctx.lineTo(x, y + r)
-													new_ctx.lineTo(x + r, y)
-													new_ctx.setFillStyle('#ffffff')
+									  	// 设置画布宽高
+									  	new_ctx.setFillStyle('#F2FCF9')
+											new_ctx.fillRect(0, 0, that.width, that.height)
+											// 画布圆角
+											// 
+											wx.getImageInfo({
+												src: res.tempFilePath,
+												success: function(e) {
+													try {
+													let img = {
+														width: that.width*0.85,
+														height: that.width*0.85/(e.width/e.height)
+													}
+													let new_pos = {
+														x: (that.width - img.width) / 2,
+														y: (that.height - img.height) / 2,
+													}
+													function roundRect (x, y, w, h, r) {
+														new_ctx.beginPath();
+														new_ctx.arc(x + r, y + r, r, Math.PI, Math.PI *  1.5)
+														new_ctx.moveTo(x + r, y)
+														new_ctx.lineTo(x + w - r, y)
+														new_ctx.lineTo(x + w, y + r)
+														new_ctx.arc(x + w - r, y + r, r, Math.PI *  1.5  , Math.PI *  2  )
+														new_ctx.lineTo(x + w, y + h - r)
+														new_ctx.lineTo(x + w - r, y + h)
+														new_ctx.arc(x + w - r, y + h - r, r,  0  , Math.PI *  0.5  )
+														new_ctx.lineTo(x + r, y + h)
+														new_ctx.lineTo(x, y + h - r)
+														new_ctx.arc(x + r, y + h - r, r, Math.PI *  0.5  , Math.PI)
+														new_ctx.lineTo(x, y + r)
+														new_ctx.lineTo(x + r, y)
+														new_ctx.setFillStyle('#ffffff')
+														new_ctx.fill()
+														new_ctx.closePath()
+														new_ctx.clip()
+														new_ctx.drawImage(res.tempFilePath, x, y, w, h)
+													}
+													roundRect (new_pos.x, new_pos.y, img.width, img.height, 9)
+													//new_ctx.save()
+													new_ctx.beginPath()
+													new_ctx.arc(new_pos.x, new_pos.y + img.height*0.78, 10, 0, 2 * Math.PI)
+													new_ctx.arc(new_pos.x + img.width, new_pos.y + img.height*0.78, 10, 0, 2 * Math.PI)
+													new_ctx.setFillStyle('#F2FCF9')
 													new_ctx.fill()
-													new_ctx.closePath()
-													new_ctx.clip()
-													new_ctx.drawImage(res.tempFilePath, x, y, w, h)
+													new_ctx.draw(true, () => {
+											    	setTimeout(function (){
+											    		wx.hideLoading()
+												    	wx.canvasToTempFilePath({
+															  x: 0,
+															  y: 0,
+															  width: that.width,
+															  height: that.height,
+															  canvasId: 'endCanvas',
+															  success: function(res) {
+															  	console.log('最终画图成功')
+															  	that.twoStep = true
+															  	that.showImg = res.tempFilePath
+															  } 
+															})
+											    	}, 200)
+											    })
+											    }
+											    catch (err) {
+											    	console.log(err, '异常')
+											    }
 												}
-												roundRect (new_pos.x, new_pos.y, img.width, img.height, 9)
-												//new_ctx.save()
-												new_ctx.beginPath()
-												new_ctx.arc(new_pos.x, new_pos.y + img.height*0.78, 10, 0, 2 * Math.PI)
-												new_ctx.arc(new_pos.x + img.width, new_pos.y + img.height*0.78, 10, 0, 2 * Math.PI)
-												new_ctx.setFillStyle('#F2FCF9')
-												new_ctx.fill()
-												new_ctx.draw(true, () => {
-										    	wx.hideLoading()
-										    	wx.canvasToTempFilePath({
-													  x: 0,
-													  y: 0,
-													  width: that.width,
-													  height: that.height,
-													  canvasId: 'endCanvas',
-													  success: function(res) {
-													  	console.log('最终画图成功')
-													  	that.twoStep = true
-													  	that.showImg = res.tempFilePath
-													  } 
-													})
-										    })
-										    }
-										    catch (err) {
-										    	console.log(err, '异常')
-										    }
-											}
-										})
-					  			}
-					  		})
+											})
+						  			}
+						  		})
+					  		}, 200)
 					  	})
 					  }
 					},
