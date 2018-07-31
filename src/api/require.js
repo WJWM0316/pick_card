@@ -69,7 +69,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
             case 500:
               util.unloading(isLoading)
               wx.showToast({
-                title: '网络不可用，请检查网络设置。',
+                title: '服务器异常，请稍后再试',
                 icon: 'none',
                 duration: 2000
               })
@@ -82,6 +82,9 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       },
       fail(res) {
         console.error('fail',url, res);
+        wx.navigateTo({
+          url: '/pages/brokenNet/main'
+        })
         util.unloading(isLoading)
         reject(res);
       },
