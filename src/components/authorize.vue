@@ -107,11 +107,9 @@
 	            })
 	          },
 	          fail: function (e) {
-	          	wx.showToast({
-	              title: '网络不可用，请检查网络设置。',
-	              icon: 'none',
-	              duration: 3000
-	             })
+	          	wx.navigateTo({
+                url: '/pages/brokenNet/main'
+              })
 	          	console.log('登录失败', e)
 	          }
 	        })

@@ -146,8 +146,15 @@ export default {
         console.log(res)
       }
     })*/
+    wx.onNetworkStatusChange(function(res){
+      console.log(res, '网络问题')
+      if (!res.isConnected) {
+        wx.navigateTo({
+          url: '/pages/brokenNet/main'
+        })
+      }
+    })
   },
-
   onShow (option) {
     console.log(option, )
     wx.setStorageSync('routeInfo', option)
