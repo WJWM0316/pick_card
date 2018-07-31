@@ -4,8 +4,11 @@
 	  <view class="share_pop" v-show="type=='consent'"> 
 	    <image  class="share_clo" src="/static/images/popup_btn_close_nor@3x.png" @tap="cloPop"></image>
 	    <image class="share_cont" src="/static/images/popup_pic_newmatch@3x.png"></image>
-	    <view class="tit" >恭喜你!</view>
-	    <view class="txt txt_2">你已经和TA成功互换名片了! 现在你可以</view>
+	    <view class="tit" >恭喜你!</view> 
+	    <view class="txt ">
+		    <view class=" txt_2">你已经和TA成功互换名片了!</view>
+		    <view class=" txt_2">现在你可以</view>
+		</view>
 
 	    <view class="btns" :class="{'index':consentForm=='index'}">
 	      <button class="btn friend" @click="toDetail">
@@ -154,12 +157,10 @@
 	    font-family:PingFangSC-Regular;
 	    color:rgba(154,161,171,1);
 	    line-height:28rpx;
-	    margin-top: 17rpx;
-	    margin-bottom: 82rpx;
-	    &.txt_2 {
-	      margin: 17rpx auto 34rpx auto;
-	      line-height:34rpx;
-	      width: 355rpx;
+      	margin: 17rpx auto 34rpx auto;
+  		text-align: center;
+	    .txt_2 {
+	      	line-height:40rpx;
 	    }
 	  }
 	  .btns {
