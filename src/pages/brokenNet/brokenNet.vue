@@ -10,11 +10,33 @@
 </template>
 <script>
 	export default {
+		onShow () {
+			setTimeout(function (){
+				wx.removeStorageSync('noNetwork')
+			}, 500)
+		},
+		onHide () {
+
+		},
 		methods: {
 			back () {
-				wx.navigateBack({
-				  delta: 1
+				wx.getNetworkType({
+					success: function(res) {
+						console.log(res)
+						if (res.networkType !== 'none') {
+							wx.navigateBack({
+							  delta: 1
+							})
+						} else {
+							wx.showToast({
+	              title: '网络不可用，请检查网络设置。',
+	              icon: 'none',
+	              duration: 2000
+	            })
+						}
+				  }
 				})
+				
 			}
 		}
 	}	

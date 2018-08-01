@@ -107,9 +107,6 @@
 	            })
 	          },
 	          fail: function (e) {
-	          	wx.navigateTo({
-                url: '/pages/brokenNet/main'
-              })
 	          	console.log('登录失败', e)
 	          }
 	        })

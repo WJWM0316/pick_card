@@ -82,9 +82,12 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       },
       fail(res) {
         console.error('fail',url, res);
-        wx.navigateTo({
-          url: '/pages/brokenNet/main'
-        })
+        if(!wx.getStorageSync('noNetwork')) {
+          wx.setStorageSync('noNetwork', true)
+          wx.navigateTo({
+            url: '/pages/brokenNet/main'
+          })
+        }
         util.unloading(isLoading)
         reject(res);
       },

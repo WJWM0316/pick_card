@@ -155,7 +155,6 @@ export default {
     })
     
     if(option &&option.query.type&&option.query.type=='flock'){
-
       if( option.shareTicket ){
         this.test = option.shareTicket
         this.checkLogin()
