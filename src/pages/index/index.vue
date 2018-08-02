@@ -147,6 +147,7 @@
         <view class="msg">要和这几位大咖交换名片的话， 点击下方按钮，创建自己的名片吧!</view>
         <button class="btn" @tap="isCreate" type="primary">创建自己的名片</button>
       </view> -->
+
     </view>
 
     <!-- 同意弹窗 -->
@@ -219,7 +220,6 @@ export default {
       isNext: true,  //翻页
 
       systemInfo: {}, //
-      beforeCreateStep: 0,
       mainRed: 0,   //交换红点
       swopRed: 0,   //交换红点
       shareData: {},
@@ -334,9 +334,6 @@ export default {
   },
   onShow (res) {
     let that = this
-    let beforeCreateStep = wx.getStorageSync('beforeCreateStep') ? wx.getStorageSync('beforeCreateStep') : 0
-    that.beforeCreateStep = beforeCreateStep
-    console.log('onshow-------beforeCreateStep',beforeCreateStep)
     this.isNext = true;
     this.toCreateSock = true;
     if (!this.$store.getters.userInfo.vkey) {
@@ -572,13 +569,11 @@ export default {
       this.isNext = false
       let that = this
       let data = this.usersList[this.nowIndex]
-      let beforeCreateStep = this.beforeCreateStep
       let step = this.usersInfo.step
       let msg = {
             to_uid: data.id, //data.unionid
           };
 
-      console.log('likeOp')
       if(status && status == 'right') {
         if(step<9){
           that.firstOp(status,msg)
@@ -644,20 +639,15 @@ export default {
 
     firstOp(type,msg){
       let that = this
-      let beforeCreateStep = this.beforeCreateStep;
+      let usersList = this.usersList;
 
-      beforeCreateStep++
-      if(beforeCreateStep >= 3){
-        console.log('firstOp==beforeCreateStep == 3')
-        wx.setStorageSync('beforeCreateStep', 3)
+      if(usersList.length > 0 && usersList.length-1 <= this.nowIndex){
         that.isNext = true
         that.isCreate()
         return
       }else {
-        wx.setStorageSync('beforeCreateStep', beforeCreateStep)
         indexUnlike(msg)
       }
-      console.log(beforeCreateStep)
       if(type=='left'){
         that.moveData={
           isMove: false,
@@ -670,7 +660,6 @@ export default {
         }
       }
       that.nowIndex ++;
-      this.beforeCreateStep = beforeCreateStep;
 
       setTimeout(()=>{
         that.moveData.style = ''
