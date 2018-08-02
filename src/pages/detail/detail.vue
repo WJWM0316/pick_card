@@ -435,7 +435,7 @@
 					})
 					return
 				}
-				wx.navigateTo({
+				wx.redirectTo({
 	        url: `/pages/createCard/main`
 	      })
 			},
@@ -711,7 +711,7 @@
 					.share {
 						width: 32rpx;
 						height: 32rpx;
-						//float: right;
+						//float: right;       
 						display: block;
 						padding:4rpx 0 4rpx 30rpx;
 						//padding:20rpx 0 20rpx 20rpx;

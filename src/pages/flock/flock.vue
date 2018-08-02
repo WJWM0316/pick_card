@@ -295,7 +295,7 @@ export default {
         return
       }
       if (this.$store.getters.userInfo.step !== 9) {
-        wx.navigateTo({
+        wx.redirectTo({
           url: `/pages/createCard/main`
         })
         return
@@ -313,7 +313,7 @@ export default {
         return
       }
       if (this.$store.getters.userInfo.step !== 9) {
-        wx.navigateTo({
+        wx.redirectTo({
           url: `/pages/createCard/main`
         })
         return
@@ -341,7 +341,7 @@ export default {
         return
       }
       if (this.$store.getters.userInfo.step !== 9) {
-        wx.navigateTo({
+        wx.redirectTo({
           url: `/pages/createCard/main`
         })
         return
@@ -381,7 +381,7 @@ export default {
         return
       }
       if (this.$store.getters.userInfo.step !== 9) {
-        wx.navigateTo({
+        wx.redirectTo({
           url: `/pages/createCard/main`
         })
         return
@@ -411,7 +411,7 @@ export default {
       })
     },
     toCreate () {
-      wx.navigateTo({
+      wx.redirectTo({
         url: `/pages/createCard/main`
       })
     },

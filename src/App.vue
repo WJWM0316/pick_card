@@ -12,6 +12,7 @@ export default {
     return {
       test: false,   //获取群信息
       testData: {},
+      enterRouteInfo: {}
     }
   },
   
@@ -79,7 +80,7 @@ export default {
           }
           setUserGroup(data).then((res)=>{
             console.log('============成功，跳转群详情',res)
-
+            wx.setStorageSync('enterRouteInfo', this.enterRouteInfo)
             wx.reLaunch({
               url: `/pages/flock/main?id=${res.data.openGId}&vkey=${res.data.userGroupId}`
             })
@@ -146,10 +147,14 @@ export default {
         console.log(res)
       }
     })*/
+    wx.removeStorageSync('enterRouteInfo')
   },
   onShow (option) {
-    console.log(option, )
-    wx.setStorageSync('routeInfo', option)
+    this.enterRouteInfo = option
+    if (!wx.getStorageSync('enterRouteInfo')) {
+      wx.setStorageSync('enterRouteInfo', option)
+    }
+    
     wx.showShareMenu({
       withShareTicket: true
     })

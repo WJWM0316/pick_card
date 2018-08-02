@@ -309,10 +309,23 @@
               that.$store.dispatch('userInfo', res0.data)
               wx.removeStorageSync('cutImgInfo')
               console.log('已更新个人信息', that.$store.getters.userInfo)
+              let params = ''
+              let url = ''
+              let routerInfo = wx.getStorageSync('enterRouteInfo')
+              if (routerInfo.query !== {}) {
+                for (var i in routerInfo.query) {
+                  params += `${i}=${routerInfo.query[i]}&`
+                }
+              }
+              if (params != '') {
+                url = `/${routerInfo.path}?${params}`
+              } else {
+                url = `/${routerInfo.path}`
+              }
               setTimeout(function () {
                 that.nowNum = 0
-                wx.navigateBack({
-                  delta: 1
+                wx.reLaunch({
+                  url: url
                 })
               }, 2000)
             })
@@ -609,9 +622,6 @@
           avatar_id: userInfo.avatar_id,
         }
 
-        if(userInfo.avatar_info && userInfo.avatar_info.middleImgUrl){
-          this.filePath = userInfo.avatar_info.middleImgUrl
-        }
         this.secondData={
           company: userInfo.company, 
           occupation: userInfo.occupation, 

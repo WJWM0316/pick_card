@@ -65,8 +65,8 @@
 	            // 请求接口获取服务器session_key
 	            const getSessionKeyParams = {
 	              code: res.code,
-	              shareUid: wx.getStorageSync('routeInfo').query.shareUid || '',
-	              shareType: wx.getStorageSync('routeInfo').query.shareType || ''
+	              shareUid: wx.getStorageSync('enterRouteInfo').query.shareUid || '',
+	              shareType: wx.getStorageSync('enterRouteInfo').query.shareType || ''
 	            }
 	            
 	            getSessionKeyApi(getSessionKeyParams).then(res => {
@@ -113,9 +113,9 @@
 	      })
 	    },
 		onGetUserinfo (e) {
-    	console.log('用户手动同意微信授权', e.mp.detail)
-    	// 授权完毕 重新调回原页面刷新当前数据
-	  	let params = ''
+	    	console.log('用户手动同意微信授权', e.mp.detail)
+	    	// 授权完毕 重新调回原页面刷新当前数据
+		  	let params = ''
         let url = ''
         for (var i in this.routerInfo.query) {
         	params += `${i}=${this.routerInfo.query[i]}&`
@@ -132,8 +132,8 @@
 	        encryptedData: e.mp.detail.encryptedData,
 	        iv: e.mp.detail.iv,
 	        key: wx.getStorageSync('key'),
-	        shareUid: wx.getStorageSync('routeInfo').query.shareUid || '',
-	        shareType: wx.getStorageSync('routeInfo').query.shareType || ''
+	        shareUid: wx.getStorageSync('enterRouteInfo').query.shareUid || '',
+	        shareType: wx.getStorageSync('enterRouteInfo').query.shareType || ''
 	      }
 	      
       	grantInformationApi(data).then(res => {
