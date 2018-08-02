@@ -80,9 +80,10 @@ export default {
           }
           setUserGroup(data).then((res)=>{
             console.log('============成功，跳转群详情',res)
-            wx.setStorageSync('enterRouteInfo', this.enterRouteInfo)
+            let path = `/pages/flock/main?id=${res.data.openGId}&vkey=${res.data.userGroupId}`
+            wx.setStorageSync('enterRouteInfo', path)
             wx.reLaunch({
-              url: `/pages/flock/main?id=${res.data.openGId}&vkey=${res.data.userGroupId}`
+              url: path
             })
           },(res)=>{
             console.log('============',res)
