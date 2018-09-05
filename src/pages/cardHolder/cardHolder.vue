@@ -1,8 +1,14 @@
 <template>
   <view class="container" >
-    <!--  -->
+    <!-- <view class="classifyList fixed" v-if="nowIndex==0 && isTitleBarFixed">
+      <block v-for="(item, index) in tabList">
+        <view class="blo " :class="{'cur':getFrd.job === item.id}"  @tap="clickTap(item.id)">{{item.name}}
+        </view>
+      </block>       
+    </view> -->
+
     <scroll-view  scroll-y=true class="main" @scrolltolower="loadNext" @scrolltoupper="refresh" @scroll="scroll_all">
-      <view class="card_top" :class="{'left':nowIndex==0}" >
+      <view class="card_top" :class="{'left':nowIndex==0 && tabList.length>1,'fixed':nowIndex==0 && isTitleBarFixed }" >
           <view class="tit" >
             <form report-submit="true" class="item" @submit="fromClick" :class="{
               'cur':nowIndex==0,
@@ -24,7 +30,7 @@
             </button>
           </view>
 
-          <view  class="classifyList" v-if="nowIndex==0 && !isTitleBarFixed">
+          <view  class="classifyList" v-if="nowIndex==0 && tabList.length>1">
             <block v-for="(item, index) in tabList">
               <view class="blo " :class="{'cur':getFrd.job === item.id}"  @tap="clickTap(item.id)">{{item.name}}
               </view>
@@ -98,12 +104,7 @@
       </view>
     </scroll-view>
 
-    <view class="classifyList fixed" v-if="nowIndex==0 && isTitleBarFixed">
-      <block v-for="(item, index) in tabList">
-        <view class="blo " :class="{'cur':getFrd.job === item.id}"  @tap="clickTap(item.id)">{{item.name}}
-        </view>
-      </block>       
-    </view>
+    
 
     <view class="hintPop" v-if="isShow">
       <!-- 分享弹窗 -->
@@ -224,7 +225,9 @@
 
 
         getFriendTabelList().then(res=>{
-          this.tabList = res.data
+          if(res.data.length>1){
+            this.tabList = res.data
+          }
         })
       })
       
@@ -310,13 +313,9 @@
 
     methods: {
       scroll_all(e){
-        console.log('!!!!!!!!!!',e.mp.detail.scrollTop)
-
         this.isTitleBarFixed = e.mp.detail.scrollTop > 145
       },
       clickTap (id){
-        console.log(id,this.getFrd.job)
-
         if(this.getFrd.job !== id){
           this.friendNext.isNext = true
           this.getFrd.id = ''
@@ -529,6 +528,10 @@
     top: -10rpx;
     background: #ffffff;
     z-index: 10;
+    &::-webkit-scrollbar {
+      width:0; height: 0;
+      display: none;
+    }
     &.fixed {
       position: fixed;
       left: 0;
@@ -542,6 +545,9 @@
       position: relative;
       display: inline-block;
       height: 80rpx;
+      &:last-child {
+        margin-right: 40rpx;
+      }
       &.cur {
         color:rgba(0,208,147,1);
         font-weight:500;
@@ -655,6 +661,17 @@
     box-shadow: 0rpx 11rpx 30rpx 0rpx rgba(153,193,214,0.08);
     &.left {
       height: 350rpx;
+    }
+    &.fixed {
+      height: 180rpx;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      .ops {
+        display: none;
+      }
     }
     .tit {
       width: 100%;

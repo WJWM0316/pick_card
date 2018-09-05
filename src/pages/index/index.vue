@@ -123,13 +123,11 @@
         <image class="gd_cont" v-else  src="/static/images/dafult_pic01@3x.png"></image>
 
         <block v-if="gdData.step==1">
-          <view class="txt">想和TA交朋友？快向TA发起交换名片申请吧！ </view>
-          <view class="txt">把卡片往右滑，或者点这个按钮也可以哦～</view>
+          <view class="txt"><text>向右划</text> 与TA互换名片</view>
         </block>
 
         <block v-else>
-          <view class="txt">不感兴趣，没关系，看看下一个人吧 </view>
-          <view class="txt">把卡片往左滑，或者点这个按钮也可以哦～</view>
+          <view class="txt"><text>向左划</text> 对TA不感兴趣</view>
         </block>
 
         <view class="bot_cont">
@@ -268,14 +266,14 @@ export default {
       // 来自页面内转发按钮
       if(res.target.dataset.type=="myDetail"){
         imageUrl = that.shareData.shareImg;
-        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.myCard.type}`;
+        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.mycard.type}`;
         
-        title = shareInfo.myCard.content?shareInfo.myCard.content:'趣名片';
+        title = shareInfo.mycard.content?shareInfo.mycard.content:'趣名片';
       }
 
       if(res.target.dataset.type=="other"){
         imageUrl = that.shareData.shareImg;
-        path = `/pages/detail/main?vkey=${this.usersList[this.nowIndex-1].vkey}&shareUid=${this.usersList[this.nowIndex-1].id}&shareType=${shareInfo.otherCard.type}`;
+        path = `/pages/sharePick/main?vkey=${this.usersList[this.nowIndex-1].vkey}&type=other`;
         
         title = shareInfo.otherCard.content?shareInfo.otherCard.content:'趣名片';
       }
@@ -1092,16 +1090,19 @@ export default {
       .gd_cont {
         width: 479rpx;
         height: 498rpx;
-        margin:  138rpx auto 100rpx auto;
+        margin: 0 auto ;
         display: block;
       }
       .txt {
-        height:30rpx;
-        font-size:30rpx;
-        color:rgba(255,255,255,1);
-        line-height:30rpx;
         text-align: center;
-        margin-bottom: 14rpx;
+        font-size:36rpx;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color: #ffffff;
+        margin: 67rpx 0 120rpx 0;
+        text {
+          color:rgba(0,208,147,1);
+        }
       }
       .bot_cont {
         width: 350rpx;

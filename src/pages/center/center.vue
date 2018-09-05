@@ -4,7 +4,7 @@
 			完善资料信息，提高吸引力
 			<view class="toEdit">立即完善<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></view>
 		</view>
-		<view class="content">
+		<view class="content" :class="{'ten': adaptive == 'ten'}">
 			<view style="height: 28rpx;"></view>
 
 			<view class="main">
@@ -281,10 +281,10 @@
 	color: #00D093;
 	margin-bottom: 30rpx;
 	padding: 44rpx 40rpx 0 40rpx;
-	border-radius:0px 0px 18px 18px ;
+	border-radius:0px 0px 18rpx 18rpx ;
 	box-sizing: border-box;
 	background:rgba(255,255,255,1);
-	margin-top: -30rpx;
+	margin-top: -44rpx;
 	box-shadow:0px 7px 10px 0px rgba(153,193,214,0.05);
 	position: relative;
 	left: 0;
@@ -304,6 +304,7 @@
 		font-weight:400;
 		margin-right: 12rpx;
 		color: #00D093;
+		font-size: 28rpx;
 		image {
 			width:20rpx;
 			height:12rpx;
@@ -340,6 +341,9 @@
 	}
 	.content {
 		padding: 0 40rpx 28rpx;
+		&.ten {
+			padding: 0 40rpx 100rpx;
+		}
 	}
 	.main {
 		position: relative;

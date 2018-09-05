@@ -337,7 +337,7 @@
     align-items: center;
     font-size:28rpx;
     font-weight:400;
-    color:rgba(0,208,147,1);
+    color: #9aa1ab;
     line-height:28rpx;
     width: 100%;
     margin-left: 20rpx;

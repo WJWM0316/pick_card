@@ -3,7 +3,7 @@
   <view class="container" >
     <view class="hint" v-if="listData.length>0">
       <form report-submit="true" class="from-box" @submit="fromClick">
-          <button formType="submit" class="from-mask  "></button>
+          <button formType="submit" class="from-mask"></button>
       </form>
       记录只保留14天，抓紧时间处理哦~
     </view>
@@ -309,7 +309,8 @@
     onLoad () {
       let that = this;
       getUserInfoApi().then( data => {
-        let usersInfo = data.data
+        this.usersInfo = data.data
+        let usersInfo = this.usersInfo
 
         let msg = {
           uid: usersInfo.id,
@@ -348,9 +349,9 @@
 
       if (res.from === 'button' ) {
         if(res.target.dataset.type=="me"){
-          title = shareInfo.showCard.content
+          title = shareInfo.mycard.content
           imageUrl = that.shareData.shareImg
-          path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
+          path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.mycard.type}`
         }
         if(res.target.dataset.type=="other"){
             that.isShow = false   //弹框消失
