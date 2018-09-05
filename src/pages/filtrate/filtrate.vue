@@ -6,24 +6,42 @@
       <view class="table_blo row_style_two">
         <view class="tit">职位</view>
         <view class="list_selct">
-          <view class="blo" v-for="(item, index) in jobData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'job')">
+          <view class="blo" v-for="(item, index) in jobData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'job')" v-if="jobSet===0 || (index < jobSet || !jobOp) " >
           {{item.name}}
-            <!-- <form report-submit="true" class="from-box" @submit="fromClick">
-                <button formType="submit" class="from-mask  "></button>
-            </form> -->
           </view>
+
+          <block v-if="jobSet !== 0">
+            <view class="detBlo open" @click="detailOp(1)" v-if="jobOp">
+              更多
+              <image class="bage" src="/static/images/deta_icon_base@3x.png" ></image>
+            </view>
+            <view class="detBlo close" @click="detailOp(1)" v-else>
+              收起
+              <image class="bage" src="/static/images/deta_icon_top@3x.png" ></image>
+            </view>
+          </block>
+          
         </view>
       </view>
 
       <view class="table_blo row_style_two">
         <view class="tit">领域</view>
         <view class="list_selct">
-          <view class="blo" v-for="(item, index) in liveData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'live')">
+          <view class="blo" v-for="(item, index) in liveData" :class="{'cur':item.isCur}" :key="key" @click="clickOp(index,'live')" v-if="liveSet===0 || ( index < liveSet || !liveOp)">
             {{item.name}}
-            <!-- <form report-submit="true" class="from-box" @submit="fromClick">
-                <button formType="submit" class="from-mask  "></button>
-            </form> -->
           </view>
+
+          <block v-if="liveSet !== 0">
+            <view class="detBlo open" @click="detailOp(2)" v-if="liveOp">
+              更多
+              <image class="bage" src="/static/images/deta_icon_base@3x.png" ></image>
+            </view>
+            <view class="detBlo close" @click="detailOp(2)" v-else>
+              收起
+              <image class="bage" src="/static/images/deta_icon_top@3x.png" ></image>
+            </view>
+          </block>
+          
         </view>
       </view>
     </view>
@@ -37,11 +55,10 @@
 
 <script>
   import mptoast from 'mptoast'
-  import { postGetLabelByIds, getChoiceLabel } from '@/api/pages/login'
+  import { postGetLabelByIds, getChoiceLabel, getLabelConfig } from '@/api/pages/login'
   import App from '@/App'
 
   export default {
-    
     components: {
       mptoast
     },
@@ -54,7 +71,18 @@
         liveAry:[],
         liveData: [],
         liveData2: [],
+        jobOp: true,
+        liveOp: true,
+
+        liveSet: 0,
+        jobSet: 0,
       }
+    },
+    watch: {
+      liveSet () {
+      },
+      jobSet () {
+      },
     },
     methods: {
       fromClick (e) {
@@ -63,6 +91,7 @@
           fromAddress: '/pages/index'
         })
       },
+
       toIndex(){
         let occupation_label_id = this.jobAry.join(',')
         let realm_label_id = this.liveAry.join(',')
@@ -85,7 +114,6 @@
       },
 
       gender (res) {
-        console.log(res)
         let that = this;
         if(res && res == 1||res == 2 && that.firstData.gender != res ){
           that.firstData.gender = res
@@ -93,8 +121,6 @@
       },
 
       inputText (e) {
-        console.log(e)
-
         let val = e.target.value
         if(val.length>0){
           this.firstData.nickname = val
@@ -110,7 +136,7 @@
         })
       },
 
-      clickOp(index,style){
+      clickOp (index,style){
         let that = this
         let listData = []
         let selAry =[]
@@ -145,8 +171,6 @@
             that.liveAry = [0]
             that.liveData = a
           }
-          /*listData = a
-          selAry = [0]*/
           return
         }
 
@@ -167,6 +191,17 @@
           listData[index].isCur = true
           selAry.push(id)
         }
+      },
+
+      detailOp (state){
+        console.log(state)
+        if(state && state === 1){
+          this.jobOp = !this.jobOp
+        }else if(state && state === 2){
+          this.liveOp = !this.liveOp
+        }
+
+
       }
     },
     onLoad(){
@@ -182,51 +217,98 @@
       let one
       let two
 
-      postGetLabelByIds(data).then((res)=>{
-        res.data.forEach((value,index,array)=>{
-          value.son.forEach((item,idx,ary)=>{
-            item['isCur'] = false
-      　   });
-      　 });
-        that.jobData = [{id:0,name:'不限',isCur:false},...res.data[1].son]
-        that.liveData = [{id:0,name:'不限',isCur:false},...res.data[0].son]
 
-        one = JSON.stringify(that.jobData)
-        that.jobData2 = JSON.parse(one.concat())
-        that.jobData2[0].isCur = true
+      getLabelConfig().then(msg => {
+        that.liveSet = parseInt(msg.data[0].fieldCount) 
+        that.jobSet = parseInt(msg.data[0].jobCount)
 
-        two = JSON.stringify(that.liveData)
-        that.liveData2 = JSON.parse(two.concat())
-        that.liveData2[0].isCur = true
+        if(that.liveSet === 0){
+          that.liveOp = false
+        }else {
+          that.liveOp = true
+        }
 
-        //获取上一次筛选
-        getChoiceLabel().then(res => {
-          let list = res.data
-          that.show = true
+        if(that.jobSet === 0){
+          that.jobOp = false
+        }else {
+          that.jobOp = true
+        }
 
-          list.forEach(item => {
-            console.log(item.oneLevel)
-            if (item.oneLevel === 3) {
-              that.jobAry.push(item.id)
-              that.jobData.forEach((e,index) => {
-                if (item.id == e.id) {
-                  that.jobData[index].isCur = true
+        postGetLabelByIds(data).then((res)=>{
+          let jobList = []
+          let liveList = []
+
+          res.data.forEach((value,index,array)=>{
+
+            value.son.forEach((item,idx,ary)=>{
+
+              if(value.id === 1 && that.liveSet !==0 ){
+                if(idx<that.liveSet ){
+                  liveList.push(item.id)
                 }
-              })
-            } else if (item.oneLevel === 1) {
-              that.liveAry.push(item.id)
-              that.liveData.forEach((e,index) => {
-                if (item.id == e.id) {
-                  that.liveData[index].isCur = true
+              }else if(value.id === 3 && that.jobSet !==0 ){
+                if(idx < that.jobSet ){
+                  jobList.push(item.id)
                 }
-              })
-            }
+              }
+              item['isCur'] = false
+        　   });
+        　 });
+
+          that.jobData = [{id:0,name:'不限',isCur:false},...res.data[1].son]
+          that.liveData = [{id:0,name:'不限',isCur:false},...res.data[0].son]
+
+          one = JSON.stringify(that.jobData)
+          that.jobData2 = JSON.parse(one.concat())
+          that.jobData2[0].isCur = true
+
+          two = JSON.stringify(that.liveData)
+          that.liveData2 = JSON.parse(two.concat())
+          that.liveData2[0].isCur = true
+
+          //获取上一次筛选
+          getChoiceLabel().then(res => {
+            let list = res.data
+            that.show = true
+            list.forEach(item => {
+              console.log(item.oneLevel)
+              if (item.oneLevel === 3) {
+                if(that.jobSet !==0){
+                  console.log(that.jobSet,jobList,item.id,jobList.indexOf(item.id))
+                  if(jobList.indexOf(item.id)<0 && that.jobOp && item.id !== 0){
+                    that.jobOp = false
+                  }
+                }
+                that.jobAry.push(item.id)
+                that.jobData.forEach((e,index) => {
+                  if (item.id == e.id) {
+                    that.jobData[index].isCur = true
+                  }
+                })
+
+
+              } else if (item.oneLevel === 1) {
+
+
+                if(that.liveSet !==0 ){
+                  if(liveList.indexOf(item.id)<0 && that.liveOp && item.id !== 0){
+                    that.liveOp = false
+                  }
+                }
+
+
+                that.liveAry.push(item.id)
+                that.liveData.forEach((e,index) => {
+                  if (item.id == e.id) {
+                    that.liveData[index].isCur = true
+                  }
+                })
+              }
+            })
           })
         })
-
-      },(res)=>{
-        
       })
+      
     },
     onShareAppMessage: function (res) {
       console.log(res)
@@ -246,6 +328,26 @@
 </script>
 
 <style lang="less" type="text/less" scoped>
+  .detBlo {
+    width:136rpx;
+    height:58rpx;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-first;
+    align-items: center;
+    font-size:28rpx;
+    font-weight:400;
+    color:rgba(0,208,147,1);
+    line-height:28rpx;
+    width: 100%;
+    margin-left: 20rpx;
+    image {
+      width: 24rpx;
+      height: 14rpx;
+      margin-left: 8rpx;
+    }
+  }
+
   .container {
     padding: 0 40rpx;
     padding-bottom: 160rpx;

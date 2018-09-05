@@ -29,13 +29,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 0,
 			"list": [
 				{
 					"id": 0,
 					"name": "1",
-					"pathName": "pages/createCard/main",
-					"query": ""
+					"pathName": "pages/edit/main",
+					"query": "vkey=t8isxq7ejo&from=index"
 				},
 				{
 					"id": 1,

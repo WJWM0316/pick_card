@@ -9,19 +9,17 @@
 		    <view class=" txt_2">你已经和TA成功互换名片了!</view>
 		    <view class=" txt_2">现在你可以</view>
 		</view>
-
-	    <view class="btns" :class="{'index':consentForm=='index'}">
-	      <button class="btn friend" @click="toDetail">
-	        <image class="img_warp" src="/static/images/popup_btn_godetails@3x.png"></image>
-	        <view class="bt_txt">看看TA的资料</view>
-	      </button>
-	      <button class="btn friends" data-type="other" open-type="share" >
-	        <image class="img_warp" src="/static/images/popup_btn_sharenew@3x.png"></image>
-	        <button data-type="other" open-type="share" class="bt_txt">炫耀一下新朋友</button>
-	      </button>
-
-	    </view>
-      <view class="again" v-show="consentForm=='index'" @tap="cloPop">继续寻找新朋友>></view>
+    <view class="btns" :class="{'index':consentForm=='index'}">
+      <button class="btn friend" @click="toDetail">
+        <image class="img_warp" src="/static/images/popup_btn_godetails@3x.png"></image>
+        <view class="bt_txt">看看TA的资料</view>
+      </button>
+      <button class="btn friends" data-type="other" open-type="share" >
+        <image class="img_warp" src="/static/images/popup_btn_sharenew@3x.png"></image>
+        <button data-type="other" open-type="share" class="bt_txt">炫耀一下新朋友</button>
+      </button>
+    </view>
+    <view class="again" v-show="consentForm=='index'" @tap="cloPop">继续寻找新朋友>></view>
 	  </view>
 	</view>
 </template>

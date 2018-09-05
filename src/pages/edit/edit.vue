@@ -1,135 +1,134 @@
 <template>
 	<view class="edit">
-		<section class="block">
-			<view class="title">基本信息</view>
-			<view class="head item">
-				<view class="itemCon">
-					<view class="left requst">头像</view>
-					<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath"></image></view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left requst">姓名</view>
-					<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.nickname"></view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left requst">性别</view>
-					<view class="right">
-						<radio-group class="radio-group" @change="sexChange">
-						  <label class="radio">
-						    <radio value=1 color="#00D093" :checked="userInfo.gender == 1"/><text>男</text>
-						  </label>
-						  <label class="radio">
-						    <radio value=2 color="#00D093" :checked="userInfo.gender == 2"/><text>女</text>
-						  </label>
-						</radio-group>
+			<section class="block">
+				<view class="title">基本信息</view>
+				<view class="head item">
+					<view class="itemCon">
+						<view class="left requst">头像</view>
+						<view class="right"><image @tap.stop="chooseImg" class="headImg" :src="filePath"></image></view>
 					</view>
 				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left">所在地</view>
-					<view class="right">
-						<picker class="pickBox" mode='region' @change="regionChange" :value="region">
-							<view class="picker">
-					      <text class="placeholder" v-show="region[1] === ''">请选择所在地</text>{{region[1]}}
-					    </view>
-						</picker>
+				<view class="item">
+					<view class="itemCon">
+						<view class="left requst">姓名</view>
+						<view class="right"><input type="text" maxlength="10" placeholder="请输入姓名" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.nickname"></view>
 					</view>
 				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left requst">职业方向</view>
-					<view class="right">
-						<picker class="pickBox" mode='selector' :range="careerList" @change="careerChange" :value="career">
-							<view class="picker">
-					      <text class="placeholder" v-show='career === null'>请选择职业方向</text><text></text>{{careerList[career]}}
-					    </view>
-						</picker>
-					</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left requst">擅长领域</view>
-					<view class="right" @tap.stop="showPop">
-						<text class="placeholder" v-if="checkedTextList.length === 0">请选择擅长领域</text>
-						<view class="fieldBox" v-else>
-							<block  v-for="(item, index) in checkedTextList" :key="index">
-								<text class="field">{{item}}</text>
-								<text v-if="index !== checkedTextList.length - 1"> | </text>
-							</block>
+				<view class="item">
+					<view class="itemCon">
+						<view class="left requst">性别</view>
+						<view class="right">
+							<radio-group class="radio-group" @change="sexChange">
+							  <label class="radio">
+							    <radio value=1 color="#00D093" :checked="userInfo.gender == 1"/><text>男</text>
+							  </label>
+							  <label class="radio">
+							    <radio value=2 color="#00D093" :checked="userInfo.gender == 2"/><text>女</text>
+							  </label>
+							</radio-group>
 						</view>
 					</view>
 				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left requst">职位</view>
-					<view class="right">
-						<input type="text" maxlength="20" placeholder="请输入职位" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.occupation">
+				<view class="item">
+					<view class="itemCon">
+						<view class="left">所在地</view>
+						<view class="right">
+							<picker class="pickBox" mode='region' @change="regionChange" :value="region">
+								<view class="picker">
+						      <text class="placeholder" v-show="region[1] === ''">请选择所在地</text>{{region[1]}}
+						    </view>
+							</picker>
+						</view>
 					</view>
 				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left requst">最近任职公司</view>
-					<view class="right">
-						<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.company">
+				<view class="item">
+					<view class="itemCon">
+						<view class="left requst">职业方向</view>
+						<view class="right">
+							<picker class="pickBox" mode='selector' :range="careerList" @change="careerChange" :value="career">
+								<view class="picker">
+						      <text class="placeholder" v-show='career === null'>请选择职业方向</text><text></text>{{careerList[career]}}
+						    </view>
+							</picker>
+						</view>
 					</view>
 				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left">公司地址</view>
-					<view class="right">
-						<input type="text" maxlength="20" placeholder="请输入公司地址" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.company_location">
+				<view class="item">
+					<view class="itemCon">
+						<view class="left requst">擅长领域</view>
+						<view class="right" @tap.stop="showPop">
+							<text class="placeholder" v-if="checkedTextList.length === 0">请选择擅长领域</text>
+							<view class="fieldBox" v-else>
+								<block  v-for="(item, index) in checkedTextList" :key="index">
+									<text class="field">{{item}}</text>
+									<text v-if="index !== checkedTextList.length - 1"> | </text>
+								</block>
+							</view>
+						</view>
 					</view>
 				</view>
-			</view>
-		</section>
-		<section class="block">
-			<view class="title">联系方式</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left requst">手机号码</view>
-					<view class="right">
-						<input type="number" disabled placeholder="请输入手机号码" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.mobile">
+				<view class="item">
+					<view class="itemCon">
+						<view class="left requst">职位</view>
+						<view class="right">
+							<input type="text" maxlength="20" placeholder="请输入职位" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.occupation">
+						</view>
 					</view>
 				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left">微信号</view>
-					<view class="right">
-						<input type="text" placeholder="请输入微信号" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.wechat">
+				<view class="item">
+					<view class="itemCon">
+						<view class="left requst">最近任职公司</view>
+						<view class="right">
+							<input type="text" maxlength="50" placeholder="请输入公司名称" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.company">
+						</view>
 					</view>
 				</view>
-			</view>
-			<view class="item">
-				<view class="itemCon">
-					<view class="left">邮箱地址</view>
-					<view class="right">
-						<input type="text" placeholder="请输入邮箱地址" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.email">
+				<view class="item">
+					<view class="itemCon">
+						<view class="left">公司地址</view>
+						<view class="right">
+							<input type="text" maxlength="20" placeholder="请输入公司地址" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.company_location">
+						</view>
 					</view>
 				</view>
-			</view>
-		</section>
-		<section class="block" :class="{'signBox' : isPos}">
-			<view class="title">个人签名</view>
-			<view class="item sign">
-				<view class="itemCon">
-					<!-- @focus="isPos = true" @blur="isPos = false" -->
-					<input maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.sign">
-					<text class="number">{{userInfo.sign ? userInfo.sign.length : 0}}/25</text>
+			</section>
+			<section class="block">
+				<view class="title">联系方式</view>
+				<view class="item">
+					<view class="itemCon">
+						<view class="left requst">手机号码</view>
+						<view class="right">
+							<input type="number" disabled placeholder="请输入手机号码" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.mobile">
+						</view>
+					</view>
 				</view>
-			</view>
-		</section>
-
+				<view class="item" id="wechat">
+					<view class="itemCon">
+						<view class="left">微信号</view>
+						<view class="right">
+							<input type="text" placeholder="请输入微信号" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.wechat">
+						</view>
+					</view>
+				</view>
+				<view class="item">
+					<view class="itemCon">
+						<view class="left">邮箱地址</view>
+						<view class="right">
+							<input type="text" placeholder="请输入邮箱地址" placeholder-style="color:#C3C9D4"  v-model.lazy="userInfo.email">
+						</view>
+					</view>
+				</view>
+			</section>
+			<section class="block" :class="{'signBox' : isPos}">
+				<view class="title">个人签名</view>
+				<view class="item sign">
+					<view class="itemCon">
+						<!-- @focus="isPos = true" @blur="isPos = false" -->
+						<input maxlength="25" placeholder="用一句话介绍你自己吧~" placeholder-style="color:#C3C9D4" v-model.lazy="userInfo.sign">
+						<text class="number">{{userInfo.sign ? userInfo.sign.length : 0}}/25</text>
+					</view>
+				</view>
+			</section>
 		<view class="btn">
 			<view @tap.stop="saveUserInfo" class="light">保存资料</view>
 		</view>
@@ -171,14 +170,17 @@
 				checkedTextList: [],
 				filePath: '',
 				careerId: '',
-				isPos: false
+				isPos: false,
 			}
 		},
 		onLoad (option) {
+			
+			console.log(option)
 			this.vkey = option.vkey
 			this.userInfo = this.$store.getters.userInfo
 			this.region = [this.userInfo.province, this.userInfo.city]
 			this.checkedTextList = []
+
 			if(this.userInfo && this.userInfo.avatar_info && this.userInfo.avatar_info.middleImgUrl){
 				this.filePath = this.userInfo.avatar_info.smallImgUrl
 				let realm_info = this.userInfo.other_info.realm_info
@@ -644,7 +646,7 @@
 			background: #fff;
 			padding: 30rpx 40rpx;
 			box-sizing: border-box;
-			z-index: 3;
+			z-index: 2;
 			.light {
 				width: 100%;
 				height: 98rpx;

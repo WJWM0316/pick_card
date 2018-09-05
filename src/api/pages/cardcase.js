@@ -3,7 +3,6 @@ import {request} from '../require.js'
 //===========个人
 // 获取个人名片列表
 export const getFriends = (data) => {
-  console.log(data)
   return request({
   	method: 'get',
     url: '/cur/friends',
@@ -14,19 +13,26 @@ export const getFriends = (data) => {
 
 // 删除个人名片
 export const deleteFriends = (data) => {
-  console.log(data)
   return request({
   	method: 'delete',
     url: '/cur/firends',
     data,
   })
 }
+// 获取个人好友行业TAB排序
+export const getFriendTabelList = () => {
+  return request({
+    method: 'post',
+    url: `/cur/friends/getFriendTabelList`,
+    isLoading: false
+  })
+}
+
 
 
 //===========群
 // 获取群名片列表
 export const getUserGroupList = (data) => {
-  console.log(data)
   return request({
   	method: 'get',
     url: '/group/getUserGroupList',
@@ -45,7 +51,6 @@ export const getUserGroupInfo = (data) => {
 
 // 加入群名片
 export const joinUserGroup = (data) => {
-  console.log(data)
   return request({
   	method: 'post',
     url: '/group/joinUserGroup',
@@ -54,7 +59,6 @@ export const joinUserGroup = (data) => {
 }
 // 创建群名片
 export const setUserGroup = (data) => {
-  console.log(data)
   return request({
   	method: 'post',
     url: '/group/setUserGroup',
@@ -64,7 +68,6 @@ export const setUserGroup = (data) => {
 
 // 编辑群名片
 export const editGroupInfo = (data) => {
-  console.log(data)
   return request({
   	method: 'put',
     url: `/group/${data.id}`,
@@ -74,7 +77,6 @@ export const editGroupInfo = (data) => {
 
 //退出群名片
 export const quitGroup = (data) => {
-  console.log(data)
   return request({
   	method: 'delete',
     url: `/group/${data.id}`,
@@ -84,7 +86,6 @@ export const quitGroup = (data) => {
 
 //判断是否加入
 export const isJoinUserGroup = (data) => {
-  console.log(data)
   return request({
   	method: 'post',
     url: `/group/isJoinUserGroup`,
@@ -95,7 +96,6 @@ export const isJoinUserGroup = (data) => {
 
 // 获取小程序码
 export const getShareCode = (data) => {
-  console.log(data)
   return request({
     method: 'post',
     url: `/share/getShareCode`,
@@ -103,4 +103,5 @@ export const getShareCode = (data) => {
     isLoading: false
   })
 }
+
 

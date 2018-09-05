@@ -44,6 +44,14 @@ export const postGetLabelByIds = (data) => {
   })
 }
 
+// 获取标签配置接口
+export const getLabelConfig = () => {
+  return request({
+    method: 'post',
+    url: '/label/getLabelConfig',
+  })
+}
+
 // 获取用户已筛选标签
 export const getChoiceLabel = (data) => {
   return request({
