@@ -487,9 +487,6 @@ export default {
           step: 1
         }
         this.isPop = false
-        /*if(this.usersList.length<1){
-          this.isCreate()
-        }*/
         try {
             wx.setStorageSync('pickCardFirst', '1')
         } catch (e) {    
@@ -607,8 +604,8 @@ export default {
       let data = this.usersList[this.nowIndex]
       let step = this.usersInfo.step
       let msg = {
-            to_uid: data.id, //data.unionid
-          };
+            to_uid: data.id //data.unionid
+          }
 
       let isShowEdit = wx.getStorageSync('isShowEdit')
       let showEditNum = wx.getStorageSync('showEditNum')?wx.getStorageSync('showEditNum'):0
@@ -617,6 +614,9 @@ export default {
         if(step<9){
           that.firstOp(status,msg)
         }else {
+          //创建成功之后
+          
+          //第一次显示微信号码          
           if(!isShowEdit){
             showEditNum = parseInt(showEditNum)
             showEditNum+=1
@@ -685,7 +685,7 @@ export default {
 
     firstOp(type,msg){
       let that = this
-      let usersList = this.usersList;
+      let usersList = this.usersList
 
       if(usersList.length > 0 && usersList.length-1 <= this.nowIndex){
         that.isNext = true
@@ -714,7 +714,7 @@ export default {
       },700)
     },
     like(msg){
-      let that = this;
+      let that = this
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
@@ -795,11 +795,11 @@ export default {
         this.coolTime = '0'
         return 0
       }
-      let t;
+      let t = null
       if(s > -1){
           let hour = Math.floor(s/3600)
           let min = Math.floor(s/60) % 60
-          let sec = s % 60;
+          let sec = s % 60
           if(hour < 10) {
               t = '0'+ hour + ":"
           } else {
