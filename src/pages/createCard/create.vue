@@ -312,6 +312,7 @@
               let params = ''
               let url = ''
               let routerInfo = wx.getStorageSync('enterRouteInfo')
+              console.log(routerInfo, '路由信息')
               if (routerInfo.query !== {}) {
                 for (var i in routerInfo.query) {
                   params += `${i}=${routerInfo.query[i]}&`

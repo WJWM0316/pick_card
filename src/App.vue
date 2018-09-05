@@ -66,11 +66,12 @@ export default {
      * 检测是否已登录
      */
     testShare(key){
+      let that = this
       wx.showShareMenu({
         withShareTicket: true
       })
        wx.getShareInfo({
-        shareTicket: this.test,
+        shareTicket: that.test,
         success: (res) => {
           console.log('========已成功获取到加密信息',res)
           let data = {
@@ -79,11 +80,13 @@ export default {
             encryptedData: res.encryptedData
           }
           setUserGroup(data).then((res)=>{
-            console.log('============成功，跳转群详情',res)
-            let path = `/pages/flock/main?id=${res.data.openGId}&vkey=${res.data.userGroupId}`
-            wx.setStorageSync('enterRouteInfo', path)
+            
+            let path = `pages/flock/main?id=${res.data.openGId}&vkey=${res.data.userGroupId}`
+            that.enterRouteInfo.path = path
+            console.log('============成功，跳转群详情', that.enterRouteInfo)
+            wx.setStorageSync('enterRouteInfo', that.enterRouteInfo)
             wx.reLaunch({
-              url: path
+              url: `/${path}`
             })
           },(res)=>{
             console.log('============',res)

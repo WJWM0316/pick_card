@@ -258,9 +258,7 @@ export default {
 
   methods: {
     loadNext(res) {
-
       if(this.getNext && this.isNext && this.isJoin){
-        console.log(111111)
         this.getNext = false
         this.getListData.page++
         this.updateData()

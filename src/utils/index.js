@@ -3,7 +3,7 @@ function formatNumber (n) {
   return str[1] ? str : `0${str}`
 }
 
-export function formatTime (date, type) {
+function formatTime (date, type) {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
