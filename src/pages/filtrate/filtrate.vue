@@ -271,38 +271,36 @@
             let list = res.data
             that.show = true
             list.forEach(item => {
-              console.log(item.oneLevel)
               if (item.oneLevel === 3) {
-                if(that.jobSet !==0){
-                  console.log(that.jobSet,jobList,item.id,jobList.indexOf(item.id))
-                  if(jobList.indexOf(item.id)<0 && that.jobOp && item.id !== 0){
-                    that.jobOp = false
-                  }
-                }
                 that.jobAry.push(item.id)
                 that.jobData.forEach((e,index) => {
                   if (item.id == e.id) {
                     that.jobData[index].isCur = true
                   }
                 })
-
+                if(that.jobSet !==0){
+                  console.log(that.jobSet,jobList,item.id,jobList.indexOf(item.id))
+                  if(jobList.indexOf(item.id)<0 && that.jobOp && item.id !== 0){
+                    that.jobOp = false
+                  }
+                }
 
               } else if (item.oneLevel === 1) {
+                console.log(item.id)
+                that.liveAry.push(item.id)
+                that.liveData.forEach((e,index) => {
+                  console.log(item.id,e.id,item.id == e.id)
+                  if (item.id == e.id) {
+                  console.log('======',item.id,e.id)
 
-
+                    that.liveData[index].isCur = true
+                  }
+                })
                 if(that.liveSet !==0 ){
                   if(liveList.indexOf(item.id)<0 && that.liveOp && item.id !== 0){
                     that.liveOp = false
                   }
                 }
-
-
-                that.liveAry.push(item.id)
-                that.liveData.forEach((e,index) => {
-                  if (item.id == e.id) {
-                    that.liveData[index].isCur = true
-                  }
-                })
               }
             })
           })
