@@ -3,7 +3,7 @@
   <view class="container" >
     <view class="hint" v-if="listData.length>0">
       <form report-submit="true" class="from-box" @submit="fromClick">
-          <button formType="submit" class="from-mask  "></button>
+          <button formType="submit" class="from-mask"></button>
       </form>
       记录只保留14天，抓紧时间处理哦~
     </view>
@@ -42,7 +42,7 @@
     </view>
 
     <mptoast />
-    <!-- <hintPop :type='consent' :isShow=isShow :consentNowItem=nowItem ></hintPop> -->
+    <hintPop :type='consent' :isShow=isShow :consentNowItem=nowItem ></hintPop>
   </view>
 </template>
 <style lang="less" type="text/less" scoped>
@@ -275,7 +275,7 @@
             that.listData[index].status = 1
             that.nowItem = that.listData[index]
             that.$mptoast('交换成功',2000)
-            //that.isShow = true
+            that.isShow = true
           }
         },(res)=>{
           that.$mptoast(res.msg,'error',2000)
@@ -309,7 +309,8 @@
     onLoad () {
       let that = this;
       getUserInfoApi().then( data => {
-        let usersInfo = data.data
+        this.usersInfo = data.data
+        let usersInfo = this.usersInfo
 
         let msg = {
           uid: usersInfo.id,
@@ -348,9 +349,9 @@
 
       if (res.from === 'button' ) {
         if(res.target.dataset.type=="me"){
-          title = shareInfo.showCard.content
+          title = shareInfo.mycard.content
           imageUrl = that.shareData.shareImg
-          path = `/pages/detail/main?vkey=${this.usersInfo.vkey}`
+          path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.mycard.type}`
         }
         if(res.target.dataset.type=="other"){
             that.isShow = false   //弹框消失

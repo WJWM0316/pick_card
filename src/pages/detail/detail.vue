@@ -1,11 +1,12 @@
 <template>
 	<view class="detail" :class="{'self' : isSelf, 'noFriend': !isSelf && userInfo.handle_status === 4}">
 		<!-- 主要展示 -->
-		<view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 10">
+		<!-- <view class="header" @tap="toFlaunt " v-if="isSelf && userInfo.apply_count > 10">
 			{{userInfo.apply_count}}人想得到你的名片
 			<view class="flaunt"><button open-type="share" data-type="flaunt" class="xuyao">炫耀一下<image class="icon" src="/static/images/deta_icon_chevron@3x.png"></image></button></view>
-		</view>
-		<view class="main card" :class="{'mTop' : isSelf && userInfo.apply_count > 10}">
+		</view> -->
+		
+		<view class="main card" >
 			<view class="positon">
 				<image class="headImg" v-if="userInfo.avatar_info" :src="userInfo.avatar_info.bigImgUrl"></image>
 				<view class="floor"  :class="{'floor-t' : userInfo.apply_count > 10}">
@@ -55,20 +56,34 @@
 				</view>
 				<view class="itemMsg" v-if="userInfo.mobile !== ''">
 					<image class="icon" src="/static/images/details_icon_phone@3x.png"></image>
-					<text class="msg" @tap="call(userInfo.mobile)" :class="{'isShow' : userInfo.mobile === '需要交换后才可见'}">
+					<text class="msg" @tap="call(userInfo.mobile)" :class="{
+						'isShow' : userInfo.mobile === '需要交换后才可见',
+						'click' : userInfo.mobile !== '需要交换后才可见'}">
 						{{userInfo.mobile}}
 					</text>
 				</view>
 				<view class="itemMsg" v-if="userInfo.email !== ''">
 					<image class="icon" src="/static/images/details_icon_email@3x.png"></image>
-					<text class="msg" @tap="copy(userInfo.email)" :class="{'isShow' : userInfo.email === '需要交换后才可见'}">
+					<text class="msg" @tap="copy(userInfo.email)" :class="{
+
+						'isShow' : userInfo.email === '需要交换后才可见',
+						'click' : userInfo.mobile !== '需要交换后才可见'}">
 						{{userInfo.email}}
 					</text>
 				</view>
 				<view class="itemMsg" v-if="userInfo.wechat !== ''">
 					<image class="icon" src="/static/images/details_icon_wechat@3x.png"></image>
-					<text class="msg" @tap="copy(userInfo.wechat)" :class="{'isShow' : userInfo.wechat === '需要交换后才可见'}">
+					<text class="msg" @tap="copy(userInfo.wechat)" :class="{
+
+						'isShow' : userInfo.wechat === '需要交换后才可见',
+						'click' : userInfo.mobile !== '需要交换后才可见'}">
 						{{userInfo.wechat}}
+					</text>
+				</view>
+				<view class="itemMsg" v-if="userInfo.company !== ''">
+					<image class="icon" src="/static/images/details_icon_company@3x.png"></image>
+					<text class="msg" >
+						{{userInfo.company}}
 					</text>
 				</view>
 			</view>
@@ -207,7 +222,6 @@
 			} else {
 				this.vkey = option.vkey
 			}
-			console.log(this.vkey, '22222111111111111')
 			const vkey = this.vkey
 			if (vkey === wx.getStorageSync('vkey')) {
 				this.isSelf = true
@@ -766,6 +780,10 @@
 						.setEllipsis();
 						&.isShow {
 							color: #B2B6C2;
+						}
+
+						&.click {
+							color: #4080ad;
 						}
 					}
 					&:last-child {

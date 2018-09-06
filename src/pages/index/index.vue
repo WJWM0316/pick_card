@@ -115,7 +115,6 @@
         ></image>
       </view>
     </view>
-
     
     <!-- 分享弹窗 -->
     <view class="pop_warp" v-if="isPop">
@@ -124,13 +123,11 @@
         <image class="gd_cont" v-else  src="/static/images/dafult_pic01@3x.png"></image>
 
         <block v-if="gdData.step==1">
-          <view class="txt">想和TA交朋友？快向TA发起交换名片申请吧！ </view>
-          <view class="txt">把卡片往右滑，或者点这个按钮也可以哦～</view>
+          <view class="txt"><text>向右划</text> 与TA互换名片</view>
         </block>
 
         <block v-else>
-          <view class="txt">不感兴趣，没关系，看看下一个人吧 </view>
-          <view class="txt">把卡片往左滑，或者点这个按钮也可以哦～</view>
+          <view class="txt"><text>向左划</text> 对TA不感兴趣</view>
         </block>
 
         <view class="bot_cont">
@@ -138,20 +135,31 @@
           <image class="bot_img bot_left_icon1" src="/static/images/dafult_icom_unlike@3x.png" v-else></image>
         </view>
       </view>
-
-      <!-- 跳转创建 -->
-      <!-- <view class="createMe" v-if="toMeCreate">
-        <image class="close"  @tap="cloCrea" src="/static/images/popup_btn_close_nor@3x.png"></image>
-        <image class="head" src="/static/images/img.jpg"></image>
-        <view class="title">Opps！你还没创建自己的名片</view>
-        <view class="msg">要和这几位大咖交换名片的话， 点击下方按钮，创建自己的名片吧!</view>
-        <button class="btn" @tap="isCreate" type="primary">创建自己的名片</button>
-      </view> -->
-
     </view>
+    <!-- 跳转编辑电话好吗 -->
+    <view class="editWarp" v-if="isShowEditWc">
+      <view class="editWC" >
+        <view class="edit_content">
+          <view class="title">丰富的联系方式有助于职场社交 请确认你的微信号是否正确</view>
+          <view class="msg" v-if="usersInfo2 && usersInfo2.wechat">{{usersInfo2.wechat}}</view>
+        </view>
+        <view class="btns">
+          <view class="btn true" @click="toEditWC">错了，去编辑</view>
+          <view class="btn" @click="closeWc">没有错</view>
+        </view>
+      </view>
+    </view>
+    
 
     <!-- 同意弹窗 -->
-    <hintPop :type='consent' :consentForm=consentForm :isShow=isShowTrue :consentNowItem=usersList[nowIndex-1] @changeshow="changeShow" @form-id="fromClick"></hintPop>
+    <hintPop 
+      :type='consent' 
+      :consentForm=consentForm 
+      :isShow=isShowTrue 
+      :consentNowItem=usersList[nowIndex-1] 
+      @changeshow="changeShow" 
+      @form-id="fromClick">
+    </hintPop>
 
     <authorize-pop :isIndex='true' :routerInfo="routerInfo"></authorize-pop>
     <mptoast />
@@ -186,6 +194,11 @@ export default {
       shareInfo: state => state.global.shareInfo,
     }),
   },
+  watch: {
+    usersInfo (val) {
+      this.usersInfo2 = val
+    },
+  },
   data () {
     return { 
       adaptive: '1',   //ten  small
@@ -193,6 +206,7 @@ export default {
       interval2: null,
       usersList: [],
       usersInfo: [],
+      usersInfo2: [],
 
       touchDot: 0,
       time: 0,
@@ -231,32 +245,41 @@ export default {
       consentForm: 'index',
       isShowFt: false,   
 
-      routerInfo: {}
+      routerInfo: {},
+
+      isShowEditWc: false,  //是否显示编辑微信
     }
   },
   onShareAppMessage: function (res) {
-    console.log(res)
     let path = '/pages/index/main?'
     let shareInfo = this.$store.getters.shareInfo
     let that = this
     let title = shareInfo.index.content
     let imageUrl = shareInfo.index.path
 
-
     wx.showShareMenu({
       withShareTicket: true
     })
+
+    console.log(shareInfo)
     if (res.from === 'button') {
       // 来自页面内转发按钮
       if(res.target.dataset.type=="myDetail"){
-        imageUrl = that.shareData.shareImg;
-        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.showCard.type}`;
+        title = shareInfo.mycard.content
+        imageUrl = that.shareData.shareImg
+        path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.mycard.type}`;
+      }
+
+      if(res.target.dataset.type=="other"){
+        imageUrl = shareInfo.matchingCard.path
+        title = shareInfo.matchingCard.content
+
+        path = `/pages/sharePick/main?vkey=${this.usersList[this.nowIndex-1].vkey}&type=other`;
         
-        title = shareInfo.showCard.content?shareInfo.showCard.content:'趣名片';
       }
 
       if(res.target.dataset.type=="index"){
-        title = shareInfo.index?shareInfo.index.content:''
+        title = shareInfo.index.content
         imageUrl = shareInfo.index.path
         path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.showCard.type}`
       }
@@ -334,8 +357,10 @@ export default {
   },
   onShow (res) {
     let that = this
-    this.isNext = true;
-    this.toCreateSock = true;
+    this.isNext = true
+    this.toCreateSock = true
+
+    this.isShowTrue = false  //防止切换出去。刷新拿不到之前的数据。 隐藏掉
     if (!this.$store.getters.userInfo.vkey) {
       authorizePop.methods.checkLogin().then(res => {
         if (res.code !== 201) { // 不需要主动授权的时候才出现引导层， 授权完毕才出现
@@ -356,6 +381,15 @@ export default {
     }
   },
   methods: {
+    closeWc (){
+      this.isShowEditWc = false
+    },
+    toEditWC(){
+      this.isShowEditWc = false
+      wx.navigateTo({
+        url: `/pages/edit/main?vkey=${this.usersInfo.vkey}&from=index`
+      })
+    },
     changeShow(res){
       this.isShowTrue = false
     },
@@ -451,9 +485,6 @@ export default {
           step: 1
         }
         this.isPop = false
-        /*if(this.usersList.length<1){
-          this.isCreate()
-        }*/
         try {
             wx.setStorageSync('pickCardFirst', '1')
         } catch (e) {    
@@ -571,28 +602,41 @@ export default {
       let data = this.usersList[this.nowIndex]
       let step = this.usersInfo.step
       let msg = {
-            to_uid: data.id, //data.unionid
-          };
+            to_uid: data.id //data.unionid
+          }
 
-      if(status && status == 'right') {
+      let isShowEdit = wx.getStorageSync('isShowEdit')
+      let showEditNum = wx.getStorageSync('showEditNum')?wx.getStorageSync('showEditNum'):0
+
+      if(status){
         if(step<9){
           that.firstOp(status,msg)
         }else {
-          that.like(msg)
+          //创建成功之后
+          
+          //第一次显示微信号码          
+          if(!isShowEdit){
+            showEditNum = parseInt(showEditNum)
+            showEditNum+=1
+            wx.setStorageSync('showEditNum',showEditNum)
+            if(showEditNum>=10){
+              this.isShowEditWc = true
+              wx.setStorageSync('isShowEdit',1)
+            }
+          }
+          if(status == 'left'){
+            that.unlike(msg)
+
+          }else if(status == 'right'){
+            that.like(msg)
+          }
         }
-      }else if(status && status == 'left'){
-        if(step<9){
-          that.firstOp(status,msg)
-        }else {
-          that.unlike(msg)
-        }
-      } 
+      }
     },
     isGetUers(){
       let that = this
       let step = this.usersInfo.step
 
-      console.log('step=====>',this.usersInfo)
       if(this.usersList.length-this.nowIndex <= 1){
         console.log('next============todo=====')
         getIndexUsers(that.getPage).then((res)=>{
@@ -639,7 +683,7 @@ export default {
 
     firstOp(type,msg){
       let that = this
-      let usersList = this.usersList;
+      let usersList = this.usersList
 
       if(usersList.length > 0 && usersList.length-1 <= this.nowIndex){
         that.isNext = true
@@ -648,13 +692,13 @@ export default {
       }else {
         indexUnlike(msg)
       }
-      if(type=='left'){
-        that.moveData={
+      if(type == 'left'){
+        that.moveData = {
           isMove: false,
           style: 'left', 
         }
       }else {
-        that.moveData={
+        that.moveData = {
           isMove: false,
           style: 'right', 
         }
@@ -668,7 +712,7 @@ export default {
       },700)
     },
     like(msg){
-      let that = this;
+      let that = this
       indexLike(msg).then((res)=>{
         console.log(res)
         that.nowIndex ++
@@ -749,11 +793,11 @@ export default {
         this.coolTime = '0'
         return 0
       }
-      let t;
+      let t = null
       if(s > -1){
           let hour = Math.floor(s/3600)
           let min = Math.floor(s/60) % 60
-          let sec = s % 60;
+          let sec = s % 60
           if(hour < 10) {
               t = '0'+ hour + ":"
           } else {
@@ -797,7 +841,68 @@ export default {
 </script>
 <style lang="less" type="text/less" scoped>
   @import url("~@/styles/animate.less");
-
+  .editWarp {
+    background:rgba(0,0,0,0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+  }
+  .editWC {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    background:rgba(255,255,255,1);
+    border-radius:18rpx;
+    z-index: 10000;
+    width: 560rpx;
+    margin-left: -280rpx;
+    .edit_content {
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      padding: 58rpx 84rpx 36rpx 84rpx;
+    }
+    .title {
+      font-size:28rpx;
+      font-weight:300;
+      color:rgba(154,161,171,1);
+      line-height:34rpx;
+    }
+    .msg {
+      font-size:34rpx;
+      font-family:Helvetica;
+      color:rgba(53,64,72,1);
+      line-height:41rpx;
+      margin-top: 14rpx;
+    }
+    .btns {
+      height: 100rpx;
+      width: 100%;
+      //position: absolute;
+      //bottom: 0;
+      //left: 0;
+      line-height: 100rpx;
+      font-size:32rpx;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color: rgba(53,57,67,1);
+      border-top: 1rpx solid rgba(229,229,229,1);
+      display: flex;
+      flex-direction: row;
+      box-sizing: border-box;
+      .btn {
+        flex: 1;
+        text-align: center;
+        &.true {
+          color:#00D093;
+          border-right: 1rpx solid rgba(229,229,229,1);
+        }
+      }
+    }
+  }
   .container {
     height: 100vh;
     background:rgba(250,251,252,1);
@@ -985,16 +1090,19 @@ export default {
       .gd_cont {
         width: 479rpx;
         height: 498rpx;
-        margin:  138rpx auto 100rpx auto;
+        margin: 0 auto ;
         display: block;
       }
       .txt {
-        height:30rpx;
-        font-size:30rpx;
-        color:rgba(255,255,255,1);
-        line-height:30rpx;
         text-align: center;
-        margin-bottom: 14rpx;
+        font-size:36rpx;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color: #ffffff;
+        margin: 67rpx 0 120rpx 0;
+        text {
+          color:rgba(0,208,147,1);
+        }
       }
       .bot_cont {
         width: 350rpx;
