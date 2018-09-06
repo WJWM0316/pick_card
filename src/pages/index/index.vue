@@ -349,6 +349,7 @@ export default {
               occupation_label.push(item.id)
             }
           })
+
           this.getPage.occupation_label_id = occupation_label.join(',') || 0
           this.getPage.realm_label_id = realm_label.join(',') || 0
         })
@@ -359,6 +360,9 @@ export default {
     let that = this
     this.isNext = true
     this.toCreateSock = true
+
+    //  首页数据刷新
+    this.getPage.exclude_uid = ''
 
     this.isShowTrue = false  //防止切换出去。刷新拿不到之前的数据。 隐藏掉
     if (!this.$store.getters.userInfo.vkey) {

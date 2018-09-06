@@ -4,7 +4,7 @@
     <view :class="{'bg' : !test}">
     <view class="state_1" v-if="test">
       <image  class="one_bg" src="/static/images/share_match_pic_share@3x.png"></image>
-      <view class="cont_tit">哇，一张名片就勾搭到一位大咖！ 你也来试</view>
+      <view class="cont_tit">哇，一张名片就勾搭到一位大咖！ 你也来试试吧～</view>
       <view class="cont_txt" style="text-align: center">趣名片PickMe，职场新人脉勾搭平台</view>
       <view class="cont_txt" style="text-align: center">有趣社交，从这里开始</view>
     </view>
