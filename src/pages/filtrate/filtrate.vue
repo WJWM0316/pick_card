@@ -105,8 +105,6 @@
           occupation_label_id: occupation_label_id,
           realm_label_id: realm_label_id
         }
-        console.log(data, 1111111111111)
-
         wx.setStorageSync('labelId', data)
         url = `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
         wx.reLaunch({
@@ -132,7 +130,6 @@
         let that = this;
 
         firstSignApi(that.firstData).then((res)=>{
-          console.log(res)
           that.nowNum = 2
         })
       },
@@ -161,7 +158,6 @@
           }
         }else {
 
-          console.log(selAry)
           a = JSON.stringify(reset)
           a = JSON.parse(a.concat())
 
@@ -195,7 +191,6 @@
       },
 
       detailOp (state){
-        console.log(state)
         if(state && state === 1){
           this.jobOp = !this.jobOp
         }else if(state && state === 2){
@@ -280,7 +275,6 @@
                   }
                 })
                 if(that.jobSet !==0){
-                  console.log(that.jobSet,jobList,item.id,jobList.indexOf(item.id))
                   if(jobList.indexOf(item.id)<0 && that.jobOp && item.id !== 0){
                     that.jobOp = false
                   }
@@ -306,7 +300,6 @@
       
     },
     onShareAppMessage: function (res) {
-      console.log(res)
       let path = '/pages/index/main?';
       let shareInfo = this.$store.getters.shareInfo
       let that = this

@@ -175,7 +175,6 @@
 		},
 		onLoad (option) {
 			
-			console.log(option)
 			this.vkey = option.vkey
 			this.userInfo = this.$store.getters.userInfo
 			this.region = [this.userInfo.province, this.userInfo.city]
@@ -190,7 +189,6 @@
 					array.push(e.id)
 				})
 				this.checkedIdList = array.join(',')
-				console.log(this.checkedTextList, this.checkedIdList)
 			}
 		},
 		onShow () {
@@ -200,7 +198,6 @@
 			this.getJobList()
 		},
 		onShareAppMessage: function (res) {
-		  console.log(res)
 		  let path = '/pages/index/main?';
 		  let shareInfo = this.$store.getters.shareInfo
 		  let that = this
@@ -234,7 +231,6 @@
 					res.data[0].son.forEach((item,index) => {
 						this.careerList.push(item.name)
 						if (item.id === this.userInfo.other_info.occupation_info.id) {
-							console.log(item.id, this.userInfo.other_info.occupation_info.id, 222222)
 							this.career = index
 							this.careerId = item.id
 						}
@@ -413,7 +409,6 @@
 				}
 				
 				upDataUserInfoApi(data).then(res => {
-					console.log('成功了', res)
 					wx.navigateBack({
 						delta: 1
 					})
@@ -423,7 +418,6 @@
 					  icon: 'none',
 					  duration: 1000
 					})
-					console.log('错误了', e)
 				})
 	      
 			},
@@ -431,7 +425,6 @@
 				this.showLablePop = false
 			},
 			getLabel (a, b) {
-				console.log('xuanz le ', a, b)
 				this.checkedIdList = a
 				this.checkedTextList = b
 				this.showLablePop = false
@@ -444,7 +437,6 @@
 			},
 			sexChange(e) {
 				this.userInfo.gender = e.mp.detail.value
-				console.log(this.userInfo.gender, this.userInfo.gender == 1, 22222222)
 			},
 			careerChange (e) {		
 				this.career = e.mp.detail.value

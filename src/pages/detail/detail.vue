@@ -217,7 +217,6 @@
 			let params = App.methods.getSceneParams(scene)
 			
 			if (params.vkey) {
-				console.log(scene, params, 111111)
 				this.vkey = params.vkey
 			} else {
 				this.vkey = option.vkey
@@ -270,7 +269,6 @@
 			this.stopShow = true
 		    if (res.from === 'button') {
 		      // 来自页面内转发按钮
-		      console.log(res.target)
 		      if (res.target.dataset.type == 'flaunt') {
 			      title = shareInfo.showCard.content,
 			      path = `pages/sharePick/main?vkey=${this.$store.getters.userInfo.vkey}&type=me&shareUid=${this.$store.getters.userInfo.id}&shareType=${shareInfo.showCard.type}`,
@@ -289,7 +287,6 @@
 			      imageUrl = this.isShareImg
 		      }
 		    }
-		    console.log(path, 1111111111111111111111111111)
 		    return {
 		      title: title,
 		      path: path,
@@ -316,7 +313,6 @@
 
 			call (phoneNumber) {
 				if (phoneNumber.length === 11) {
-					console.log(phoneNumber, '拨打电话号码')
 					wx.makePhoneCall({
 					  phoneNumber: phoneNumber
 					})
@@ -547,7 +543,6 @@
 					this.userInfo.other_info.realm_info.forEach(e => {
 						this.checkedTextList.push(e.name)
 					})
-					console.log(this.checkedTextList, '测试')
 					this.getShareImg()
 				})
 			},
@@ -562,7 +557,6 @@
 				  urls: list, // 需要预览的图片http链接列表
 				  complete: function () {
 				  	_this.stopShow = true
-				  	console.log(_this.stopShow, 2222222)
 				  }
 				})
 			}

@@ -153,7 +153,6 @@ export default {
       path: 'pages/flock/main',
       query: res
     }
-    console.log(res,'群详情页面')
     let that = this
     let adaptive = wx.setStorageSync('adaptive')
     if(!adaptive){
@@ -201,7 +200,6 @@ export default {
           msg.label.push(`${item.name} | `)
         })
 
-        console.log(msg)
         msg.label = msg.label.join('')
         msg.label = msg.label.slice(0, msg.label.length-3)
 
@@ -246,8 +244,6 @@ export default {
       }
       // 来自页面内转发按钮
     }
-    console.log(path)
-
     return {
       title: title,
       path: path,
@@ -266,7 +262,6 @@ export default {
       
     },
     fromClick (e) {
-      console.log(e)
       App.methods.sendFormId({
         fromId: e.mp.detail.formId,
         fromAddress: '/pages/index'
@@ -298,7 +293,6 @@ export default {
         })
         return
       }
-      console.log(item)
       wx.navigateTo({
         url: `/pages/detail/main?vkey=${item.vkey}`
       })
@@ -317,7 +311,6 @@ export default {
         return
       }
       let that = this
-      console.log('jiaru=========')
       joinUserGroup({userGroupId:this.msg.vkey}).then((res)=>{
         if(res.http_status == 200){
           that.$mptoast('成功加入')
@@ -325,10 +318,8 @@ export default {
 
           that.updateData('first')
         }
-        console.log(1111,res)
       },(res)=>{
         that.$mptoast(res.msg)
-        console.log('error1111',res)
       })
     },
     quit () {
@@ -351,7 +342,6 @@ export default {
         success: function(res) {
           if (res.confirm) {
             quitGroup({id:that.msg.vkey}).then((res)=>{
-              console.log(res)
               if(res.http_status == 200){
                 that.$mptoast('成功退出')
                 that.isJoin = false
@@ -364,9 +354,7 @@ export default {
             }).catch(function(error) {
               that.$mptoast(res.msg)
             });
-            console.log('用户点击确定')
           } else if (res.cancel) {
-            console.log('用户点击取消')
           }
         }
       })
@@ -393,7 +381,6 @@ export default {
           }
           if (res.confirm) {
             indexLike(msg).then((res)=>{
-              console.log(res)
               if(res.http_status == 200){
                 that.flockInfo.groupMemberList[index].handle_status = 2
                 that.$mptoast('申请成功')
@@ -416,7 +403,6 @@ export default {
     updateData(isFirst){
       let that = this
       getUserGroupInfo(that.getListData).then((res)=>{
-        console.log('更新',isFirst,res)
         if(isFirst=='first'){
           that.flockInfo = res.data
         }else {

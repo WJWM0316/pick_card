@@ -214,7 +214,6 @@
           msg.label.push(`${item.name} | `)
         })
 
-        console.log(msg)
         msg.label = msg.label.join('')
         msg.label = msg.label.slice(0, msg.label.length-3)
 
@@ -234,13 +233,11 @@
       wx.getSystemInfo({
         success: function(res) {
           that.systemInfo = res;
-          console.log(res)
           that.spHeight = (res.windowHeight-175)*2;
         }
       })
     },
     onShareAppMessage: function (res) {
-      console.log(res)
       let path = '/pages/index/main?';
       let shareInfo = this.$store.getters.shareInfo
       let that = this
@@ -275,8 +272,6 @@
         path: path,
         imageUrl: imageUrl,
         success(){
-          console.log(that.isCheck)
-
           if(res.target.dataset.type=="flock" && !that.isCheck){
             that.isShow = true;
           }
@@ -296,7 +291,6 @@
       let that = this;
 
       //doing some thing
-      console.log('下拉刷新执行完毕要停止当前页面下拉刷新',res)
       that.getList()
       setTimeout(function(){
           wx.stopPullDownRefresh()
@@ -307,7 +301,6 @@
       let that = this;
     },
     onPageScroll (e) {
-      console.log('====',e)
       this.isTitleBarFixed = e.scrollTop > 0
     },
 
@@ -325,14 +318,11 @@
       },
 
       loadNext (){
-        console.log('loadNext')
         let that = this
         let flockNext = this.flockNext
         let friendNext = this.friendNext
 
         if(that.nowIndex==0){
-
-          console.log(friendNext.getNext ,friendNext.isNext )
           if(friendNext.getNext && friendNext.isNext ){
             this.getFrd.id = this.friendList[this.friendList.length-1].id
             that.getFriend()
@@ -349,7 +339,6 @@
       },
 
       /*refresh (){
-        console.log(111111)
         let that = this
         let flockNext = this.flockNext
         let friendNext = this.friendNext
@@ -376,10 +365,8 @@
 
       getFriend(isFirst){
         let that = this
-        console.log('更新getFriend')
 
         getFriends(that.getFrd).then((res)=>{
-          console.log('更新getFriend',res)
           if(isFirst=='first'){
             that.friendList = res.data
           }else {
@@ -395,8 +382,6 @@
       getFlock(isFirst){
         let that = this
         getUserGroupList(that.getFlk).then((res)=>{
-          console.log('更新getFlock',res)
-
           if(isFirst=='first'){
             if(res.http_status==200){
               deleteRedFriends()
@@ -445,7 +430,6 @@
       },
 
       fromClick (e) {
-        console.log(e)
         App.methods.sendFormId({
           fromId: e.mp.detail.formId,
           fromAddress: '/pages/index'
@@ -463,7 +447,6 @@
       },
       
       toDetail (item) {
-        console.log(item)
         wx.navigateTo({
           url: `/pages/detail/main?vkey=${item.friend_user_info.vkey}`
         })
@@ -474,7 +457,6 @@
         })
       },
       toFlock (res,index) {
-        console.log(index)
         if(res.openGid){
           this.florkList.list[index].newJoinMemberCount = 0
           this.florkList.list[index].userGroupTabRedDot = 0

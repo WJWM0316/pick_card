@@ -212,7 +212,6 @@
         this.bindPhone.number = e.mp.detail.value
       },
       isPoneAvailable(str) {
-        console.log(str)
         let myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
         if (!myreg.test(str)) {
             return false;
@@ -237,12 +236,10 @@
           that.bindPhone.isPh = true
         }else {
           let key = wx.getStorageSync('key')
-          console.log(key)
           that.thirdData.iv = e.mp.detail.iv
           that.thirdData.encryptedData = e.mp.detail.encryptedData
 
           App.methods.checkLogin().then((res)=>{
-            console.log('===checkLogin===',res)
             if(res.http_status == 200){
               that.thirdData.key = res.data.key
               that.thirdPost(1)
@@ -287,11 +284,9 @@
 
         that.thirdData['build_label_id'] = []
         that.thirdRule.job.forEach((value,index)=>{
-          console.log(value)
           that.thirdData['build_label_id'].push(that.thirdRule.jobData[value])
       　 });
         that.thirdRule.live.forEach((value,index)=>{
-          console.log(value)
           that.thirdData['build_label_id'].push(that.thirdRule.liveData[value])
       　 });
         if(type==1){
@@ -308,11 +303,9 @@
             getUserInfoApi().then(res0 => {     
               that.$store.dispatch('userInfo', res0.data)
               wx.removeStorageSync('cutImgInfo')
-              console.log('已更新个人信息', that.$store.getters.userInfo)
               let params = ''
               let url = ''
               let routerInfo = wx.getStorageSync('enterRouteInfo')
-              console.log(routerInfo, '路由信息')
               if (routerInfo.query !== {}) {
                 for (var i in routerInfo.query) {
                   params += `${i}=${routerInfo.query[i]}&`
@@ -342,7 +335,6 @@
         })
       },
       secondOne (index) {
-        console.log(index)
         let that = this
         if(that.secondRule.oli.length>0){
           let oldIndex = that.secondRule.oli[0]
@@ -408,7 +400,6 @@
         })
       },
       gender (res) {
-        console.log(res)
         let that = this;
         if(res && res == 1||res == 2 && that.firstData.gender != res ){
           that.firstData.gender = res
@@ -419,7 +410,6 @@
       },
       toNext (num) {
         
-        console.log('toNext',num)
         let that = this,
             listData = that.listData,
             data = {};
@@ -435,9 +425,6 @@
           this.$mptoast('请选择您的性别')
           return
         }
-        console.log(that.nowNum == 0)
-        console.log(wx.getStorageSync('cutImgInfo'))
-
         if(that.nowNum == 0 && wx.getStorageSync('cutImgInfo')){
           const info = wx.getStorageSync('cutImgInfo')
           const parmas = {
@@ -578,7 +565,6 @@
         },1000)
       },
       sms() {
-        console.log('获取验证码')
         let that = this,
             data = {
               mobile : that.bindPhone.number
@@ -643,7 +629,6 @@
             item['isCur'] = false
       　   });
       　 });
-        console.log(res.data)
         that.listData = res.data
       },(res)=>{
       })
@@ -655,7 +640,6 @@
       }
     },
     onShareAppMessage: function (res) {
-      console.log(res)
       let path = '/pages/index/main?';
       let shareInfo = this.$store.getters.shareInfo
       let that = this
