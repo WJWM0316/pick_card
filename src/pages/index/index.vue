@@ -244,7 +244,7 @@ export default {
 
       isShowTrue: false,  //同意
       consentForm: 'index',
-      isShowFt: false,   
+      isShowFt: null,   
 
       routerInfo: {},
 

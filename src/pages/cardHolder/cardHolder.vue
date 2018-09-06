@@ -513,6 +513,11 @@
   .main {
     height: 100vh;
   }
+  ::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+    color: transparent;
+  }
   .classifyList {
     white-space:nowrap;
     height: 80rpx;
@@ -531,6 +536,7 @@
     &::-webkit-scrollbar {
       width:0; height: 0;
       display: none;
+      color: transparent;
     }
     &.fixed {
       position: fixed;
