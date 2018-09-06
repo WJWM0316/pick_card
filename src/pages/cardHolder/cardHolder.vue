@@ -672,6 +672,9 @@
       .ops {
         display: none;
       }
+      .classifyList {
+        top: 10rpx;
+      }
     }
     .tit {
       width: 100%;

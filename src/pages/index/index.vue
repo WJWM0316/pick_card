@@ -137,7 +137,7 @@
       </view>
     </view>
     <!-- 跳转编辑电话好吗 -->
-    <view class="editWarp" v-if="isShowEditWc">
+    <view class="editWarp" v-if="isShowEditWc && usersInfo2 && usersInfo2.wechat">
       <view class="editWC" >
         <view class="edit_content">
           <view class="title">丰富的联系方式有助于职场社交 请确认你的微信号是否正确</view>
@@ -163,6 +163,7 @@
 
     <authorize-pop :isIndex='true' :routerInfo="routerInfo"></authorize-pop>
     <mptoast />
+    <!-- :isPop=isShowFt -->
     <footerTab :type=1 :adaptive=adaptive :isRed=mainRed :isPop=isShowFt></footerTab>
   </view>
 </template>
@@ -293,7 +294,6 @@ export default {
       success(){
         that.isShowTrue = false
         that.isShowFt = false
-        console.log(that.isCheck)
       }
     }
   },
@@ -390,9 +390,11 @@ export default {
         url: `/pages/edit/main?vkey=${this.usersInfo.vkey}&from=index`
       })
     },
-    changeShow(res){
+
+    changeShow (res){
       this.isShowTrue = false
     },
+
     dataList () {
       let that = this
       console.log('dataList')
@@ -852,13 +854,14 @@ export default {
   }
   .editWC {
     position: absolute;
-    top: 20%;
+    top: 50%;
     left: 50%;
     background:rgba(255,255,255,1);
     border-radius:18rpx;
     z-index: 10000;
     width: 560rpx;
     margin-left: -280rpx;
+    margin-top: -160rpx;
     .edit_content {
       width: 100%;
       box-sizing: border-box;
