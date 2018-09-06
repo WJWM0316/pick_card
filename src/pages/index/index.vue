@@ -262,7 +262,6 @@ export default {
       withShareTicket: true
     })
 
-    console.log(shareInfo)
     if (res.from === 'button') {
       // 来自页面内转发按钮
       if(res.target.dataset.type=="myDetail"){
@@ -298,7 +297,6 @@ export default {
     }
   },
   onLoad(res) {
-    console.log('onload',res)
     this.routerInfo = {
       path: 'pages/index/main',
       query: res
@@ -344,7 +342,6 @@ export default {
           res.data.forEach(item => {
             if (item.oneLevel === 1) {
               realm_label.push(item.id)
-              console.log('!!!!!',item.id)
             } else {
               occupation_label.push(item.id)
             }
@@ -401,7 +398,6 @@ export default {
 
     dataList () {
       let that = this
-      console.log('dataList')
       //that.usersInfo = that.$store.getters.userInfo
       getIndexUsers(that.getPage).then((res)=>{
         that.usersInfo = that.$store.getters.userInfo
@@ -631,8 +627,6 @@ export default {
       let that = this
       let step = this.usersInfo.step
       if(this.usersList.length-this.nowIndex <= 1){
-        console.log(that.getPage.exclude_uid)
-
         getIndexUsers(that.getPage).then((res)=>{
           if(step!=9 && step){
             that.isCreate()

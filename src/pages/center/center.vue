@@ -125,7 +125,6 @@
 		},
 		watch: {
 			info(val){
-				console.log(val)
 			}
 		},
 		computed: {
@@ -148,13 +147,11 @@
 			let that = this
 			wx.getSetting({
         success(res) {
-          console.log(res, res.authSetting['scope.writePhotosAlbum'])
           if (res.authSetting['scope.writePhotosAlbum']) {
           	that.openSet = false
         	}
         }
       })
-      console.log('用户信息', this.userInfo)
 			if (this.userInfo) {
 				this.info = this.userInfo
 				this.info.other_info.realm_info.forEach(e => {
@@ -180,7 +177,6 @@
 
 		},
 		onShareAppMessage: function (res) {
-			console.log(res)
 			let path = '/pages/index/main?';
 			let shareInfo = this.$store.getters.shareInfo
 			let that = this
@@ -203,7 +199,6 @@
 	    		imageUrl = shareInfo.showCard.path
 	    	}
     	}
-    	console.log(path, '我是分享的链接')
     	return {
     	  title: title,
     	  path: path,
@@ -212,7 +207,6 @@
  	 	},
 		methods: {
 			fromClick (e) {
-				console.log(e)
 			  App.methods.sendFormId({
 			    fromId: e.mp.detail.formId,
 			    fromAddress: '/pages/index'
@@ -248,17 +242,15 @@
 								    wx.getClipboardData({
 								      success: function(res) {
 								      	wx.showToast({
-												  title: '复制成功',
-												  icon: 'success',
-												  duration: 1000
-												})
-								        console.log(res.data) // data
+										  title: '复制成功',
+										  icon: 'success',
+										  duration: 1000
+										})
 								      }
 								    })
 								  }
 								})
 					    } else if (res.cancel) {
-					      console.log('用户点击取消')
 					    }
 					  }
 					})
