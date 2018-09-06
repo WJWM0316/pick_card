@@ -397,15 +397,18 @@ export default {
 
     dataList () {
       let that = this
+      console.log('dataList')
       //that.usersInfo = that.$store.getters.userInfo
       getIndexUsers(that.getPage).then((res)=>{
         that.usersInfo = that.$store.getters.userInfo
         //排除uid
         let exclude_uid = []
-        if(res.data.length > 0 && that.usersInfo == 9){
+
+        if(res.data.length > 0 && that.usersInfo.step == 9){
           for(let i = 0;res.data.length>i;i++){
             exclude_uid[i] = res.data[i].id
           }
+          
           exclude_uid = exclude_uid.join(',')
         }
         that.getPage.exclude_uid = exclude_uid
@@ -623,18 +626,19 @@ export default {
     isGetUers(){
       let that = this
       let step = this.usersInfo.step
-
       if(this.usersList.length-this.nowIndex <= 1){
+        console.log(that.getPage.exclude_uid)
+
         getIndexUsers(that.getPage).then((res)=>{
           if(step!=9 && step){
             that.isCreate()
             return
-          }else {
           }
           if(res.data.length<1){
             that.isEnd = true;
             console.log('没有数据了。冷却===》',that.isEnd)
           }else {
+
             //排除uid
             let exclude_uid = []
             if(res.data.length > 0 && that.usersInfo.step == 9){
@@ -643,6 +647,8 @@ export default {
               }
               exclude_uid = exclude_uid.join(',')
             }
+
+
             that.getPage.exclude_uid = exclude_uid
 
             that.isEnd = false

@@ -39,7 +39,7 @@
 					</form>
 				</view>
 				<!--  -->
-				<view class="flaunt" v-if="info.apply_count > 0">
+				<view class="flaunt" v-if="info.apply_count > 10">
 					<view class="number" v-if="info && info.apply_count"><text>{{info.apply_count}}</text>人想得到你的名片</view>
 					<button open-type="share" data-type="flaunt" class="toFlaunt">
 						炫耀一下

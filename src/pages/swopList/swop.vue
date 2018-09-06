@@ -342,7 +342,6 @@
       let title = shareInfo.index.content
       let imageUrl = shareInfo.index.path
 
-        console.log(shareInfo)
         wx.showShareMenu({
           withShareTicket: true
         })
@@ -355,13 +354,12 @@
         }
         if(res.target.dataset.type=="other"){
             that.isShow = false   //弹框消失
-            title = shareInfo.otherCard.content
-            imageUrl = shareInfo.otherCard.path
+            title = shareInfo.matchingCard.content
+            imageUrl = shareInfo.matchingCard.path
             path = `/pages/sharePick/main?vkey=${this.nowItem.apply_user_info.vkey}?type=other`
         }
         // 来自页面内转发按钮
       }
-      
       return {
         title: title,
         path: path,
