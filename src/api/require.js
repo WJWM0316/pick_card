@@ -39,7 +39,7 @@ export const request = ({ method = 'post', url, data = {}, needKey = true, isLoa
       method: method,
       success(res) {
         util.unloading(isLoading)
-        console.log('请求成功后 response', res)
+        // console.log('请求成功后 response', res)
         // console.log('url',config.baseHost+url)
         // console.log('data',data)
         // console.log('header',addHttpHead)

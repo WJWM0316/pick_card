@@ -298,11 +298,11 @@ export default {
     }
   },
   onLoad(res) {
+    console.log('onload',res)
     this.routerInfo = {
       path: 'pages/index/main',
       query: res
     }
-    console.log(res)
     let that = this
     let value = wx.getStorageSync('pickCardFirst')
     let saveData = {
@@ -320,7 +320,6 @@ export default {
         }
 
         wx.setStorageSync('adaptive', that.adaptive)
-        console.log(res)
       }
     })
 
@@ -344,9 +343,10 @@ export default {
         getChoiceLabel().then(res => {
           res.data.forEach(item => {
             if (item.oneLevel === 1) {
-              occupation_label.push(item.id)
-            } else {
               realm_label.push(item.id)
+              console.log('!!!!!',item.id)
+            } else {
+              occupation_label.push(item.id)
             }
           })
           this.getPage.occupation_label_id = occupation_label.join(',') || 0
@@ -397,12 +397,9 @@ export default {
 
     dataList () {
       let that = this
-      console.log('dataList')
       //that.usersInfo = that.$store.getters.userInfo
       getIndexUsers(that.getPage).then((res)=>{
         that.usersInfo = that.$store.getters.userInfo
-        console.log(res)
-        console.log(that.usersInfo, '用户信息')
         //排除uid
         let exclude_uid = []
         if(res.data.length > 0 && that.usersInfo == 9){
@@ -415,8 +412,6 @@ export default {
 
         that.usersList = res.data
         this.nowIndex = 0
-
-
         if(that.usersInfo.step!=9){
             if(res.data.length<1){
               that.isCreate()
@@ -440,10 +435,7 @@ export default {
           that.isCooling = false;
         } 
       },(res)=>{
-        console.log(res)
-        
         if(res.http_status == 400 && res.code == 99){
-          console.log('res.data.rest_time=====',res.data.rest_time)
           that.intervalTime(res.data.rest_time)
         }else {
           that.isCooling = false
@@ -451,8 +443,6 @@ export default {
         }
         that.usersInfo = that.$store.getters.userInfo
         that.getShareImg()
-        console.log(that.usersInfo )
-        
       })
     },
     fromClick (e) {
@@ -538,7 +528,6 @@ export default {
     },
 
     isCreate (){
-      console.log('isCreate',this.toCreateSock)
       if(this.usersInfo.step!=9){
 
         this.isPop = false
@@ -563,7 +552,6 @@ export default {
       clearInterval(that.interval2)
       that.interval2 =  setInterval(function () {  
         that.time++; 
-        console.log(that.time, 1111111111111)
       }, 100);  
 
       that.moveData={
@@ -575,7 +563,6 @@ export default {
       let touchMove = e.touches[0].pageX
       let touchDot = this.touchDot
       let status = false
-      console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot))
       // 向左滑动    
       if (touchMove - touchDot <= -80 && this.time < 10) {  
         status = 'left'
@@ -590,14 +577,12 @@ export default {
       }
     },
     tEnd (e) {
-      console.log('tend')
       clearInterval(this.interval2) // 清除setInterval  
       this.time = 0
     },
     
     //左右划操作
     likeOp (status){
-      console.log(this.nowIndex,this.usersList.length,status,this.isNext)
       if(!this.isNext){return}
       this.isNext = false
       let that = this
@@ -640,14 +625,11 @@ export default {
       let step = this.usersInfo.step
 
       if(this.usersList.length-this.nowIndex <= 1){
-        console.log('next============todo=====')
         getIndexUsers(that.getPage).then((res)=>{
-          console.log(res)
           if(step!=9 && step){
             that.isCreate()
             return
           }else {
-            console.log(step)
           }
           if(res.data.length<1){
             that.isEnd = true;
@@ -716,7 +698,6 @@ export default {
     like(msg){
       let that = this
       indexLike(msg).then((res)=>{
-        console.log(res)
         that.nowIndex ++
         if(res.code==101||res.code==102){
           that.isShowTrue = true
@@ -747,12 +728,9 @@ export default {
 
       clearInterval(that.interval)
       that.interval = setInterval(()=>{
-        console.log(num)
         that.transformTime(num)
         num--;
         if(num<0){
-          console.log('========',num)
-
           that.isGetUers()
           clearInterval(that.interval)
           this.coolTime = '0'
@@ -778,8 +756,6 @@ export default {
           that.isNext = true
         },700)
       },(res)=>{
-        console.log(res)
-
         if(res.http_status == 400 && res.code == 99){
           that.intervalTime(res.data.rest_time)
         }else {

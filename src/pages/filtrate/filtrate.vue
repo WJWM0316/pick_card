@@ -106,6 +106,7 @@
           realm_label_id: realm_label_id
         }
         console.log(data, 1111111111111)
+
         wx.setStorageSync('labelId', data)
         url = `/pages/index/main?occupation_label_id=${occupation_label_id}&realm_label_id=${realm_label_id}&from=filtrate`
         wx.reLaunch({
