@@ -80,10 +80,10 @@
 						{{userInfo.wechat}}
 					</text>
 				</view>
-				<view class="itemMsg" v-if="userInfo.company !== ''">
+				<view class="itemMsg" v-if="userInfo.company_location !== ''">
 					<image class="icon" src="/static/images/details_icon_company@3x.png"></image>
 					<text class="msg" >
-						{{userInfo.company}}
+						{{userInfo.company_location}}
 					</text>
 				</view>
 			</view>

@@ -31,7 +31,7 @@
           </view>
 
           <view  class="classifyList" v-if="nowIndex==0 && tabList.length>1">
-            <block v-for="(item, index) in tabList">
+            <block v-for="(item, index) in tabList" :key="index">
               <view class="blo " :class="{'cur':getFrd.job === item.id}"  @tap="clickTap(item.id)">{{item.name}}
               </view>
             </block>       
@@ -46,7 +46,7 @@
               <block v-if="friendList.length>0 ">
                 <view class="perch"></view>
                 
-                <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in friendList" :key="key" >
+                <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in friendList" :key="index" >
                   <button formType="submit" @tap="toDetail(item)">
                     <view class="blo_msg listone" :class="{'one': item.has_red_dot == 1}" >
                       <image class="blo_img" :src="item.friend_user_info.avatar_info.smallImgUrl" v-if="item.friend_user_info.avatar_info"></image>
@@ -77,7 +77,7 @@
 
                 <view class="perch"></view>
 
-                <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in florkList.list" :key="key">
+                <form report-submit="true" class="card_block" @submit="fromClick" v-for="(item, index) in florkList.list" :key="index">
                   <button formType="submit" class=""   @tap="toFlock(item,index)">
 
                   <view class="blo_msg flock_blo" >
