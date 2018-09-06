@@ -42,7 +42,7 @@
     </view>
 
     <mptoast />
-    <!-- <hintPop :type='consent' :isShow=isShow :consentNowItem=nowItem ></hintPop> -->
+    <hintPop :type='consent' :isShow=isShow :consentNowItem=nowItem ></hintPop>
   </view>
 </template>
 <style lang="less" type="text/less" scoped>
@@ -275,7 +275,7 @@
             that.listData[index].status = 1
             that.nowItem = that.listData[index]
             that.$mptoast('交换成功',2000)
-            //that.isShow = true
+            that.isShow = true
           }
         },(res)=>{
           that.$mptoast(res.msg,'error',2000)

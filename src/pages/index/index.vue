@@ -261,25 +261,25 @@ export default {
       withShareTicket: true
     })
 
-    console.log(res.target.dataset.type)
+    console.log(shareInfo)
     if (res.from === 'button') {
       // 来自页面内转发按钮
       if(res.target.dataset.type=="myDetail"){
-        imageUrl = that.shareData.shareImg;
+        title = shareInfo.mycard.content
+        imageUrl = that.shareData.shareImg
         path = `/pages/detail/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.mycard.type}`;
-        
-        title = shareInfo.mycard.content?shareInfo.mycard.content:'趣名片';
       }
 
       if(res.target.dataset.type=="other"){
-        imageUrl = that.shareData.shareImg;
+        imageUrl = shareInfo.matchingCard.path
+        title = shareInfo.matchingCard.content
+
         path = `/pages/sharePick/main?vkey=${this.usersList[this.nowIndex-1].vkey}&type=other`;
         
-        title = shareInfo.otherCard.content?shareInfo.otherCard.content:'趣名片';
       }
 
       if(res.target.dataset.type=="index"){
-        title = shareInfo.index?shareInfo.index.content:''
+        title = shareInfo.index.content
         imageUrl = shareInfo.index.path
         path = `/pages/index/main?vkey=${this.usersInfo.vkey}&shareUid=${this.usersInfo.id}&shareType=${shareInfo.showCard.type}`
       }

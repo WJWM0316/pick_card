@@ -286,13 +286,9 @@
                 }
 
               } else if (item.oneLevel === 1) {
-                console.log(item.id)
                 that.liveAry.push(item.id)
                 that.liveData.forEach((e,index) => {
-                  console.log(item.id,e.id,item.id == e.id)
                   if (item.id == e.id) {
-                  console.log('======',item.id,e.id)
-
                     that.liveData[index].isCur = true
                   }
                 })
